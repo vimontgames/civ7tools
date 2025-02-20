@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="extern">
+      <UniqueIdentifier>{ad661f87-d177-4270-82e1-430723511923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\imgui">
+      <UniqueIdentifier>{236ce4c4-bf91-4077-a5c6-f7e0600f100c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\imgui-sfml">
+      <UniqueIdentifier>{dbf8a6f8-1183-421c-b8bb-5e1c28480565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\imgui-addons">
+      <UniqueIdentifier>{9ff235d1-87de-4549-b832-73a37def35d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\imgui-addons\FileBrowser">
+      <UniqueIdentifier>{4554ad2f-1e57-4154-8835-cc8229cf4f7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\miniz-cpp">
+      <UniqueIdentifier>{c2ff2874-218d-4242-b388-950a93fa5e07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\TinyXML-2">
+      <UniqueIdentifier>{bd4fbe8e-f613-42c5-a449-147917542c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\base64">
+      <UniqueIdentifier>{41107896-b71a-47f8-9963-fed5491ee472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\stb">
+      <UniqueIdentifier>{a0474975-525a-456a-a4d5-7a7758acc008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{86ce2a81-15d7-4f0b-ac2f-64243363d573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shader">
+      <UniqueIdentifier>{80d7ef9f-b7d3-4b54-b117-04cc21698b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shader\Shared">
+      <UniqueIdentifier>{64ff588c-7c37-46ad-954b-c9568fc217a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\map">
+      <UniqueIdentifier>{2192542d-4a60-4f39-8d07-c2d29e6f4e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\imgui-bitfield">
+      <UniqueIdentifier>{57937d9b-227b-4da5-8386-5f04b6580d52}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui.cpp">
+      <Filter>extern\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_demo.cpp">
+      <Filter>extern\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_draw.cpp">
+      <Filter>extern\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_tables.cpp">
+      <Filter>extern\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_widgets.cpp">
+      <Filter>extern\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui-sfml\imgui-SFML.cpp">
+      <Filter>extern\imgui-sfml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp">
+      <Filter>extern\imgui-addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\tinyxml2\tinyxml2.cpp">
+      <Filter>extern\TinyXML-2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resourceinfo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\guistyle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stringconvert.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\precomp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shadermanager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\map\map.cpp">
+      <Filter>src\map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+    <None Include="..\data\shader\default_ps.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\default_vs.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\heightfield_ps.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\heightfield_vs.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\resources_ps.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\resources_vs.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\territories_ps.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\territories_vs.fx">
+      <Filter>data\shader</Filter>
+    </None>
+    <None Include="..\data\shader\copyRGB_ps.fx">
+      <Filter>data\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\extern\miniz-cpp\zip_file.hpp">
+      <Filter>extern\miniz-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\base64\base64.hpp">
+      <Filter>extern\base64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\stb\stb_image.h">
+      <Filter>extern\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resourceinfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\colorfloat4.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\guistyle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stringconvert.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\precomp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shadermanager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\stb\stb_image_write.h">
+      <Filter>extern\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\data\shader\common.h">
+      <Filter>data\shader\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\data\shader\fx.h">
+      <Filter>data\shader\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\data\shader\hlsl2glsl.h">
+      <Filter>data\shader\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map.h">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_export.hpp">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_import.hpp">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_refresh.hpp">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_actions.hpp">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\imgui-Bitfield\ImGuiBitfield.hpp">
+      <Filter>extern\imgui-bitfield</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_render.hpp">
+      <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Array2D.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
