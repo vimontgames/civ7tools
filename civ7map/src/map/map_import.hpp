@@ -238,10 +238,28 @@ bool Map::importCiv7Map(const string & _map, const string & _cwd)
     //    }
     //}
 
-    width = 64;
-    height = 64;
+    // Load the .js file to a temp buffer
+    FILE * fp = fopen(_map.c_str(), "r");
+    if (fp)
+    {
+        fseek(fp, 0, SEEK_END);
+        size_t filesize = ftell(fp);
+        rewind(fp); 
+        char * temp = (char *)malloc(filesize + 1);
+        fread(temp, 1, filesize, fp);
+        temp[filesize] = '\0';
+        fclose(fp);
+        string data = (string)temp;
+        free(temp);
 
-    loaded = true;
+        // We're looking for a map script with a "generate format" function
+        auto generateMap = data.find("generateMap()");
+        if (string::npos != generateMap)
+        {
+            loaded = true;
+            return true;
+        }
+    }
 
-    return true;
+    return false; 
 }

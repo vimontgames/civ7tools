@@ -1,82 +1,148 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\extern\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp" />
-    <ClCompile Include="..\extern\imgui-sfml\imgui-SFML.cpp" />
-    <ClCompile Include="..\extern\imgui\imgui.cpp" />
-    <ClCompile Include="..\extern\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\extern\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\extern\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\extern\tinyxml2\tinyxml2.cpp" />
-    <ClCompile Include="src\guistyle.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map\map.cpp" />
     <ClCompile Include="src\precomp.cpp" />
     <ClCompile Include="src\resourceinfo.cpp" />
     <ClCompile Include="src\shadermanager.cpp" />
     <ClCompile Include="src\stringconvert.cpp" />
+    <ClCompile Include="..\extern\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\imgui-sfml\imgui-SFML.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\guistyle.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\data\shader\common.h" />
     <ClInclude Include="..\extern\base64\base64.hpp" />
-    <ClInclude Include="..\extern\imgui-Bitfield\ImGuiBitfield.hpp" />
     <ClInclude Include="..\extern\miniz-cpp\zip_file.hpp" />
-    <ClInclude Include="..\extern\stb\stb_image.h" />
-    <ClInclude Include="..\extern\stb\stb_image_write.h" />
     <ClInclude Include="src\Array2D.h" />
     <ClInclude Include="src\colorfloat4.h" />
-    <ClInclude Include="src\guistyle.h" />
-    <ClInclude Include="src\map\map.h" />
-    <ClInclude Include="src\map\map_actions.hpp" />
-    <ClInclude Include="src\map\map_export.hpp" />
-    <ClInclude Include="src\map\map_import.hpp" />
-    <ClInclude Include="src\map\map_refresh.hpp" />
-    <ClInclude Include="src\map\map_render.hpp" />
     <ClInclude Include="src\maths.h" />
     <ClInclude Include="src\precomp.h" />
     <ClInclude Include="src\resourceinfo.h" />
     <ClInclude Include="src\shadermanager.h" />
     <ClInclude Include="src\stringconvert.h" />
     <ClInclude Include="..\data\shader\hlsl2glsl.h">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\data\shader\fx.h">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\imgui-Bitfield\ImGuiBitfield.hpp">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\guistyle.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\stb\stb_image.h">
+      <Filter>stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\stb\stb_image_write.h">
+      <Filter>stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map.h">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_actions.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_export.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_import.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_refresh.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_render.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\info.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\display.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\debug.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\help.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\console.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\baseWindow.h">
+      <Filter>windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\default_ps.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\default_vs.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\heightfield_ps.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\heightfield_vs.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\resources_ps.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\resources_vs.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\territories_ps.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\territories_vs.fx">
-      <Filter>Shaders</Filter>
+      <Filter>shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Shaders">
+    <Filter Include="stb">
+      <UniqueIdentifier>{f7816ae2-c0ec-48f1-9156-f0868f8c5809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="map">
+      <UniqueIdentifier>{921e1cd8-20aa-432d-9200-3cd8f9683a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows">
+      <UniqueIdentifier>{edb045ea-aa78-4601-971a-46836fec155b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
       <UniqueIdentifier>{4f7fe4d8-e3f7-4929-a923-9f130b976671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{df9296f9-1c10-457e-acb6-e6a4a28b9776}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -6,7 +6,6 @@
 #include "guistyle.h"
 #include "resourceinfo.h"
 #include "map/map.h"
-
 #include "shader/common.h"
 
 using namespace std;
@@ -29,19 +28,16 @@ static const u32 g_fixedTextLengthLarge = 20;
 bool g_openFileDialog = false;
 bool g_saveFileDialog = false;
 
-bool g_openDisplayWindow = true;
-bool g_openInfoWindow = true;
-//bool g_openTerritoriesWindow = true;
-//bool g_openLandmarksWindow = true;
-//bool g_openSpawnsWindow = true;
-//bool g_openWondersWindow = true;
-bool g_openDebugWindow = false;
-
-bool g_openHelpWindow = true;
-bool g_openAboutWindow = false;
-
 static vector<Map*> g_maps;
 static Map * g_map = nullptr;
+
+#include "windows/help.hpp"
+#include "windows/debug.hpp"
+#include "windows/info.hpp"
+#include "windows/display.hpp"
+#include "windows/console.hpp"
+
+static vector<BaseWindow *> g_windows;
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public std::stringbuf
@@ -59,7 +55,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 
 #include "imgui_internal.h"
 
-const char * version = "civ7map 0.0";
+const char * version = "civ7map 0.01";
 
 //--------------------------------------------------------------------------------------
 int main() 
@@ -84,9 +80,9 @@ int main()
     sf::ContextSettings contextSettings;
                         contextSettings.sRgbCapable = false;
 
-    RenderWindow window(VideoMode(g_screenWidth, g_screenHeight), "", Style::Titlebar | Style::Resize | Style::Close, contextSettings);
-    window.setFramerateLimit(60);
-    Init(window);
+    RenderWindow mainWindow(VideoMode(g_screenWidth, g_screenHeight), "", Style::Titlebar | Style::Resize | Style::Close, contextSettings);
+    mainWindow.setFramerateLimit(60);
+    Init(mainWindow);
 
     ShaderManager::init();
 
@@ -98,24 +94,30 @@ int main()
 
     SetupImGuiStyle();
 
+    g_windows.push_back(new ConsoleWindow());
+    g_windows.push_back(new DebugWindow());
+    g_windows.push_back(new DisplayWindow());
+    g_windows.push_back(new HelpWindow());
+    g_windows.push_back(new InfoWindow());
+
     Clock deltaClock;
-    while (window.isOpen()) 
+    while (mainWindow.isOpen()) 
     {
         string title = version;
         if (g_map)
             title += string(" - ") + g_map->path;
 
-        window.setTitle(title.c_str());
+        mainWindow.setTitle(title.c_str());
 
         sf::Event event;
-        while (window.pollEvent(event))
+        while (mainWindow.pollEvent(event))
         {
             ProcessEvent(event);
 
             switch (event.type)
             {
                 case Event::Closed:
-                    window.close();
+                    mainWindow.close();
                     break;
 
                 case Event::GainedFocus:
@@ -149,7 +151,7 @@ int main()
             }
         }
 
-        Update(window, deltaClock.restart());
+        Update(mainWindow, deltaClock.restart());
 
         bool showUI = true;
 
@@ -180,38 +182,19 @@ int main()
                 ImGui::Separator();
 
                 if (ImGui::MenuItem("Exit"))
-                    window.close();
+                    mainWindow.close();
 
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Windows"))
             {
-                if (ImGui::MenuItem("Display", nullptr, g_openDisplayWindow))
-                    g_openDisplayWindow ^= 1;
-
-                if (ImGui::MenuItem("Infos",nullptr, g_openInfoWindow))
-                    g_openInfoWindow ^= 1;
-
-                //if (ImGui::MenuItem("Landmarks", nullptr, g_openLandmarksWindow))
-                //    g_openLandmarksWindow ^= 1;
-                //
-                //if (ImGui::MenuItem("Landmarks", nullptr, g_openSpawnsWindow))
-                //    g_openSpawnsWindow ^= 1;
-                //
-                //if (ImGui::MenuItem("Territories", nullptr, g_openTerritoriesWindow))
-                //    g_openTerritoriesWindow ^= 1;
-
-                //if (ImGui::MenuItem("Wonders", nullptr, g_openWondersWindow))
-                //    g_openWondersWindow ^= 1;
-
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Help", nullptr, g_openHelpWindow))
-                    g_openHelpWindow ^= 1;
-
-                if (ImGui::MenuItem("Debug", nullptr, g_openDebugWindow))
-                    g_openDebugWindow ^= 1;
+                for (auto * window : g_windows)
+                {
+                    bool visible = window->IsVisible();
+                    if (ImGui::MenuItem(window->Name().c_str(), nullptr, visible))
+                        window->SetVisible(!visible);
+                }
 
                 ImGui::EndMenu();
             }
@@ -250,387 +233,10 @@ int main()
 
         ImGui::End();
 
-        if (g_openHelpWindow)
+        for (auto * window : g_windows)
         {
-            if (Begin("Help", &g_openHelpWindow))
-            {
-                ImGui::Columns(2, "mycolumns2", false);
-                {
-                    SetColumnWidth(0, 96.0f);
-
-                    ImGui::Text("Pan");
-                    ImGui::Text("Zoom");
-                }
-                ImGui::NextColumn();
-                {
-                    ImGui::Text("Left Mouse Button");
-                    ImGui::Text("Mouse Wheel");
-                }             
-            }
-            ImGui::End();
-        }
-
-        if (g_openDebugWindow)
-        {
-            if (Begin("Debug", &g_openDebugWindow))
-            {
-                ImGui::TreeNodeEx("Mouse", ImGuiTreeNodeFlags_DefaultOpen);
-                {
-                    ImGui::Columns(2, "mycolumns2", false);
-                    {
-                        ImGui::Text("Position");
-                        ImGui::Text("Buttons");
-                        ImGui::Text("Wheel");
-                    }
-
-                    ImGui::NextColumn();
-                    {
-                        const auto & mousePos = sf::Mouse::getPosition(window);
-                        ImGui::Text((to_string(mousePos.x) + ", " + to_string(mousePos.y)).c_str());
-
-                        string mouseButtonsString = "";
-                        if (sf::Mouse::isButtonPressed(Mouse::Left))
-                            mouseButtonsString += "Left ";
-
-                        if (sf::Mouse::isButtonPressed(Mouse::Middle))
-                            mouseButtonsString += "Middle ";
-
-                        if (sf::Mouse::isButtonPressed(Mouse::Right))
-                            mouseButtonsString += "Right ";
-
-                        ImGui::Text(mouseButtonsString.c_str());
-
-                        if (g_map)
-                            ImGui::Text((to_string((int)g_map->mouseWheelDelta)).c_str());
-                    }
-
-                    ImGui::TreePop();
-                }
-
-                ImGui::Columns(1);
-
-                if (TreeNodeEx("View", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    Columns(2, "mycolumns2", false);
-                    {
-                        ImGui::Text("HasFocus");
-                        ImGui::Text("Offset");
-                        ImGui::Text("Zoom");
-                    }
-
-                    NextColumn();
-                    {
-                        ImGui::Text(g_hasFocus ? "true" : "false");
-
-                        if (g_map)
-                        {
-                            char tmp[256];
-                            sprintf_s(tmp, "%.1f, %.1f", g_map->cameraOffset.x, g_map->cameraOffset.y);
-                            ImGui::Text(tmp);
-
-                            sprintf_s(tmp, "%.1f", g_map->cameraZoom);
-                            ImGui::Text(tmp);
-                        }
-                    }
-
-                    TreePop();
-                }
-            }
-
-            ImGui::End();
-        }
-
-        if (g_openInfoWindow)
-        {
-            if (Begin("Infos", &g_openInfoWindow) && g_map)
-            {
-                char temp[256];
-                sprintf_s(temp, g_map->author.c_str());
-                ImGui::InputText("Author", temp, 256, ImGuiInputTextFlags_ReadOnly);
-
-                if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    int editMapSize[2] =
-                    {
-                        (int)g_map->width,
-                        (int)g_map->height
-                    };
-
-                    const bool editX = ImGui::InputInt("horizontal", &editMapSize[0], 1, 100, ImGuiInputTextFlags_ReadOnly);
-                    const bool editY = ImGui::InputInt("vertical", &editMapSize[1], 1, 100, ImGuiInputTextFlags_ReadOnly);
-
-                    if (editX || editY)
-                    {
-
-                    }
-
-                    TreePop();
-                }
-
-                if (TreeNodeEx("Offset", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    int editMapOffset[2] =
-                    {
-                        g_map->mapOffset[0].x, g_map->mapOffset[0].y
-                    };
-
-                    const bool editX = ImGui::InputInt("horizontal", &editMapOffset[0]);
-                    const bool editY = ImGui::InputInt("vertical", &editMapOffset[1]);
-
-                    if (editX || editY)
-                    {
-                        g_map->mapOffset[0].x = editMapOffset[0];
-                        g_map->mapOffset[0].y = editMapOffset[1];
-
-                        Vector2i delta = g_map->mapOffset[0] - g_map->mapOffset[1];
-
-                        g_map->translate(delta);
-
-                        g_map->mapOffset[1] = g_map->mapOffset[0];
-
-                        g_map->refresh();
-                    }
-
-                    TreePop();
-                }          
-                
-                if (TreeNodeEx("Options", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    ImGui::Checkbox(getFixedSizeString("Map cycling", g_fixedTextLengthShort).c_str(), &g_map->useMapCycling);
-                    ImGui::Checkbox(getFixedSizeString("Procedural mountain chains", g_fixedTextLengthShort).c_str(), &g_map->useProceduralMountainChains);
-                    TreePop();
-                }
-            }
-
-            ImGui::End();
-        }
-
-        //if (g_openTerritoriesWindow)
-        //{
-        //    if (Begin("Territories", &g_openTerritoriesWindow) && g_map)
-        //    {
-        //        if (ImGui::Button(("Remove all territories (" + to_string(g_map->territoriesInfo.size()) + ")").c_str()))
-        //            g_map->clearTerritories();
-        //
-        //        for (u32 i = 0; i < g_map->territoriesInfo.size(); ++i)
-        //        {
-        //            if (TreeNodeEx(to_string(i).c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-        //            {
-        //                PushItemWidth(g_comboxItemWidth);
-        //
-        //                auto & territory = g_map->territoriesInfo[i];
-        //                
-        //                needRefresh |= Combo("Continent", (int*)&territory.continent, "Ocean\0Continent 1\0Continent 2\0Continent 3\0Continent 4\0Continent 5\0Continent 6\0Continent 7\0\0");
-        //                needRefresh |= Combo("Biome", (int*)&territory.biome, "Arctic\0Badlands\0Desert\0Grassland\0Meditarranean\0Savanna\0Taiga\0Temperate\0Tropical\0Tundra\0\0");
-        //
-        //                // should be done during refresh, not UI!
-        //                territory.ocean = (territory.continent == 0) ? true : false;
-        //
-        //                PopItemWidth();
-        //
-        //                TreePop();
-        //            }
-        //        }
-        //    }
-        //    ImGui::End();
-        //}
-        //
-        //if (g_openSpawnsWindow)
-        //{
-        //    if (Begin("Spawns", &g_openSpawnsWindow) && g_map)
-        //    {
-        //        ImGui::InputInt("Empire count", &g_map->empireCount, 1, 100);
-        //
-        //        if (ImGui::Button("Randomize spawns order"))
-        //            g_map->randomizeSpawnOrder();
-        //        ImGui::SameLine();
-        //        if (ImGui::Button("Add spawn point"))
-        //            g_map->addSpawn();
-        //
-        //        for (u32 i = 0; i < g_map->allSpawnsPoints.size(); ++i)
-        //        {
-        //            SpawnPoint & spawn = g_map->allSpawnsPoints[i];
-        //
-        //            if (spawn.flags & (1 << (g_map->spawnPlayerCountDisplayed-1)))
-        //            {
-        //                if (TreeNodeEx(("Player " + to_string(spawn.index[g_map->spawnPlayerCountDisplayed - 1]+1)).c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-        //                {
-        //                    PushItemWidth(g_comboxItemWidth);
-        //
-        //                    needRefresh |= ImGui::InputInt2("Position", (int*)&spawn.pos);
-        //
-        //                    if (BeginCombo("Flags", to_string(spawn.flags).c_str()))
-        //                    {
-        //                        bool selectedFlags[_countof(g_map->spawnInfo)];
-        //                        for (u32 b = 0; b < _countof(g_map->spawnInfo); ++b)
-        //                        {
-        //                            if (spawn.flags & (1 << b))
-        //                                selectedFlags[b] = true;
-        //                            else
-        //                                selectedFlags[b] = false;
-        //
-        //                            needRefresh |= ImGui::Checkbox((to_string(b + 1) + " player" + string(b ? "s" : "")).c_str(), &selectedFlags[b]);
-        //
-        //                            if (selectedFlags[b])
-        //                                spawn.flags |= 1 << b;
-        //                            else
-        //                                spawn.flags &= ~(1 << b);
-        //                        }
-        //
-        //                        if (needRefresh)
-        //                            g_map->computeSpawnOrder();
-        //
-        //                        EndCombo();
-        //                    }
-        //
-        //                    PopItemWidth();
-        //
-        //                    if (ImGui::Button("Delete"))
-        //                        g_map->removeSpawn(i);
-        //
-        //                    TreePop();
-        //                }
-        //            }
-        //        }
-        //    }
-        //    ImGui::End();
-        //}
-        //
-        //if (g_openLandmarksWindow)
-        //{
-        //    if (Begin("Landmarks", &g_openLandmarksWindow) && g_map)
-        //    {
-        //        if (ImGui::Button( ("Remove all landmarks (" + to_string(g_map->landmarkInfo.size()) + ")").c_str()))
-        //            g_map->clearLandmarks();
-        //
-        //        for (u32 i = 0; i < g_map->landmarkInfo.size(); ++i)
-        //        {
-        //            if (TreeNodeEx(to_string(i).c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-        //            {
-        //                PushItemWidth(g_comboxItemWidth);
-        //
-        //                auto & landmark = g_map->landmarkInfo[i];
-        //
-        //                char buffer[1024];
-        //                sprintf_s(buffer, landmark.name.c_str());
-        //                bool changed = ImGui::InputText("Name", buffer, 1024);
-        //                if (changed)
-        //                {
-        //                    landmark.name = buffer;
-        //                    needRefresh = true;
-        //                }
-        //                
-        //                needRefresh |= Combo("Definition", (int*)&landmark.definitonIndex, "Desert\0Forest\0Lake\0Mountain\0River\0\0");
-        //
-        //                PopItemWidth();
-        //                TreePop();
-        //            }
-        //        }
-        //    }
-        //    ImGui::End();
-        //}
-
-        //if (g_openWondersWindow)
-        //{
-        //    if (Begin("Wonders", &g_openWondersWindow))
-        //    {
-        //
-        //    }
-        //    ImGui::End();
-        //}
-
-        if (g_openDisplayWindow)
-        {
-            if (Begin("Display", &g_openDisplayWindow) && g_map)
-            {
-                if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    PushItemWidth(g_comboxItemWidth);
-                    needRefresh |= Combo("Filter", (int*)&g_map->territoryBackground, "None\0Tile\0Territories\0Biomes\0Landmarks\0Wonders\0\0");
-                    PopItemWidth();
-
-                    needRefresh |= Checkbox(getFixedSizeString("Borders", g_fixedTextLengthShort).c_str(), &g_map->showTerritoriesBorders);
-
-                    ImGui::SameLine();
-                    needRefresh |= Checkbox(getFixedSizeString("Hexes", g_fixedTextLengthShort).c_str(), &g_map->useHexUVs);
-
-
-                    g_map->bitmaps[Territories].visible = g_map->territoryBackground != TerritoryBackground::None;
-
-                    TreePop();
-                }
-
-                if (ImGui::TreeNodeEx("Resources", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    auto ListResources = [=](ResourceInfo * _infos, u32 _first, u32 _last)
-                    {
-                        bool changed = false;
-
-                        ImGui::Indent();
-                        for (u32 i = _first; i <= _last; ++i)
-                        {
-                            const u32 index = i - _first;
-                            auto & info = _infos[index];
-
-                            changed |= ImGui::Checkbox(getFixedSizeString(info.name.c_str(), g_fixedTextLengthLarge).c_str(), &info.visible);
-                            ImGui::SameLine();
-                            float * pFloat = (float*)&info.color.rgba[0];
-                            changed |= ImGui::ColorEdit4(info.name.c_str(), pFloat, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoLabel);
-
-                            ImGui::SameLine();
-                            ImGui::Text(to_string(_infos[index].count).c_str());
-                        }
-                        ImGui::Unindent();
-
-                        return changed;
-                    };
-
-                    //needRefresh |= ImGui::Checkbox(getFixedSizeString("Strategic", g_fixedTextLengthShort).c_str(), &g_map->showStrategicResources);
-                    //if (g_map->showStrategicResources)
-                    //    needRefresh |= ListResources(strategicResources, (u32)StrategicResource::First, (u32)StrategicResource::Last);
-                    //
-                    //needRefresh |= ImGui::Checkbox(getFixedSizeString("Luxury", g_fixedTextLengthShort).c_str(), &g_map->showLuxuryResources);
-                    //if (g_map->showLuxuryResources)
-                    //    needRefresh |= ListResources(luxuryResources, (u32)LuxuryResource::First, (u32)LuxuryResource::Last);
-                    //
-                    //needRefresh |= ImGui::Checkbox(getFixedSizeString("Wonders", g_fixedTextLengthShort).c_str(), &g_map->showWonders);
-                    //if (g_map->showWonders)
-                    //    needRefresh |= ListResources(naturalWonderResources, (u32)NaturalWonderResource::First, (u32)NaturalWonderResource::Last);
-
-                    needRefresh |= ImGui::Checkbox(getFixedSizeString("Spawns", g_fixedTextLengthShort).c_str(), &g_map->showSpawnPoints);
-                    if (g_map->showSpawnPoints)
-                    {
-                        PushItemWidth(g_comboxItemWidth);
-
-                        ImGui::Indent();
-                        {
-                            for (u32 i = 0; i < _countof(g_map->spawnInfo); ++i)
-                            {
-                                needRefresh |= ImGui::RadioButton(getFixedSizeString(to_string(i + 1) + " player" + string(i ? "s" : ""), g_fixedTextLengthLarge).c_str(), (int*)&g_map->spawnPlayerCountDisplayed, int(i + 1));
-                                SameLine();
-
-                                u32 count = 0;
-                                for (u32 j = 0; j < g_map->allSpawnsPoints.size(); ++j)
-                                {
-                                    const SpawnPoint & spawn = g_map->allSpawnsPoints[j];
-                                    if (spawn.flags & (1 << i))
-                                        count++;
-                                }
-
-                                ImGui::Text( "%u/%u", count, i + 1);
-                            }
-                        }
-                        ImGui::Unindent();
-                        
-                        PopItemWidth();
-                    }
-
-                    g_map->bitmaps[Resources].visible = g_map->showStrategicResources || g_map->showLuxuryResources || g_map->showWonders || g_map->showSpawnPoints;
-
-                    ImGui::TreePop();
-                }
-            }
-            ImGui::End();
+            if (window->IsVisible())
+                needRefresh |= window->Draw(mainWindow);
         }
 
         if (!g_maps.empty())
@@ -768,13 +374,13 @@ int main()
                 if (!g_map->cameraPan)
                 {
                     // begin pan
-                    g_map->cameraPanOrigin = (Vector2f)Mouse::getPosition(window);
+                    g_map->cameraPanOrigin = (Vector2f)Mouse::getPosition(mainWindow);
                     g_map->cameraPan = true;
                 }
                 else
                 {
                     //continue pan
-                    g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(window)) * panSpeed * (g_map->cameraZoom*g_map->cameraZoom) + g_map->cameraPreviousOffset;
+                    g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * (g_map->cameraZoom*g_map->cameraZoom) + g_map->cameraPreviousOffset;
                 }
             }
             else if (g_map->cameraPan)
@@ -802,18 +408,22 @@ int main()
         }
 
         // Clear backbuffer
-        window.clear(Color(0, 0, 0, 0));
+        mainWindow.clear(Color(0, 0, 0, 0));
 
         // Render map
         if (g_map)
-            g_map->render(window);
+            g_map->render(mainWindow);
 
         // Render UI
-        Render(window);
+        Render(mainWindow);
 
         // Present backbuffer
-        window.display();
+        mainWindow.display();
     }
+
+    for (auto * window : g_windows)
+        delete(window);
+    g_windows.clear();
 
     ShaderManager::deinit();
     Shutdown();

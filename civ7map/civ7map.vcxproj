@@ -14,7 +14,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{15DA6D26-F905-4922-89CC-A8D6DDDFC591}</ProjectGuid>
     <RootNamespace>bhkmap</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -141,6 +141,12 @@
     <ClInclude Include="src\resourceinfo.h" />
     <ClInclude Include="src\shadermanager.h" />
     <ClInclude Include="src\stringconvert.h" />
+    <ClInclude Include="src\windows\console.hpp" />
+    <ClInclude Include="src\windows\debug.hpp" />
+    <ClInclude Include="src\windows\display.hpp" />
+    <ClInclude Include="src\windows\help.hpp" />
+    <ClInclude Include="src\windows\info.hpp" />
+    <ClInclude Include="src\windows\baseWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\default_ps.fx">
