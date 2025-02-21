@@ -69,6 +69,16 @@ public:
         m_data = std::move(temp.m_data);
     }
 
+    void SetSize(u32 width, u32 height)
+    {
+        m_width = width;
+        m_height = height;
+        resize();
+    }
+
+    u32 Width() const { return m_width; }
+    u32 Height() const { return m_height; }
+
 protected:
     void resize()
     {

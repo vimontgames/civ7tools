@@ -108,13 +108,13 @@ void Map::addSpawn()
 //--------------------------------------------------------------------------------------
 void Map::clearLandmarks()
 {
-    landmarkInfo.clear();
-
-    for (u32 j = 0; j < height; ++j)
-        for (u32 i = 0; i < width; ++i)
-            landmarksTexture.set(i,j, 0xFF0000FF);
-
-    refresh();
+    //landmarkInfo.clear();
+    //
+    //for (u32 j = 0; j < height; ++j)
+    //    for (u32 i = 0; i < width; ++i)
+    //        landmarksTexture.set(i,j, 0xFF0000FF);
+    //
+    //refresh();
 }
 
 //--------------------------------------------------------------------------------------
@@ -122,14 +122,14 @@ void Map::clearLandmarks()
 //--------------------------------------------------------------------------------------
 void Map::clearTerritories()
 {
-    territoriesInfo.clear();
-
-    Territory empty;
-    territoriesInfo.push_back(empty);
-
-    for (u32 j = 0; j < height; ++j)
-        for (u32 i = 0; i < width; ++i)
-            zonesTexture.set(i,j, 0x00000000);
-
-    refresh();
+    //territoriesInfo.clear();
+    //
+    //Territory empty;
+    //territoriesInfo.push_back(empty);
+    //
+    //for (u32 j = 0; j < height; ++j)
+    //    for (u32 i = 0; i < width; ++i)
+    //        zonesTexture.set(i,j, 0x00000000);
+    //
+    //refresh();
 }

@@ -62,7 +62,7 @@ void Map::loadIcons()
         shared.count = 0;
     }
 
-    for (u32 i = 0; i < MapBitmap::Count; ++i)
+    for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
     {
         auto & bitmap = bitmaps[i];
         bitmap.image.create(width, height);
@@ -133,13 +133,15 @@ void Map::translate(const sf::Vector2i & _offset)
         spawn.pos.y = ((int)spawn.pos.y + (int)height - offsetY) % (int)height;
     }
 
-    elevationTexture.    translate(offsetX, offsetY);
-    zonesTexture.        translate(offsetX, offsetY);
-    poiTexture.          translate(offsetX, offsetY);
-    landmarksTexture.    translate(offsetX, offsetY);
-    naturalWonderTexture.translate(offsetX, offsetY);
-    riverTexture.        translate(offsetX, offsetY);
-    visibilityTexture.   translate(offsetX, offsetY);
-    roadTexture.         translate(offsetX, offsetY);
-    matchingSeedTexture. translate(offsetX, offsetY);
+    civ7TerrainType.translate(offsetX, offsetY);
+
+    //elevationTexture.    translate(offsetX, offsetY);
+    //zonesTexture.        translate(offsetX, offsetY);
+    //poiTexture.          translate(offsetX, offsetY);
+    //landmarksTexture.    translate(offsetX, offsetY);
+    //naturalWonderTexture.translate(offsetX, offsetY);
+    //riverTexture.        translate(offsetX, offsetY);
+    //visibilityTexture.   translate(offsetX, offsetY);
+    //roadTexture.         translate(offsetX, offsetY);
+    //matchingSeedTexture. translate(offsetX, offsetY);
 }

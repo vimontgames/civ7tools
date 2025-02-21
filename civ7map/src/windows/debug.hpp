@@ -22,6 +22,15 @@ bool DebugWindow::Draw(const RenderWindow & window)
 
     if (Begin("Debug", &m_visible))
     {
+        if (ImGui::Button("Refresh"))
+        {
+            ShaderManager::deinit();
+            ShaderManager::init();
+            needRefresh = true;
+        }
+
+        ImGui::Separator();
+
         ImGui::TreeNodeEx("Mouse", ImGuiTreeNodeFlags_DefaultOpen);
         {
             ImGui::Columns(2, "mycolumns2", false);
@@ -80,6 +89,8 @@ bool DebugWindow::Draw(const RenderWindow & window)
                     ImGui::Text(tmp);
                 }
             }
+
+            Columns(1);
 
             TreePop();
         }

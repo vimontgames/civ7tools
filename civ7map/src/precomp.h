@@ -22,6 +22,9 @@
 using i32 = int;
 using u32 = unsigned int;
 using ubyte = unsigned char;
+using u8 = ubyte;
+
+#include "misc/logger.h"
 
 inline void debugPrint(const char * _format, ...)
 {

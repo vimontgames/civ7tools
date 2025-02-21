@@ -8,31 +8,25 @@
 #define MAX_PLAYER_SPAWN 10
 
 //--------------------------------------------------------------------------------------
-enum MapBitmap
+enum class MapBitmap
 {
-    Heightfield = 0,
-    Territories,
-    Resources,
+    TerrainData = 0,
 
-    First = Heightfield,
-    Last = Resources,
+    First = TerrainData,
+    Last = TerrainData,
     Count = Last - First + 1
 };
 
 //--------------------------------------------------------------------------------------
-struct Territory
+enum class MapFilter
 {
-    u32 continent = 0;
-    u32 biome = 0;
-    bool ocean = true;
-};
+    TerrainType = 0,
+    Biome,
+    Continents,
 
-//--------------------------------------------------------------------------------------
-struct Landmark
-{
-    std::string name;
-    u32 definitonIndex = 0;
-    std::vector<sf::Vector2u> positions;
+    First = TerrainType,
+    Last = Continents,
+    Count = Last - First + 1
 };
 
 //--------------------------------------------------------------------------------------
@@ -58,21 +52,6 @@ struct Bitmap
 };
 
 //--------------------------------------------------------------------------------------
-enum class TerritoryBackground : u32
-{
-    None = 0,
-    Tile,
-    Territory,
-    Biome,
-    Landmarks,
-    Wonders,
-
-    First = None,
-    Last = Wonders,
-    Count = Last - First + 1
-};
-
-//--------------------------------------------------------------------------------------
 struct NaturalWonder
 {
     std::string name;
@@ -93,6 +72,62 @@ struct SpawnInfo
 {
     bool visible = false;
     sf::Texture texture;
+};
+
+//--------------------------------------------------------------------------------------
+enum class TerrainType
+{
+    Moutain = 0,
+    Hill,
+    Flat,
+    Coast,
+    Ocean,
+    NavigableRiver
+};
+
+//--------------------------------------------------------------------------------------
+enum class BiomeType
+{
+    Tundra,
+    Grassland,
+    Plains,
+    Tropical,
+    Desert,
+    Marine
+};
+
+//--------------------------------------------------------------------------------------
+enum class Civ6TerrainType
+{
+    Grass           = 0,
+    Grass_Hills     = 1,
+    Grass_Moutain   = 2,   // Moutain      
+
+    Plains          = 3,
+    Plains_Hills    = 4,
+    Plains_Moutain  = 5,   // Moutain   
+
+    Desert          = 6,    // OK
+    Desert_Hills    = 7,
+    Desert_Moutain  = 8,
+
+    Tundra          = 9,
+    Tundra_Hills    = 10,
+    Tundra_Moutain  = 11,    // Moutain  
+
+    Snow            = 12,
+    Snow_Hills      = 13,
+    Snow_Moutain    = 14,    // Moutain 
+
+    Coast           = 15,   // OK
+    Ocean           = 16    // OK
+};
+
+//--------------------------------------------------------------------------------------
+struct Civ7Tile
+{
+    TerrainType terrainType = TerrainType::Flat;
+    BiomeType biomeType = BiomeType::Tundra;
 };
 
 //--------------------------------------------------------------------------------------
@@ -137,6 +172,7 @@ public:
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const std::string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const std::string & _name);
+    bool GetCiv7TerrainFromCiv6(const std::string & data, const std::string label);
         
 public:
     std::string path;
@@ -145,26 +181,32 @@ public:
     u32 width = 0;
     u32 height = 0;
 
-    Array2D<u32>    elevationTexture;
-    Array2D<u32>    zonesTexture;
-    Array2D<u32>    poiTexture;
-    Array2D<u32>    visibilityTexture;
-    Array2D<u32>    roadTexture;
-    Array2D<u32>    riverTexture;
-    Array2D<u32>    matchingSeedTexture;
-    Array2D<u32>    naturalWonderTexture;
-    Array2D<u32>    landmarksTexture;
+    //Array2D<u32> civ6TerrainType;
 
-    std::vector<Territory> territoriesInfo;
-    std::vector<Landmark> landmarkInfo;
+
+
+    Array2D<Civ7Tile> civ7TerrainType;
+
+    //Array2D<u32>    elevationTexture;
+    //Array2D<u32>    zonesTexture;
+    //Array2D<u32>    poiTexture;
+    //Array2D<u32>    visibilityTexture;
+    //Array2D<u32>    roadTexture;
+    //Array2D<u32>    riverTexture;
+    //Array2D<u32>    matchingSeedTexture;
+    //Array2D<u32>    naturalWonderTexture;
+    //Array2D<u32>    landmarksTexture;
+
+    //std::vector<Territory> territoriesInfo;
+    //std::vector<Landmark> landmarkInfo;
     //std::vector<NaturalWonder> naturalWondersInfo;
 
-    Bitmap bitmaps[MapBitmap::Count];
+    Bitmap bitmaps[(int)MapBitmap::Count];
 
     bool loaded = false;
     bool m_isOpen = true;
     
-    TerritoryBackground territoryBackground = TerritoryBackground::Territory;
+    MapFilter territoryBackground = MapFilter::TerrainType;
     bool showTerritoriesBorders = true;
     bool useHexUVs = true;
 

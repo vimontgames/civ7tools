@@ -73,12 +73,12 @@ bool InfoWindow::Draw(const RenderWindow & window)
             TreePop();
         }
 
-        if (TreeNodeEx("Options", ImGuiTreeNodeFlags_DefaultOpen))
-        {
-            ImGui::Checkbox(getFixedSizeString("Map cycling", g_fixedTextLengthShort).c_str(), &g_map->useMapCycling);
-            ImGui::Checkbox(getFixedSizeString("Procedural mountain chains", g_fixedTextLengthShort).c_str(), &g_map->useProceduralMountainChains);
-            TreePop();
-        }
+        //if (TreeNodeEx("Options", ImGuiTreeNodeFlags_DefaultOpen))
+        //{
+        //    ImGui::Checkbox(getFixedSizeString("Map cycling", g_fixedTextLengthShort).c_str(), &g_map->useMapCycling);
+        //    ImGui::Checkbox(getFixedSizeString("Procedural mountain chains", g_fixedTextLengthShort).c_str(), &g_map->useProceduralMountainChains);
+        //    TreePop();
+        //}
     }
 
     ImGui::End();

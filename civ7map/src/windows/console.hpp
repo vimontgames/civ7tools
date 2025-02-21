@@ -15,11 +15,11 @@ private:
     void ExecuteConsoleCommand(const char * command_line);
 
 private:
-    char                    g_inputBuffer[256];
-    ImVector<const char *>  g_commands;
-    ImVector<char *>        g_history;
-    int                     g_historyPos;    // -1: new line, 0..History.Size-1 browsing history.
-    ImGuiTextFilter         g_filter;
+    char                    m_inputBuffer[256];
+    ImVector<const char *>  m_commands;
+    ImVector<char *>        m_history;
+    int                     m_historyPos;    // -1: new line, 0..History.Size-1 browsing history.
+    ImGuiTextFilter         m_filter;
     bool                    g_autoscroll;
     bool                    g_scrollToBottom;
 
@@ -30,14 +30,14 @@ private:
 ConsoleWindow::ConsoleWindow() : 
     BaseWindow("Console")
 {
-    memset(g_inputBuffer, 0, sizeof(g_inputBuffer));
-    g_historyPos = -1;
+    memset(m_inputBuffer, 0, sizeof(m_inputBuffer));
+    m_historyPos = -1;
 
     // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
-    g_commands.push_back("HELP");
-    g_commands.push_back("HISTORY");
-    g_commands.push_back("CLEAR");
-    g_commands.push_back("CLASSIFY");
+    m_commands.push_back("HELP");
+    m_commands.push_back("HISTORY");
+    m_commands.push_back("CLEAR");
+    m_commands.push_back("CLASSIFY");
     g_autoscroll = true;
     g_scrollToBottom = false;
 }
@@ -51,7 +51,7 @@ ConsoleWindow::~ConsoleWindow()
 //--------------------------------------------------------------------------------------
 void ConsoleWindow::ClearConsoleWindow()
 {
-    //Kernel::getLogger()->Clear();
+    g_logger.Clear();
 }
 
 //--------------------------------------------------------------------------------------
@@ -84,9 +84,9 @@ int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData * data)
 
             // Build a list of candidates
             ImVector<const char *> candidates;
-            for (int i = 0; i < g_commands.Size; i++)
-                if (Strnicmp(g_commands[i], word_start, (int)(word_end - word_start)) == 0)
-                    candidates.push_back(g_commands[i]);
+            for (int i = 0; i < m_commands.Size; i++)
+                if (Strnicmp(m_commands[i], word_start, (int)(word_end - word_start)) == 0)
+                    candidates.push_back(m_commands[i]);
 
             if (candidates.Size == 0)
             {
@@ -136,25 +136,25 @@ int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData * data)
         case ImGuiInputTextFlags_CallbackHistory:
         {
             // Example of HISTORY
-            const int prev_history_pos = g_historyPos;
+            const int prev_history_pos = m_historyPos;
             if (data->EventKey == ImGuiKey_UpArrow)
             {
-                if (g_historyPos == -1)
-                    g_historyPos = g_history.Size - 1;
-                else if (g_historyPos > 0)
-                    g_historyPos--;
+                if (m_historyPos == -1)
+                    m_historyPos = m_history.Size - 1;
+                else if (m_historyPos > 0)
+                    m_historyPos--;
             }
             else if (data->EventKey == ImGuiKey_DownArrow)
             {
-                if (g_historyPos != -1)
-                    if (++g_historyPos >= g_history.Size)
-                        g_historyPos = -1;
+                if (m_historyPos != -1)
+                    if (++m_historyPos >= m_history.Size)
+                        m_historyPos = -1;
             }
 
             // A better implementation would preserve the data on the current input line along with cursor position.
-            if (prev_history_pos != g_historyPos)
+            if (prev_history_pos != m_historyPos)
             {
-                const char * history_str = (g_historyPos >= 0) ? g_history[g_historyPos] : "";
+                const char * history_str = (m_historyPos >= 0) ? m_history[m_historyPos] : "";
                 data->DeleteChars(0, data->BufTextLen);
                 data->InsertChars(0, history_str);
             }
@@ -170,15 +170,15 @@ void ConsoleWindow::ExecuteConsoleCommand(const char * command_line)
 
     // Insert into history. First find match and delete it so it can be pushed to the back.
     // This isn't trying to be smart or optimal.
-    g_historyPos = -1;
-    for (int i = g_history.Size - 1; i >= 0; i--)
-        if (Stricmp(g_history[i], command_line) == 0)
+    m_historyPos = -1;
+    for (int i = m_history.Size - 1; i >= 0; i--)
+        if (Stricmp(m_history[i], command_line) == 0)
         {
-            free(g_history[i]);
-            g_history.erase(g_history.begin() + i);
+            free(m_history[i]);
+            m_history.erase(m_history.begin() + i);
             break;
         }
-    g_history.push_back(Strdup(command_line));
+    m_history.push_back(Strdup(command_line));
 
     // Process command
     if (Stricmp(command_line, "CLEAR") == 0)
@@ -193,7 +193,7 @@ void ConsoleWindow::ExecuteConsoleCommand(const char * command_line)
     }
     else if (Stricmp(command_line, "HISTORY") == 0)
     {
-        int first = g_history.Size - 10;
+        int first = m_history.Size - 10;
         //for (int i = first > 0 ? first : 0; i < m_history.Size; i++)
             //VG_INFO("%3d: %s\n", i, m_history[i]);
     }
@@ -246,226 +246,174 @@ bool ConsoleWindow::Draw(const RenderWindow & window)
 
         ImGui::SameLine();
 
-        //auto * logger = Kernel::getLogger();
-        //logger->Lock();
-        //{
-        //    m_filter.Draw("Filter", 256);
-        //
-        //    ImGui::SameLine();
-        //
-        //    uint infoCount = 0, warningCount = 0, errorCount = 0;
-        //    const auto count = logger->GetLogCount();
-        //    for (uint i = 0; i < count; i++)
-        //    {
-        //        const auto & item = logger->GetLog(i);
-        //        switch (item.level)
-        //        {
-        //            case Level::Info:
-        //                infoCount += item.count;
-        //                break;
-        //
-        //            case Level::Warning:
-        //                warningCount += item.count;
-        //                break;
-        //
-        //            case Level::Error:
-        //                errorCount += item.count;
-        //                break;
-        //        }
-        //    }
-        //
-        //    auto buttonSize = style::button::SizeSmall;
-        //    buttonSize.x *= 2;
-        //
-        //    ImVec2 size = GetWindowContentRegionSize();
-        //    ImGuiStyle & style = ImGui::GetStyle();
-        //
-        //    char infoLabel[256];
-        //    sprintf_s(infoLabel, "%s %u", style::icon::Info, infoCount);
-        //    auto infoLabelWidth = ImGui::CalcTextSize(infoLabel).x + style.FramePadding.x * 2.0f;
-        //    strcat(infoLabel, "###ShowInfo");
-        //
-        //    char warningLabel[256];
-        //    sprintf_s(warningLabel, "%s %u", style::icon::Warning, warningCount);
-        //    auto warningLabelWidth = ImGui::CalcTextSize(warningLabel).x + style.FramePadding.x * 2.0f;
-        //    strcat(warningLabel, "###ShowWarning");
-        //
-        //    char errorLabel[256];
-        //    sprintf_s(errorLabel, "%s %u", style::icon::Error, errorCount);
-        //    auto errorLabelWidth = ImGui::CalcTextSize(errorLabel).x + style.FramePadding.x * 2.0f;
-        //    strcat(errorLabel, "###ShowError");
-        //
-        //    float offset = size.x - infoLabelWidth - warningLabelWidth - errorLabelWidth - style.FramePadding.x;
-        //
-        //    auto & options = getConsoleOptions();
-        //
-        //    bool showInfos, showWarnings, showErrors;
-        //
-        //    PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0, 0.5f));
-        //    {
-        //        ImGui::SetCursorPosX(offset);
-        //
-        //        showInfos = asBool(LevelFlags::Info & options.m_levels);
-        //        if (ImGui::TooltipButton(infoLabel, showInfos, true, "Show Infos"))
-        //        {
-        //            showInfos = !showInfos;
-        //
-        //            if (showInfos)
-        //                options.m_levels |= LevelFlags::Info;
-        //            else
-        //                options.m_levels &= ~LevelFlags::Info;
-        //        }
-        //
-        //        ImGui::SameLine();
-        //
-        //        if (warningCount > 0)
-        //            ImGui::PushStyleColor(ImGuiCol_Text, warningColor);
-        //        showWarnings = asBool(LevelFlags::Warning & options.m_levels);
-        //        if (ImGui::TooltipButton(warningLabel, showWarnings, true, "Show Warnings"))
-        //        {
-        //            showWarnings = !showWarnings;
-        //
-        //            if (showWarnings)
-        //                options.m_levels |= LevelFlags::Warning;
-        //            else
-        //                options.m_levels &= ~LevelFlags::Warning;
-        //        }
-        //        if (warningCount > 0)
-        //            ImGui::PopStyleColor();
-        //
-        //        ImGui::SameLine();
-        //
-        //        if (errorCount > 0)
-        //            ImGui::PushStyleColor(ImGuiCol_Text, errorColor);
-        //        showErrors = asBool(LevelFlags::Error & options.m_levels);
-        //        if (ImGui::TooltipButton(errorLabel, showErrors, true, "Show Errors"))
-        //        {
-        //            showErrors = !showErrors;
-        //
-        //            if (showErrors)
-        //                options.m_levels |= LevelFlags::Error;
-        //            else
-        //                options.m_levels &= ~LevelFlags::Error;
-        //        }
-        //        if (errorCount > 0)
-        //            ImGui::PopStyleColor();
-        //    }
-        //    PopStyleVar();
-        //
-        //    //ImGui::SameLine();
-        //    //
-        //    //if (ImGui::SmallButton("Add Info"))
-        //    //    VG_INFO("[Console] something went wrong");
-        //    //
-        //    //ImGui::SameLine();
-        //    //
-        //    //if (ImGui::SmallButton("Add Warning"))
-        //    //    VG_WARNING("[Console] something went wrong");
-        //    //
-        //    //ImGui::SameLine();
-        //    //
-        //    //if (ImGui::SmallButton("Add Error")) 
-        //    //    VG_ERROR("[Console] something went wrong");
-        //
-        //    ImGui::Separator();
-        //
-        //    // Reserve enough left-over height for 1 separator + 1 input text
-        //    const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-        //    ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
-        //    if (ImGui::BeginPopupContextWindow())
-        //    {
-        //        if (ImGui::Selectable("Clear"))
-        //            clearLog = true;
-        //        if (ImGui::Selectable("Copy"))
-        //            copyToClipboard = true;
-        //        ImGui::EndPopup();
-        //    }
-        //
-        //    // Display every line as a separate entry so we can change their color or add custom widgets.
-        //    // If you only want raw text you can use ImGui::TextUnformatted(log.begin(), log.end());
-        //    // NB- if you have thousands of entries this approach may be too inefficient and may require user-side clipping
-        //    // to only process visible items. The clipper will automatically measure the height of your first item and then
-        //    // "seek" to display only items in the visible area.
-        //    // To use the clipper we can replace your standard loop:
-        //    //      for (int i = 0; i < Items.Size; i++)
-        //    //   With:
-        //    //      ImGuiListClipper clipper;
-        //    //      clipper.Begin(Items.Size);
-        //    //      while (clipper.Step())
-        //    //         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-        //    // - That your items are evenly spaced (same height)
-        //    // - That you have cheap random access to your elements (you can access them given their index,
-        //    //   without processing all the ones before)
-        //    // You cannot this code as-is if a filter is active because it breaks the 'cheap random-access' property.
-        //    // We would need random-access on the post-filtered list.
-        //    // A typical application wanting coarse clipping and filtering may want to pre-compute an array of indices
-        //    // or offsets of items that passed the filtering test, recomputing this array when user changes the filter,
-        //    // and appending newly elements as they are inserted. This is left as a task to the user until we can manage
-        //    // to improve this example code!
-        //    // If your items are of variable height:
-        //    // - Split them into same height items would be simpler and facilitate random-seeking into your list.
-        //    // - Consider using manual call to IsRectVisible() and skipping extraneous decoration from your items.
-        //    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
-        //    if (copyToClipboard)
-        //        ImGui::LogToClipboard();
-        //
-        //    //const auto count = logger->GetLogCount();
-        //    for (uint i = 0; i < count; i++)
-        //    {
-        //        const auto & item = logger->GetLog(i);
-        //
-        //        switch (item.level)
-        //        {
-        //            case Level::Info:
-        //                if (!showInfos)
-        //                    continue;
-        //                break;
-        //
-        //            case Level::Warning:
-        //                if (!showWarnings)
-        //                    continue;
-        //                break;
-        //
-        //            case Level::Error:
-        //                if (!showErrors)
-        //                    continue;
-        //                break;
-        //        }
-        //
-        //        char fullmsg[8192];
-        //
-        //        if (item.count > 1)
-        //            sprintf(fullmsg, "[%s] %s (x%u)", item.category.c_str(), item.message.c_str(), item.count);
-        //        else
-        //            sprintf(fullmsg, "[%s] %s", item.category.c_str(), item.message.c_str());
-        //
-        //        if (!m_filter.PassFilter(fullmsg))
-        //            continue;
-        //
-        //        ImVec4 color;
-        //        bool has_color = false;
-        //
-        //        switch (item.level)
-        //        {
-        //            case Level::Error:
-        //                color = errorColor;
-        //                has_color = true;
-        //                break;
-        //
-        //            case Level::Warning:
-        //                color = warningColor;
-        //                has_color = true;
-        //                break;
-        //        }
-        //
-        //        if (has_color)
-        //            ImGui::PushStyleColor(ImGuiCol_Text, color);
-        //        ImGui::TextUnformatted(fullmsg);
-        //        if (has_color)
-        //            ImGui::PopStyleColor();
-        //    }
-        //}
-        //logger->Unlock();
+        Logger * logger = &g_logger;
+        {
+            m_filter.Draw("Filter", 256);
+        
+            ImGui::SameLine();
+        
+            int infoCount = 0, warningCount = 0, errorCount = 0;
+            const auto count = logger->GetLogCount();
+            for (int i = 0; i < count; i++)
+            {
+                const auto & item = logger->GetLog(i);
+                switch (item.level)
+                {
+                    case Level::Info:
+                        infoCount ++;
+                        break;
+        
+                    case Level::Warning:
+                        warningCount ++;
+                        break;
+        
+                    case Level::Error:
+                        errorCount ++;
+                        break;
+                }
+            }
+        
+            ImGuiStyle & style = ImGui::GetStyle();
+        
+            char infoLabel[256];
+            sprintf_s(infoLabel, "Infos (%u)", infoCount);
+            auto infoLabelWidth = ImGui::CalcTextSize(infoLabel).x + style.FramePadding.x * 2.0f;
+            strcat(infoLabel, "###ShowInfo");
+        
+            char warningLabel[256];
+            sprintf_s(warningLabel, "Warnings (%u)",warningCount);
+            auto warningLabelWidth = ImGui::CalcTextSize(warningLabel).x + style.FramePadding.x * 2.0f;
+            strcat(warningLabel, "###ShowWarning");
+        
+            char errorLabel[256];
+            sprintf_s(errorLabel, "Errors (%u)", errorCount);
+            auto errorLabelWidth = ImGui::CalcTextSize(errorLabel).x + style.FramePadding.x * 2.0f;
+            strcat(errorLabel, "###ShowError");
+        
+            ImVec2 size = ImGui::GetContentRegionMax();
+            float offset = size.x - infoLabelWidth - warningLabelWidth - errorLabelWidth - style.FramePadding.x;
+                    
+            static bool g_showInfos = false;
+            static bool g_showWarnings = true;
+            static bool g_showErrors = true;
+
+            PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0, 0.5f));
+            {
+                ImGui::SetCursorPosX(offset);
+
+                bool grayed = !g_showInfos;
+
+                if (grayed)
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+
+                if (ImGui::Button(infoLabel))
+                    g_showInfos = !g_showInfos;
+
+                if (grayed)
+                    ImGui::PopStyleColor();
+        
+                ImGui::SameLine();
+                
+                grayed = !g_showWarnings;
+
+                if (grayed)
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+                else if (warningCount > 0)
+                    ImGui::PushStyleColor(ImGuiCol_Text, warningColor);
+              
+                if (ImGui::Button(warningLabel))
+                    g_showWarnings = !g_showWarnings;
+                
+                if (grayed || warningCount > 0)
+                    ImGui::PopStyleColor();
+        
+                ImGui::SameLine();
+        
+                grayed = !g_showErrors;
+
+                if (grayed)
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+                else if (errorCount > 0)
+                    ImGui::PushStyleColor(ImGuiCol_Text, errorColor);
+        
+                if (ImGui::Button(errorLabel))
+                    g_showErrors = !g_showErrors;
+
+                if (grayed || errorCount > 0)
+                    ImGui::PopStyleColor();
+            }
+            PopStyleVar();
+                
+            ImGui::Separator();
+        
+            // Reserve enough left-over height for 1 separator + 1 input text
+            const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+            ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
+            if (ImGui::BeginPopupContextWindow())
+            {
+                if (ImGui::Selectable("Clear"))
+                    clearLog = true;
+                if (ImGui::Selectable("Copy"))
+                    copyToClipboard = true;
+                ImGui::EndPopup();
+            }
+       
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); 
+            if (copyToClipboard)
+                ImGui::LogToClipboard();
+        
+            for (int i = 0; i < count; i++)
+            {
+                const auto & item = logger->GetLog(i);
+        
+                switch (item.level)
+                {
+                    case Level::Info:
+                        if (!g_showInfos)
+                            continue;
+                        break;
+        
+                    case Level::Warning:
+                        if (!g_showWarnings)
+                            continue;
+                        break;
+        
+                    case Level::Error:
+                        if (!g_showErrors)
+                            continue;
+                        break;
+                }
+        
+                char fullmsg[8192];
+        
+                sprintf(fullmsg, "%s", item.message.c_str());
+        
+                if (!m_filter.PassFilter(fullmsg))
+                    continue;
+        
+                ImVec4 color;
+                bool has_color = false;
+        
+                switch (item.level)
+                {
+                    case Level::Error:
+                        color = errorColor;
+                        has_color = true;
+                        break;
+        
+                    case Level::Warning:
+                        color = warningColor;
+                        has_color = true;
+                        break;
+                }
+        
+                if (has_color)
+                    ImGui::PushStyleColor(ImGuiCol_Text, color);
+                ImGui::TextUnformatted(fullmsg);
+                if (has_color)
+                    ImGui::PopStyleColor();
+            }
+        }
 
         if (copyToClipboard)
             ImGui::LogFinish();
@@ -477,17 +425,17 @@ bool ConsoleWindow::Draw(const RenderWindow & window)
             ImGui::SetScrollHereY(1.0f);
         g_scrollToBottom = false;
 
-        //ImGui::PopStyleVar();
-        //ImGui::EndChild();
+        ImGui::PopStyleVar();
+        ImGui::EndChild();
         ImGui::Separator();
 
         // Command-line
         bool reclaim_focus = false;
         ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
         PushItemWidth(-1);
-        if (ImGui::InputText("###Input", g_inputBuffer, IM_ARRAYSIZE(g_inputBuffer), input_text_flags, &TextEditCallbackStub, (void**)this))
+        if (ImGui::InputText("###Input", m_inputBuffer, IM_ARRAYSIZE(m_inputBuffer), input_text_flags, &TextEditCallbackStub, (void**)this))
         {
-            char * s = g_inputBuffer;
+            char * s = m_inputBuffer;
             Strtrim(s);
             if (s[0])
                 ExecuteConsoleCommand(s);

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\extern\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\map\map.cpp" />
     <ClCompile Include="src\precomp.cpp" />
     <ClCompile Include="src\resourceinfo.cpp" />
     <ClCompile Include="src\shadermanager.cpp" />
@@ -31,6 +30,12 @@
     </ClCompile>
     <ClCompile Include="src\guistyle.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\map\map.cpp">
+      <Filter>map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\misc\logger.cpp">
+      <Filter>misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +103,9 @@
     <ClInclude Include="src\windows\baseWindow.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\misc\logger.h">
+      <Filter>misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">
@@ -143,6 +151,9 @@
     </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{df9296f9-1c10-457e-acb6-e6a4a28b9776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{205e461d-7be8-400c-bcde-abf5063050b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

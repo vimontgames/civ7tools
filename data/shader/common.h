@@ -2,11 +2,9 @@
 #pragma once
 #endif
 
-#define PASS_TYPE_TILE      0
-#define PASS_TYPE_TERRITORY 1
-#define PASS_TYPE_LANDMARK  2
-#define PASS_TYPE_BIOME     3
-#define PASS_TYPE_WONDER    4
+#define PASS_TYPE_TERRAIN       0
+#define PASS_TYPE_BIOME         1
+#define PASS_TYPE_CONTINENTS    2
 
 #define PASS_TYPE_MASK      0xF
 
@@ -29,9 +27,9 @@ float2 hexUV(float2 uv)
     if (0 != (PASS_FLAG_HEXES & passFlags))
     {
         if (0 != (int(uv.y * texSize.y) & 1))
-            uv.x += 0.25f / texSize.x;
-        else
             uv.x -= 0.25f / texSize.x;
+        else
+            uv.x += 0.25f / texSize.x;
     }
     return uv;
 }

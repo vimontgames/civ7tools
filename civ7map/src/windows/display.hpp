@@ -24,21 +24,70 @@ bool DisplayWindow::Draw(const RenderWindow & window)
     {
         if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
         {
+            needRefresh |= Checkbox(getFixedSizeString("Line offset", g_fixedTextLengthShort).c_str(), &g_map->useHexUVs);
+            ImGui::Separator();
+
             PushItemWidth(g_comboxItemWidth);
-            needRefresh |= Combo("Filter", (int *)&g_map->territoryBackground, "None\0Tile\0Territories\0Biomes\0Landmarks\0Wonders\0\0");
+            needRefresh |= Combo("Filter", (int *)&g_map->territoryBackground, "TerrainType\0Biome\0Continents\0\0");
             PopItemWidth();
 
-            needRefresh |= Checkbox(getFixedSizeString("Borders", g_fixedTextLengthShort).c_str(), &g_map->showTerritoriesBorders);
+            switch (g_map->territoryBackground)
+            {
+                case MapFilter::TerrainType:
+                {                   
+                    float flatColor[] = { 0.3f, 0.3f, 0.3f };
+                    ImGui::ColorEdit3("Flat", flatColor, ImGuiColorEditFlags_NoInputs);
 
-            ImGui::SameLine();
-            needRefresh |= Checkbox(getFixedSizeString("Hexes", g_fixedTextLengthShort).c_str(), &g_map->useHexUVs);
+                    float hillColor[] = { 0.6f, 0.6f, 0.6f };
+                    ImGui::ColorEdit3("Hill", hillColor, ImGuiColorEditFlags_NoInputs);
 
-            g_map->bitmaps[Territories].visible = g_map->territoryBackground != TerritoryBackground::None;
+                    float moutainColor[] = { 0.9f, 0.9f, 0.9f };
+                    ImGui::ColorEdit3("Moutain", moutainColor, ImGuiColorEditFlags_NoInputs);
+
+                    float oceanColor[] = { 0, 0, 1 };
+                    ImGui::ColorEdit3("Ocean", oceanColor, ImGuiColorEditFlags_NoInputs);
+
+                    float coastColor[] = { 0, 0.5f, 1 };
+                    ImGui::ColorEdit3("Coast", coastColor, ImGuiColorEditFlags_NoInputs);
+
+                    float navigableRiverColor[] = { 0, 1, 1 };
+                    ImGui::ColorEdit3("Navigable River", navigableRiverColor, ImGuiColorEditFlags_NoInputs);
+                }
+                break;
+
+                case MapFilter::Biome:
+                {
+                    float tundraColor[] = { 0.8f, 1.0f, 0.8f };
+                    ImGui::ColorEdit3("Tundra", tundraColor, ImGuiColorEditFlags_NoInputs);
+
+                    float grasslandColor[] = { 0.0f, 1.0f, 0.0f };
+                    ImGui::ColorEdit3("Grassland", grasslandColor, ImGuiColorEditFlags_NoInputs);
+
+                    float plainsColor[] = { 0.5f, 0.8f, 0.0f };
+                    ImGui::ColorEdit3("Plains", plainsColor, ImGuiColorEditFlags_NoInputs);
+
+                    float tropicalColor[] = { 0.0f, 0.5f, 0.0f };
+                    ImGui::ColorEdit3("Tropical", tropicalColor, ImGuiColorEditFlags_NoInputs);
+
+                    float desertColor[] = { 1.0f, 1.0f, 0.0f };
+                    ImGui::ColorEdit3("Desert", desertColor, ImGuiColorEditFlags_NoInputs);
+
+                    float marineColor[] = { 0.0f, 0.0f, 1.0f };
+                    ImGui::ColorEdit3("Marine", marineColor, ImGuiColorEditFlags_NoInputs);
+                }
+                break;
+            }
+
+            //needRefresh |= Checkbox(getFixedSizeString("Borders", g_fixedTextLengthShort).c_str(), &g_map->showTerritoriesBorders);
+
+            //ImGui::SameLine();
+            
+            g_map->bitmaps[(int)MapBitmap::TerrainData].visible = true; // g_map->territoryBackground != TerritoryBackground::None;
 
             TreePop();
         }
 
-        if (ImGui::TreeNodeEx("Resources", ImGuiTreeNodeFlags_DefaultOpen))
+        if (0 && ImGui::TreeNodeEx("Resources", ImGuiTreeNodeFlags_DefaultOpen))
         {
             auto ListResources = [=](ResourceInfo * _infos, u32 _first, u32 _last)
             {
@@ -92,7 +141,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 PopItemWidth();
             }
 
-            g_map->bitmaps[Resources].visible = g_map->showStrategicResources || g_map->showLuxuryResources || g_map->showWonders || g_map->showSpawnPoints;
+            //g_map->bitmaps[Resources].visible = g_map->showStrategicResources || g_map->showLuxuryResources || g_map->showWonders || g_map->showSpawnPoints;
 
             ImGui::TreePop();
         }

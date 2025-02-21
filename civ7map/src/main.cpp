@@ -25,8 +25,22 @@ static float g_comboxItemWidth = 120;
 static const u32 g_fixedTextLengthShort = 10;
 static const u32 g_fixedTextLengthLarge = 20;
 
-bool g_openFileDialog = false;
 bool g_saveFileDialog = false;
+
+enum ImportFile
+{
+    None,
+    Civ6YnAMP
+};
+ImportFile g_importFile = ImportFile::None;
+
+const char * g_importFileNames[] =
+{
+    "",                     // None
+    "Import Civ6 YnAMP map" // Civ6YnAMP
+};
+
+const char * g_importFileName = nullptr;
 
 static vector<Map*> g_maps;
 static Map * g_map = nullptr;
@@ -83,6 +97,8 @@ int main()
     RenderWindow mainWindow(VideoMode(g_screenWidth, g_screenHeight), "", Style::Titlebar | Style::Resize | Style::Close, contextSettings);
     mainWindow.setFramerateLimit(60);
     Init(mainWindow);
+
+    LOG_INFO("%s", version);
 
     ShaderManager::init();
 
@@ -173,11 +189,14 @@ int main()
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Import"))
-                    g_openFileDialog = true;
+                if (ImGui::MenuItem("Import Civ6 YnAMP map"))
+                {
+                    g_importFile = ImportFile::Civ6YnAMP;
+                    g_importFileName = g_importFileNames[ImportFile::Civ6YnAMP];
+                }
 
-                if(ImGui::MenuItem("Export"))
-                    g_saveFileDialog = true;
+                //if(ImGui::MenuItem("Export"))
+                //    g_saveFileDialog = true;
 
                 ImGui::Separator();
 
@@ -266,6 +285,62 @@ int main()
                         map->hovered = true;
                     else
                         map->hovered = false;
+
+                    ImVec2 topLeft = ImGui::GetWindowPos();
+                    ImVec2 size = ImGui::GetWindowSize();
+                    const auto mousePos = Mouse::getPosition(mainWindow);
+                    ImVec2 relativeMousePos = ImVec2(mousePos.x - topLeft.x, mousePos.y - topLeft.y - ImGui::GetFrameHeight());
+
+                    if (relativeMousePos.x > 0 && relativeMousePos.y > 0 && relativeMousePos.x  < size.x && relativeMousePos.y < (size.y- ImGui::GetFrameHeight()))
+                    {
+                        if (ImGui::IsMouseDown(0))
+                        {
+                            int i = 42;
+                        }
+
+                        Vector2f size = Vector2f((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
+
+                        sf::View view;
+                        view.setCenter(sf::Vector2f(float(g_screenWidth) * 0.5f, (float)(g_screenHeight) * 0.5f));
+                        view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
+                        view.zoom(g_map->cameraZoom); // zeng
+                        view.move(g_map->cameraOffset);
+                        
+                        // Convert to world coordinates using the current SFML view (handles zoom & offset)
+                        sf::Vector2i mousePixel = sf::Vector2i((int)relativeMousePos.x, (int)relativeMousePos.y);
+                        sf::Vector2f uv = mainWindow.mapPixelToCoords(mousePixel, view);
+                        uv.x /= (float)size.x;
+                        uv.y /= (float)size.y;
+
+                        if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
+                        {
+                            float w = (float)g_map->width;
+                            float h = (float)g_map->height;
+
+                            Vector2i cell;
+
+                            cell.x = (int)min(uv.x * w, (w - 1));
+                            cell.y = (int)min(uv.y * w, (h - 1));
+
+                            if (g_map->useHexUVs)
+                            {
+                                if (cell.y & 1)
+                                {
+                                    cell.x = (int)floor(uv.x * w + 0.25f);
+                                    if (cell.x > (w-1))
+                                        cell.x = 0;
+                                }
+                                else
+                                {
+                                    cell.x = (int)floor(uv.x * w - 0.25f);
+                                    if (cell.x == -1)
+                                        cell.x = (int)(w - 1);
+                                }
+                            }
+
+                            ImGui::SetTooltip("Plot %i,%i", cell.x, cell.y);
+                        }
+                    }
                 }
                 ImGui::End();
 
@@ -291,10 +366,10 @@ int main()
         if (demo)
             ImGui::ShowDemoWindow(&demo);
 
-        if (g_openFileDialog)
+        if (g_importFile != ImportFile::None)
         {
-            ImGui::OpenPopup("Import");
-            g_openFileDialog = false;
+            ImGui::OpenPopup(g_importFileName);
+            g_importFile = ImportFile::None;
             SetCurrentDirectory(g_myDocumentsPath.c_str());
         }
         else if (g_saveFileDialog)
@@ -304,7 +379,7 @@ int main()
             SetCurrentDirectory(g_myDocumentsPath.c_str());
         }
 
-        if (g_fileDialog.showFileDialog("Import", ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
+        if (g_importFileName != nullptr && g_fileDialog.showFileDialog(g_importFileName, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
         {
             const string newFilePath = g_fileDialog.selected_path;
 
@@ -366,8 +441,7 @@ int main()
         const float panSpeed = 1.0f;
         const float zoomSpeed = 1.1f;
 
-        //if (!IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && !IsWindowFocused(ImGuiHoveredFlags_AnyWindow) && g_hasFocus)
-        if (g_map && g_map->hovered)
+         if (g_map && g_map->hovered)
         {
             if (Mouse::isButtonPressed(Mouse::Left))
             {

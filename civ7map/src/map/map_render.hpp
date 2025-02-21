@@ -21,7 +21,7 @@ void Map::render(RenderWindow & _window)
 
     tempRenderTexture.setView(view);
 
-    for (u32 i = 0; i < MapBitmap::Count; ++i)
+    for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
     {
         auto & bitmap = bitmaps[i];
         if (bitmap.visible)
@@ -48,29 +48,17 @@ void Map::render(RenderWindow & _window)
 
                     switch (territoryBackground)
                     {
-                    default:
-                    case TerritoryBackground::None:
-                        break;
+                        case MapFilter::TerrainType:
+                            passFlags = PASS_TYPE_TERRAIN;
+                            break;
 
-                    case TerritoryBackground::Tile:
-                        passFlags = PASS_TYPE_TILE;
-                        break;
+                        case MapFilter::Biome:
+                            passFlags = PASS_TYPE_BIOME;
+                            break;
 
-                    case TerritoryBackground::Territory:
-                        passFlags = PASS_TYPE_TERRITORY;
-                        break;
-
-                    case TerritoryBackground::Biome:
-                        passFlags = PASS_TYPE_BIOME;
-                        break;
-
-                    case TerritoryBackground::Landmarks:
-                        passFlags = PASS_TYPE_LANDMARK;
-                        break;
-
-                    case TerritoryBackground::Wonders:
-                        passFlags = PASS_TYPE_WONDER;
-                        break;
+                        case MapFilter::Continents:
+                            passFlags = PASS_TYPE_CONTINENTS;
+                            break;
                     }
 
                     if (useHexUVs)
@@ -85,7 +73,7 @@ void Map::render(RenderWindow & _window)
                 tempRenderTexture.draw(sprite, rs);
             }
 
-            if (bitmap.drawSprites)
+            if (0 && bitmap.drawSprites)
             {
                 sf::Shader * shader = ShaderManager::get(bitmap.spriteshader);
 
