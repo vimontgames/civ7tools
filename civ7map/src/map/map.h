@@ -101,11 +101,11 @@ enum class Civ6TerrainType
 {
     Grass           = 0,
     Grass_Hills     = 1,
-    Grass_Moutain   = 2,   // Moutain      
+    Grass_Moutain   = 2,        
 
     Plains          = 3,
     Plains_Hills    = 4,
-    Plains_Moutain  = 5,   // Moutain   
+    Plains_Moutain  = 5,   
 
     Desert          = 6,    // OK
     Desert_Hills    = 7,
@@ -113,11 +113,11 @@ enum class Civ6TerrainType
 
     Tundra          = 9,
     Tundra_Hills    = 10,
-    Tundra_Moutain  = 11,    // Moutain  
+    Tundra_Moutain  = 11,      
 
     Snow            = 12,
     Snow_Hills      = 13,
-    Snow_Moutain    = 14,    // Moutain 
+    Snow_Moutain    = 14,    
 
     Coast           = 15,   // OK
     Ocean           = 16    // OK
