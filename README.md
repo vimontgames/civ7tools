@@ -8,6 +8,11 @@ Open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [her
 
 # Changelog
 
+## v0.02
+
+- Add support for 'GetMap' being imported from a separate file
+- Separate parsing map data and Civ6 => Civ7 tile format conversion
+
 ## v0.01
 
 ![Screenshot](doc/img/v0.01.png)
@@ -26,6 +31,7 @@ Open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [her
 * [TinyXML-2](https://github.com/leethomason/tinyxml2)
 * [Base64](https://github.com/terrakuh/base64)
 * [stb](https://github.com/nothings/stb)
+* [magic__enum](https://github.com/Neargye/magic_enum)
 
 (*) All dependencies but the SFML have been copied to this repo, you will need to set an environment variable named $(SFML) pointing to your SFML install in order to compile.
 
