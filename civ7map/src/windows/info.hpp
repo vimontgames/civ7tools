@@ -24,7 +24,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
     if (Begin("Infos", &m_visible) && g_map)
     {
         char temp[256];
-        sprintf_s(temp, g_map->author.c_str());
+        sprintf_s(temp, g_map->m_author.c_str());
         ImGui::InputText("Author", temp, 256, ImGuiInputTextFlags_ReadOnly);
 
         if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))

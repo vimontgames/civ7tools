@@ -111,6 +111,7 @@
     </ClCompile>
     <ClCompile Include="src\map\map.cpp" />
     <ClCompile Include="src\misc\logger.cpp" />
+    <ClCompile Include="src\misc\utils.cpp" />
     <ClCompile Include="src\precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -138,11 +139,14 @@
     <ClInclude Include="src\map\map_refresh.hpp" />
     <ClInclude Include="src\map\map_render.hpp" />
     <ClInclude Include="src\maths.h" />
+    <ClInclude Include="src\misc\utils.h" />
     <ClInclude Include="src\misc\logger.h" />
     <ClInclude Include="src\precomp.h" />
     <ClInclude Include="src\resourceinfo.h" />
     <ClInclude Include="src\shadermanager.h" />
     <ClInclude Include="src\stringconvert.h" />
+    <ClInclude Include="src\tile\civ6tile.h" />
+    <ClInclude Include="src\tile\civ7tile.h" />
     <ClInclude Include="src\windows\console.hpp" />
     <ClInclude Include="src\windows\debug.hpp" />
     <ClInclude Include="src\windows\display.hpp" />

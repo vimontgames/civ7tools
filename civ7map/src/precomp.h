@@ -24,7 +24,10 @@ using u32 = unsigned int;
 using ubyte = unsigned char;
 using u8 = ubyte;
 
+using namespace std;
+
 #include "misc/logger.h"
+#include "misc/utils.h"
 
 inline void debugPrint(const char * _format, ...)
 {

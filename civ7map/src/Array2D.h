@@ -66,7 +66,7 @@ public:
             }
         }
 
-        m_data = std::move(temp.m_data);
+        m_data = move(temp.m_data);
     }
 
     void SetSize(u32 width, u32 height)
@@ -88,5 +88,5 @@ protected:
 private:
     u32            m_width = 0;
     u32            m_height = 0;
-    std::vector<T> m_data;
+    vector<T> m_data;
 };

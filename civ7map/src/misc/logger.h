@@ -21,7 +21,7 @@ enum class LevelFlags
 struct LogEntry
 {
     Level level;
-    std::string message;
+    string message;
 };
 
 class Logger
@@ -42,7 +42,7 @@ protected:
     void                    log(Level _level, const char * _msg);
 
 private:
-    std::vector<LogEntry>   m_entries;
+    vector<LogEntry>   m_entries;
 };
 
 extern Logger g_logger;

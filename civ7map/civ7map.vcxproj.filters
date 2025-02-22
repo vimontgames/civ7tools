@@ -37,6 +37,9 @@
     <ClCompile Include="src\misc\logger.cpp">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="src\misc\utils.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\data\shader\common.h" />
@@ -106,6 +109,15 @@
     <ClInclude Include="src\misc\logger.h">
       <Filter>misc</Filter>
     </ClInclude>
+    <ClInclude Include="src\misc\utils.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tile\civ7tile.h">
+      <Filter>tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tile\civ6tile.h">
+      <Filter>tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">
@@ -154,6 +166,9 @@
     </Filter>
     <Filter Include="misc">
       <UniqueIdentifier>{205e461d-7be8-400c-bcde-abf5063050b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tile">
+      <UniqueIdentifier>{3938cb73-3d31-426c-8cbb-14b3d51d01ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

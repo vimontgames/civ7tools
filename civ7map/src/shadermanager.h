@@ -28,6 +28,6 @@ private:
 	static void dump(const char * _type, const char * _path, const char * _src);
 
 private:
-	static std::vector<ShaderInfo> s_shaders;
+	static vector<ShaderInfo> s_shaders;
 	static ShaderID s_defaultShaderID;
 };

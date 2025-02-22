@@ -80,17 +80,7 @@ void Map::loadIcons()
 //--------------------------------------------------------------------------------------
 string Map::getShortName() const
 {
-    string shortName = path;
-
-    auto path = shortName.find_last_of("/\\");
-    if (path != string::npos)
-        shortName.erase(0, path + 1);
-
-    const size_t ext = shortName.rfind('.');
-    if (ext != string::npos)
-        shortName.erase(ext);
-
-    return shortName;
+    return GetFilenameWithoutExtension(m_path);
 }
 
 //--------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 //--------------------------------------------------------------------------------------
 struct ResourceInfo
 {
-    std::string name;
+    string name;
     ColorFloat4 color;
     bool visible = true;
     sf::Texture texture;

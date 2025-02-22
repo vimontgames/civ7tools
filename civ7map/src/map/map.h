@@ -5,6 +5,9 @@
 #include "tinyxml2.h"
 #include "Array2D.h"
 
+#include "tile/civ6tile.h"
+#include "tile/civ7tile.h"
+
 #define MAX_PLAYER_SPAWN 10
 
 //--------------------------------------------------------------------------------------
@@ -44,7 +47,7 @@ struct Bitmap
 
     bool drawSprites = false;
 
-    std::vector<sf::Sprite> sprites;
+    vector<sf::Sprite> sprites;
     ShaderID spriteshader = invalidShaderID;
     sf::BlendMode spriteblend = { sf::BlendMode::Factor::One, sf::BlendMode::Factor::Zero, sf::BlendMode::Add };
 
@@ -54,7 +57,7 @@ struct Bitmap
 //--------------------------------------------------------------------------------------
 struct NaturalWonder
 {
-    std::string name;
+    string name;
     ColorFloat4 color = ColorFloat4(1,0,0,1);
     bool visible = true;
 };
@@ -75,73 +78,17 @@ struct SpawnInfo
 };
 
 //--------------------------------------------------------------------------------------
-enum class TerrainType
-{
-    Moutain = 0,
-    Hill,
-    Flat,
-    Coast,
-    Ocean,
-    NavigableRiver
-};
-
-//--------------------------------------------------------------------------------------
-enum class BiomeType
-{
-    Tundra,
-    Grassland,
-    Plains,
-    Tropical,
-    Desert,
-    Marine
-};
-
-//--------------------------------------------------------------------------------------
-enum class Civ6TerrainType
-{
-    Grass           = 0,
-    Grass_Hills     = 1,
-    Grass_Moutain   = 2,        
-
-    Plains          = 3,
-    Plains_Hills    = 4,
-    Plains_Moutain  = 5,   
-
-    Desert          = 6,    // OK
-    Desert_Hills    = 7,
-    Desert_Moutain  = 8,
-
-    Tundra          = 9,
-    Tundra_Hills    = 10,
-    Tundra_Moutain  = 11,      
-
-    Snow            = 12,
-    Snow_Hills      = 13,
-    Snow_Moutain    = 14,    
-
-    Coast           = 15,   // OK
-    Ocean           = 16    // OK
-};
-
-//--------------------------------------------------------------------------------------
-struct Civ7Tile
-{
-    TerrainType terrainType = TerrainType::Flat;
-    BiomeType biomeType = BiomeType::Tundra;
-};
-
-//--------------------------------------------------------------------------------------
 struct Map
 {
 public:
     Map();
 
     // map_import.hpp
-    bool importCiv7Map(const std::string & _map, const std::string & _cwd);
+    bool importCiv7Map(const string & _map, const string & _cwd);
 
     // map_export.hpp
-    void exportCiv7Map(std::string & _map, const std::string & _cwd);
-    void saveBitmap(const Array2D<u32> _bitmap, tinyxml2::XMLElement * _xmlTerrainSave, const std::string & _field);
+    void exportCiv7Map(string & _map, const string & _cwd);
+    void saveBitmap(const Array2D<u32> _bitmap, tinyxml2::XMLElement * _xmlTerrainSave, const string & _field);
 
     // map_actions.hpp
     void randomizeSpawnOrder(); 
@@ -161,7 +108,7 @@ public:
     // misc
     void loadIcons();
 
-    std::string getShortName() const;
+    string getShortName() const;
 
     void resetCameraPan();
     void resetCameraZoom();
@@ -170,36 +117,20 @@ public:
     void translate(const sf::Vector2i & _offset);
 
 private:
-    template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const std::string & _name, u32 _width, u32 _height);
-    u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const std::string & _name);
-    bool GetCiv7TerrainFromCiv6(const std::string & data, const std::string label);
+    template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
+    u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
+    bool GetCiv7TerrainFromCiv6(const string & data);
+    Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
         
 public:
-    std::string path;
-    std::string author;
+    string m_path;
+    string m_GetMapPath;
+    string m_author;
 
     u32 width = 0;
     u32 height = 0;
 
-    //Array2D<u32> civ6TerrainType;
-
-
-
     Array2D<Civ7Tile> civ7TerrainType;
-
-    //Array2D<u32>    elevationTexture;
-    //Array2D<u32>    zonesTexture;
-    //Array2D<u32>    poiTexture;
-    //Array2D<u32>    visibilityTexture;
-    //Array2D<u32>    roadTexture;
-    //Array2D<u32>    riverTexture;
-    //Array2D<u32>    matchingSeedTexture;
-    //Array2D<u32>    naturalWonderTexture;
-    //Array2D<u32>    landmarksTexture;
-
-    //std::vector<Territory> territoriesInfo;
-    //std::vector<Landmark> landmarkInfo;
-    //std::vector<NaturalWonder> naturalWondersInfo;
 
     Bitmap bitmaps[(int)MapBitmap::Count];
 
@@ -225,7 +156,7 @@ public:
     int empireCount = 0;
 
     SpawnInfo spawnInfo[MAX_PLAYER_SPAWN];
-    std::vector<SpawnPoint> allSpawnsPoints;
+    vector<SpawnPoint> allSpawnsPoints;
 
     sf::RenderTexture renderTexture;
 

@@ -1,6 +1,6 @@
 #include "shadermanager.h"
 
-std::vector<ShaderInfo> ShaderManager::s_shaders;
+vector<ShaderInfo> ShaderManager::s_shaders;
 ShaderID ShaderManager::s_defaultShaderID = invalidShaderID;
 
 //--------------------------------------------------------------------------

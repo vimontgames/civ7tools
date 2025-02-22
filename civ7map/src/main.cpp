@@ -54,14 +54,14 @@ static Map * g_map = nullptr;
 static vector<BaseWindow *> g_windows;
 
 //--------------------------------------------------------------------------------------
-class dbg_stream_for_cout : public std::stringbuf
+class dbg_stream_for_cout : public stringbuf
 {
 public:
     ~dbg_stream_for_cout() { sync(); }
     int sync()
     {
         ::OutputDebugStringA(str().c_str());
-        str(std::string()); // Clear the string buffer
+        str(string()); // Clear the string buffer
         return 0;
     }
 };
@@ -69,7 +69,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 
 #include "imgui_internal.h"
 
-const char * version = "civ7map 0.01";
+const char * version = "civ7map 0.02";
 
 //--------------------------------------------------------------------------------------
 int main() 
@@ -78,8 +78,8 @@ int main()
     srand((u32)time(NULL));
 
     // Redirect SFML errors to debug output
-    std::cout.rdbuf(&g_DebugStreamFor_cout);
-    std::streambuf* previous = sf::err().rdbuf(&g_DebugStreamFor_cout);
+    cout.rdbuf(&g_DebugStreamFor_cout);
+    streambuf* previous = sf::err().rdbuf(&g_DebugStreamFor_cout);
 
     // save dir
     TCHAR cwd[MAX_PATH];
@@ -121,7 +121,7 @@ int main()
     {
         string title = version;
         if (g_map)
-            title += string(" - ") + g_map->path;
+            title += string(" - ") + g_map->m_path;
 
         mainWindow.setTitle(title.c_str());
 
@@ -385,10 +385,10 @@ int main()
 
             // Create new map
             Map * newMap = new Map();
-            newMap->path = newFilePath;
+            newMap->m_path = newFilePath;
             
             // Import it
-            if (newMap->importCiv7Map(newMap->path, g_currentWorkingDirectory))
+            if (newMap->importCiv7Map(newMap->m_path, g_currentWorkingDirectory))
             {
                 SetCurrentDirectory(g_currentWorkingDirectory.c_str());
                 newMap->refresh();
@@ -398,7 +398,7 @@ int main()
                 u32 mapIndex = u32(-1);
                 for (u32 i = 0; i < g_maps.size(); ++i)
                 {
-                    if (g_maps[i]->path == newFilePath)
+                    if (g_maps[i]->m_path == newFilePath)
                     {
                         mapIndex = i;
                         break;
@@ -423,13 +423,13 @@ int main()
         {
             if (g_map)
             {
-                const string prevFilename = g_map->path;
+                const string prevFilename = g_map->m_path;
 
                 const string newFilePath = g_fileDialog.selected_path;
-                g_map->path = newFilePath;
-                g_map->exportCiv7Map(g_map->path, g_currentWorkingDirectory);
+                g_map->m_path = newFilePath;
+                g_map->exportCiv7Map(g_map->m_path, g_currentWorkingDirectory);
 
-                if (prevFilename != g_map->path)
+                if (prevFilename != g_map->m_path)
                     g_map->docked = false;
             }
         }
