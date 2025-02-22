@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <iostream>
 #include <sstream>
+#include <locale>
 #include <time.h>
 #include <stdlib.h> 
 
@@ -19,10 +20,19 @@
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/BlendMode.hpp>
 
+#include "magic_enum/include/magic_enum/magic_enum.hpp"
+
+#define FMT_UNICODE 0
+#include "fmt/include/fmt/core.h"
+#include "fmt/include/fmt/format.h" 
+#include "fmt/include/fmt/printf.h"
+
 using i32 = int;
+using i8 = signed char;
 using u32 = unsigned int;
 using ubyte = unsigned char;
 using u8 = ubyte;
+using uint = unsigned int;
 
 using namespace std;
 
@@ -48,3 +58,28 @@ static int   Stricmp(const char * s1, const char * s2) { int d; while ((d = toup
 static int   Strnicmp(const char * s1, const char * s2, int n) { int d = 0; while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; n--; } return d; }
 static char * Strdup(const char * s) { size_t len = strlen(s) + 1; void * buf = malloc(len); return (char *)memcpy(buf, (const void *)s, len); }
 static void  Strtrim(char * s) { char * str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
+
+struct float4
+{
+    float4(float _x, float _y, float _z, float _w) :
+        x(_x),
+        y(_y),
+        z(_z),
+        w(_w)
+    {
+
+    }
+
+    union
+    {
+        struct
+        {
+            float x, y, z, w;
+        };
+        struct
+        {
+            float r, g, b, a;
+        };
+        float value[4];
+    };
+};

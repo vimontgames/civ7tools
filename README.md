@@ -32,6 +32,7 @@ Open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [her
 * [Base64](https://github.com/terrakuh/base64)
 * [stb](https://github.com/nothings/stb)
 * [magic__enum](https://github.com/Neargye/magic_enum)
+* [fmt](https://github.com/fmtlib/fmt/)
 
 (*) All dependencies but the SFML have been copied to this repo, you will need to set an environment variable named $(SFML) pointing to your SFML install in order to compile.
 
