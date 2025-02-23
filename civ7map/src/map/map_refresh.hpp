@@ -20,13 +20,13 @@ void Map::refresh()
     extern u32 g_screenWidth;
     extern u32 g_screenHeight;
 
-    const Vector2f scale = Vector2f(float(g_screenWidth) / float(width), float(g_screenHeight) / float(height));
+    const Vector2f scale = Vector2f(float(g_screenWidth) / float(m_width), float(g_screenHeight) / float(m_height));
 
-    for (u32 h = 0; h < height; ++h)
+    for (u32 h = 0; h < m_height; ++h)
     {
-        for (u32 w = 0; w < width; ++w)
+        for (u32 w = 0; w < m_width; ++w)
         {
-            const u32 offset = w + h * width;
+            const u32 offset = w + h * m_width;
 
             const Civ7Tile & tile = civ7TerrainType.get(w, h);
 
@@ -51,7 +51,7 @@ void Map::refresh()
             // Red is resource
             color1.r = (u8)tile.resource;
             
-            terrain.image.setPixel(w, h + height, color1);
+            terrain.image.setPixel(w, h + m_height, color1);
         }
     }
 

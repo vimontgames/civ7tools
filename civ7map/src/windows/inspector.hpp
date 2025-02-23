@@ -24,7 +24,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
     {
         Civ7Tile * tile = nullptr;
         
-        if (g_map && g_selectedCell.x < g_map->width && g_selectedCell.y < g_map->height)
+        if (g_map && g_selectedCell.x < g_map->m_width && g_selectedCell.y < g_map->m_height)
             tile = &g_map->civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
 
         ImGui::BeginTable("TileTable", 2, ImGuiTableFlags_Resizable);

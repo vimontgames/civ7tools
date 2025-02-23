@@ -32,6 +32,8 @@ static const u32 g_fixedTextLengthLarge = 20;
 
 bool g_saveFileDialog = false;
 
+const char * g_saveImGuiIniPath = nullptr;
+
 enum ImportFile
 {
     None,
@@ -351,8 +353,8 @@ int main()
 
                             if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
                             {
-                                float w = (float)g_map->width;
-                                float h = (float)g_map->height;
+                                float w = (float)g_map->m_width;
+                                float h = (float)g_map->m_height;
 
                                 Vector2i cell;
 
@@ -465,12 +467,14 @@ int main()
             ImGui::OpenPopup(g_importFileName);
             g_importFile = ImportFile::None;
             SetCurrentDirectory(g_myDocumentsPath.c_str());
+            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
         }
         else if (g_saveFileDialog)
         {
             ImGui::OpenPopup("Export");
             g_saveFileDialog = false;
             SetCurrentDirectory(g_myDocumentsPath.c_str());
+            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
         }
 
         if (g_importFileName != nullptr && g_fileDialog.showFileDialog(g_importFileName, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
@@ -485,6 +489,7 @@ int main()
             if (newMap->importCiv7Map(newMap->m_path, g_currentWorkingDirectory))
             {
                 SetCurrentDirectory(g_currentWorkingDirectory.c_str());
+                ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
                 newMap->refresh();
                 newMap->resetCamera();
 
@@ -528,6 +533,7 @@ int main()
             }
 
             SetCurrentDirectory(g_currentWorkingDirectory.c_str());
+            ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
         }
 
         if (needRefresh)
@@ -539,7 +545,7 @@ int main()
 
          if (g_map && g_map->hovered)
         {
-            if (Mouse::isButtonPressed(Mouse::Middle))
+            if (Mouse::isButtonPressed(Mouse::Right))
             {
                 if (!g_map->cameraPan)
                 {

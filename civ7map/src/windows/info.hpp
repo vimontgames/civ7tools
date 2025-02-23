@@ -31,8 +31,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
         {
             int editMapSize[2] =
             {
-                (int)g_map->width,
-                (int)g_map->height
+                (int)g_map->m_width,
+                (int)g_map->m_height
             };
 
             const bool editX = ImGui::InputInt("horizontal", &editMapSize[0], 1, 100, ImGuiInputTextFlags_ReadOnly);

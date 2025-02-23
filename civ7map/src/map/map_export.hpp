@@ -122,12 +122,12 @@ void Map::exportCiv7Map(string & _map, const string & _cwd)
         "    // MapToConvertV7 = { civ7TerrainType, civ7BiomeType, civ7FeatureType }\n"
         "\n"
         "\n",
-        width
+        m_width
     );
 
-    for (uint j = 0; j < height; ++j)
+    for (uint j = 0; j < m_height; ++j)
     {
-        for (uint i = 0; i < width; ++i)
+        for (uint i = 0; i < m_width; ++i)
         {
             const Civ7Tile & tile = civ7TerrainType.get(i, j);
 
@@ -248,7 +248,7 @@ void Map::saveBitmap(const Array2D<u32> _bitmap, XMLElement * _xmlTerrainSave, c
     if (xmlBytes)
     {
         int len = 0;
-        ubyte * png = stbi_write_png_to_mem((const ubyte*)_bitmap.data(), width * sizeof(u32), width, height, 4, &len);
+        ubyte * png = stbi_write_png_to_mem((const ubyte*)_bitmap.data(), m_width * sizeof(u32), m_width, m_height, 4, &len);
         string pngBase64 = base64::encode((char*)png, (size_t)len);
 
         xmlBytes->SetAttribute("Length", len);

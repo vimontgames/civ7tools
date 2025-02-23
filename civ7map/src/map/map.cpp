@@ -65,7 +65,7 @@ void Map::loadIcons()
     for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
     {
         auto & bitmap = bitmaps[i];
-        bitmap.image.create(width, height * 2);
+        bitmap.image.create(m_width, m_height * 2);
         bitmap.sprites.clear();
     }
 
@@ -110,17 +110,17 @@ void Map::translate(const sf::Vector2i & _offset)
     int offsetY = _offset.y;
 
     while (offsetX < 0)
-        offsetX += width;
+        offsetX += m_width;
     while (offsetY < 0)
-        offsetY += height;
+        offsetY += m_height;
 
     LOG_INFO("Translate map by {%i,%i}\n", offsetX, offsetY);
 
     for (u32 i = 0; i < allSpawnsPoints.size(); ++i)
     {
         SpawnPoint & spawn = allSpawnsPoints[i];
-        spawn.pos.x = ((int)spawn.pos.x + (int)width - offsetX) % (int)width;
-        spawn.pos.y = ((int)spawn.pos.y + (int)height - offsetY) % (int)height;
+        spawn.pos.x = ((int)spawn.pos.x + (int)m_width - offsetX) % (int)m_width;
+        spawn.pos.y = ((int)spawn.pos.y + (int)m_height - offsetY) % (int)m_height;
     }
 
     civ7TerrainType.translate(offsetX, offsetY);

@@ -134,8 +134,8 @@ public:
     string m_GetMapPath;
     string m_author;
 
-    u32 width = 0;
-    u32 height = 0;
+    u32 m_width = 0;
+    u32 m_height = 0;
 
     Array2D<Civ7Tile> civ7TerrainType;
 
