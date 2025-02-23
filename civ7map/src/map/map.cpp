@@ -65,7 +65,7 @@ void Map::loadIcons()
     for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
     {
         auto & bitmap = bitmaps[i];
-        bitmap.image.create(width, height);
+        bitmap.image.create(width, height * 2);
         bitmap.sprites.clear();
     }
 
@@ -114,7 +114,7 @@ void Map::translate(const sf::Vector2i & _offset)
     while (offsetY < 0)
         offsetY += height;
 
-    debugPrint("Translate map by {%i,%i}\n", offsetX, offsetY);
+    LOG_INFO("Translate map by {%i,%i}\n", offsetX, offsetY);
 
     for (u32 i = 0; i < allSpawnsPoints.size(); ++i)
     {
@@ -124,14 +124,32 @@ void Map::translate(const sf::Vector2i & _offset)
     }
 
     civ7TerrainType.translate(offsetX, offsetY);
+}
 
-    //elevationTexture.    translate(offsetX, offsetY);
-    //zonesTexture.        translate(offsetX, offsetY);
-    //poiTexture.          translate(offsetX, offsetY);
-    //landmarksTexture.    translate(offsetX, offsetY);
-    //naturalWonderTexture.translate(offsetX, offsetY);
-    //riverTexture.        translate(offsetX, offsetY);
-    //visibilityTexture.   translate(offsetX, offsetY);
-    //roadTexture.         translate(offsetX, offsetY);
-    //matchingSeedTexture. translate(offsetX, offsetY);
+//--------------------------------------------------------------------------------------
+string Map::getContinentName(ContinentType continent) const
+{
+    if ((int)continent < m_continents.size())
+        return m_continents[(int)continent];
+    else
+        return "";
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getContinentShortName(ContinentType continent) const
+{
+    string name = getContinentName(continent);
+    const string continentPrefix = "CONTINENT_";
+    size_t trim = name.find(continentPrefix);
+    if (-1 != trim)
+        name = name.substr(trim + continentPrefix.length());
+
+    name = CapitalizeWords(name);
+    return name;
+}
+
+//--------------------------------------------------------------------------------------
+uint Map::getContinentCount() const
+{
+    return (uint)m_continents.size();
 }

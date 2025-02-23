@@ -10,8 +10,11 @@ Open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [her
 
 ## v0.02
 
+![Screenshot](doc/img/v0.02.png)
+
 - Add support for 'GetMap' being imported from a separate file
 - Separate parsing map data and Civ6 => Civ7 tile format conversion
+- Import continents and resources
 
 ## v0.01
 

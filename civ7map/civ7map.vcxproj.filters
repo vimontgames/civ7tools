@@ -118,6 +118,9 @@
     <ClInclude Include="src\tile\civ6tile.h">
       <Filter>tile</Filter>
     </ClInclude>
+    <ClInclude Include="..\data\shader\colors.h">
+      <Filter>shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

@@ -48,6 +48,10 @@ void Map::render(RenderWindow & _window)
 
                     switch (territoryBackground)
                     {
+                        default:
+                            LOG_ERROR("Missing case \"%s\" (%i)", asString(territoryBackground).c_str(), (int)territoryBackground);
+                            break;
+
                         case MapFilter::TerrainType:
                             passFlags = PASS_TYPE_TERRAIN;
                             break;
@@ -56,8 +60,16 @@ void Map::render(RenderWindow & _window)
                             passFlags = PASS_TYPE_BIOME;
                             break;
 
-                        case MapFilter::Continents:
-                            passFlags = PASS_TYPE_CONTINENTS;
+                        case MapFilter::Feature:
+                            passFlags = PASS_TYPE_FEATURE;
+                            break;
+
+                        case MapFilter::Continent:
+                            passFlags = PASS_TYPE_CONTINENT;
+                            break;
+
+                        case MapFilter::Resource:
+                            passFlags = PASS_TYPE_RESOURCE;
                             break;
                     }
 

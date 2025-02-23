@@ -82,8 +82,12 @@ sf::Shader * ShaderManager::compile(const char * _vs, const char * _ps, bool _de
         sf::String common;
         fileToString(fx, "data/shader/common.h");
 
-        vs = header + fx + common + vs;
-        ps = header + fx + common + ps;
+		// shared colors
+        sf::String colors;
+        fileToString(colors, "data/shader/colors.h");
+
+        vs = header + fx + common + colors + vs;
+        ps = header + fx + common + colors + ps;
 	}
 
 	sf::Shader * shader = new sf::Shader();

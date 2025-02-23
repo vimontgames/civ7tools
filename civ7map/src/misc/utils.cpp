@@ -39,14 +39,14 @@ string GetFilenameWithoutExtension(const string & _fullpath)
 //--------------------------------------------------------------------------------------
 bool ReadFile(const string & _fullpath, string & _data)
 {
-    FILE * fp = fopen(_fullpath.c_str(), "r");
+    FILE * fp = fopen(_fullpath.c_str(), "rb");
     if (fp)
     {
         fseek(fp, 0, SEEK_END);
         size_t filesize = ftell(fp);
         rewind(fp);
         char * temp = (char *)malloc(filesize + 1);
-        fread(temp, 1, filesize, fp);
+        size_t read = fread(temp, 1, filesize, fp);
         temp[filesize] = '\0';
         fclose(fp);
         _data = (string)temp;
@@ -57,4 +57,26 @@ bool ReadFile(const string & _fullpath, string & _data)
     LOG_WARNING("Could not read file \"%s\"", _fullpath.c_str());
     _data = {};
     return false;
+}
+
+//--------------------------------------------------------------------------------------
+string CapitalizeWords(const string & input)
+{
+    std::stringstream ss(input);
+    std::string word, result;
+
+    std::istringstream iss(input);
+    while (std::getline(iss, word, '_'))
+    {
+        if (!word.empty())
+        {
+            word[0] = std::toupper(word[0]);
+            for (size_t i = 1; i < word.size(); ++i)
+                word[i] = std::tolower(word[i]);
+            if (!result.empty()) result += " ";
+            result += word;
+        }
+    }
+
+    return result;
 }

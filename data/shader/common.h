@@ -4,9 +4,11 @@
 
 #define PASS_TYPE_TERRAIN       0
 #define PASS_TYPE_BIOME         1
-#define PASS_TYPE_CONTINENTS    2
+#define PASS_TYPE_FEATURE       2
+#define PASS_TYPE_CONTINENT    3
+#define PASS_TYPE_RESOURCE      4
 
-#define PASS_TYPE_MASK      0xF
+#define PASS_TYPE_MASK          0xF
 
 #define PASS_FLAG_BORDERS   0x40000000
 #define PASS_FLAG_HEXES     0x80000000

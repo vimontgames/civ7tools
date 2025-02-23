@@ -1,0 +1,5 @@
+Tuner script:
+tuner-input.js
+
+Enable Tuner:
+Open the "AppOptions.txt" file in the "\AppData\Local\Firaxis Games\Sid Meier's Civilization VII" folder (on Windows), uncomment ;EnableDebugPanels -1

@@ -5,15 +5,15 @@
 #include "tinyxml2.h"
 #include "Array2D.h"
 
-#include "tile/civ6tile.h"
 #include "tile/civ7tile.h"
+#include "tile/civ6tile.h"
 
 #define MAX_PLAYER_SPAWN 10
 
 //--------------------------------------------------------------------------------------
 enum class MapBitmap
 {
-    TerrainData = 0,
+    TerrainData = 0,        // TerrainType | Biome | Feature | Continent then Resource | ? | ? | ?
 
     First = TerrainData,
     Last = TerrainData,
@@ -25,10 +25,13 @@ enum class MapFilter
 {
     TerrainType = 0,
     Biome,
-    Continents,
+    Feature,
+    Continent,
+
+    Resource,
 
     First = TerrainType,
-    Last = Continents,
+    Last = Resource,
     Count = Last - First + 1
 };
 
@@ -116,6 +119,10 @@ public:
 
     void translate(const sf::Vector2i & _offset);
 
+    string getContinentName(ContinentType continent) const;
+    string getContinentShortName(ContinentType continent) const;
+    uint getContinentCount() const;
+
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
@@ -174,5 +181,5 @@ public:
 
     sf::Vector2i mapOffset[2] = { sf::Vector2i(0,0), sf::Vector2i(0,0) };
 
-    
+    vector<string> m_continents;
 };

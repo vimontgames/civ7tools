@@ -56,11 +56,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;..\data;..\extern\miniz-cpp;..\extern\imgui;..\extern\imgui-sfml;..\extern\ImGui-Addons\FileBrowser;..\extern\tinyxml2;..\extern\base64;..\extern\stb;$(SFML)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\extern;..\data;..\extern\miniz-cpp;..\extern\imgui;..\extern\imgui-sfml;..\extern\ImGui-Addons\FileBrowser;..\extern\tinyxml2;..\extern\base64;..\extern\fmt\include;..\extern\stb;$(SFML)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>precomp.h</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -77,11 +78,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;..\data;..\extern\miniz-cpp;..\extern\imgui;..\extern\imgui-sfml;..\extern\ImGui-Addons\FileBrowser;..\extern\tinyxml2;..\extern\base64;..\extern\stb;$(SFML)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\extern;..\data;..\extern\miniz-cpp;..\extern\imgui;..\extern\imgui-sfml;..\extern\ImGui-Addons\FileBrowser;..\extern\tinyxml2;..\extern\base64;..\extern\fmt\include;..\extern\stb;$(SFML)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>precomp.h</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,6 +123,7 @@
     <ClCompile Include="src\stringconvert.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\data\shader\colors.h" />
     <ClInclude Include="..\data\shader\common.h" />
     <ClInclude Include="..\data\shader\fx.h" />
     <ClInclude Include="..\data\shader\hlsl2glsl.h" />

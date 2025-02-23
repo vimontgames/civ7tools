@@ -15,8 +15,12 @@ using namespace ImGui::SFML;
 using namespace imgui_addons;
 
 bool g_hasFocus = true;
-u32 g_screenWidth = 1920;
-u32 g_screenHeight = 1024;
+
+const u32 g_initScreenWidth = 1920;
+const u32 g_initScreenHeight = 1080;
+
+u32 g_screenWidth = g_initScreenWidth;
+u32 g_screenHeight = g_initScreenHeight;
 
 static ImGuiFileBrowser g_fileDialog;
 static string g_myDocumentsPath;
@@ -151,16 +155,22 @@ int main()
 
                 case Event::Resized:
                 {
-                    if (g_map)
+                    for (auto & map : g_maps)
                     {
                         Vector2f offset = Vector2f(float(g_screenWidth / 2) - float(event.size.width / 2), float(g_screenHeight / 2) - float(event.size.height / 2));
 
-                        g_map->cameraOffset += offset;
-                        g_map->cameraPreviousOffset += offset;
-                        g_map->cameraZoom = g_map->cameraZoom / (float(event.size.height) / float(g_screenHeight));
+                        map->cameraOffset += offset;
+                        map->cameraPreviousOffset += offset;
+                        map->cameraZoom = map->cameraZoom / (float(event.size.height) / float(g_screenHeight));
 
                         g_screenWidth = event.size.width;
                         g_screenHeight = event.size.height;
+
+                        mainWindow.setSize(Vector2u(g_screenWidth, g_screenHeight));
+                        sf::FloatRect visibleArea(0, 0, (float)g_screenWidth, (float)g_screenHeight);
+                        mainWindow.setView(sf::View(visibleArea));
+
+                        map->refresh();
                     }
                 }
                 break;
@@ -286,59 +296,114 @@ int main()
                     else
                         map->hovered = false;
 
-                    ImVec2 topLeft = ImGui::GetWindowPos();
-                    ImVec2 size = ImGui::GetWindowSize();
-                    const auto mousePos = Mouse::getPosition(mainWindow);
-                    ImVec2 relativeMousePos = ImVec2(mousePos.x - topLeft.x, mousePos.y - topLeft.y - ImGui::GetFrameHeight());
-
-                    if (relativeMousePos.x > 0 && relativeMousePos.y > 0 && relativeMousePos.x  < size.x && relativeMousePos.y < (size.y- ImGui::GetFrameHeight()))
+                    if (g_map == map)
                     {
-                        if (ImGui::IsMouseDown(0))
+                        ImVec2 topLeft = ImGui::GetWindowPos();
+                        ImVec2 size = ImGui::GetWindowSize();
+                        const auto mousePos = Mouse::getPosition(mainWindow);
+                        ImVec2 relativeMousePos = ImVec2(mousePos.x - topLeft.x, mousePos.y - topLeft.y - ImGui::GetFrameHeight());
+
+                        if (relativeMousePos.x > 0 && relativeMousePos.y > 0 && relativeMousePos.x  < size.x && relativeMousePos.y < (size.y- ImGui::GetFrameHeight()))
                         {
-                            int i = 42;
-                        }
-
-                        Vector2f size = Vector2f((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
-
-                        sf::View view;
-                        view.setCenter(sf::Vector2f(float(g_screenWidth) * 0.5f, (float)(g_screenHeight) * 0.5f));
-                        view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
-                        view.zoom(g_map->cameraZoom); // zeng
-                        view.move(g_map->cameraOffset);
-                        
-                        // Convert to world coordinates using the current SFML view (handles zoom & offset)
-                        sf::Vector2i mousePixel = sf::Vector2i((int)relativeMousePos.x, (int)relativeMousePos.y);
-                        sf::Vector2f uv = mainWindow.mapPixelToCoords(mousePixel, view);
-                        uv.x /= (float)size.x;
-                        uv.y /= (float)size.y;
-
-                        if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
-                        {
-                            float w = (float)g_map->width;
-                            float h = (float)g_map->height;
-
-                            Vector2i cell;
-
-                            cell.x = (int)min(uv.x * w, (w - 1));
-                            cell.y = (int)min(uv.y * w, (h - 1));
-
-                            if (g_map->useHexUVs)
+                            if (ImGui::IsMouseDown(0))
                             {
-                                if (cell.y & 1)
-                                {
-                                    cell.x = (int)floor(uv.x * w + 0.25f);
-                                    if (cell.x > (w-1))
-                                        cell.x = 0;
-                                }
-                                else
-                                {
-                                    cell.x = (int)floor(uv.x * w - 0.25f);
-                                    if (cell.x == -1)
-                                        cell.x = (int)(w - 1);
-                                }
+                                int i = 42;
                             }
 
-                            ImGui::SetTooltip("Plot %i,%i", cell.x, cell.y);
+                            Vector2f size = Vector2f((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
+
+                            sf::View view;
+                            view.setCenter(sf::Vector2f(float(g_screenWidth) * 0.5f, (float)(g_screenHeight) * 0.5f));
+                            view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
+                            view.zoom(g_map->cameraZoom); // zeng
+                            view.move(g_map->cameraOffset);
+                        
+                            // Convert to world coordinates using the current SFML view (handles zoom & offset)
+                            sf::Vector2i mousePixel = sf::Vector2i((int)relativeMousePos.x, (int)relativeMousePos.y);
+                            sf::Vector2f uv = mainWindow.mapPixelToCoords(mousePixel, view);
+                            uv.x /= (float)size.x;
+                            uv.y /= (float)size.y;
+
+                            //uv.x *= (float)g_screenWidth / (float)g_initScreenWidth; // hem, not really sure why but it's needed after window resized :p
+                            //uv.y *= (float)g_screenHeight / (float)g_initScreenHeight;
+
+                            uv.x *= 0.5f;
+                            uv.y *= 0.5f;
+
+                            if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
+                            {
+                                float w = (float)g_map->width;
+                                float h = (float)g_map->height;
+
+                                Vector2i cell;
+
+                                cell.x = (int)min(uv.x * w, (w - 1));
+                                cell.y = (int)min(uv.y * h, (h - 1));
+
+                                if (g_map->useHexUVs)
+                                {
+                                    if (cell.y & 1)
+                                    {
+                                        cell.x = (int)floor(uv.x * w + 0.25f);
+                                        if (cell.x > (w - 1))
+                                            cell.x = 0;
+                                    }
+                                    else
+                                    {
+                                        cell.x = (int)floor(uv.x * w - 0.25f);
+                                        if (cell.x == -1)
+                                            cell.x = (int)(w - 1);
+                                    }
+                                }
+
+                                cell.y = (int)h - cell.y - 1;
+
+                                const Civ7Tile tile = g_map->civ7TerrainType.get(cell.x, cell.y);
+
+                                ImGui::BeginTooltip();
+                                {
+                                    ImGui::Text("%i,%i", cell.x, cell.y);
+                                    ImGui::Separator();
+
+                                    DrawColor(g_map, tile.continent);
+                                    ImGui::SameLine();
+                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                    ImGui::Text("(%i)", (int)tile.continent);
+
+                                    DrawColor(g_map, tile.terrain);
+                                    ImGui::SameLine();
+                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                    ImGui::Text("(%i)", (int)tile.terrain);
+                                
+                                    DrawColor(g_map, tile.biome);
+                                    ImGui::SameLine();
+                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                    ImGui::Text("(%i)", (int)tile.biome);
+
+                                    //if (tile.feature != FeatureType::None)
+                                    {
+                                        DrawColor(g_map, tile.feature);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)",(int)tile.feature);
+                                    }
+
+                                    DrawColor(g_map, tile.resource);
+                                    ImGui::SameLine();
+                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                    ImGui::Text("(%i)", (int)tile.resource);
+
+                                    ImGui::Separator();
+
+                                    #if _DEBUG0
+                                    {
+                                        ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
+                                        ImGui::Text("uv %.2f,%.2f", uv.x, uv.y);
+                                    }
+                                    #endif
+                                }
+                                ImGui::EndTooltip();
+                            }
                         }
                     }
                 }

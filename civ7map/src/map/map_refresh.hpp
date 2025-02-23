@@ -30,15 +30,28 @@ void Map::refresh()
 
             const Civ7Tile & tile = civ7TerrainType.get(w, h);
 
-            Color color = Color(0, 0, 0, 255);
+            Color color0 = Color(0, 0, 0, 0);
 
             // Red is terrain type
-            color.r = (u8)tile.terrainType;  
+            color0.r = (u8)tile.terrain;
 
             // Green is biome
-            color.g = (u8)tile.biomeType;
+            color0.g = (u8)tile.biome;
 
-            terrain.image.setPixel(w, h, color);
+            // Blue is feature
+            color0.b = (u8)tile.feature;
+
+            // Alpha is continent
+            color0.a = (u8)tile.continent;
+
+            terrain.image.setPixel(w, h, color0);
+
+            Color color1 = Color(0, 0, 0, 0);
+
+            // Red is resource
+            color1.r = (u8)tile.resource;
+            
+            terrain.image.setPixel(w, h + height, color1);
         }
     }
 
@@ -48,7 +61,7 @@ void Map::refresh()
         bitmap.texture.loadFromImage(bitmap.image);
         bitmap.sprite.setTexture(bitmap.texture);
         bitmap.sprite.setTextureRect(IntRect(0, 0, bitmap.texture.getSize().x, bitmap.texture.getSize().y));
-        bitmap.sprite.setScale(scale);
+        bitmap.sprite.setScale(Vector2f(scale.x * 2.0f, scale.y));
 
         //if (bitmap.quadshader == invalidShaderID)
         {

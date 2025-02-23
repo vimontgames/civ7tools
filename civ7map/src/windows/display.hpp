@@ -1,4 +1,5 @@
 #include "BaseWindow.h"
+#include "shader/colors.h"
 
 //--------------------------------------------------------------------------------------
 class DisplayWindow : public BaseWindow
@@ -16,6 +17,47 @@ DisplayWindow::DisplayWindow() :
 }
 
 //--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, ContinentType _continent)
+{
+    float4 color = getContinentColor(_continent);
+    float f3Color[] = { color.r, color.g,  color.b };
+    string continentName = _map->getContinentShortName(_continent);
+    ImGui::ColorEdit3(-1 != (int)_continent ? continentName.c_str() : "No continent", f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, TerrainType _terrain)
+{
+    float4 color = getTerrainColor(_terrain);
+    float f3Color[] = { color.r, color.g,  color.b };
+    ImGui::ColorEdit3(asString(_terrain).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, BiomeType _biome)
+{
+    float4 color = getBiomeColor(_biome);
+    float f3Color[] = { color.r, color.g,  color.b };
+    ImGui::ColorEdit3(asString(_biome).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, FeatureType _feature)
+{
+    float4 color = getFeatureColor(_feature);
+    float f3Color[] = { color.r, color.g,  color.b };
+    ImGui::ColorEdit3(FeatureType::None != _feature ? asString(_feature).c_str() : "No feature", f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, ResourceType _resource)
+{
+    float4 color = getResourceColor(_resource);
+    float f3Color[] = { color.r, color.g,  color.b };
+    ImGui::ColorEdit3(ResourceType::None != _resource ? asString(_resource).c_str() : "No resource", f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
 bool DisplayWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
@@ -28,52 +70,50 @@ bool DisplayWindow::Draw(const RenderWindow & window)
             ImGui::Separator();
 
             PushItemWidth(g_comboxItemWidth);
-            needRefresh |= Combo("Filter", (int *)&g_map->territoryBackground, "TerrainType\0Biome\0Continents\0\0");
+            needRefresh |= Combo("Filter", (int *)&g_map->territoryBackground, "TerrainType\0Biome\0Feature\0Continents\0Resource\0\0");
             PopItemWidth();
 
             switch (g_map->territoryBackground)
             {
+                default:
+                    LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->territoryBackground).c_str(), (int)g_map->territoryBackground);
+                    break;
+
                 case MapFilter::TerrainType:
-                {                   
-                    float flatColor[] = { 0.3f, 0.3f, 0.3f };
-                    ImGui::ColorEdit3("Flat", flatColor, ImGuiColorEditFlags_NoInputs);
-
-                    float hillColor[] = { 0.6f, 0.6f, 0.6f };
-                    ImGui::ColorEdit3("Hill", hillColor, ImGuiColorEditFlags_NoInputs);
-
-                    float moutainColor[] = { 0.9f, 0.9f, 0.9f };
-                    ImGui::ColorEdit3("Moutain", moutainColor, ImGuiColorEditFlags_NoInputs);
-
-                    float oceanColor[] = { 0, 0, 1 };
-                    ImGui::ColorEdit3("Ocean", oceanColor, ImGuiColorEditFlags_NoInputs);
-
-                    float coastColor[] = { 0, 0.5f, 1 };
-                    ImGui::ColorEdit3("Coast", coastColor, ImGuiColorEditFlags_NoInputs);
-
-                    float navigableRiverColor[] = { 0, 1, 1 };
-                    ImGui::ColorEdit3("Navigable River", navigableRiverColor, ImGuiColorEditFlags_NoInputs);
+                {       
+                    for (uint i = 0; i < enumCount<TerrainType>(); ++i)
+                        DrawColor(g_map, (TerrainType)i);
                 }
                 break;
 
                 case MapFilter::Biome:
                 {
-                    float tundraColor[] = { 0.8f, 1.0f, 0.8f };
-                    ImGui::ColorEdit3("Tundra", tundraColor, ImGuiColorEditFlags_NoInputs);
+                    for (uint i = 0; i < enumCount<BiomeType>(); ++i)
+                        DrawColor(g_map, (BiomeType)i);
+                }
+                break;
 
-                    float grasslandColor[] = { 0.0f, 1.0f, 0.0f };
-                    ImGui::ColorEdit3("Grassland", grasslandColor, ImGuiColorEditFlags_NoInputs);
+                case MapFilter::Feature:
+                {
+                    auto vals = magic_enum::enum_entries<FeatureType>();
 
-                    float plainsColor[] = { 0.5f, 0.8f, 0.0f };
-                    ImGui::ColorEdit3("Plains", plainsColor, ImGuiColorEditFlags_NoInputs);
+                    for (auto val : vals)
+                        DrawColor(g_map, val.first);
+                }
+                break;
 
-                    float tropicalColor[] = { 0.0f, 0.5f, 0.0f };
-                    ImGui::ColorEdit3("Tropical", tropicalColor, ImGuiColorEditFlags_NoInputs);
+                case MapFilter::Continent:
+                {
+                    for (uint i = 0; i < g_map->getContinentCount(); ++i)
+                        DrawColor(g_map, (ContinentType)i);
+                }
+                break;
 
-                    float desertColor[] = { 1.0f, 1.0f, 0.0f };
-                    ImGui::ColorEdit3("Desert", desertColor, ImGuiColorEditFlags_NoInputs);
-
-                    float marineColor[] = { 0.0f, 0.0f, 1.0f };
-                    ImGui::ColorEdit3("Marine", marineColor, ImGuiColorEditFlags_NoInputs);
+                case MapFilter::Resource:
+                {
+                    auto vals = magic_enum::enum_entries<ResourceType>();
+                    for (auto val : vals)
+                        DrawColor(g_map, val.first);
                 }
                 break;
             }
