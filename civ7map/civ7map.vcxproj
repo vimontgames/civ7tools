@@ -156,6 +156,7 @@
     <ClInclude Include="src\windows\help.hpp" />
     <ClInclude Include="src\windows\info.hpp" />
     <ClInclude Include="src\windows\baseWindow.h" />
+    <ClInclude Include="src\windows\inspector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\default_ps.fx">

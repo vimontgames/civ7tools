@@ -21,6 +21,8 @@
 uniform int passFlags;
 uniform float2 texSize;
 uniform float2 screenSize;
+uniform float2 hoveredCell;
+uniform float2 selectedCell;
 uniform float4 color;
 uniform sampler2D texture;
 

@@ -166,6 +166,12 @@ const mapIDX = {
 	cliff: 5
 }
 
+const mapIDXV7 = {
+	terrain: 0,
+	biome: 1,
+	feature: 2
+}
+
 function getCiv6Terrain(iTerrain) {
 	return civ6Terrain[iTerrain];
 }
@@ -179,6 +185,34 @@ function getTerrainType(sCiv6Terrain) {
 		return globals.g_CoastTerrain;
 	} else if (sCiv6Terrain == "TERRAIN_OCEAN") {
 		return globals.g_OceanTerrain;
+	} 
+	// default
+	return globals.g_FlatTerrain;
+}
+
+function getTerrainTypeV7(sCiv7Terrain) 
+{
+	console.log("getTerrainTypeV7 - sCiv7Terrain = " + sCiv7Terrain);
+	
+	if (sCiv7Terrain.search("MOUNTAIN") != -1) 
+	{
+		return globals.g_MountainTerrain;
+	} else if (sCiv7Terrain.search("HILLS") != -1)
+	{
+		return globals.g_HillTerrain;
+	} else if (sCiv7Terrain == "TERRAIN_HILL") 
+	{
+		return globals.g_HillTerrain;
+	} else if (sCiv7Terrain == "TERRAIN_COAST") 
+	{
+		return globals.g_CoastTerrain;
+	} else if (sCiv7Terrain == "TERRAIN_OCEAN") 
+	{
+		return globals.g_OceanTerrain;
+	} 
+	else if (sCiv7Terrain == "TERRAIN_NAVIGABLE_RIVER") 
+	{
+		return globals.g_NavigableRiverTerrain;
 	} 
 	// default
 	return globals.g_FlatTerrain;
@@ -200,6 +234,37 @@ function getBiomeType(sCiv6Terrain) {
 	return globals.g_MarineBiome;
 }
 
+function getBiomeTypeV7(sCiv7Biome) 
+{
+	if (sCiv7Biome.search("TUNDRA") != -1) 
+	{
+		return globals.g_TundraBiome;
+	} 
+	else if (sCiv7Biome.search("GRASSLAND") != -1) 
+	{
+		return globals.g_GrasslandBiome;
+	}
+	else if (sCiv7Biome.search("PLAINS") != -1) 
+	{
+		return globals.g_PlainsBiome;
+	}
+	else if (sCiv7Biome.search("TROPICAL") != -1) 
+	{
+		return globals.g_TropicalBiome;
+	}
+	else if (sCiv7Biome.search("DESERT") != -1) 
+	{
+		return globals.g_DesertBiome;
+	}
+	else if (sCiv7Biome.search("MARINE") != -1) 
+	{
+		return globals.g_MarineBiome;
+	}
+	
+	// default
+	return globals.g_MarineBiome;
+}
+
 export function getTerrainFromRow(row) {
 	let terrain = row[mapIDX.terrain];
 	console.log("getTerrainFromRow - terrain = " + terrain);
@@ -210,6 +275,19 @@ export function getTerrainFromRow(row) {
 		return getTerrainType(terrain);
 	}
 }
+
+export function getTerrainFromRowV7(row) 
+{
+	let terrain = row[mapIDXV7.terrain];
+	console.log("getTerrainFromRowV7 - terrain = " + terrain);
+	if (typeof(terrain) == 'number') 
+	{
+		terrain = civ7terrain[terrain];
+	} 
+	
+	return getTerrainTypeV7(terrain);
+}
+
 
 export function getBiomeFromRow(row) {
 	let terrain = row[mapIDX.terrain];
@@ -232,6 +310,19 @@ export function getBiomeFromRow(row) {
 	} else {
 		return getBiomeType(terrain);
 	}
+}
+
+export function getBiomeFromRowV7(row) 
+{
+	let biome = row[mapIDXV7.biome];
+	console.log("getBiomeFromRowV7 - biome = " + biome);
+		
+	if (typeof(biome) == 'number') 
+	{
+		biome = civ7biome[biome];
+	} 
+	
+	return getBiomeTypeV7(biome);
 }
 
 

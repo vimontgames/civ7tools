@@ -1,4 +1,5 @@
 #include "imgui.h" 
+#include "imgui_internal.h"
 #include "imgui-SFML.h" 
 #include "ImGuiFileBrowser.h"
 #include "Shlobj.h"
@@ -49,11 +50,15 @@ const char * g_importFileName = nullptr;
 static vector<Map*> g_maps;
 static Map * g_map = nullptr;
 
+Vector2i g_hoveredCell = Vector2i(-1, -1);
+Vector2i g_selectedCell = Vector2i(-1, -1);
+
 #include "windows/help.hpp"
 #include "windows/debug.hpp"
 #include "windows/info.hpp"
 #include "windows/display.hpp"
 #include "windows/console.hpp"
+#include "windows/inspector.hpp"
 
 static vector<BaseWindow *> g_windows;
 
@@ -73,7 +78,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 
 #include "imgui_internal.h"
 
-const char * version = "civ7map 0.02";
+const char * version = "civ7map 0.03";
 
 //--------------------------------------------------------------------------------------
 int main() 
@@ -92,8 +97,15 @@ int main()
 
     // default path
     WCHAR userFolder[MAX_PATH];
-    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_MYDOCUMENTS, NULL, CSIDL_MYDOCUMENTS, userFolder)))
-        g_myDocumentsPath = ws2s(wstring(userFolder)) + "\\Humankind\\Maps";
+    if (IsDebuggerPresent())
+    {
+        g_myDocumentsPath = g_currentWorkingDirectory + "\\mods";
+    }
+    else
+    {
+        if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_LOCAL_APPDATA, NULL, CSIDL_LOCAL_APPDATA, userFolder)))
+            g_myDocumentsPath = ws2s(wstring(userFolder)) + "\\Firaxis Games\\Sid Meier's Civilization VII\\Mods";
+    }
 
     sf::ContextSettings contextSettings;
                         contextSettings.sRgbCapable = false;
@@ -119,6 +131,7 @@ int main()
     g_windows.push_back(new DisplayWindow());
     g_windows.push_back(new HelpWindow());
     g_windows.push_back(new InfoWindow());
+    g_windows.push_back(new InspectorWindow());
 
     Clock deltaClock;
     while (mainWindow.isOpen()) 
@@ -205,8 +218,14 @@ int main()
                     g_importFileName = g_importFileNames[ImportFile::Civ6YnAMP];
                 }
 
-                //if(ImGui::MenuItem("Export"))
-                //    g_saveFileDialog = true;
+                if (!g_map)
+                    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+
+                if(ImGui::MenuItem("Export Civ7 YnAMP map"))
+                    g_saveFileDialog = true;
+
+                if (!g_map)
+                    ImGui::PopItemFlag();
 
                 ImGui::Separator();
 
@@ -358,6 +377,10 @@ int main()
 
                                 cell.y = (int)h - cell.y - 1;
 
+                                g_hoveredCell = cell;
+                                if (ImGui::IsMouseDown(0))
+                                    g_selectedCell = cell;
+
                                 const Civ7Tile tile = g_map->civ7TerrainType.get(cell.x, cell.y);
 
                                 ImGui::BeginTooltip();
@@ -403,6 +426,12 @@ int main()
                                     #endif
                                 }
                                 ImGui::EndTooltip();
+                            }
+                            else
+                            {
+                                g_hoveredCell = Vector2i(-1, -1);
+                                if (ImGui::IsMouseDown(0))
+                                    g_selectedCell = Vector2i(-1, -1);
                             }
                         }
                     }
@@ -497,6 +526,8 @@ int main()
                 if (prevFilename != g_map->m_path)
                     g_map->docked = false;
             }
+
+            SetCurrentDirectory(g_currentWorkingDirectory.c_str());
         }
 
         if (needRefresh)
@@ -508,7 +539,7 @@ int main()
 
          if (g_map && g_map->hovered)
         {
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (Mouse::isButtonPressed(Mouse::Middle))
             {
                 if (!g_map->cameraPan)
                 {
@@ -519,7 +550,8 @@ int main()
                 else
                 {
                     //continue pan
-                    g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * (g_map->cameraZoom*g_map->cameraZoom) + g_map->cameraPreviousOffset;
+                    //g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * (g_map->cameraZoom*g_map->cameraZoom) + g_map->cameraPreviousOffset;
+                    g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * g_map->cameraZoom + g_map->cameraPreviousOffset ;
                 }
             }
             else if (g_map->cameraPan)

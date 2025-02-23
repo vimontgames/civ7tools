@@ -26,7 +26,7 @@
 			<Text>[icon:YNAMP_CIV6_EARTH] Greatest Earth Map (YnAMP)[n]Civ5 map by djvandyke</Text>
 		</Row>
 		<Row Tag="LOC_MAP_GREATEST_EARTH_YNAMP_CUSTOM_NAME">
-			<Text>[icon:YNAMP_CIV6_EARTH] Greatest Earth Map Custom(YnAMP)[n]Saved with civ5map</Text>
+			<Text>[icon:YNAMP_CIV6_EARTH] Greatest Earth Map (YnAMP)[n]Custom civ5map version</Text>
 		</Row>
 	</EnglishText>
 </Database>

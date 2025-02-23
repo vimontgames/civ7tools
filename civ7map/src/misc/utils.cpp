@@ -80,3 +80,9 @@ string CapitalizeWords(const string & input)
 
     return result;
 }
+
+//--------------------------------------------------------------------------------------
+bool isDigits(const string & str)
+{
+    return !str.empty() && all_of(str.begin(), str.end(), ::isdigit);
+}

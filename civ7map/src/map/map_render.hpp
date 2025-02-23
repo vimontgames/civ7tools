@@ -1,3 +1,6 @@
+extern Vector2i g_hoveredCell;
+extern Vector2i g_selectedCell;
+
 void Map::render(RenderWindow & _window)
 {
     extern u32 g_screenWidth;
@@ -43,6 +46,8 @@ void Map::render(RenderWindow & _window)
                 {
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
                     shader->setUniform("screenSize", Vector2f(float(g_screenWidth), float(g_screenHeight)));
+                    shader->setUniform("hoveredCell", Vector2f((float)g_hoveredCell.x, (float)g_hoveredCell.y));
+                    shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
 
                     int passFlags = 0;
 

@@ -7,6 +7,7 @@ string GetFilenameWithoutExtension(const string & _fullpath);
 bool ReadFile(const string & path, string & _data);
 
 string CapitalizeWords(const string & input);
+bool isDigits(const string & str);
 
 template <typename E> string asString(E value)
 {

@@ -121,6 +121,9 @@
     <ClInclude Include="..\data\shader\colors.h">
       <Filter>shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\windows\inspector.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

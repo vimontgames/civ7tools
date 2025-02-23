@@ -19,6 +19,7 @@ import { generateSnow, dumpPermanentSnow } from '/base-standard/maps/snow-genera
 import { dumpStartSectors, dumpContinents, dumpTerrain, dumpElevation, dumpRainfall, dumpBiomes, dumpFeatures, dumpResources, dumpNoisePredicate } from '/base-standard/maps/map-debug-helpers.js';
 import * as ynamp from '/ged-ynamp/maps/ynamp-utilities.js';
 import { GetMap } from '/ged-ynamp/maps/greatest-earth-map-custom/greatest-earth-custom-data.js';
+import { GetMapV7 } from '/ged-ynamp/maps/greatest-earth-map-custom/greatest-earth-custom-dataV7.js';
 
 function requestMapData(initParams) {
     console.log(initParams.width);
@@ -33,6 +34,8 @@ function requestMapData(initParams) {
 function generateMap() {
 
     let importedMap = GetMap();
+	let importedMapV7 = GetMapV7();
+	
     let naturalWonderEvent = false;
     const liveEventDBRow = GameInfo.GlobalParameters.lookup("REGISTERED_RACE_TO_WONDERS_EVENT");
     if (liveEventDBRow && liveEventDBRow.Value != "0") {
@@ -95,7 +98,8 @@ function generateMap() {
     }
     let bHumanNearEquator = utilities.needHumanNearEquator();
     startSectors = chooseStartSectors(iNumPlayers1, iNumPlayers2, iStartSectorRows, iStartSectorCols, bHumanNearEquator);
-    createLandmasses(iWidth, iHeight, westContinent, eastContinent, importedMap);
+    //createLandmasses(iWidth, iHeight, westContinent, eastContinent, importedMap);
+	createLandmassesV7(iWidth, iHeight, westContinent, eastContinent, importedMapV7); // Override with Civ7 data
     //utilities.createIslands(iWidth, iHeight, westContinent2, eastContinent2, 4);
     //utilities.createIslands(iWidth, iHeight, westContinent2, eastContinent2, 5);
     //utilities.createIslands(iWidth, iHeight, westContinent2, eastContinent2, 6);
@@ -126,7 +130,10 @@ function generateMap() {
     console.log("validateAndFixTerrain (2)...");
     TerrainBuilder.validateAndFixTerrain();
     TerrainBuilder.defineNamedRivers();
-	createBiomes(iWidth, iHeight, importedMap);
+	
+	//createBiomes(iWidth, iHeight, importedMap);
+	createBiomesV7(iWidth, iHeight, importedMapV7);	// Override with Civ7 data
+	
     //designateBiomes(iWidth, iHeight);
     addNaturalWonders(iWidth, iHeight, iNumNaturalWonders, naturalWonderEvent);
     console.log("addFloodplains...");
@@ -292,6 +299,40 @@ function createLandmasses(iWidth, iHeight, continent1, continent2, importedMap) 
     }
 }
 
+function createLandmassesV7(iWidth, iHeight, continent1, continent2, importedMapV7) {
+    
+    let greatestEarth = GetMap();
+
+    console.log("Giant Earth : Set Land and Water...");
+    console.log(iHeight);
+    console.log(iWidth);
+
+    for (let iY = 0; iY < iHeight; iY++) 
+	{
+        for (let iX = 0; iX < iWidth; iX++) 
+		{
+            let terrain = globals.g_FlatTerrain;
+			
+            // Initialize plot tag
+            TerrainBuilder.setPlotTag(iX, iY, PlotTags.PLOT_TAG_NONE);
+            console.log("createLandmasses (" + iX + "," + iY +")");
+			terrain = ynamp.getTerrainFromRowV7(importedMapV7[iX][iY]);
+
+            // Add plot tag if applicable
+            if (terrain != globals.g_OceanTerrain && terrain != globals.g_CoastTerrain) 
+			{
+                utilities.addLandmassPlotTags(iX, iY, continent2.west);
+            }
+            else 
+			{
+                utilities.addWaterPlotTags(iX, iY, continent2.west);
+            }
+            TerrainBuilder.setTerrainType(iX, iY, terrain);
+            console.log("createLandmasses (" + iX + "," + iY +") = " + importedMapV7[iX][iY][0] + " = " + terrain + " / " + GameplayMap.getTerrainType(iX, iY));
+        }
+    }
+}
+
 
 function createBiomes(iWidth, iHeight, importedMap) {
     
@@ -305,6 +346,22 @@ function createBiomes(iWidth, iHeight, importedMap) {
 			TerrainBuilder.setBiomeType(iX, iY, biome);
             
             console.log("SetBiome (" + iX + "," + iY +") = " + importedMap[iX][iY][0] + " = " + biome);
+        }
+    }
+}
+
+function createBiomesV7(iWidth, iHeight, importedMapV7) {
+    
+    console.log("Greatest Earth : Create Biomes (V7)...");
+    console.log(iHeight);
+    console.log(iWidth);
+
+    for (let iY = 0; iY < iHeight; iY++) {
+        for (let iX = 0; iX < iWidth; iX++) {
+            let biome = ynamp.getBiomeFromRowV7(importedMapV7[iX][iY]);
+			TerrainBuilder.setBiomeType(iX, iY, biome);
+            
+            console.log("SetBiomeV7 (" + iX + "," + iY +") = " + importedMapV7[iX][iY][1] + " = " + biome);
         }
     }
 }

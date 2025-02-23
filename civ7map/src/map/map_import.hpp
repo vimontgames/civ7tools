@@ -34,17 +34,15 @@ bool GetValue(const string & data, const string label, u32 & value)
     if (-1 != pos)
     {
         string numberStr = data.substr(pos + token.length() + 1);
-                    numberStr = numberStr.substr(0, numberStr.find_first_of(";")); 
-                    value = static_cast<uint32_t>(stoi(numberStr));
-       return true;
+        numberStr = numberStr.substr(0, numberStr.find_first_of(";")); 
+
+        if (isDigits(numberStr))
+        {
+            value = static_cast<uint32_t>(stoi(numberStr));
+            return true;
+        }
     }
     return false;
-}
-
-//--------------------------------------------------------------------------------------
-bool isDigits(const string & str) 
-{
-    return !str.empty() && all_of(str.begin(), str.end(), ::isdigit);
 }
 
 //--------------------------------------------------------------------------------------
