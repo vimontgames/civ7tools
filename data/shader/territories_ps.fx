@@ -76,53 +76,53 @@ void main()
         
     float2 invScreenSize = 1.0f / screenSize.xy * 2.0f;
     
-    //float4 left     = getTile(uv + float2(-invScreenSize.x, 0));
-    //float4 right    = getTile(uv + float2(+invScreenSize.x, 0));
-    //float4 bottom   = getTile(uv + float2(0, -invScreenSize.y));
-    //float4 up       = getTile(uv + float2(0, +invScreenSize.y));
-    //
-    //float4 topLeft     = getTile(uv + float2(-invScreenSize.x, +invScreenSize.y));
-    //float4 topRight    = getTile(uv + float2(+invScreenSize.x, +invScreenSize.y));
-    //float4 bottomLeft  = getTile(uv + float2(-invScreenSize.x, -invScreenSize.y));
-    //float4 bottomRight = getTile(uv + float2(+invScreenSize.x, -invScreenSize.y));
+    Tile left     = getTile(uv + float2(-invScreenSize.x, 0));
+    Tile right    = getTile(uv + float2(+invScreenSize.x, 0));
+    Tile bottom   = getTile(uv + float2(0, -invScreenSize.y));
+    Tile up = getTile(uv + float2(0, +invScreenSize.y));
     
-    //bool edge = false;
-    //
-    //int passIndex = passFlags & PASS_TYPE_MASK;
-    //float edgeMul = 1.0f, edgeAdd = 0.0f;
-    //switch (passIndex)
-    //{
-    //    case PASS_TYPE_TERRAIN:
-    //        edge = EdgeDetect(center.r, left.r, right.r, bottom.r, up.r, topLeft.r, topRight.r, bottomLeft.r, bottomRight.r);
-    //        edgeMul = 1.0f;
-    //        edgeAdd = -0.05f;
-    //        break;
-    //    
-    //    case PASS_TYPE_BIOME:
-    //        edge = EdgeDetect(center.g, left.g, right.g, bottom.g, up.g, topLeft.g, topRight.g, bottomLeft.g, bottomRight.g);
-    //        edgeMul = 1.0f;
-    //        edgeAdd = -0.05f;
-    //        break;
-    //    
-    //    case PASS_TYPE_FEATURE:
-    //        edge = EdgeDetect(center.b, left.b, right.b, bottom.b, up.b, topLeft.b, topRight.b, bottomLeft.b, bottomRight.b);
-    //        edgeMul = 1.0f;
-    //        edgeAdd = -0.05f;
-    //        break;
-    //    
-    //    case PASS_TYPE_CONTINENT:
-    //        edge = EdgeDetect(center.a, left.a, right.a, bottom.a, up.a, topLeft.a, topRight.a, bottomLeft.a, bottomRight.a);
-    //        edgeMul = 1.0f;
-    //        edgeAdd = -0.25f;
-    //        break;
-    //}
-    //
-    //if (edge)
-    //{
-    //    color.r = color.r * edgeMul + edgeAdd;
-    //    color.g = color.g * edgeMul + edgeAdd;
-    //    color.b = color.b * edgeMul + edgeAdd;
-    //}
+    Tile topLeft     = getTile(uv + float2(-invScreenSize.x, +invScreenSize.y));
+    Tile topRight    = getTile(uv + float2(+invScreenSize.x, +invScreenSize.y));
+    Tile bottomLeft  = getTile(uv + float2(-invScreenSize.x, -invScreenSize.y));
+    Tile bottomRight = getTile(uv + float2(+invScreenSize.x, -invScreenSize.y));
+    
+    bool edge = false;
+    
+    int passIndex = passFlags & PASS_TYPE_MASK;
+    float edgeMul = 1.0f, edgeAdd = 0.0f;
+    switch (passIndex)
+    {
+        //case PASS_TYPE_TERRAIN:
+        //    edge = EdgeDetect(center.r, left.r, right.r, bottom.r, up.r, topLeft.r, topRight.r, bottomLeft.r, bottomRight.r);
+        //    edgeMul = 1.0f;
+        //    edgeAdd = -0.05f;
+        //    break;
+        //
+        //case PASS_TYPE_BIOME:
+        //    edge = EdgeDetect(center.g, left.g, right.g, bottom.g, up.g, topLeft.g, topRight.g, bottomLeft.g, bottomRight.g);
+        //    edgeMul = 1.0f;
+        //    edgeAdd = -0.05f;
+        //    break;
+        //
+        //case PASS_TYPE_FEATURE:
+        //    edge = EdgeDetect(center.b, left.b, right.b, bottom.b, up.b, topLeft.b, topRight.b, bottomLeft.b, bottomRight.b);
+        //    edgeMul = 1.0f;
+        //    edgeAdd = -0.05f;
+        //    break;
+        
+        case PASS_TYPE_CONTINENT:
+            edge = EdgeDetect(center.color0.a, left.color0.a, right.color0.a, bottom.color0.a, up.color0.a, topLeft.color0.a, topRight.color0.a, bottomLeft.color0.a, bottomRight.color0.a);
+            edgeMul = 1.0f;
+            edgeAdd = -0.25f;
+            break;
+    }
+    
+    if (edge)
+    {
+        color.r = color.r * edgeMul + edgeAdd;
+        color.g = color.g * edgeMul + edgeAdd;
+        color.b = color.b * edgeMul + edgeAdd;
+    }
         
     gl_FragColor = float4(color.rgb, 1);
     
