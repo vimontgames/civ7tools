@@ -10,6 +10,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{1BAF69DA-B88E-40CD-B36D-1432342A3D32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Civ7-YnAMP", "Civ7-YnAMP", "{0BB17153-729C-48C5-808A-3781915FA9C4}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "giant-earth-map", "giant-earth-map", "{200660D8-004D-4E12-8F53-572759199C90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "greatest-earth-map", "greatest-earth-map", "{CDAF4FE8-EA65-4C7F-83DB-974323E81AFD}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml
+		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js
+		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js
+		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1BAF69DA-B88E-40CD-B36D-1432342A3D32} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
+		{0BB17153-729C-48C5-808A-3781915FA9C4} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{200660D8-004D-4E12-8F53-572759199C90} = {0BB17153-729C-48C5-808A-3781915FA9C4}
+		{CDAF4FE8-EA65-4C7F-83DB-974323E81AFD} = {0BB17153-729C-48C5-808A-3781915FA9C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B29936D3-D786-4B14-82AD-70BEBC6F7AF9}
