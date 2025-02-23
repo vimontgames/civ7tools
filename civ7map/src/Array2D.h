@@ -27,7 +27,12 @@ public:
         }
     }
 
-    const T & get(u32 _x, u32 _y)
+    const T & get(u32 _x, u32 _y) const
+    {
+        return m_data[_x + _y * m_width];
+    }
+
+    T & get(u32 _x, u32 _y)
     {
         return m_data[_x + _y * m_width];
     }
