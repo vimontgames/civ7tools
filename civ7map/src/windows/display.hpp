@@ -22,7 +22,7 @@ void DrawColor(const Map * _map, ContinentType _continent)
     float4 color = getContinentColor(_continent);
     float f3Color[] = { color.r, color.g,  color.b };
     string continentName = _map->getContinentShortName(_continent);
-    ImGui::ColorEdit3(-1 != (int)_continent ? continentName.c_str() : "No continent", f3Color, ImGuiColorEditFlags_NoInputs);
+    ImGui::ColorEdit3(continentName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
 }
 
 //--------------------------------------------------------------------------------------

@@ -66,6 +66,15 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                     int selectedIndex = -1;
                     if (ImGui::BeginCombo("###Continent", continentName.c_str()))
                     {
+                        // None
+                        {
+                            bool isSelected = (selectedIndex == -1);
+                            if (ImGui::Selectable(g_map->getContinentShortName((ContinentType)-1).c_str(), isSelected))
+                            {
+                                selectedIndex = -1;
+                                tile->continent = (ContinentType)-1;
+                            }
+                        }
                         for (uint i = 0; i < g_map->getContinentCount(); ++i)
                         {
                             bool isSelected = (selectedIndex == i);

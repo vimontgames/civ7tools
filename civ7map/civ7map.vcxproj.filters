@@ -42,7 +42,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\data\shader\common.h" />
     <ClInclude Include="..\extern\base64\base64.hpp" />
     <ClInclude Include="..\extern\miniz-cpp\zip_file.hpp" />
     <ClInclude Include="src\Array2D.h" />
@@ -123,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="src\windows\inspector.hpp">
       <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\data\shader\common.h">
+      <Filter>shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

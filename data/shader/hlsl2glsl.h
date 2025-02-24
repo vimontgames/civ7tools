@@ -13,3 +13,9 @@
 #define int4 ivec4
 
 #define lerp(a,b,f) ((1.0f-f)*a + f*b)
+#define frac fract
+
+float saturate(float x)
+{
+    return clamp(x, 0, 1);
+}

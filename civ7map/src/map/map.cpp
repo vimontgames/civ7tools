@@ -138,14 +138,21 @@ string Map::getContinentName(ContinentType continent) const
 //--------------------------------------------------------------------------------------
 string Map::getContinentShortName(ContinentType continent) const
 {
-    string name = getContinentName(continent);
-    const string continentPrefix = "CONTINENT_";
-    size_t trim = name.find(continentPrefix);
-    if (-1 != trim)
-        name = name.substr(trim + continentPrefix.length());
+    if (-1 != (int)continent)
+    {
+        string name = getContinentName(continent);
+        const string continentPrefix = "CONTINENT_";
+        size_t trim = name.find(continentPrefix);
+        if (-1 != trim)
+            name = name.substr(trim + continentPrefix.length());
 
-    name = CapitalizeWords(name);
-    return name;
+        name = CapitalizeWords(name);
+        return name;
+    }
+    else
+    {
+        return "No continent";
+    }
 }
 
 //--------------------------------------------------------------------------------------

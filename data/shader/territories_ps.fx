@@ -4,11 +4,77 @@ struct Tile
     float4 color1;
 };
 
-Tile getTile(float2 uv)
+#define USE_NEW_HEXES 0
+
+float2 hexUV2(float2 uv)
 {
+#if !USE_NEW_HEXES
+    return hexUV(uv);
+#endif
+    
+    uv *= texSize;
+    uv.y -= 1.0f/4.0f;
+    
+    if (0 != (PASS_FLAG_HEXES & passFlags))
+    {        
+        if (0 != (int(uv.y) & 1))
+            uv.x -= 0.25f;
+        else
+            uv.x += 0.25f;
+        
+        if (0 != (int(uv.y) & 1))
+        {
+            if (frac(uv.x) < 0.5 && frac(uv.y) > 0.5f)
+            {
+                if (frac(uv.x) < frac(0.5 + uv.y))
+                {
+                    uv.y += 1;
+                }
+            }
+            else if (frac(uv.x) > 0.5 && frac(uv.y) > 0.5f)
+            {
+                if (frac(uv.x) > 1-frac(0.5+uv.y))
+                {
+                    uv.x += 1;
+                    uv.y += 1;
+                }
+            }
+        }
+        else
+        {            
+            if (frac(uv.x) < 0.5 && frac(uv.y) > 0.5f)
+            {
+                if (frac(uv.x) < frac(0.5 + uv.y))
+                {
+                    uv.x -= 1;
+                    uv.y += 1;
+                }
+            }
+            else if (frac(uv.x) > 0.5 && frac(uv.y) > 0.5f)
+            {
+                if (frac(uv.x) > 1 - frac(0.5 + uv.y))
+                {
+                    uv.y += 1;
+                }
+            }
+        }
+    }
+    
+
+    
+    uv = frac(uv / texSize);
+    
+    return uv;
+}
+
+Tile getTile(float2 uv)
+{    
+    float2 uv0 = hexUV2(uv * float2(1, 0.5) + float2(0, 0));
+    float2 uv1 = hexUV2(uv * float2(1, 0.5) + float2(0, 0.5));
+        
     Tile tile;
-    tile.color0 = texture2D(texture, hexUV(uv * float2(1,0.5) + float2(0,0) ));
-    tile.color1 = texture2D(texture, hexUV(uv * float2(1,0.5) + float2(0,0.5) ));
+    tile.color0 = texture2D(texture, uv0);
+    tile.color1 = texture2D(texture, uv1);
     return tile;
 }
 
@@ -70,16 +136,18 @@ void main()
 {
     float2 uv = gl_TexCoord[0].xy;
     uv.y = 1 - uv.y;
-    
+        
     Tile center = getTile(uv);
     float4 color = getTileColor(center);
         
     float2 invScreenSize = 1.0f / screenSize.xy * 2.0f;
     
-    Tile left     = getTile(uv + float2(-invScreenSize.x, 0));
+    float2 leftUV = +float2(-invScreenSize.x, 0);
+    
+    Tile left     = getTile(uv + leftUV);
     Tile right    = getTile(uv + float2(+invScreenSize.x, 0));
     Tile bottom   = getTile(uv + float2(0, -invScreenSize.y));
-    Tile up = getTile(uv + float2(0, +invScreenSize.y));
+    Tile up       = getTile(uv + float2(0, +invScreenSize.y));
     
     Tile topLeft     = getTile(uv + float2(-invScreenSize.x, +invScreenSize.y));
     Tile topRight    = getTile(uv + float2(+invScreenSize.x, +invScreenSize.y));
@@ -124,7 +192,7 @@ void main()
         color.b = color.b * edgeMul + edgeAdd;
     }
         
-    float2 tileUV = (hexUV(uv.xy * float2(1, 0.5)) * texSize);
+    float2 tileUV = (hexUV2(uv.xy * float2(1, 0.5)) * texSize);
     
     // wrap poulet
     if (tileUV.x > texSize.x)
@@ -133,7 +201,7 @@ void main()
         tileUV.x += (texSize.x);
     
     float borderSize = 0.1f;
-    float4 borderColor = color.rgba;// * float4(0.99f, 0.99f, 0.99f, 1.0f);
+    float4 borderColor = color.rgba  * float4(0.9f, 0.9f, 0.9f, 1.0f);
     
     float2 cell = floor(tileUV);
     
@@ -142,9 +210,20 @@ void main()
     else if (cell.x == hoveredCell.x && cell.y == hoveredCell.y)
         borderColor.rgb = (color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;  
     
-    float2 tileUVFract = fract(tileUV);
+    float2 tileUVFract = frac(tileUV);
     if (((abs(tileUVFract.x) < borderSize) || (abs(tileUVFract.x) > (1.0 - borderSize))) || ((abs(tileUVFract.y) < borderSize) || (abs(tileUVFract.y) > (1.0 - borderSize))))
         color.rgb = borderColor.rgb;
         
     gl_FragColor = float4(color.rgb, 1);
+
+    
+#if USE_NEW_HEXES
+    float2 huv = hexUV2(uv * float2(1, 0.5));
+    //if (huv.y > 0.5)
+    //    discard;
+    
+    gl_FragColor = float4(floor(huv * texSize ) / (texSize), 0, 1);
+    gl_FragColor = float4(frac(huv* texSize ), 0, 1);
+    
+    #endif
 }
