@@ -21,7 +21,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Infos", &m_visible) && g_map)
+    if (Begin("Map Infos###Infos", &m_visible) && g_map)
     {
         char temp[256];
         sprintf_s(temp, g_map->m_author.c_str());

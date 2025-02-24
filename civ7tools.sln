@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{1BAF69DA-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Civ7-YnAMP", "Civ7-YnAMP", "{0BB17153-729C-48C5-808A-3781915FA9C4}"
 	ProjectSection(SolutionItems) = preProject
+		mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js = mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js
 		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
 	EndProjectSection
 EndProject
@@ -23,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "greatest-earth-map", "great
 	ProjectSection(SolutionItems) = preProject
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js
+		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data2.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data2.js
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml
 	EndProjectSection
