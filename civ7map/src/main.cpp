@@ -338,12 +338,16 @@ int main()
                             view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
                             view.zoom(g_map->cameraZoom); // zeng
                             view.move(g_map->cameraOffset);
+
+                            float ar = (float(g_screenWidth) / float(map->m_width)) / (float(g_screenHeight) / float(map->m_height));
                         
                             // Convert to world coordinates using the current SFML view (handles zoom & offset)
                             sf::Vector2i mousePixel = sf::Vector2i((int)relativeMousePos.x, (int)relativeMousePos.y);
                             sf::Vector2f uv = mainWindow.mapPixelToCoords(mousePixel, view);
                             uv.x /= (float)size.x;
                             uv.y /= (float)size.y;
+
+                            uv.y /= ar;
 
                             //uv.x *= (float)g_screenWidth / (float)g_initScreenWidth; // hem, not really sure why but it's needed after window resized :p
                             //uv.y *= (float)g_screenHeight / (float)g_initScreenHeight;

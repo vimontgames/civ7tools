@@ -20,7 +20,9 @@ void Map::refresh()
     extern u32 g_screenWidth;
     extern u32 g_screenHeight;
 
-    const Vector2f scale = Vector2f(float(g_screenWidth) / float(m_width), float(g_screenHeight) / float(m_height));
+    Vector2f scale = Vector2f(float(g_screenWidth) / float(m_width), float(g_screenHeight) / float(m_height));
+    float ar =(float(g_screenWidth) / float(m_width)) / (float(g_screenHeight) / float(m_height));
+    scale.y *= ar;
 
     for (u32 h = 0; h < m_height; ++h)
     {

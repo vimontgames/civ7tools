@@ -136,6 +136,9 @@ void main()
 {
     float2 uv = gl_TexCoord[0].xy;
     uv.y = 1 - uv.y;
+    
+    //gl_FragColor = float4(uv.xy, 0, 1);
+    //return;
         
     Tile center = getTile(uv);
     float4 color = getTileColor(center);
