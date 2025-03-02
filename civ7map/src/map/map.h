@@ -36,6 +36,14 @@ enum class MapFilter
 };
 
 //--------------------------------------------------------------------------------------
+enum class GridType
+{
+    Regular = 0,
+    Offset,
+    Hexagon
+};
+
+//--------------------------------------------------------------------------------------
 struct Bitmap
 {
     bool visible = true;
@@ -144,9 +152,9 @@ public:
     bool loaded = false;
     bool m_isOpen = true;
     
-    MapFilter territoryBackground = MapFilter::TerrainType;
-    bool showTerritoriesBorders = true;
-    bool useHexUVs = true;
+    MapFilter m_mapFilter = MapFilter::TerrainType;
+    GridType m_gridType = GridType::Hexagon;
+    bool m_showBorders = true;
 
     bool showStrategicResources = false;
     bool showLuxuryResources = false;

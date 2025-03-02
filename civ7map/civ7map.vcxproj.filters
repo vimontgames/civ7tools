@@ -137,22 +137,16 @@
     <None Include="..\data\shader\default_vs.fx">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\data\shader\heightfield_ps.fx">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\data\shader\heightfield_vs.fx">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="..\data\shader\resources_ps.fx">
       <Filter>shaders</Filter>
     </None>
     <None Include="..\data\shader\resources_vs.fx">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\data\shader\territories_ps.fx">
+    <None Include="..\data\shader\terrain_ps.fx">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\data\shader\territories_vs.fx">
+    <None Include="..\data\shader\terrain_vs.fx">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

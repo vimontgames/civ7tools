@@ -28,7 +28,7 @@ function generateMap() {
         eastEnd: 102
     };
     let importedMap = GetMap();
-    //let importedMap2 = GetMap2();
+    let importedMap2 = GetMap2();
     generateYnAMP2(mapName, importedMap, /*null*/importedMap2, genParameters); // Passing null will not use the data in Civ7 format
 }
 

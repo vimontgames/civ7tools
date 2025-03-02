@@ -331,7 +331,8 @@ int main()
                                 int i = 42;
                             }
 
-                            Vector2f size = Vector2f((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
+                            float2 renderTargetSize = float2((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
+                            Vector2f size = Vector2f(renderTargetSize.x, renderTargetSize.y);
 
                             sf::View view;
                             view.setCenter(sf::Vector2f(float(g_screenWidth) * 0.5f, (float)(g_screenHeight) * 0.5f));
@@ -344,16 +345,35 @@ int main()
                             // Convert to world coordinates using the current SFML view (handles zoom & offset)
                             sf::Vector2i mousePixel = sf::Vector2i((int)relativeMousePos.x, (int)relativeMousePos.y);
                             sf::Vector2f uv = mainWindow.mapPixelToCoords(mousePixel, view);
-                            uv.x /= (float)size.x;
-                            uv.y /= (float)size.y;
 
                             uv.y /= ar;
 
-                            //uv.x *= (float)g_screenWidth / (float)g_initScreenWidth; // hem, not really sure why but it's needed after window resized :p
-                            //uv.y *= (float)g_screenHeight / (float)g_initScreenHeight;
-
                             uv.x *= 0.5f;
                             uv.y *= 0.5f;
+
+                            uv.x /= (float)size.x+1;
+                            uv.y /= (float)size.y+1;
+
+                            float2 temp;
+                            float2 texSize = float2(map->bitmaps[(int)MapBitmap::TerrainData].image.getSize().x, map->bitmaps[(int)MapBitmap::TerrainData].image.getSize().y);
+
+                            switch (map->m_gridType)
+                            {
+                                case GridType::Regular:
+                                    temp = getTileUV(float2(uv.x, uv.y), texSize, 0);
+                                    break;
+
+                                case GridType::Offset:
+                                    temp = getTileUV(float2(uv.x, uv.y ), texSize, PASS_FLAG_OFFSET);
+                                    break;
+
+                                case GridType::Hexagon:
+                                    temp = getTileUV(float2(uv.x, uv.y), texSize, PASS_FLAG_HEXAGON);
+                                    break;
+                            }
+
+                            uv.x = temp.x;
+                            uv.y = temp.y;
 
                             if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
                             {
@@ -362,26 +382,27 @@ int main()
 
                                 Vector2i cell;
 
-                                cell.x = (int)min(uv.x * w, (w - 1));
-                                cell.y = (int)min(uv.y * h, (h - 1));
+                                cell.x = (int)min((uv.x) * w, (w - 1));
+                                cell.y = (int)min((uv.y) * h, (h - 1));
 
-                                if (g_map->useHexUVs)
+                                switch (g_map->m_gridType)
                                 {
-                                    if (cell.y & 1)
-                                    {
-                                        cell.x = (int)floor(uv.x * w + 0.25f);
-                                        if (cell.x > (w - 1))
-                                            cell.x = 0;
-                                    }
-                                    else
-                                    {
-                                        cell.x = (int)floor(uv.x * w - 0.25f);
-                                        if (cell.x == -1)
-                                            cell.x = (int)(w - 1);
-                                    }
+                                    case GridType::Hexagon:
+                                        if (cell.y & 1)
+                                        {
+                                            //cell.x = (int)min((uv.x) * w + 0.25f, (w - 1));
+                                            //if (getTileUV(float2(uv.x, uv.y), texSize, PASS_FLAG_HEXAGON).x == getTileUV(float2(uv.x + 0.125f / w, uv.y), texSize, PASS_FLAG_HEXAGON).x)
+                                            //    cell.x = 0;
+                                        }
+                                        break;
                                 }
 
                                 cell.y = (int)h - cell.y - 1;
+
+                                if (cell.x >= map->m_width)
+                                    cell.x = 0;
+                                if (cell.y >= map->m_height)
+                                    cell.y = 0;
 
                                 g_hoveredCell = cell;
                                 if (ImGui::IsMouseDown(0))
@@ -424,10 +445,11 @@ int main()
 
                                     ImGui::Separator();
 
-                                    #if _DEBUG0
+                                    #if _DEBUG
                                     {
                                         ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
-                                        ImGui::Text("uv %.2f,%.2f", uv.x, uv.y);
+                                        ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
+                                        ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
                                     }
                                     #endif
                                 }

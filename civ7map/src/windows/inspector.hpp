@@ -23,147 +23,129 @@ bool InspectorWindow::Draw(const RenderWindow & window)
     if (Begin("Inspector", &m_visible))
     {
         Civ7Tile * tile = nullptr;
+        Map * map = g_map;
         
-        if (g_map && g_selectedCell.x < g_map->m_width && g_selectedCell.y < g_map->m_height)
-            tile = &g_map->civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
+        if (map && (uint)g_selectedCell.x < map->m_width && (uint)g_selectedCell.y < map->m_height)
+            tile = &map->civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
 
-        ImGui::BeginTable("TileTable", 2, ImGuiTableFlags_Resizable);
+        if (!tile)
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+        bool dirty = false;
+
+        if (tile)
         {
-            ImGui::TableNextColumn();
+            //ImGui::Text("%i,%i", g_selectedCell.x, g_selectedCell.y);
+            ImGui::InputInt2("Selected", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
 
-            if (!tile)
-                ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-
-            ImGui::Text("Selected");
-
-            const int offset = 7;
-
-            ImGui::SetCursorPosY(GetCursorPosY() + offset);
-            ImGui::Text("Continent");
-
-            ImGui::SetCursorPosY(GetCursorPosY() + offset);
-            ImGui::Text("Terrain");
-
-            ImGui::SetCursorPosY(GetCursorPosY() + offset);
-            ImGui::Text("Biome");
-
-            ImGui::SetCursorPosY(GetCursorPosY() + offset);
-            ImGui::Text("Feature");
-
-            ImGui::TableNextColumn();
-
-            if (tile)
+            // Continent
             {
-                //ImGui::Text("%i,%i", g_selectedCell.x, g_selectedCell.y);
-                ImGui::InputInt2("###SelectedCell", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
+                float4 color = getContinentColor(tile->continent);
+                float f3Color[] = { color.r, color.g,  color.b };
+                string continentName = map->getContinentShortName(tile->continent);
 
-                // Continent
+                int selectedIndex = -1;
+                if (ImGui::BeginCombo("Continent", continentName.c_str()))
                 {
-                    float4 color = getContinentColor(tile->continent);
-                    float f3Color[] = { color.r, color.g,  color.b };
-                    string continentName = g_map->getContinentShortName(tile->continent);
-
-                    int selectedIndex = -1;
-                    if (ImGui::BeginCombo("###Continent", continentName.c_str()))
+                    // None
                     {
-                        // None
+                        bool isSelected = (selectedIndex == -1);
+                        if (ImGui::Selectable(map->getContinentShortName((ContinentType)-1).c_str(), isSelected))
                         {
-                            bool isSelected = (selectedIndex == -1);
-                            if (ImGui::Selectable(g_map->getContinentShortName((ContinentType)-1).c_str(), isSelected))
-                            {
-                                selectedIndex = -1;
-                                tile->continent = (ContinentType)-1;
-                            }
+                            selectedIndex = -1;
+                            tile->continent = (ContinentType)-1;
+                            dirty = true;
                         }
-                        for (uint i = 0; i < g_map->getContinentCount(); ++i)
-                        {
-                            bool isSelected = (selectedIndex == i);
-                            if (ImGui::Selectable(g_map->getContinentShortName((ContinentType)i).c_str(), isSelected))
-                            {
-                                selectedIndex = i; 
-                                tile->continent = (ContinentType)i;
-                            }
-                        }
-
-                        ImGui::EndCombo();
                     }
-                }
-
-                // TerrainType
-                {
-                    float4 color = getTerrainColor(tile->terrain);
-                    float f3Color[] = { color.r, color.g,  color.b };
-
-                    int selectedIndex = -1;
-                    if (ImGui::BeginCombo("###Terrain", asString(tile->terrain).c_str()))
+                    for (uint i = 0; i < map->getContinentCount(); ++i)
                     {
-                        for (uint i = 0; i < enumCount<TerrainType>(); ++i)
+                        bool isSelected = (selectedIndex == i);
+                        if (ImGui::Selectable(map->getContinentShortName((ContinentType)i).c_str(), isSelected))
                         {
-                            bool isSelected = (selectedIndex == i);
-                            if (ImGui::Selectable(asString((TerrainType)i).c_str(), isSelected))
-                            {
-                                selectedIndex = i; 
-                                tile->terrain = (TerrainType)i;
-                            }
+                            selectedIndex = i; 
+                            tile->continent = (ContinentType)i;
+                            dirty = true;
                         }
-
-                        ImGui::EndCombo();
                     }
-                }
 
-                // Biome
-                {
-                    float4 color = getBiomeColor(tile->biome);
-                    float f3Color[] = { color.r, color.g,  color.b };
-
-                    int selectedIndex = -1;
-                    if (ImGui::BeginCombo("###Biome", asString(tile->biome).c_str()))
-                    {
-                        for (uint i = 0; i < enumCount<BiomeType>(); ++i)
-                        {
-                            bool isSelected = (selectedIndex == i);
-                            if (ImGui::Selectable(asString((BiomeType)i).c_str(), isSelected))
-                            {
-                                selectedIndex = i;
-                                tile->biome = (BiomeType)i;
-                            }
-                        }
-
-                        ImGui::EndCombo();
-                    }
-                }
-
-                // Feature
-                {
-                    float4 color = getFeatureColor(tile->feature);
-                    float f3Color[] = { color.r, color.g,  color.b };
-
-                    int selectedIndex = -1;
-                    if (ImGui::BeginCombo("###Biome", asString(tile->biome).c_str()))
-                    {
-                        for (uint i = 0; i < enumCount<FeatureType>(); ++i)
-                        {
-                            bool isSelected = (selectedIndex == i);
-                            if (ImGui::Selectable(asString((FeatureType)i).c_str(), isSelected))
-                            {
-                                selectedIndex = i;
-                                tile->feature = (FeatureType)i;
-                            }
-                        }
-
-                        ImGui::EndCombo();
-                    }
+                    ImGui::EndCombo();
                 }
             }
 
-            if (!tile)
-                ImGui::PopItemFlag();
+            // TerrainType
+            {
+                float4 color = getTerrainColor(tile->terrain);
+                float f3Color[] = { color.r, color.g,  color.b };
 
+                int selectedIndex = -1;
+                if (ImGui::BeginCombo("TerrainType", asString(tile->terrain).c_str()))
+                {
+                    for (uint i = 0; i < enumCount<TerrainType>(); ++i)
+                    {
+                        bool isSelected = (selectedIndex == i);
+                        if (ImGui::Selectable(asString((TerrainType)i).c_str(), isSelected))
+                        {
+                            selectedIndex = i; 
+                            tile->terrain = (TerrainType)i;
+                            dirty = true;
+                        }
+                    }
+
+                    ImGui::EndCombo();
+                }
+            }
+
+            // Biome
+            {
+                float4 color = getBiomeColor(tile->biome);
+                float f3Color[] = { color.r, color.g,  color.b };
+
+                int selectedIndex = -1;
+                if (ImGui::BeginCombo("Biome", asString(tile->biome).c_str()))
+                {
+                    for (uint i = 0; i < enumCount<BiomeType>(); ++i)
+                    {
+                        bool isSelected = (selectedIndex == i);
+                        if (ImGui::Selectable(asString((BiomeType)i).c_str(), isSelected))
+                        {
+                            selectedIndex = i;
+                            tile->biome = (BiomeType)i;
+                            dirty = true;
+                        }
+                    }
+
+                    ImGui::EndCombo();
+                }
+            }
+
+            // Feature
+            {
+                float4 color = getFeatureColor(tile->feature);
+                float f3Color[] = { color.r, color.g,  color.b };
+
+                int selectedIndex = -1;
+                if (ImGui::BeginCombo("Feature", asString(tile->biome).c_str()))
+                {
+                    for (uint i = 0; i < enumCount<FeatureType>(); ++i)
+                    {
+                        bool isSelected = (selectedIndex == i);
+                        if (ImGui::Selectable(asString((FeatureType)i).c_str(), isSelected))
+                        {
+                            selectedIndex = i;
+                            tile->feature = (FeatureType)i;
+                            dirty = true;
+                        }
+                    }
+
+                    ImGui::EndCombo();
+                }
+            }
         }
-        ImGui::EndTable();
 
-        
-        //ImGui::Separator();
+        if (dirty)
+            map->refresh();
+
+        if (!tile)
+            ImGui::PopItemFlag();
     }
 
     ImGui::End();

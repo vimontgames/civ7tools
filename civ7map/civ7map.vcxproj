@@ -171,18 +171,10 @@
     <None Include="..\data\shader\resources_vs.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="..\data\shader\territories_ps.fx">
+    <None Include="..\data\shader\terrain_ps.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="..\data\shader\territories_vs.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\data\shader\heightfield_ps.fx">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\data\shader\heightfield_vs.fx">
+    <None Include="..\data\shader\terrain_vs.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

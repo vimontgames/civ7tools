@@ -73,7 +73,7 @@ void Map::refresh()
                 break;
 
             case MapBitmap::TerrainData:
-                bitmap.quadshader = ShaderManager::add("data/shader/territories_vs.fx", "data/shader/territories_ps.fx");
+                bitmap.quadshader = ShaderManager::add("data/shader/terrain_vs.fx", "data/shader/terrain_ps.fx");
                 bitmap.quadblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
                 break;
             }

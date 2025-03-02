@@ -59,9 +59,32 @@ static int   Strnicmp(const char * s1, const char * s2, int n) { int d = 0; whil
 static char * Strdup(const char * s) { size_t len = strlen(s) + 1; void * buf = malloc(len); return (char *)memcpy(buf, (const void *)s, len); }
 static void  Strtrim(char * s) { char * str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
+struct float2
+{
+    float2(float _x = 0.0f, float _y = 0.0f) :
+        x(_x),
+        y(_y)
+    {
+
+    }
+
+    union
+    {
+        struct
+        {
+            float x, y;
+        };
+        struct
+        {
+            float r, g;
+        };
+        float value[2];
+    };
+};
+
 struct float4
 {
-    float4(float _x, float _y, float _z, float _w) :
+    float4(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f, float _w = 0.0f) :
         x(_x),
         y(_y),
         z(_z),

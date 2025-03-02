@@ -45,16 +45,17 @@ void Map::render(RenderWindow & _window)
                 if (shader)
                 {
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
+                    shader->setUniform("mapSize", Vector2f((float)m_width, (float)m_height));
                     shader->setUniform("screenSize", Vector2f(float(g_screenWidth), float(g_screenHeight)));
                     shader->setUniform("hoveredCell", Vector2f((float)g_hoveredCell.x, (float)g_hoveredCell.y));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
 
                     int passFlags = 0;
 
-                    switch (territoryBackground)
+                    switch (m_mapFilter)
                     {
                         default:
-                            LOG_ERROR("Missing case \"%s\" (%i)", asString(territoryBackground).c_str(), (int)territoryBackground);
+                            LOG_ERROR("Missing case \"%s\" (%i)", asString(m_mapFilter).c_str(), (int)m_mapFilter);
                             break;
 
                         case MapFilter::TerrainType:
@@ -78,10 +79,18 @@ void Map::render(RenderWindow & _window)
                             break;
                     }
 
-                    if (useHexUVs)
-                        passFlags |= PASS_FLAG_HEXES;
+                    switch (m_gridType)
+                    {
+                        case GridType::Hexagon:
+                            passFlags |= PASS_FLAG_HEXAGON;
+                            break;
 
-                    if (showTerritoriesBorders)
+                        case GridType::Offset:
+                            passFlags |= PASS_FLAG_OFFSET;
+                            break;
+                    }
+
+                    if (m_showBorders)
                         passFlags |= PASS_FLAG_BORDERS;
 
                     shader->setUniform("passFlags", passFlags);

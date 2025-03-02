@@ -10,8 +10,10 @@
 
 #define PASS_TYPE_MASK          0xF
 
-#define PASS_FLAG_BORDERS   0x40000000
-#define PASS_FLAG_HEXES     0x80000000
+#define PASS_FLAG_SWAPY         0x10000000
+#define PASS_FLAG_HEXAGON       0x20000000
+#define PASS_FLAG_OFFSET        0x40000000
+#define PASS_FLAG_BORDERS       0x80000000
 
 #define TEXEL_FLAG_WATER_TILE       0x20
 #define TEXEL_FLAG_OCEAN_TERRITORY  0x40
@@ -20,22 +22,105 @@
 #ifndef __cplusplus
 uniform int passFlags;
 uniform float2 texSize;
+uniform float2 mapSize;
 uniform float2 screenSize;
 uniform float2 hoveredCell;
 uniform float2 selectedCell;
 uniform float4 color;
 uniform sampler2D texture;
+#define inline
+#endif
 
-float2 hexUV(float2 uv)
+inline float2 getTileUV_Offset(float2 uv, float2 size)
 {
-    if (0 != (PASS_FLAG_HEXES & passFlags))
-    {
-        if (0 != (int(uv.y * texSize.y) & 1))
-            uv.x -= 0.25f / texSize.x;
-        else
-            uv.x += 0.25f / texSize.x;
-    }
+    if (0 != (int(uv.y) & 1))
+        uv.x -= 0.25f;
+    else
+        uv.x += 0.25f;
     return uv;
 }
-#endif
+
+inline float2 getTileUV_Hexagon(float2 uv, float2 size)
+{
+    if (0 != (int(uv.y) & 1))
+        uv.x -= 0.25f;
+    else
+        uv.x += 0.25f;
+
+    int test = 1;
+
+    if (uv.y * size.y <= 0.125)
+    {
+        test = 0;
+        uv.x -= 0.5;
+    }
+
+    if (test == (int(uv.y) & 1))
+    {
+        if (frac(uv.x) <= 0.5 && frac(uv.y) > 0.5f)
+        {
+            if (frac(uv.x) <= frac(0.5f + uv.y))
+            {
+                uv.y += 0.5f;
+            }
+        }
+        else if (frac(uv.x) > 0.5f && frac(uv.y) > 0.5f)
+        {
+            if (frac(uv.x) >= 1.0f - frac(0.5f + uv.y))
+            {
+                uv.x += 0.5f;
+                uv.y += 0.5f;
+            }
+        }
+    }
+    else
+    {
+        if (frac(uv.x) < 0.5f && frac(uv.y) > 0.5f)
+        {
+            if (frac(uv.x) <= frac(0.5f + uv.y))
+            {
+                uv.x -= 0.5f;
+                uv.y += 0.5f;
+            }
+        }
+        else if (frac(uv.x) > 0.5f && frac(uv.y) > 0.5f)
+        {
+            if (frac(uv.x) >= 1.0f - frac(0.5f + uv.y))
+            {
+                uv.y += 0.5;
+            }
+        }
+    }
+
+    return uv;
+}
+
+inline float2 getTileUV(float2 uv, float2 size, int flags)
+{
+    if (0 != (PASS_FLAG_OFFSET & flags))
+    {
+        uv.x *= size.x + 1.0f;
+        uv.y *= size.y;
+        uv.x -= 0.25f;
+        uv = getTileUV_Offset(uv, size);
+    }
+    else if (0 != (PASS_FLAG_HEXAGON & flags))
+    {
+        uv.x *= size.x + 1.0f;
+        uv.y *= size.y + 1.0f;
+        uv.x -= 0.25f;
+        uv.y -= 0.5f;
+
+        uv = getTileUV_Hexagon(uv, size);
+    }
+    else
+    {
+        uv.x *= size.x;
+        uv.y *= size.y;
+    }
+
+    uv.x /= size.x;
+    uv.y /= size.y;
+    return uv;
+}
 

@@ -66,17 +66,17 @@ bool DisplayWindow::Draw(const RenderWindow & window)
     {
         if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            needRefresh |= Checkbox(getFixedSizeString("Line offset", g_fixedTextLengthShort).c_str(), &g_map->useHexUVs);
+            needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
+            needRefresh |= Checkbox("Show Borders", &g_map->m_showBorders);
+
             ImGui::Separator();
 
-            PushItemWidth(g_comboxItemWidth);
-            needRefresh |= Combo("Filter", (int *)&g_map->territoryBackground, "TerrainType\0Biome\0Feature\0Continents\0Resource\0\0");
-            PopItemWidth();
+            needRefresh |= Combo("Layer", (int *)&g_map->m_mapFilter, "TerrainType\0Biome\0Feature\0Continents\0Resource\0\0");
 
-            switch (g_map->territoryBackground)
+            switch (g_map->m_mapFilter)
             {
                 default:
-                    LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->territoryBackground).c_str(), (int)g_map->territoryBackground);
+                    LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
                     break;
 
                 case MapFilter::TerrainType:

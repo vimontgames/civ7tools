@@ -4,73 +4,32 @@ struct Tile
     float4 color1;
 };
 
-#define USE_NEW_HEXES 0
-
-float2 hexUV2(float2 uv)
+bool isBorder(float2 uv)
 {
-#if !USE_NEW_HEXES
-    return hexUV(uv);
-#endif
+    uv.y = uv.y * 0.5;
     
-    uv *= texSize;
-    uv.y -= 1.0f/4.0f;
+    float2 center = getTileUV(uv, texSize, passFlags);
     
-    if (0 != (PASS_FLAG_HEXES & passFlags))
-    {        
-        if (0 != (int(uv.y) & 1))
-            uv.x -= 0.25f;
-        else
-            uv.x += 0.25f;
+    float2 invScreenSize = 1.5f / screenSize.xy * float2(1.0f, 0.5f);
+    
+    float2 left   = getTileUV(uv + float2(-invScreenSize.x, 0), texSize, passFlags);
+    float2 right  = getTileUV(uv + float2(+invScreenSize.x, 0), texSize, passFlags);
+    float2 bottom = getTileUV(uv + float2(0, -invScreenSize.y), texSize, passFlags);
+    float2 up     = getTileUV(uv + float2(0, +invScreenSize.y), texSize, passFlags);
         
-        if (0 != (int(uv.y) & 1))
-        {
-            if (frac(uv.x) < 0.5 && frac(uv.y) > 0.5f)
-            {
-                if (frac(uv.x) < frac(0.5 + uv.y))
-                {
-                    uv.y += 1;
-                }
-            }
-            else if (frac(uv.x) > 0.5 && frac(uv.y) > 0.5f)
-            {
-                if (frac(uv.x) > 1-frac(0.5+uv.y))
-                {
-                    uv.x += 1;
-                    uv.y += 1;
-                }
-            }
-        }
-        else
-        {            
-            if (frac(uv.x) < 0.5 && frac(uv.y) > 0.5f)
-            {
-                if (frac(uv.x) < frac(0.5 + uv.y))
-                {
-                    uv.x -= 1;
-                    uv.y += 1;
-                }
-            }
-            else if (frac(uv.x) > 0.5 && frac(uv.y) > 0.5f)
-            {
-                if (frac(uv.x) > 1 - frac(0.5 + uv.y))
-                {
-                    uv.y += 1;
-                }
-            }
-        }
-    }
-    
-
-    
-    uv = frac(uv / texSize);
-    
-    return uv;
+    if (floor(left.x * texSize.x)   != floor(center.x * texSize.x) || floor(left.y * texSize.y)   != floor(center.y * texSize.y)
+     || floor(right.x * texSize.x)  != floor(center.x * texSize.x) || floor(right.y * texSize.y)  != floor(center.y * texSize.y)
+     || floor(bottom.x * texSize.x) != floor(center.x * texSize.x) || floor(bottom.y * texSize.y) != floor(center.y * texSize.y)
+     || floor(up.x * texSize.x)     != floor(center.x * texSize.x) || floor(up.y * texSize.y)     != floor(center.y * texSize.y))
+        return true;
+        
+    return false;
 }
 
 Tile getTile(float2 uv)
 {    
-    float2 uv0 = hexUV2(uv * float2(1, 0.5) + float2(0, 0));
-    float2 uv1 = hexUV2(uv * float2(1, 0.5) + float2(0, 0.5));
+    float2 uv0 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.0f), texSize, passFlags);
+    float2 uv1 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.5f), texSize, passFlags);
         
     Tile tile;
     tile.color0 = texture2D(texture, uv0);
@@ -143,11 +102,9 @@ void main()
     Tile center = getTile(uv);
     float4 color = getTileColor(center);
         
-    float2 invScreenSize = 1.0f / screenSize.xy * 2.0f;
-    
-    float2 leftUV = +float2(-invScreenSize.x, 0);
-    
-    Tile left     = getTile(uv + leftUV);
+    float2 invScreenSize = 1.5f / screenSize.xy * float2(1.0f, 0.5f);
+        
+    Tile left     = getTile(uv + float2(-invScreenSize.x, 0));
     Tile right    = getTile(uv + float2(+invScreenSize.x, 0));
     Tile bottom   = getTile(uv + float2(0, -invScreenSize.y));
     Tile up       = getTile(uv + float2(0, +invScreenSize.y));
@@ -194,39 +151,38 @@ void main()
         color.g = color.g * edgeMul + edgeAdd;
         color.b = color.b * edgeMul + edgeAdd;
     }
-        
-    float2 tileUV = (hexUV2(uv.xy * float2(1, 0.5)) * texSize);
     
-    // wrap poulet
-    if (tileUV.x > texSize.x)
-        tileUV.x -= (texSize.x);
-    else if (tileUV.x < 0)
-        tileUV.x += (texSize.x);
+    bool selected = false, hovered = false;
     
-    float borderSize = 0.1f;
-    float4 borderColor = color.rgba  * float4(0.9f, 0.9f, 0.9f, 1.0f);
-    
+    float2 tileUV = getTileUV(uv.xy * float2(1, 0.5), texSize, passFlags) * texSize;
     float2 cell = floor(tileUV);
     
+    if (cell.x < 0 || cell.x >= texSize.x || cell.y < 0 || cell.y > (texSize.y / 2 - 1))
+    {
+        discard;
+        //gl_FragColor = float4(1, 0, 1, 1);
+        //return;
+    }
+    
+    float4 borderColor = color.rgba * float4(0.9f, 0.9f, 0.9f, 1.0f);
+    
     if (cell.x == selectedCell.x && cell.y == selectedCell.y)
-        borderColor.rgb = (color.rgb * 0.2f) + (1.0f - color.rgb) * 0.8f;
+    {
+        borderColor.rgba = float4(0,1,0, 0.95f); // (color.rgb * 0.2f) + (1.0f - color.rgb) * 0.8f;
+        selected = true;
+    }
+    
     else if (cell.x == hoveredCell.x && cell.y == hoveredCell.y)
-        borderColor.rgb = (color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;  
+    {
+        hovered = true;
+        borderColor.rgba =  float4(0,10,0, 0.15f); //(color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;
+    }
     
-    float2 tileUVFract = frac(tileUV);
-    if (((abs(tileUVFract.x) < borderSize) || (abs(tileUVFract.x) > (1.0 - borderSize))) || ((abs(tileUVFract.y) < borderSize) || (abs(tileUVFract.y) > (1.0 - borderSize))))
-        color.rgb = borderColor.rgb;
+    bool showBorders = (0 != (PASS_FLAG_BORDERS & passFlags));
+    if (isBorder(uv) && (showBorders || hovered || selected))
+        color.rgb = lerp(color.rgb, borderColor.rgb, borderColor.a);
         
-    gl_FragColor = float4(color.rgb, 1);
-
+    gl_FragColor = float4(color.rgb, 1);   
     
-#if USE_NEW_HEXES
-    float2 huv = hexUV2(uv * float2(1, 0.5));
-    //if (huv.y > 0.5)
-    //    discard;
-    
-    gl_FragColor = float4(floor(huv * texSize ) / (texSize), 0, 1);
-    gl_FragColor = float4(frac(huv* texSize ), 0, 1);
-    
-    #endif
+    //gl_FragColor = lerp(gl_FragColor, float4(frac(tileUV), 0, 1), 1);
 }
