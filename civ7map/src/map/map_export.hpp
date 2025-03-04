@@ -107,19 +107,29 @@ string getFeatureTypeAsString(FeatureType _type)
 
 
 //--------------------------------------------------------------------------------------
-void Map::exportCiv7Map(string & _map, const string & _cwd)
+void Map::exportMap(const string & _cwd)
 {
     string data = fmt::sprintf
     (
-        "export function GetMap2() {\n"
+        "/*\n"
         "\n"
-        "    let MapToConvert2 = [];\n"
+        "--	FILE:	 GreatestEarthMap\n"
+        "--  made by djvandyke for civ5\n"
+        "--  imported to civ6\n"
+        "--  imported to civ7 by Gedemon (2025)\n"
+        "\n"
+        "*/\n"
+        "\n"
+        "console.log(\"loading greatest-earth-data.js\");\n\n"
+        "export function GetMap() {\n"
+        "\n"
+        "    let MapToConvert = [];\n"
         "    for (let i = 0; i < %u; i++) {\n"
-        "        MapToConvert2[i] = [];\n"
+        "        MapToConvert[i] = [];\n"
         "    }\n"
         "\n"
         "    // Map Data (Civ7)\n"
-        "    // MapToConvert2 = { civ7TerrainType, civ7BiomeType, civ7FeatureType }\n"
+        "    // MapToConvert = { civ7TerrainType, civ7BiomeType, civ7FeatureType }\n"
         "\n"
         "\n",
         m_width
@@ -129,20 +139,21 @@ void Map::exportCiv7Map(string & _map, const string & _cwd)
     {
         for (uint i = 0; i < m_width; ++i)
         {
-            const Civ7Tile & tile = civ7TerrainType.get(i, j);
+            const Civ7Tile & tile = m_civ7TerrainType.get(i, j);
 
-            data += fmt::sprintf("MapToConvert2[%u][%u]=[%s, %s, %s]\n", i, j, getTerrainTypeAsString(tile.terrain), getBiomeTypeAsString(tile.biome), getFeatureTypeAsString(tile.feature));
+            data += fmt::sprintf("    MapToConvert[%u][%u]=[%s, %s, %s];\n", i, j, getTerrainTypeAsString(tile.terrain), getBiomeTypeAsString(tile.biome), getFeatureTypeAsString(tile.feature));
         }
     }
 
     data +=
         "\n"
-        "    return MapToConvert2;\n"
+        "    return MapToConvert;\n"
         "}"
         "\n"
-        "//# sourceMappingURL=file:///base-standard/maps/continents-plus.js.map\n";
+        "console.log(\"loaded greatest-earth-data.js\");\n"
+        "//\n";
 
-    FILE * fp = fopen(_map.c_str(), "wb");
+    FILE * fp = fopen(m_path.c_str(), "wb");
     
     if (fp)
     {

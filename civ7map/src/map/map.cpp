@@ -1,5 +1,4 @@
 #include "map.h"
-#include "resourceinfo.h"
 #include "maths.h"
 #include "tinyxml2.h"
 #include "zip_file.hpp"
@@ -32,49 +31,77 @@ Map::Map()
 }
 
 //--------------------------------------------------------------------------------------
-void Map::loadIcons()
+void Map::createBitmaps()
 {
-    // load resource textures if needed
-    for (u32 i = 0; i < (u32)StrategicResource::Count; ++i)
+    for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)
     {
-        ResourceInfo & shared = strategicResources[i];
-        Texture & tex = shared.texture;
-        if (Vector2u(0, 0) == tex.getSize())
-            tex.loadFromFile("data/img/" + strategicResources[i].name + ".png");
-        shared.count = 0;
-    }
-
-    for (u32 i = 0; i < (u32)LuxuryResource::Count; ++i)
-    {
-        ResourceInfo & shared = luxuryResources[i];
-        Texture & tex = shared.texture;
-        if (Vector2u(0, 0) == tex.getSize())
-            tex.loadFromFile("data/img/" + luxuryResources[i].name + ".png");
-        shared.count = 0;
-    }
-
-    for (u32 i = 0; i < (u32)NaturalWonderResource::Count; ++i)
-    {
-        ResourceInfo & shared = naturalWonderResources[i];
-        Texture & tex = shared.texture;
-        if (Vector2u(0, 0) == tex.getSize())
-            tex.loadFromFile("data/img/wonder.png");
-        shared.count = 0;
-    }
-
-    for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
-    {
-        auto & bitmap = bitmaps[i];
+        auto & bitmap = m_bitmaps[i];
         bitmap.image.create(m_width, m_height * 2);
         bitmap.sprites.clear();
     }
+}
 
-    for (u32 i = 0; i < _countof(spawnInfo); ++i)
+//--------------------------------------------------------------------------------------
+void Map::loadIcons()
+{
+    for (auto val : enumValues<ResourceType>())
     {
-        auto & info = spawnInfo[i];
-        if (Vector2u(0, 0) == info.texture.getSize())
-            info.texture.loadFromFile("data/img/" + to_string(i + 1) + ".png");  
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            ResourceInfo & info = m_resources[index];
+            if (info.dirty)
+            {
+                bool dirty = false;
+
+                auto path = fmt::sprintf("data/img/%s.png", asString((ResourceType)index));
+                if (!FileExists(path))
+                {
+                    LOG_WARNING("Texture \"%s\" not found", GetFilename(path).c_str());
+                    path = fmt::sprintf("data/img/%s.png", "Default");
+                    dirty = true;
+                }
+
+                if (info.texture.loadFromFile(path))
+                {
+                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    info.dirty = dirty;
+                    info.texture.generateMipmap();
+                }
+                else
+                    LOG_ERROR("Texture \"%s\" could not be loaded", GetFilename(path).c_str());
+            }
+            info.count = 0;
+        }
     }
+
+    // load resource textures if needed
+    //for (u32 i = 0; i < (u32)StrategicResource::Count; ++i)
+    //{
+    //    ResourceInfo & shared = strategicResources[i];
+    //    Texture & tex = shared.texture;
+    //    if (Vector2u(0, 0) == tex.getSize())
+    //        tex.loadFromFile("data/img/" + strategicResources[i].name + ".png");
+    //    shared.count = 0;
+    //}
+    //
+    //for (u32 i = 0; i < (u32)LuxuryResource::Count; ++i)
+    //{
+    //    ResourceInfo & shared = luxuryResources[i];
+    //    Texture & tex = shared.texture;
+    //    if (Vector2u(0, 0) == tex.getSize())
+    //        tex.loadFromFile("data/img/" + luxuryResources[i].name + ".png");
+    //    shared.count = 0;
+    //}
+    //
+    //for (u32 i = 0; i < (u32)NaturalWonderResource::Count; ++i)
+    //{
+    //    ResourceInfo & shared = naturalWonderResources[i];
+    //    Texture & tex = shared.texture;
+    //    if (Vector2u(0, 0) == tex.getSize())
+    //        tex.loadFromFile("data/img/wonder.png");
+    //    shared.count = 0;
+    //}
 }
 
 //--------------------------------------------------------------------------------------
@@ -86,14 +113,14 @@ string Map::getShortName() const
 //--------------------------------------------------------------------------------------
 void Map::resetCameraPan()
 {
-    cameraOffset = Vector2f(0, 0);
-    cameraPreviousOffset = cameraOffset;
+    m_cameraOffset = Vector2f(0, 0);
+    m_cameraPreviousOffset = m_cameraOffset;
 }
 
 //--------------------------------------------------------------------------------------
 void Map::resetCameraZoom()
 {
-    cameraZoom = 1.0f;
+    m_cameraZoom = 1.0f;
 }
 
 //--------------------------------------------------------------------------------------
@@ -116,14 +143,14 @@ void Map::translate(const sf::Vector2i & _offset)
 
     LOG_INFO("Translate map by {%i,%i}\n", offsetX, offsetY);
 
-    for (u32 i = 0; i < allSpawnsPoints.size(); ++i)
-    {
-        SpawnPoint & spawn = allSpawnsPoints[i];
-        spawn.pos.x = ((int)spawn.pos.x + (int)m_width - offsetX) % (int)m_width;
-        spawn.pos.y = ((int)spawn.pos.y + (int)m_height - offsetY) % (int)m_height;
-    }
+    //for (u32 i = 0; i < allSpawnsPoints.size(); ++i)
+    //{
+    //    SpawnPoint & spawn = allSpawnsPoints[i];
+    //    spawn.pos.x = ((int)spawn.pos.x + (int)m_width - offsetX) % (int)m_width;
+    //    spawn.pos.y = ((int)spawn.pos.y + (int)m_height - offsetY) % (int)m_height;
+    //}
 
-    civ7TerrainType.translate(offsetX, offsetY);
+    m_civ7TerrainType.translate(offsetX, offsetY);
 }
 
 //--------------------------------------------------------------------------------------

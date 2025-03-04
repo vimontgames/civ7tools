@@ -37,6 +37,18 @@ string GetFilenameWithoutExtension(const string & _fullpath)
 }
 
 //--------------------------------------------------------------------------------------
+bool FileExists(const string & _fullpath)
+{
+    FILE * file = fopen(_fullpath.c_str(), "rb");
+    if (file) 
+    {
+        fclose(file);
+        return true; 
+    }
+    return false; 
+}
+
+//--------------------------------------------------------------------------------------
 bool ReadFile(const string & _fullpath, string & _data)
 {
     FILE * fp = fopen(_fullpath.c_str(), "rb");

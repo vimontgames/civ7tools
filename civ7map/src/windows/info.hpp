@@ -50,7 +50,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
         {
             int editMapOffset[2] =
             {
-                g_map->mapOffset[0].x, g_map->mapOffset[0].y
+                g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
             };
 
             const bool editX = ImGui::InputInt("horizontal", &editMapOffset[0]);
@@ -58,27 +58,20 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
             if (editX || editY)
             {
-                g_map->mapOffset[0].x = editMapOffset[0];
-                g_map->mapOffset[0].y = editMapOffset[1];
+                g_map->m_mapOffset[0].x = editMapOffset[0];
+                g_map->m_mapOffset[0].y = editMapOffset[1];
 
-                Vector2i delta = g_map->mapOffset[0] - g_map->mapOffset[1];
+                Vector2i delta = g_map->m_mapOffset[0] - g_map->m_mapOffset[1];
 
                 g_map->translate(delta);
 
-                g_map->mapOffset[1] = g_map->mapOffset[0];
+                g_map->m_mapOffset[1] = g_map->m_mapOffset[0];
 
                 g_map->refresh();
             }
 
             TreePop();
         }
-
-        //if (TreeNodeEx("Options", ImGuiTreeNodeFlags_DefaultOpen))
-        //{
-        //    ImGui::Checkbox(getFixedSizeString("Map cycling", g_fixedTextLengthShort).c_str(), &g_map->useMapCycling);
-        //    ImGui::Checkbox(getFixedSizeString("Procedural mountain chains", g_fixedTextLengthShort).c_str(), &g_map->useProceduralMountainChains);
-        //    TreePop();
-        //}
     }
 
     ImGui::End();

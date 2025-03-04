@@ -5,7 +5,7 @@
 #include "Shlobj.h"
 #include "stringconvert.h"
 #include "guistyle.h"
-#include "resourceinfo.h"
+#include "maths.h"
 #include "map/map.h"
 #include "shader/common.h"
 
@@ -43,8 +43,8 @@ ImportFile g_importFile = ImportFile::None;
 
 const char * g_importFileNames[] =
 {
-    "",                     // None
-    "Import Civ6 YnAMP map" // Civ6YnAMP
+    "",                     
+    "Import YnAMP map" 
 };
 
 const char * g_importFileName = nullptr;
@@ -71,7 +71,7 @@ public:
     ~dbg_stream_for_cout() { sync(); }
     int sync()
     {
-        ::OutputDebugStringA(str().c_str());
+        LOG_WARNING(str().c_str());
         str(string()); // Clear the string buffer
         return 0;
     }
@@ -165,7 +165,7 @@ int main()
 
                 case Event::MouseWheelMoved:
                     if (g_map)
-                        g_map->mouseWheelDelta = (float)event.mouseWheel.delta;
+                        g_map->m_mouseWheelDelta = (float)event.mouseWheel.delta;
                     break;
 
                 case Event::Resized:
@@ -174,9 +174,9 @@ int main()
                     {
                         Vector2f offset = Vector2f(float(g_screenWidth / 2) - float(event.size.width / 2), float(g_screenHeight / 2) - float(event.size.height / 2));
 
-                        map->cameraOffset += offset;
-                        map->cameraPreviousOffset += offset;
-                        map->cameraZoom = map->cameraZoom / (float(event.size.height) / float(g_screenHeight));
+                        map->m_cameraOffset += offset;
+                        map->m_cameraPreviousOffset += offset;
+                        map->m_cameraZoom = map->m_cameraZoom / (float(event.size.height) / float(g_screenHeight));
 
                         g_screenWidth = event.size.width;
                         g_screenHeight = event.size.height;
@@ -214,7 +214,7 @@ int main()
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Import Civ6 YnAMP map"))
+                if (ImGui::MenuItem("Import YnAMP map"))
                 {
                     g_importFile = ImportFile::Civ6YnAMP;
                     g_importFileName = g_importFileNames[ImportFile::Civ6YnAMP];
@@ -223,7 +223,7 @@ int main()
                 if (!g_map)
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
-                if(ImGui::MenuItem("Export Civ7 YnAMP map"))
+                if(ImGui::MenuItem("Export YnAMP map"))
                     g_saveFileDialog = true;
 
                 if (!g_map)
@@ -295,11 +295,11 @@ int main()
             {
                 Map * map = g_maps[m];
 
-                if (!map->docked)
+                if (!map->m_isDocked)
                 {
                     auto dock_id_center = ImGui::DockBuilderGetCentralNode(dockspace_id);
                     DockBuilderDockWindow(g_map->getShortName().c_str(), dock_id_center->ID);
-                    map->docked = true;
+                    map->m_isDocked = true;
                 }
 
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -310,12 +310,12 @@ int main()
                     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
                         g_map = map;
 
-                    ImGui::ImageButton(map->renderTexture, (sf::Vector2f)map->renderTexture.getSize(), 0, sf::Color::White, sf::Color::White);
+                    ImGui::ImageButton(map->m_renderTexture, (sf::Vector2f)map->m_renderTexture.getSize(), 0, sf::Color::White, sf::Color::White);
 
                     if (IsItemHovered())
-                        map->hovered = true;
+                        map->m_isHovered = true;
                     else
-                        map->hovered = false;
+                        map->m_isHovered = false;
 
                     if (g_map == map)
                     {
@@ -331,14 +331,14 @@ int main()
                                 int i = 42;
                             }
 
-                            float2 renderTargetSize = float2((float)map->renderTexture.getSize().x, (float)map->renderTexture.getSize().y);
+                            float2 renderTargetSize = float2((float)map->m_renderTexture.getSize().x, (float)map->m_renderTexture.getSize().y);
                             Vector2f size = Vector2f(renderTargetSize.x, renderTargetSize.y);
 
                             sf::View view;
                             view.setCenter(sf::Vector2f(float(g_screenWidth) * 0.5f, (float)(g_screenHeight) * 0.5f));
                             view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
-                            view.zoom(g_map->cameraZoom); // zeng
-                            view.move(g_map->cameraOffset);
+                            view.zoom(g_map->m_cameraZoom); // zeng
+                            view.move(g_map->m_cameraOffset);
 
                             float ar = (float(g_screenWidth) / float(map->m_width)) / (float(g_screenHeight) / float(map->m_height));
                         
@@ -355,60 +355,93 @@ int main()
                             uv.y /= (float)size.y+1;
 
                             float2 temp;
-                            float2 texSize = float2(map->bitmaps[(int)MapBitmap::TerrainData].image.getSize().x, map->bitmaps[(int)MapBitmap::TerrainData].image.getSize().y);
+                            float2 texSize = float2((float)map->m_bitmaps[(int)MapBitmap::TerrainData].image.getSize().x, (float)map->m_bitmaps[(int)MapBitmap::TerrainData].image.getSize().y);
+
+                            float w = (float)g_map->m_width;
+                            float h = (float)g_map->m_height;
 
                             switch (map->m_gridType)
                             {
                                 case GridType::Regular:
-                                    temp = getTileUV(float2(uv.x, uv.y), texSize, 0);
+                                    temp = getTileUV(float2(uv.x - 0.0f / w, uv.y * 0.5f), texSize, 0);
                                     break;
 
                                 case GridType::Offset:
-                                    temp = getTileUV(float2(uv.x, uv.y ), texSize, PASS_FLAG_OFFSET);
+                                    temp = getTileUV(float2(uv.x + 0.5f / w, uv.y * 0.5f), texSize, PASS_FLAG_OFFSET);
                                     break;
 
                                 case GridType::Hexagon:
-                                    temp = getTileUV(float2(uv.x, uv.y), texSize, PASS_FLAG_HEXAGON);
+                                    temp = getTileUV(float2(uv.x - 0.0f / w, uv.y * 0.5f), texSize, PASS_FLAG_HEXAGON);
                                     break;
                             }
 
-                            uv.x = temp.x;
-                            uv.y = temp.y;
+                            uv.x = temp.x * 1.0f;
+                            uv.y = temp.y * 2.0f;
 
-                            if (uv.x > 0.0f && uv.y > 0.0f && uv.x <= 1.0f && uv.y <= 1.0f)
+                            float hS = 0.0f, hE = 0.0f;
+                            if (map->m_gridType == GridType::Offset)
                             {
-                                float w = (float)g_map->m_width;
-                                float h = (float)g_map->m_height;
+                                const int Y = (int)min(floor((uv.y) * h), (h - 1));
+                                if (0 == (Y & 1))
+                                    hS = hE = +1.0f / w;
+                            }
+                            else if (map->m_gridType == GridType::Hexagon)
+                            {
+                                const int Y = (int)min(floor((uv.y) * h), (h - 1));
+                                if (0 == (Y & 1))
+                                {
+                                    hE = +0.5f / w;
+                                    hS = +0.5f / w;
+                                }
+                                else
+                                {
+                                    hS = -0.5f / w;
+                                    hE = -0.5f / w;
+                                }
+                            }
 
+                            if (uv.x > 0.0f + hS && uv.y > 0.0f && uv.x < 1.0f + hE && uv.y < 1.0f)
+                            {
                                 Vector2i cell;
-
-                                cell.x = (int)min((uv.x) * w, (w - 1));
-                                cell.y = (int)min((uv.y) * h, (h - 1));
 
                                 switch (g_map->m_gridType)
                                 {
+                                    default:
+                                        cell.x = (int)min(floor((uv.x) * w), (w - 1));
+                                        cell.y = (int)min(floor((uv.y) * h), (h - 1));
+                                        break;
+
+                                    case GridType::Offset:
+                                        cell.x = (int)min(floor((uv.x) * w), (w));
+                                        cell.y = (int)min(floor((uv.y) * h), (h - 1));
+
+                                        if (0 == (cell.y & 1))
+                                            cell.x = (int)min((int)cell.x - 1, (int)(w - 1));
+                                        else
+                                            cell.x = (int)min((int)cell.x + 0, (int)(w - 1));
+                                        break;
+
                                     case GridType::Hexagon:
-                                        if (cell.y & 1)
-                                        {
-                                            //cell.x = (int)min((uv.x) * w + 0.25f, (w - 1));
-                                            //if (getTileUV(float2(uv.x, uv.y), texSize, PASS_FLAG_HEXAGON).x == getTileUV(float2(uv.x + 0.125f / w, uv.y), texSize, PASS_FLAG_HEXAGON).x)
-                                            //    cell.x = 0;
-                                        }
+                                        cell.x = (int)min(round((uv.x) * w), (w));
+                                        cell.y = (int)min(round((uv.y) * h), (h));
+
+                                        if (0 == (cell.y & 1))
+                                            cell.x = (int)min((int)cell.x-1, (int)(w - 1));
+                                        else
+                                            cell.x = (int)min((int)cell.x +0, (int)(w - 1));
                                         break;
                                 }
 
                                 cell.y = (int)h - cell.y - 1;
 
-                                if (cell.x >= map->m_width)
-                                    cell.x = 0;
-                                if (cell.y >= map->m_height)
-                                    cell.y = 0;
+                                cell.x = clamp(cell.x, 0, (int)(map->m_width-1));
+                                cell.y = clamp(cell.y, 0, (int)(map->m_height-1));
 
                                 g_hoveredCell = cell;
                                 if (ImGui::IsMouseDown(0))
                                     g_selectedCell = cell;
 
-                                const Civ7Tile tile = g_map->civ7TerrainType.get(cell.x, cell.y);
+                                const Civ7Tile tile = g_map->m_civ7TerrainType.get(cell.x, cell.y);
 
                                 ImGui::BeginTooltip();
                                 {
@@ -512,7 +545,7 @@ int main()
             newMap->m_path = newFilePath;
             
             // Import it
-            if (newMap->importCiv7Map(newMap->m_path, g_currentWorkingDirectory))
+            if (newMap->importMap(g_currentWorkingDirectory))
             {
                 SetCurrentDirectory(g_currentWorkingDirectory.c_str());
                 ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
@@ -552,10 +585,10 @@ int main()
 
                 const string newFilePath = g_fileDialog.selected_path;
                 g_map->m_path = newFilePath;
-                g_map->exportCiv7Map(g_map->m_path, g_currentWorkingDirectory);
+                g_map->exportMap(g_currentWorkingDirectory);
 
                 if (prevFilename != g_map->m_path)
-                    g_map->docked = false;
+                    g_map->m_isDocked = false;
             }
 
             SetCurrentDirectory(g_currentWorkingDirectory.c_str());
@@ -569,38 +602,38 @@ int main()
         const float panSpeed = 1.0f;
         const float zoomSpeed = 1.1f;
 
-         if (g_map && g_map->hovered)
+         if (g_map && g_map->m_isHovered)
         {
             if (Mouse::isButtonPressed(Mouse::Right))
             {
-                if (!g_map->cameraPan)
+                if (!g_map->m_cameraPan)
                 {
                     // begin pan
-                    g_map->cameraPanOrigin = (Vector2f)Mouse::getPosition(mainWindow);
-                    g_map->cameraPan = true;
+                    g_map->m_cameraPanOrigin = (Vector2f)Mouse::getPosition(mainWindow);
+                    g_map->m_cameraPan = true;
                 }
                 else
                 {
                     //continue pan
                     //g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * (g_map->cameraZoom*g_map->cameraZoom) + g_map->cameraPreviousOffset;
-                    g_map->cameraOffset = (g_map->cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * g_map->cameraZoom + g_map->cameraPreviousOffset ;
+                    g_map->m_cameraOffset = (g_map->m_cameraPanOrigin - (Vector2f)Mouse::getPosition(mainWindow)) * panSpeed * g_map->m_cameraZoom + g_map->m_cameraPreviousOffset ;
                 }
             }
-            else if (g_map->cameraPan)
+            else if (g_map->m_cameraPan)
             {
                 // end pan
-                g_map->cameraPan = false;
-                g_map->cameraPreviousOffset = g_map->cameraOffset;
+                g_map->m_cameraPan = false;
+                g_map->m_cameraPreviousOffset = g_map->m_cameraOffset;
             }
 
-            if (0 != g_map->mouseWheelDelta)
+            if (0 != g_map->m_mouseWheelDelta)
             {
-                if (g_map->mouseWheelDelta < 0)
-                    g_map->cameraZoom *= zoomSpeed;
-                else if (g_map->mouseWheelDelta > 0)
-                    g_map->cameraZoom /= zoomSpeed;
+                if (g_map->m_mouseWheelDelta < 0)
+                    g_map->m_cameraZoom *= zoomSpeed;
+                else if (g_map->m_mouseWheelDelta > 0)
+                    g_map->m_cameraZoom /= zoomSpeed;
 
-                g_map->mouseWheelDelta = 0;
+                g_map->m_mouseWheelDelta = 0;
             }
         }
 

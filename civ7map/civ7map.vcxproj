@@ -118,7 +118,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\resourceinfo.cpp" />
     <ClCompile Include="src\shadermanager.cpp" />
     <ClCompile Include="src\stringconvert.cpp" />
   </ItemGroup>
@@ -145,7 +144,6 @@
     <ClInclude Include="src\misc\utils.h" />
     <ClInclude Include="src\misc\logger.h" />
     <ClInclude Include="src\precomp.h" />
-    <ClInclude Include="src\resourceinfo.h" />
     <ClInclude Include="src\shadermanager.h" />
     <ClInclude Include="src\stringconvert.h" />
     <ClInclude Include="src\tile\civ6tile.h" />

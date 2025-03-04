@@ -29,7 +29,7 @@ bool isBorder(float2 uv)
 Tile getTile(float2 uv)
 {    
     float2 uv0 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.0f), texSize, passFlags);
-    float2 uv1 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.5f), texSize, passFlags);
+    float2 uv1 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.5f - 0.0f / texSize.y), texSize, passFlags);
         
     Tile tile;
     tile.color0 = texture2D(texture, uv0);
@@ -159,9 +159,9 @@ void main()
     
     if (cell.x < 0 || cell.x >= texSize.x || cell.y < 0 || cell.y > (texSize.y / 2 - 1))
     {
-        discard;
-        //gl_FragColor = float4(1, 0, 1, 1);
-        //return;
+        //discard;
+        gl_FragColor = float4(1, 0, 1, 1);
+        return;
     }
     
     float4 borderColor = color.rgba * float4(0.9f, 0.9f, 0.9f, 1.0f);
@@ -175,14 +175,15 @@ void main()
     else if (cell.x == hoveredCell.x && cell.y == hoveredCell.y)
     {
         hovered = true;
-        borderColor.rgba =  float4(0,10,0, 0.15f); //(color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;
+        borderColor.rgba =  float4(0,10,0, 0.05f); //(color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;
     }
+    
+    //color = lerp(color, float4(uv, 0, 1), 1);
+    //color = float4(int(tileUV / texSize.xy) & 1 ? 1 :0, 0, 0, 1);
     
     bool showBorders = (0 != (PASS_FLAG_BORDERS & passFlags));
     if (isBorder(uv) && (showBorders || hovered || selected))
         color.rgb = lerp(color.rgb, borderColor.rgb, borderColor.a);
         
     gl_FragColor = float4(color.rgb, 1);   
-    
-    //gl_FragColor = lerp(gl_FragColor, float4(frac(tileUV), 0, 1), 1);
 }

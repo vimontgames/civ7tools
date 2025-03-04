@@ -26,7 +26,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
         Map * map = g_map;
         
         if (map && (uint)g_selectedCell.x < map->m_width && (uint)g_selectedCell.y < map->m_height)
-            tile = &map->civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
+            tile = &map->m_civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
 
         if (!tile)
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);

@@ -58,7 +58,7 @@ bool DebugWindow::Draw(const RenderWindow & window)
                 ImGui::Text(mouseButtonsString.c_str());
 
                 if (g_map)
-                    ImGui::Text((to_string((int)g_map->mouseWheelDelta)).c_str());
+                    ImGui::Text((to_string((int)g_map->m_mouseWheelDelta)).c_str());
             }
 
             ImGui::TreePop();
@@ -82,10 +82,10 @@ bool DebugWindow::Draw(const RenderWindow & window)
                 if (g_map)
                 {
                     char tmp[256];
-                    sprintf_s(tmp, "%.1f, %.1f", g_map->cameraOffset.x, g_map->cameraOffset.y);
+                    sprintf_s(tmp, "%.1f, %.1f", g_map->m_cameraOffset.x, g_map->m_cameraOffset.y);
                     ImGui::Text(tmp);
 
-                    sprintf_s(tmp, "%.1f", g_map->cameraZoom);
+                    sprintf_s(tmp, "%.1f", g_map->m_cameraZoom);
                     ImGui::Text(tmp);
                 }
             }

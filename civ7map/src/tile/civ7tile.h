@@ -110,10 +110,18 @@ enum class ContinentType : i8
 //--------------------------------------------------------------------------------------
 struct Civ7Tile
 {
-    TerrainType  terrain   = TerrainType::Flat;
-    BiomeType    biome     = BiomeType::Tundra;
-    FeatureType  feature   = FeatureType::None;
-    ContinentType    continent = ContinentType::None;
-                           
-    ResourceType resource  = ResourceType::None;
+    TerrainType   terrain   = TerrainType::Flat;
+    BiomeType     biome     = BiomeType::Tundra;
+    FeatureType   feature   = FeatureType::None;
+    ContinentType continent = ContinentType::None;              
+    ResourceType  resource  = ResourceType::None;
+};
+
+//--------------------------------------------------------------------------------------
+struct ResourceInfo
+{
+    bool visible = true;
+    bool dirty = true;
+    sf::Texture texture;
+    u32 count = 0;
 };

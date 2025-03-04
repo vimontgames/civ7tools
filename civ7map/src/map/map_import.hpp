@@ -118,7 +118,7 @@ bool GetNextValue(string & input, size_t & pos, string & value)
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::GetCiv7TerrainFromCiv6(const string & data)
+bool Map::importMapSize(const string & data, int & mapWidth, int & mapHeight) const
 {
     const string label = "MapToConvert";
     const string token = label + (string)"[";
@@ -127,34 +127,7 @@ bool Map::GetCiv7TerrainFromCiv6(const string & data)
     size_t posLine = firstToken;
     size_t offset = 0;
 
-    if (-1 == posLine)
-    {
-        // This could be using data from an external file, e.g. new version of "greatest-earth-map.js" imports map data from "greatest-earth-data.js"
-        const string importGetMapToken = "import { GetMap } from '";
-        size_t importGetMap = data.find(importGetMapToken);
-        if (-1 != importGetMap)
-        {
-            size_t endImportGetMap = data.find("'", importGetMap + importGetMapToken.length() + 1);
-            m_GetMapPath = data.substr(importGetMap + importGetMapToken.length(), endImportGetMap - importGetMap - importGetMapToken.length());
-
-            // Expect the data file to be in the same folder as the original file ...
-            m_GetMapPath = GetFolder(m_path) + "\\" + GetFilename(m_GetMapPath);
-
-            LOG_INFO("File \"%s\" imports GetMap from \"%s\"", GetFilename(m_path).c_str(), m_GetMapPath.c_str());
-
-            string getmapData;
-            if (ReadFile(m_GetMapPath, getmapData))
-            {
-                return GetCiv7TerrainFromCiv6(getmapData);
-            }
-        }
-
-        LOG_ERROR("Could not find \"%s\"", label.c_str());
-        return false;
-    }
-
-    // First pass to get map size
-    int mapWidth = 0, mapHeight = 0;
+    mapWidth = mapHeight = -1;
 
     while (posLine != -1)
     {
@@ -183,24 +156,77 @@ bool Map::GetCiv7TerrainFromCiv6(const string & data)
         posLine = data.find(token, offset);
     }
 
-    // save map size
-    m_width = mapWidth;
-    m_height = mapHeight;
+    if (-1 != mapWidth && -1 != mapHeight)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
-    // restart for actual parsing 
-    posLine = firstToken;
-    offset = 0;
+//--------------------------------------------------------------------------------------
+bool Map::ImportYnAMP(const string & data)
+{
+    const string label = "MapToConvert";
+    const string token = label + (string)"[";
+    const size_t firstToken = data.find(token);
 
-    LOG_INFO("Map size is %ux%u", mapWidth, mapHeight);
-    civ7TerrainType.SetSize(mapWidth, mapHeight);
+    size_t posLine = firstToken;
+    size_t offset = 0;
+
+    if (-1 == posLine)
+    {
+        // This could be using data from an external file, e.g. new version of "greatest-earth-map.js" imports map data from "greatest-earth-data.js"
+        const string importGetMapToken = "import { GetMap } from '";
+        size_t importGetMap = data.find(importGetMapToken);
+        if (-1 != importGetMap)
+        {
+            size_t endImportGetMap = data.find("'", importGetMap + importGetMapToken.length() + 1);
+            m_mapDataPath = data.substr(importGetMap + importGetMapToken.length(), endImportGetMap - importGetMap - importGetMapToken.length());
+
+            // Expect the data file to be in the same folder as the original file ...
+            m_mapDataPath = GetFolder(m_path) + "\\" + GetFilename(m_mapDataPath);
+
+            LOG_INFO("File \"%s\" imports GetMap from \"%s\"", GetFilename(m_path).c_str(), m_mapDataPath.c_str());
+
+            string getmapData;
+            if (ReadFile(m_mapDataPath, getmapData))
+            {
+                return ImportYnAMP(getmapData);
+            }
+        }
+
+        LOG_ERROR("Could not find \"%s\" in file \"%s\"", label.c_str(), GetFilename(m_path).c_str());
+        return false;
+    }
+
+    // First pass to get map size
+    int mapWidth, mapHeight;
+
+    if (importMapSize(data, mapWidth, mapHeight))
+    {
+        // save map size
+        m_width = mapWidth;
+        m_height = mapHeight;
+
+        LOG_INFO("Map size is %ux%u", mapWidth, mapHeight);
+        m_civ7TerrainType.SetSize(mapWidth, mapHeight);
+    }
+    else
+    {
+        LOG_ERROR("Could not get map size from file \"%s\"", GetFilename(m_path).c_str());
+        return false;
+    }
 
     // Clear map (in case of holes in data)
-    for (u32 j = 0; j < civ7TerrainType.Height(); ++j)
+    for (u32 j = 0; j < m_civ7TerrainType.Height(); ++j)
     {
-        for (u32 i = 0; i < civ7TerrainType.Width(); ++i)
+        for (u32 i = 0; i < m_civ7TerrainType.Width(); ++i)
         {
             Civ7Tile tile = {};
-            civ7TerrainType.set(i, j, tile);
+            m_civ7TerrainType.set(i, j, tile);
         }
     }
 
@@ -347,7 +373,7 @@ bool Map::GetCiv7TerrainFromCiv6(const string & data)
                             continentNames.push_back(continentS);
                             civ6Tile.continent = (ContinentType)(continentNames.size() - 1);
 
-                            LOG_INFO("Add continent \"%s\" (%u)", continentS.c_str(), (int)civ6Tile.continent);
+                            LOG_INFO("Add continent \"%s\" at index %u", continentS.c_str(), (int)civ6Tile.continent);
                         }
                     }
                 }
@@ -482,7 +508,7 @@ bool Map::GetCiv7TerrainFromCiv6(const string & data)
 
                 Civ7Tile civ7Tile = ConvertCiv6TileToCiv7(civ6Tile, i, j);
 
-                civ7TerrainType.set(i, j, civ7Tile);
+                m_civ7TerrainType.set(i, j, civ7Tile);
             }
         }
 
@@ -833,28 +859,18 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::importCiv7Map(const string & _map, const string & _cwd)
+bool Map::importMap(const string & _cwd)
 {
     string data;
-    if (ReadFile(_map, data))
+    if (ReadFile(m_path, data))
     {
         // We're looking for a map script with a "generate format" function
         auto generateMap = data.find("generateMap()");
         if (string::npos != generateMap)
         {
-            loaded = true;
+            m_isLoaded = true;
 
-            // New format does not have map size in main .js, so deduce it from parsing MapToConvert[i][j] instead
-            //u32 w, h;
-            //if (GetValue(data, "iWidth", w))
-            //    this->width = w;
-            //
-            //if (GetValue(data, "iHeight", h))
-            //    this->height = h;
-            
-            //civ7TerrainType.SetSize(w, h);
-
-            if (!GetCiv7TerrainFromCiv6(data))
+            if (!ImportYnAMP(data))
                 return false;
 
             return true;

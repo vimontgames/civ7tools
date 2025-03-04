@@ -20,5 +20,5 @@ void main()
 
     bool edge = (left.r > 0.5 != center.r > 0.5) || (right.r > 0.5 != center.r > 0.5) || (bottom.r > 0.5 != center.r > 0.5) || (up.r > 0.5 != center.r > 0.5);
 
-    gl_FragColor.rgba = float4(1, 1, 1, right.r) * color;
+    gl_FragColor.rgba = center; //    float4(1, 1, 1, right.r) * color;
 }

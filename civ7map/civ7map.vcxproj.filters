@@ -4,7 +4,6 @@
     <ClCompile Include="..\extern\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\precomp.cpp" />
-    <ClCompile Include="src\resourceinfo.cpp" />
     <ClCompile Include="src\shadermanager.cpp" />
     <ClCompile Include="src\stringconvert.cpp" />
     <ClCompile Include="..\extern\imgui\imgui.cpp">
@@ -48,7 +47,6 @@
     <ClInclude Include="src\colorfloat4.h" />
     <ClInclude Include="src\maths.h" />
     <ClInclude Include="src\precomp.h" />
-    <ClInclude Include="src\resourceinfo.h" />
     <ClInclude Include="src\shadermanager.h" />
     <ClInclude Include="src\stringconvert.h" />
     <ClInclude Include="..\data\shader\hlsl2glsl.h">

@@ -9,8 +9,8 @@ void Map::render(RenderWindow & _window)
     sf::ContextSettings contextSettings;
                         contextSettings.sRgbCapable = true;
 
-    renderTexture.create(g_screenWidth, g_screenHeight, contextSettings);
-    renderTexture.clear(Color(255, 0, 255,255)); // should not be visible
+    m_renderTexture.create(g_screenWidth, g_screenHeight, contextSettings);
+    m_renderTexture.clear(Color(255, 0, 255,255)); // should not be visible
 
     sf::RenderTexture tempRenderTexture;
     tempRenderTexture.create(g_screenWidth, g_screenHeight, contextSettings);
@@ -19,14 +19,28 @@ void Map::render(RenderWindow & _window)
     sf::View view;
              view.setCenter(sf::Vector2f(float(g_screenWidth)*0.5f, (float)(g_screenHeight)*0.5f));
              view.setSize(sf::Vector2f(float(g_screenWidth), (float)g_screenHeight));
-             view.zoom(cameraZoom); // zeng
-             view.move(cameraOffset);
+             view.zoom(m_cameraZoom); // zeng
+             view.move(m_cameraOffset);
 
     tempRenderTexture.setView(view);
 
-    for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
+    for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)
     {
-        auto & bitmap = bitmaps[i];
+        auto & bitmap = m_bitmaps[i];
+        const auto mapBitmap = (MapBitmap)i;
+        switch (mapBitmap)
+        {
+            case MapBitmap::TerrainData:
+                bitmap.drawQuad = true;
+                bitmap.drawSprites = false;
+                break;
+
+            case MapBitmap::Resources:
+                bitmap.drawQuad = false;
+                bitmap.drawSprites = true;
+                break;
+        }
+
         if (bitmap.visible)
         {
             if (bitmap.drawQuad)
@@ -99,7 +113,7 @@ void Map::render(RenderWindow & _window)
                 tempRenderTexture.draw(sprite, rs);
             }
 
-            if (0 && bitmap.drawSprites)
+            if (bitmap.drawSprites)
             {
                 sf::Shader * shader = ShaderManager::get(bitmap.spriteshader);
 
@@ -109,18 +123,68 @@ void Map::render(RenderWindow & _window)
 
                 for (u32 j = 0; j < bitmap.sprites.size(); ++j)
                 {
-                    Sprite & sprite = bitmap.sprites[j];
+                    SpriteInfo & spriteInfo = bitmap.sprites[j];
 
                     if (shader)
                     {
-                        shader->setUniform("texSize", (Vector2f)sprite.getTexture()->getSize());
+                        shader->setUniform("texSize", (Vector2f)spriteInfo.sprite.getTexture()->getSize());
                         shader->setUniform("screenSize", Vector2f(float(g_screenWidth), float(g_screenHeight)));
 
-                        auto color = Glsl::Vec4(sprite.getColor());
+                        auto color = Glsl::Vec4(spriteInfo.sprite.getColor());
                         shader->setUniform("color", color);
                     }
 
-                    tempRenderTexture.draw(sprite, rs);
+                    float scaleX, scaleY;
+                    switch (m_gridType)
+                    {
+                        default:
+                            scaleX = 2.0f * (float)m_renderTexture.getSize().x / (float)(m_width);
+                            scaleY = 2.0f * (float)m_renderTexture.getSize().x / (float)(m_width);
+                            break;
+
+                        case GridType::Offset:
+                            scaleX = 2.0f * (float)m_renderTexture.getSize().x / (float)(m_width+1);
+                            scaleY = 2.0f * (float)m_renderTexture.getSize().x / (float)(m_width);
+                            break;
+
+                        case GridType::Hexagon:
+                            scaleX = 2.0f * (float)m_renderTexture.getSize().x / (float)(m_width + 1);
+                            scaleY = 2.0f * (float)m_renderTexture.getSize().x / ( float(m_width)+ 1 - 1.0f/6.0f );
+                            break;
+                    }
+
+                    float texScaleX = scaleX / (float)spriteInfo.sprite.getTexture()->getSize().x;
+                    float texScaleY = scaleY / (float)spriteInfo.sprite.getTexture()->getSize().y;
+
+                    spriteInfo.sprite.setOrigin(0, 0);
+
+                    const float fGridX = (float)(spriteInfo.x) * scaleX;
+                    const float fGridY = (float)(m_height - spriteInfo.y - 1) * scaleY;
+
+                    switch (m_gridType)
+                    {
+                        default:
+                            spriteInfo.sprite.setPosition(fGridX, fGridY);
+                            break;
+
+                        case GridType::Offset:
+                            if (spriteInfo.y & 1)
+                                spriteInfo.sprite.setPosition(fGridX + scaleX * 0.5f, fGridY);
+                            else
+                                spriteInfo.sprite.setPosition(fGridX, fGridY);
+                            break;
+
+                        case GridType::Hexagon:
+                            if (spriteInfo.y & 1)
+                                spriteInfo.sprite.setPosition(fGridX + scaleX * 0.5f, fGridY + scaleY * 0.25f);
+                            else
+                                spriteInfo.sprite.setPosition(fGridX, fGridY + scaleY * 0.25f);
+                            break;
+                    }
+
+                    spriteInfo.sprite.setScale(texScaleX, texScaleY);
+
+                    tempRenderTexture.draw(spriteInfo.sprite, rs);
                 }
             }
         }
@@ -130,14 +194,14 @@ void Map::render(RenderWindow & _window)
 
     // clear alpha to one
     RenderStates rs;
-    rs.shader = ShaderManager::get(copyRGBshader);
+    rs.shader = ShaderManager::get(m_copyRGBshader);
     rs.blendMode = sf::BlendMode(BlendMode::Factor::One, sf::BlendMode::Factor::Zero, BlendMode::Equation::Add);
     Sprite quad;
     quad.setColor(Color(1, 1, 1, 1));
     quad.setPosition(Vector2f(0, 0));
     quad.setTexture(tempRenderTexture.getTexture());
-    quad.setTextureRect(IntRect(0, 0, renderTexture.getSize().x, renderTexture.getSize().y));
-    renderTexture.draw(quad, rs);
+    quad.setTextureRect(IntRect(0, 0, m_renderTexture.getSize().x, m_renderTexture.getSize().y));
+    m_renderTexture.draw(quad, rs);
 
-    renderTexture.display();
+    m_renderTexture.display();
 }

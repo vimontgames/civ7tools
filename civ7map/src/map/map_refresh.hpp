@@ -1,21 +1,13 @@
 //--------------------------------------------------------------------------------------
 void Map::refresh()
 {
-    if (!loaded)
+    if (!m_isLoaded)
         return;
 
+    createBitmaps();
     loadIcons();
 
-    Bitmap & terrain = bitmaps[(int)MapBitmap::TerrainData];
-
-    static sf::Color zoneColors[] =
-    {
-        Color::Red,
-        Color::Green,
-        Color::Yellow,
-        Color::Magenta,
-        Color::Cyan
-    };
+    Bitmap & terrain = m_bitmaps[(int)MapBitmap::TerrainData];
 
     extern u32 g_screenWidth;
     extern u32 g_screenHeight;
@@ -24,13 +16,15 @@ void Map::refresh()
     float ar =(float(g_screenWidth) / float(m_width)) / (float(g_screenHeight) / float(m_height));
     scale.y *= ar;
 
+    auto & resources = m_bitmaps[(int)MapBitmap::Resources];
+
     for (u32 h = 0; h < m_height; ++h)
     {
         for (u32 w = 0; w < m_width; ++w)
         {
             const u32 offset = w + h * m_width;
 
-            const Civ7Tile & tile = civ7TerrainType.get(w, h);
+            const Civ7Tile & tile = m_civ7TerrainType.get(w, h);
 
             Color color0 = Color(0, 0, 0, 0);
 
@@ -54,12 +48,24 @@ void Map::refresh()
             color1.r = (u8)tile.resource;
             
             terrain.image.setPixel(w, h + m_height, color1);
+
+            if (ResourceType::None != tile.resource)
+            {
+                auto & info = m_resources[(int)/*ResourceType::Gold*/ tile.resource];
+                if (info.texture.getSize().x > 0)
+                {
+                    SpriteInfo & spriteInfo = resources.sprites.emplace_back();
+                    spriteInfo.sprite.setTexture(info.texture); 
+                    spriteInfo.x = w;
+                    spriteInfo.y = h;
+                }
+            }
         }
     }
 
-    for (u32 i = 0; i < (int)MapBitmap::Count; ++i)
+    for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)
     {
-        auto & bitmap = bitmaps[i];
+        auto & bitmap = m_bitmaps[i];
         bitmap.texture.loadFromImage(bitmap.image);
         bitmap.sprite.setTexture(bitmap.texture);
         bitmap.sprite.setTextureRect(IntRect(0, 0, bitmap.texture.getSize().x, bitmap.texture.getSize().y));
@@ -80,24 +86,19 @@ void Map::refresh()
         }
 
         //if (bitmap.spriteshader == invalidShaderID)
-        //{
-        //    switch ((MapBitmap)i)
-        //    {
-        //    default:
-        //        break;
-        //
-        //    case MapBitmap::Heightfield:
-        //        bitmap.quadshader = ShaderManager::add("data/shader/heightfield_vs.fx", "data/shader/heightfield_ps.fx");
-        //        bitmap.quadblend = sf::BlendMode(BlendMode::Factor::One, sf::BlendMode::Factor::Zero, BlendMode::Equation::Add);
-        //        break;
-        //
-        //    case MapBitmap::Resources:
-        //        bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
-        //        bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
-        //        break;
-        //    }
-        //}
+        {
+            switch ((MapBitmap)i)
+            {
+            default:
+                break;
+                
+            case MapBitmap::Resources:
+                bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
+                bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
+                break;
+            }
+        }
     }
 
-    copyRGBshader = ShaderManager::add("data/shader/default_vs.fx", "data/shader/copyRGB_ps.fx");
+    m_copyRGBshader = ShaderManager::add("data/shader/default_vs.fx", "data/shader/copyRGB_ps.fx");
 }
