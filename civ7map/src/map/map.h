@@ -10,6 +10,14 @@
 #define MAX_PLAYER_SPAWN 10
 
 //--------------------------------------------------------------------------------------
+enum class MapFormat
+{
+    Unknown = -1,
+    Civ6 = 6,
+    Civ7 = 7
+};
+
+//--------------------------------------------------------------------------------------
 enum class MapBitmap
 {
     TerrainData = 0,       // TerrainType | Biome | Feature | Continent then Resource | ? | ? | ?
@@ -64,6 +72,13 @@ struct Bitmap
 };
 
 //--------------------------------------------------------------------------------------
+struct ResourceIcon
+{
+    bool dirty = true;
+    sf::Texture texture;
+};
+
+//--------------------------------------------------------------------------------------
 struct Map
 {
 public:
@@ -87,7 +102,8 @@ public:
 
     // misc
     void createBitmaps();
-    void loadIcons();
+    void initResources();
+    static void loadIcons();
 
     string getShortName() const;
 
@@ -101,6 +117,11 @@ public:
     string getContinentShortName(ContinentType continent) const;
     uint getContinentCount() const;
 
+    static string getTerrainTypeAsString(TerrainType _type);
+    static string getBiomeTypeAsString(BiomeType _type);
+    static string getFeatureTypeAsString(FeatureType _type);
+    static string getResourceTypeAsString(ResourceType _type);
+
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
@@ -109,6 +130,9 @@ private:
     Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
         
 public:
+    // shared
+    static ResourceIcon s_resourceIcons[enumCount<ResourceType>()];
+
     // file(s)
     string              m_path;
     string              m_mapDataPath;

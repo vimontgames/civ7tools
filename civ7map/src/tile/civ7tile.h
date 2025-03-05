@@ -121,7 +121,5 @@ struct Civ7Tile
 struct ResourceInfo
 {
     bool visible = true;
-    bool dirty = true;
-    sf::Texture texture;
     u32 count = 0;
 };

@@ -135,6 +135,9 @@ int main()
     g_windows.push_back(new InfoWindow());
     g_windows.push_back(new InspectorWindow());
 
+    // static init
+    Map::loadIcons();
+
     Clock deltaClock;
     while (mainWindow.isOpen()) 
     {

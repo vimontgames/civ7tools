@@ -24,7 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "greatest-earth-map", "great
 	ProjectSection(SolutionItems) = preProject
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js
-		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data2.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data2.js
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js
 		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml
 	EndProjectSection

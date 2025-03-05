@@ -34,7 +34,6 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
         if (tile)
         {
-            //ImGui::Text("%i,%i", g_selectedCell.x, g_selectedCell.y);
             ImGui::InputInt2("Selected", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
 
             // Continent
@@ -43,15 +42,14 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 float f3Color[] = { color.r, color.g,  color.b };
                 string continentName = map->getContinentShortName(tile->continent);
 
-                int selectedIndex = -1;
-                if (ImGui::BeginCombo("Continent", continentName.c_str()))
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
                 {
                     // None
                     {
                         bool isSelected = (selectedIndex == -1);
-                        if (ImGui::Selectable(map->getContinentShortName((ContinentType)-1).c_str(), isSelected))
+                        if (ImGui::Selectable(fmt::sprintf("%s (-1)", map->getContinentShortName((ContinentType)-1)).c_str(), isSelected))
                         {
-                            selectedIndex = -1;
                             tile->continent = (ContinentType)-1;
                             dirty = true;
                         }
@@ -59,14 +57,12 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                     for (uint i = 0; i < map->getContinentCount(); ++i)
                     {
                         bool isSelected = (selectedIndex == i);
-                        if (ImGui::Selectable(map->getContinentShortName((ContinentType)i).c_str(), isSelected))
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
                         {
-                            selectedIndex = i; 
                             tile->continent = (ContinentType)i;
                             dirty = true;
                         }
                     }
-
                     ImGui::EndCombo();
                 }
             }
@@ -76,20 +72,20 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 float4 color = getTerrainColor(tile->terrain);
                 float f3Color[] = { color.r, color.g,  color.b };
 
-                int selectedIndex = -1;
-                if (ImGui::BeginCombo("TerrainType", asString(tile->terrain).c_str()))
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(tile->terrain), (int)tile->terrain).c_str()))
                 {
-                    for (uint i = 0; i < enumCount<TerrainType>(); ++i)
+                    for (auto val : enumValues<TerrainType>())
                     {
-                        bool isSelected = (selectedIndex == i);
-                        if (ImGui::Selectable(asString((TerrainType)i).c_str(), isSelected))
+                        const int index = (int)val.first;
+                        bool isSelected = (selectedIndex == index);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = i; 
-                            tile->terrain = (TerrainType)i;
+                            selectedIndex = index;
+                            tile->terrain = val.first;
                             dirty = true;
                         }
                     }
-
                     ImGui::EndCombo();
                 }
             }
@@ -99,20 +95,20 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 float4 color = getBiomeColor(tile->biome);
                 float f3Color[] = { color.r, color.g,  color.b };
 
-                int selectedIndex = -1;
-                if (ImGui::BeginCombo("Biome", asString(tile->biome).c_str()))
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(tile->biome), (int)tile->biome).c_str()))
                 {
-                    for (uint i = 0; i < enumCount<BiomeType>(); ++i)
+                    for (auto val : enumValues<BiomeType>())
                     {
-                        bool isSelected = (selectedIndex == i);
-                        if (ImGui::Selectable(asString((BiomeType)i).c_str(), isSelected))
+                        const int index = (int)val.first;
+                        bool isSelected = (selectedIndex == index);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = i;
-                            tile->biome = (BiomeType)i;
+                            selectedIndex = index;
+                            tile->biome = val.first;
                             dirty = true;
                         }
                     }
-
                     ImGui::EndCombo();
                 }
             }
@@ -122,20 +118,43 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 float4 color = getFeatureColor(tile->feature);
                 float f3Color[] = { color.r, color.g,  color.b };
 
-                int selectedIndex = -1;
-                if (ImGui::BeginCombo("Feature", asString(tile->biome).c_str()))
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(tile->feature), (int)tile->feature).c_str()))
                 {
-                    for (uint i = 0; i < enumCount<FeatureType>(); ++i)
+                    for (auto val : enumValues<FeatureType>())
                     {
-                        bool isSelected = (selectedIndex == i);
-                        if (ImGui::Selectable(asString((FeatureType)i).c_str(), isSelected))
+                        const int index = (int)val.first;
+                        bool isSelected = (selectedIndex == index);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = i;
-                            tile->feature = (FeatureType)i;
+                            selectedIndex = index;
+                            tile->feature = val.first;
                             dirty = true;
                         }
                     }
+                    ImGui::EndCombo();
+                }
+            }
 
+            // Resource
+            {
+                float4 color = getResourceColor(tile->resource);
+                float f3Color[] = { color.r, color.g,  color.b };
+
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(tile->resource), (int)tile->resource).c_str()))
+                {
+                    for (auto val : enumValues<ResourceType>())
+                    {
+                        const int index = (int)val.first;
+                        bool isSelected = (selectedIndex == index);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
+                        {
+                            selectedIndex = index;
+                            tile->resource = val.first;
+                            dirty = true;
+                        }
+                    }
                     ImGui::EndCombo();
                 }
             }

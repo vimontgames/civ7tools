@@ -4,8 +4,11 @@ void Map::refresh()
     if (!m_isLoaded)
         return;
 
-    createBitmaps();
+    // Refresh icons
     loadIcons();
+
+    createBitmaps();
+    initResources();
 
     Bitmap & terrain = m_bitmaps[(int)MapBitmap::TerrainData];
 
@@ -51,11 +54,14 @@ void Map::refresh()
 
             if (ResourceType::None != tile.resource)
             {
-                auto & info = m_resources[(int)/*ResourceType::Gold*/ tile.resource];
-                if (info.texture.getSize().x > 0)
+                uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
+                auto & info = m_resources[resIndex];
+                auto & icons = s_resourceIcons[resIndex];
+
+                if (icons.texture.getSize().x > 0)
                 {
                     SpriteInfo & spriteInfo = resources.sprites.emplace_back();
-                    spriteInfo.sprite.setTexture(info.texture); 
+                    spriteInfo.sprite.setTexture(icons.texture);
                     spriteInfo.x = w;
                     spriteInfo.y = h;
                 }

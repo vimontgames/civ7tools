@@ -28,8 +28,12 @@ bool isBorder(float2 uv)
 
 Tile getTile(float2 uv)
 {    
+    float offsetY = 0.0f;
+    if (0 != (PASS_FLAG_HEXAGON & passFlags))
+        offsetY = 0.499f;
+    
     float2 uv0 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.0f), texSize, passFlags);
-    float2 uv1 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.5f - 0.0f / texSize.y), texSize, passFlags);
+    float2 uv1 = getTileUV(uv * float2(1.0f, 0.5f) + float2(0.0f, 0.5f - offsetY / texSize.y), texSize, passFlags);
         
     Tile tile;
     tile.color0 = texture2D(texture, uv0);
@@ -159,7 +163,7 @@ void main()
     
     if (cell.x < 0 || cell.x >= texSize.x || cell.y < 0 || cell.y > (texSize.y / 2 - 1))
     {
-        //discard;
+        discard;
         gl_FragColor = float4(1, 0, 1, 1);
         return;
     }

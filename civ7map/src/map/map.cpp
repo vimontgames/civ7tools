@@ -24,6 +24,8 @@ using namespace tinyxml2;
 #include "map_actions.hpp"
 #include "map_render.hpp"
 
+ResourceIcon Map::s_resourceIcons[enumCount<ResourceType>()];
+
 //--------------------------------------------------------------------------------------
 Map::Map()
 {
@@ -42,7 +44,7 @@ void Map::createBitmaps()
 }
 
 //--------------------------------------------------------------------------------------
-void Map::loadIcons()
+void Map::initResources()
 {
     for (auto val : enumValues<ResourceType>())
     {
@@ -50,58 +52,43 @@ void Map::loadIcons()
         if (index > 0)
         {
             ResourceInfo & info = m_resources[index];
-            if (info.dirty)
+            info.count = 0;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::loadIcons()
+{
+    for (auto val : enumValues<ResourceType>())
+    {
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            ResourceIcon & resIcon = s_resourceIcons[index];
+            if (resIcon.dirty)
             {
                 bool dirty = false;
 
-                auto path = fmt::sprintf("data/img/%s.png", asString((ResourceType)index));
+                auto path = fmt::sprintf("data/img/resources/%s.png", asString((ResourceType)index));
                 if (!FileExists(path))
                 {
                     LOG_WARNING("Texture \"%s\" not found", GetFilename(path).c_str());
-                    path = fmt::sprintf("data/img/%s.png", "Default");
+                    path = fmt::sprintf("data/img/resources/%s.png", "Default");
                     dirty = true;
                 }
 
-                if (info.texture.loadFromFile(path))
+                if (resIcon.texture.loadFromFile(path))
                 {
                     LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
-                    info.dirty = dirty;
-                    info.texture.generateMipmap();
+                    resIcon.dirty = dirty;
+                    resIcon.texture.generateMipmap();
                 }
                 else
                     LOG_ERROR("Texture \"%s\" could not be loaded", GetFilename(path).c_str());
             }
-            info.count = 0;
         }
     }
-
-    // load resource textures if needed
-    //for (u32 i = 0; i < (u32)StrategicResource::Count; ++i)
-    //{
-    //    ResourceInfo & shared = strategicResources[i];
-    //    Texture & tex = shared.texture;
-    //    if (Vector2u(0, 0) == tex.getSize())
-    //        tex.loadFromFile("data/img/" + strategicResources[i].name + ".png");
-    //    shared.count = 0;
-    //}
-    //
-    //for (u32 i = 0; i < (u32)LuxuryResource::Count; ++i)
-    //{
-    //    ResourceInfo & shared = luxuryResources[i];
-    //    Texture & tex = shared.texture;
-    //    if (Vector2u(0, 0) == tex.getSize())
-    //        tex.loadFromFile("data/img/" + luxuryResources[i].name + ".png");
-    //    shared.count = 0;
-    //}
-    //
-    //for (u32 i = 0; i < (u32)NaturalWonderResource::Count; ++i)
-    //{
-    //    ResourceInfo & shared = naturalWonderResources[i];
-    //    Texture & tex = shared.texture;
-    //    if (Vector2u(0, 0) == tex.getSize())
-    //        tex.loadFromFile("data/img/wonder.png");
-    //    shared.count = 0;
-    //}
 }
 
 //--------------------------------------------------------------------------------------
