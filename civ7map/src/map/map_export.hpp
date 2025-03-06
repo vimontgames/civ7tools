@@ -51,9 +51,10 @@ string Map::getFeatureTypeAsString(FeatureType _type)
     {
         default:
             LOG_WARNING("Unknow FeatureType \"%s\" (%i)", asString(_type).c_str(), (int)_type);
-        case FeatureType::None:
+        case FeatureType::Random:
             return "-1";
-
+        case FeatureType::None:
+            return "0";
         case FeatureType::SagebrushSteppe:
             return "FEATURE_SAGEBRUSH_STEPPE";
         case FeatureType::Oasis:
@@ -112,9 +113,10 @@ std::string Map::getResourceTypeAsString(ResourceType _type)
     {
         default:
             LOG_WARNING("Unknown ResourceType \"%d\"", static_cast<int>(_type));
-        case ResourceType::None:
+        case ResourceType::Random:
             return "-1";
-
+        case ResourceType::None:
+            return "0";
         case ResourceType::Cotton:              
             return "RESOURCE_COTTON";
         case ResourceType::Dates:               
@@ -201,6 +203,17 @@ std::string Map::getResourceTypeAsString(ResourceType _type)
 }
 
 //--------------------------------------------------------------------------------------
+// Add extra brackets for all values that are not numbers
+//--------------------------------------------------------------------------------------
+string exportValue(const string & _value)
+{
+    if (isNumber(_value))
+        return _value;
+    else
+        return "\"" + _value + "\"";
+}
+
+//--------------------------------------------------------------------------------------
 void Map::exportMap(const string & _cwd)
 {
     string data = fmt::sprintf
@@ -235,7 +248,12 @@ void Map::exportMap(const string & _cwd)
         {
             const Civ7Tile & tile = m_civ7TerrainType.get(i, j);
 
-            data += fmt::sprintf("    MapToConvert[%u][%u]=[\"%s\", \"%s\", \"%s\", \"%s\"];\n", i, j, getTerrainTypeAsString(tile.terrain), getBiomeTypeAsString(tile.biome), getFeatureTypeAsString(tile.feature), getResourceTypeAsString(tile.resource));
+            data += fmt::sprintf("    MapToConvert[%u][%u]=[%s, %s, %s, %s];\n", 
+                i, j, 
+                exportValue(getTerrainTypeAsString(tile.terrain)),
+                exportValue(getBiomeTypeAsString(tile.biome)),
+                exportValue(getFeatureTypeAsString(tile.feature)),
+                exportValue(getResourceTypeAsString(tile.resource)));
         }
     }
 

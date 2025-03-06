@@ -46,7 +46,7 @@ void DrawColor(const Map * _map, FeatureType _feature)
 {
     float4 color = getFeatureColor(_feature);
     float f3Color[] = { color.r, color.g,  color.b };
-    ImGui::ColorEdit3(FeatureType::None != _feature ? asString(_feature).c_str() : "No feature", f3Color, ImGuiColorEditFlags_NoInputs);
+    ImGui::ColorEdit3(asString(_feature).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
 }
 
 //--------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ void DrawColor(const Map * _map, ResourceType _resource)
 {
     float4 color = getResourceColor(_resource);
     float f3Color[] = { color.r, color.g,  color.b };
-    ImGui::ColorEdit3(ResourceType::None != _resource ? asString(_resource).c_str() : "No resource", f3Color, ImGuiColorEditFlags_NoInputs);
+    ImGui::ColorEdit3(asString(_resource).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
 }
 
 //--------------------------------------------------------------------------------------

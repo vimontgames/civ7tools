@@ -34,7 +34,16 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
         if (tile)
         {
-            ImGui::InputInt2("Selected", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
+            ImGui::InputInt2("Plot", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            int engineLoc[2] =
+            {
+                g_selectedCell.x,
+                g_selectedCell.y + 2
+            };
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::InputInt2("Engine Plot", engineLoc, ImGuiInputTextFlags_EnterReturnsTrue);
+            ImGui::PopItemFlag();
 
             // Continent
             {

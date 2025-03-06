@@ -466,13 +466,10 @@ int main()
                                     ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                     ImGui::Text("(%i)", (int)tile.biome);
 
-                                    //if (tile.feature != FeatureType::None)
-                                    {
-                                        DrawColor(g_map, tile.feature);
-                                        ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                        ImGui::Text("(%i)",(int)tile.feature);
-                                    }
+                                    DrawColor(g_map, tile.feature);
+                                    ImGui::SameLine();
+                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                    ImGui::Text("(%i)",(int)tile.feature);
 
                                     DrawColor(g_map, tile.resource);
                                     ImGui::SameLine();

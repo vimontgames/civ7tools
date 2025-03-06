@@ -52,7 +52,7 @@ void Map::refresh()
             
             terrain.image.setPixel(w, h + m_height, color1);
 
-            if (ResourceType::None != tile.resource)
+            if (ResourceType::Random != tile.resource)
             {
                 uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
                 auto & info = m_resources[resIndex];

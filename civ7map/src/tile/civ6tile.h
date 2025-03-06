@@ -25,7 +25,7 @@ enum class Civ6Terrain : i8
 //--------------------------------------------------------------------------------------
 enum class Civ6Feature : i8
 {
-    None        = -1,
+    Random      = -1,
 
     FloodPlains = 0,
     Ice         = 1,
@@ -39,7 +39,7 @@ enum class Civ6Feature : i8
 //--------------------------------------------------------------------------------------
 enum class Civ6Resource : i8
 {
-    None            = -1,
+    Random          = -1,
 
     Bananas         = 0,
     Cattle          = 1,
@@ -88,7 +88,7 @@ enum class Civ6Resource : i8
 struct Civ6Tile
 {
     Civ6Terrain     terrain = Civ6Terrain::Tundra;
-    Civ6Feature     feature = Civ6Feature::None;
-    Civ6Resource    resource = Civ6Resource::None;
+    Civ6Feature     feature = Civ6Feature::Random;
+    Civ6Resource    resource = Civ6Resource::Random;
     ContinentType   continent = ContinentType::None;
 };

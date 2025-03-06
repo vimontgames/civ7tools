@@ -46,28 +46,6 @@ bool GetValue(const string & data, const string label, u32 & value)
 }
 
 //--------------------------------------------------------------------------------------
-bool isNumber(const std::string & str) 
-{
-    if (str.empty()) 
-        return false;
-
-    size_t start = 0;
-    if (str[0] == '-') 
-    {
-        if (str.size() == 1) return false; 
-            start = 1; 
-    }
-
-    for (size_t i = start; i < str.size(); ++i) 
-    {
-        if (!std::isdigit(str[i])) 
-            return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------
 bool GetNextValue(string & input, size_t & pos, string & value) 
 {
     value.clear();
@@ -653,7 +631,7 @@ bool Map::ImportYnAMP(const string & data)
                                 if (!found)
                                 {
                                     LOG_WARNING("Unknown ResourceType \"%s\" at (%u,%u)", resourceTypeS.c_str(), i, j);
-                                    civ7Tile.resource = ResourceType::None;
+                                    civ7Tile.resource = ResourceType::Random;
                                 }
                             }
                         }
@@ -769,11 +747,11 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
         {
             default:
                 LOG_WARNING("Unknown _civ6.feature %i at (%u,%u)", (int)_civ6.feature, i, j);
-                civ7.feature = FeatureType::None;
+                civ7.feature = FeatureType::Random;
                 break;
 
-            case Civ6Feature::None:
-                civ7.feature = FeatureType::None;
+            case Civ6Feature::Random:
+                civ7.feature = FeatureType::Random;
                 break;
 
             case Civ6Feature::FloodPlains:
@@ -835,11 +813,11 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
         {
             default:
                 LOG_WARNING("Cannot match _civ6.resource \"%s\" (%i) at (%u,%u)", asString(_civ6.resource).c_str(), (int)_civ6.resource, i, j);
-                civ7.resource = ResourceType::None; 
+                civ7.resource = ResourceType::Random; 
                 break;
 
-            case Civ6Resource::None:
-                civ7.resource = ResourceType::None;
+            case Civ6Resource::Random:
+                civ7.resource = ResourceType::Random;
                 break;
 
             // Replacement

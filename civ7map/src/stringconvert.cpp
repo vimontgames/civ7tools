@@ -25,3 +25,25 @@ string ws2s(const wstring& _str)
     delete[] buf;
     return r;
 }
+
+//--------------------------------------------------------------------------------------
+bool isNumber(const std::string & str)
+{
+    if (str.empty())
+        return false;
+
+    size_t start = 0;
+    if (str[0] == '-')
+    {
+        if (str.size() == 1) return false;
+        start = 1;
+    }
+
+    for (size_t i = start; i < str.size(); ++i)
+    {
+        if (!std::isdigit(str[i]))
+            return false;
+    }
+
+    return true;
+}

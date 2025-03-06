@@ -1,5 +1,6 @@
 import * as globals from '/base-standard/maps/map-globals.js';
 import * as utilities from '/base-standard/maps/map-utilities.js';
+import { addFeatures, designateBiomes } from '/base-standard/maps/feature-biome-generator.js';
 
 /*
  *  map script
@@ -424,10 +425,20 @@ export function placeFeatures(iWidth, iHeight, importedMap, mapType) {
     for (let iY = 0; iY < iHeight; iY++) {
         for (let iX = 0; iX < iWidth; iX++) {
             let feature = getFeatureFromRow(importedMap[iX][iY]);
-            if (TerrainBuilder.canHaveFeature(iX, iY, feature)) {
-                TerrainBuilder.setFeatureType(iX, iY, feature);
-            } else {
-                console.log("Can't place at (" + iX + "," + iY +") feature = " + feature);
+            console.log("importedMap[" + iX + "][" + iY + "]) = " + getFeatureFromRow(importedMap[iX][iY]));
+            console.log("getFeatureFromRow(" + getFeatureFromRow(importedMap[iX][iY]) + ") = " + feature);
+            if (feature == 0) {
+                console.log("Force no feature at (" + iX + "," + iY + ")");
+                TerrainBuilder.setFeatureType(iX, iY, 0); 
+            } else if (feature == -1) { 
+                console.log("Keep random feature at (" + iX + "," + iY + ")");
+            } else { // use saved feature from file
+                //if (TerrainBuilder.canHaveFeature(iX, iY, feature)) {
+                    console.log("Can place at (" + iX + "," + iY + ") feature = " + feature);
+                    TerrainBuilder.setFeatureType(iX, iY, feature);
+                //} else {
+                //    console.log("Cannot place at (" + iX + "," + iY + ") feature = " + feature);
+                //}
             }
         }
     }

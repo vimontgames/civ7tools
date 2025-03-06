@@ -1,5 +1,6 @@
 #include "map.h"
 #include "maths.h"
+#include "stringconvert.h"
 #include "tinyxml2.h"
 #include "zip_file.hpp"
 #include "base64.hpp"
@@ -63,7 +64,7 @@ void Map::loadIcons()
     for (auto val : enumValues<ResourceType>())
     {
         int index = (int)val.first;
-        if (index > 0)
+        if (index != -1)
         {
             ResourceIcon & resIcon = s_resourceIcons[index];
             if (resIcon.dirty)

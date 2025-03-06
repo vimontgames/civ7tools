@@ -45,6 +45,11 @@ float4 getTileColor(Tile tile)
 {    
     float4 color = float4(1.0, 0.0, 1.0, 1.0);
     
+    uint terrainType = uint(tile.color0.r * 255.0f);
+    bool isWater = false;
+    if (terrainType == TerrainType_Ocean || terrainType == TerrainType_Coast)
+        isWater = true;
+    
     int passIndex = passFlags & PASS_TYPE_MASK;
     switch (passIndex)
     {
@@ -62,6 +67,9 @@ float4 getTileColor(Tile tile)
         {
             uint biomeType = uint(tile.color0.g * 255.0f);
             color = getBiomeColor(biomeType);
+            
+            if (isWater)
+                color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
         break;
         
@@ -69,6 +77,9 @@ float4 getTileColor(Tile tile)
         {
             uint featureType = uint(tile.color0.b * 255.0f);
             color = getFeatureColor(featureType);
+            
+            if (isWater)
+                color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
         break;
         
@@ -76,6 +87,9 @@ float4 getTileColor(Tile tile)
         {
             uint continent = uint(tile.color0.a * 255.0f);
             color = getContinentColor(continent);
+            
+            if (isWater)
+                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
         break;
         
@@ -83,6 +97,9 @@ float4 getTileColor(Tile tile)
         {
             uint res = uint(tile.color1.r * 255.0f);
             color = getResourceColor(res);
+            
+            if (isWater)
+                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
         break;
     }

@@ -23,82 +23,94 @@ enum class BiomeType : i8
 };
 
 //--------------------------------------------------------------------------------------
+enum class FertilityType : i8
+{
+    Random = -1,
+
+    Dry = 0,
+    Standart,
+    Fertile
+};
+
+//--------------------------------------------------------------------------------------
 enum class FeatureType : i8
 {
-    None                            = -1,
+    Random                          = -1,
 
-    SagebrushSteppe                 = 0,
-    Oasis                           = 1,
-    DesertFloodplainMinor           = 2,
-    DesertFloodplainNavigable       = 3,
-    Forest                          = 4,
-    Marsh                           = 5,
-    GrasslandFloodplainMinor        = 6,
-    GrasslandFloodplainNavigable    = 7,
-    Reef                            = 8,
-    ColdReef                        = 9,
-    Ice                             = 10,
-    SavanaWoodland                  = 11,
-    WateringHole                    = 12,
-    PlainsFloodplainMinor           = 13,
-    PlainsFloodplainNavigable       = 14,
-    RainForest                      = 15,
-    Mangrove                        = 16,
-    TropicalFloodplainMinor         = 17,
-    TropicalFloodplainNavigable     = 18,
-    Taiga                           = 19,
-    TundraBog                       = 20,
-    TundraFloodplainMinor           = 21,
-    TundraFloodplainNavigable       = 22,
-    Volcano,
+    None                            = 0,
+    SagebrushSteppe                 = 1,
+    Oasis                           = 2,
+    DesertFloodplainMinor           = 3,
+    DesertFloodplainNavigable       = 4,
+    Forest                          = 5,
+    Marsh                           = 6,
+    GrasslandFloodplainMinor        = 7,
+    GrasslandFloodplainNavigable    = 8,
+    Reef                            = 9,
+    ColdReef                        = 10,
+    Ice                             = 11,
+    SavanaWoodland                  = 12,
+    WateringHole                    = 13,
+    PlainsFloodplainMinor           = 14,
+    PlainsFloodplainNavigable       = 15,
+    RainForest                      = 16,
+    Mangrove                        = 17,
+    TropicalFloodplainMinor         = 18,
+    TropicalFloodplainNavigable     = 19,
+    Taiga                           = 20,
+    TundraBog                       = 21,
+    TundraFloodplainMinor           = 22,
+    TundraFloodplainNavigable       = 23,
+    Volcano                         = 24,
 };
 
 //--------------------------------------------------------------------------------------
 enum class ResourceType
 {
-    None                = -1,
+    Random              = -1,
 
-    Cotton              = 0,
-    Dates               = 1,
-    Dyes                = 2,
-    Fish                = 3,
-    Gold                = 4,
-    GoldDistantLands    = 5,
-    Gypsum              = 6,
-    Incense             = 7,
-    Ivory               = 8,
-    Jade                = 9,
-    Kaolin              = 10,
-    Marble              = 11,
-    Pearls              = 12,
-    Silk                = 13,
-    Silver              = 14,
-    SilverDistantLands  = 15,
-    Wine                = 16,
-    Camels              = 17,
-    Hides               = 18,
-    Horses              = 19,
-    Iron                = 20,
-    Salt                = 21,
-    Wool                = 22,
-    LapisLazuli         = 23,
-    Cocoa               = 24,
-    Furs                = 25,
-    Spices              = 26,
-    Sugar               = 27,
-    Tea                 = 28,
-    Truffles            = 29,
-    Niter               = 30,
-    Cloves              = 31,
-    Whales              = 32,
-    Coffee              = 33,
-    Tobacco             = 34,
-    Citrus              = 35,
-    Coal                = 36,
-    Nickel              = 37,
-    Oil                 = 38,
-    Quinine             = 39,
-    Rubber              = 40
+    None                = 0,
+    Cotton              = 1,
+    Dates               = 2,
+    Dyes                = 3,
+    Fish                = 4,
+    Gold                = 5,
+    GoldDistantLands    = 6,
+    Gypsum              = 7,
+    Incense             = 8,
+    Ivory               = 9,
+    Jade                = 10,
+    Kaolin              = 11,
+    Marble              = 12,
+    Pearls              = 13,
+    Silk                = 14,
+    Silver              = 15,
+    SilverDistantLands  = 16,
+    Wine                = 17,
+    Camels              = 18,
+    Hides               = 19,
+    Horses              = 20,
+    Iron                = 21,
+    Salt                = 22,
+    Wool                = 23,
+    LapisLazuli         = 24,
+    Cocoa               = 25,
+    Furs                = 26,
+    Spices              = 27,
+    Sugar               = 28,
+    Tea                 = 29,
+    Truffles            = 30,
+    Niter               = 31,
+    Cloves              = 32,
+    Whales              = 33,
+    Coffee              = 34,
+    Tobacco             = 35,
+    Citrus              = 36,
+    Coal                = 37,
+    Nickel              = 38,
+    Oil                 = 39,
+    Quinine             = 40,
+    Rubber              = 41           
 };
 
 //--------------------------------------------------------------------------------------
@@ -112,9 +124,9 @@ struct Civ7Tile
 {
     TerrainType   terrain   = TerrainType::Flat;
     BiomeType     biome     = BiomeType::Tundra;
-    FeatureType   feature   = FeatureType::None;
+    FeatureType   feature   = FeatureType::Random;
     ContinentType continent = ContinentType::None;              
-    ResourceType  resource  = ResourceType::None;
+    ResourceType  resource  = ResourceType::Random;
 };
 
 //--------------------------------------------------------------------------------------

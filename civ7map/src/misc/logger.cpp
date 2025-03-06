@@ -15,6 +15,8 @@ void Logger::Log(Level _level, const char * _format, ...)
         va_start(args, _format);
         vsnprintf_s(tempBuffer, bufferSize - 1, _format, args);
         m_entries.emplace_back(LogEntry{ _level, tempBuffer });
+        ::OutputDebugString(tempBuffer);
+        ::OutputDebugString("\n");
         va_end(args);
     }
 }

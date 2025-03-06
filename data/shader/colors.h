@@ -71,40 +71,40 @@ float4 getBiomeColor(BiomeType biome)
 //--------------------------------------------------------------------------------------
 
 // Should match enum class FeatureType in map.h
-#define FeatureType_None                            255
-
-#define FeatureType_SagebrushSteppe                 0
-#define FeatureType_Oasis                           1
-#define FeatureType_DesertFloodplainMinor           2
-#define FeatureType_DesertFloodplainNavigable       3
-#define FeatureType_Forest                          4
-#define FeatureType_Marsh                           5
-#define FeatureType_GrasslandFloodplainMinor        6
-#define FeatureType_GrasslandFloodplainNavigable    7
-#define FeatureType_Reef                            8
-#define FeatureType_ColdReef                        9
-#define FeatureType_Ice                             10
-#define FeatureType_SavanaWoodland                  11
-#define FeatureType_WateringHole                    12
-#define FeatureType_PlainsFloodplainMinor           13
-#define FeatureType_PlainsFloodplainNavigable       14
-#define FeatureType_RainForest                      15
-#define FeatureType_Mangrove                        16
-#define FeatureType_TropicalFloodplainMinor         17
-#define FeatureType_TropicalFloodplainNavigable     18
-#define FeatureType_Taiga                           19
-#define FeatureType_TundraBog                       20
-#define FeatureType_TundraFloodplainMinor           21
-#define FeatureType_TundraFloodplainNavigable       22
-#define FeatureType_Volcano                         23
+#define FeatureType_Random                          255
+#define FeatureType_None                            0
+#define FeatureType_SagebrushSteppe                 1
+#define FeatureType_Oasis                           2
+#define FeatureType_DesertFloodplainMinor           3
+#define FeatureType_DesertFloodplainNavigable       4
+#define FeatureType_Forest                          5
+#define FeatureType_Marsh                           6
+#define FeatureType_GrasslandFloodplainMinor        7
+#define FeatureType_GrasslandFloodplainNavigable    8
+#define FeatureType_Reef                            9
+#define FeatureType_ColdReef                        10
+#define FeatureType_Ice                             11
+#define FeatureType_SavanaWoodland                  12
+#define FeatureType_WateringHole                    13
+#define FeatureType_PlainsFloodplainMinor           14
+#define FeatureType_PlainsFloodplainNavigable       15
+#define FeatureType_RainForest                      16
+#define FeatureType_Mangrove                        17
+#define FeatureType_TropicalFloodplainMinor         18
+#define FeatureType_TropicalFloodplainNavigable     19
+#define FeatureType_Taiga                           20
+#define FeatureType_TundraBog                       21
+#define FeatureType_TundraFloodplainMinor           22
+#define FeatureType_TundraFloodplainNavigable       23
+#define FeatureType_Volcano                         24 
 
 float4 getFeatureColor(uint feature)
 {
-    switch (feature)
+    switch (feature & 0xFF)
     {
-        default:                                        return float4(0.0f, 0.0f, 0.0f, (1.0f));
-        case FeatureType_None:                          return float4(0.1f, 0.1f, 0.1f, (0.0f));
-
+        default:                                        return float4(1.0f, 0.0f, 1.0f, (0.5f));
+        case FeatureType_None:                          return float4(0.0f, 0.0f, 0.0f, (1.0f));
+        case FeatureType_Random:                        return float4(0.2f, 0.2f, 0.2f, (1.0f));
         case FeatureType_SagebrushSteppe:               return float4(0.5f, 0.5f, 0.5f, (1.0f));
         case FeatureType_Oasis:                         return float4(1.0f, 0.5f, 0.0f, (1.0f));
         case FeatureType_DesertFloodplainMinor:         return float4(1.0f, 1.0f, 0.5f, (1.0f));
@@ -146,7 +146,7 @@ float4 getContinentColor(uint index)
 {
     index &= 0xFF;
 
-    if (index == FeatureType_None)
+    if (index == 0xFF)
         return float4(0.1f, 0.1f, 0.1f, (1.0f));
     
     const float4 continentColors[6] =
@@ -178,62 +178,62 @@ float4 getContinentColor(ContinentType continent)
 // Resource
 //--------------------------------------------------------------------------------------
 
-#define ResourceType_None                255
-
-#define ResourceType_Cotton              0
-#define ResourceType_Dates               1
-#define ResourceType_Dyes                2
-#define ResourceType_Fish                3
-#define ResourceType_Gold                4
-#define ResourceType_GoldDistantLands    5
-#define ResourceType_Gypsum              6
-#define ResourceType_Incense             7
-#define ResourceType_Ivory               8
-#define ResourceType_Jade                9
-#define ResourceType_Kaolin              10
-#define ResourceType_Marble              11
-#define ResourceType_Pearls              12
-#define ResourceType_Silk                13
-#define ResourceType_Silver              14
-#define ResourceType_SilverDistantLands  15
-#define ResourceType_Wine                16
-#define ResourceType_Camels              17
-#define ResourceType_Hides               18
-#define ResourceType_Horses              19
-#define ResourceType_Iron                20
-#define ResourceType_Salt                21
-#define ResourceType_Wool                22
-#define ResourceType_LapisLazuli         23
-#define ResourceType_Cocoa               24
-#define ResourceType_Furs                25
-#define ResourceType_Spices              26
-#define ResourceType_Sugar               27
-#define ResourceType_Tea                 28
-#define ResourceType_Truffles            29
-#define ResourceType_Niter               30
-#define ResourceType_Cloves              31
-#define ResourceType_Whales              32
-#define ResourceType_Coffee              33
-#define ResourceType_Tobacco             34
-#define ResourceType_Citrus              35
-#define ResourceType_Coal                36
-#define ResourceType_Nickel              37
-#define ResourceType_Oil                 38
-#define ResourceType_Quinine             39
-#define ResourceType_Rubber              40
-
+#define ResourceType_Random              255
+#define ResourceType_None                0
+#define ResourceType_Cotton              1
+#define ResourceType_Dates               2
+#define ResourceType_Dyes                3
+#define ResourceType_Fish                4
+#define ResourceType_Gold                5
+#define ResourceType_GoldDistantLands    6
+#define ResourceType_Gypsum              7
+#define ResourceType_Incense             8
+#define ResourceType_Ivory               9
+#define ResourceType_Jade                10
+#define ResourceType_Kaolin              11
+#define ResourceType_Marble              12
+#define ResourceType_Pearls              13
+#define ResourceType_Silk                14
+#define ResourceType_Silver              15
+#define ResourceType_SilverDistantLands  16
+#define ResourceType_Wine                17
+#define ResourceType_Camels              18
+#define ResourceType_Hides               19
+#define ResourceType_Horses              20
+#define ResourceType_Iron                21
+#define ResourceType_Salt                22
+#define ResourceType_Wool                23
+#define ResourceType_LapisLazuli         24
+#define ResourceType_Cocoa               25
+#define ResourceType_Furs                26
+#define ResourceType_Spices              27
+#define ResourceType_Sugar               28
+#define ResourceType_Tea                 29
+#define ResourceType_Truffles            30
+#define ResourceType_Niter               31
+#define ResourceType_Cloves              32
+#define ResourceType_Whales              33
+#define ResourceType_Coffee              34
+#define ResourceType_Tobacco             35
+#define ResourceType_Citrus              36
+#define ResourceType_Coal                37
+#define ResourceType_Nickel              38
+#define ResourceType_Oil                 39
+#define ResourceType_Quinine             40
+#define ResourceType_Rubber              41 
 
 float4 getResourceColor(uint index)
 {
-    index &= 0xFF;
-
-    if (index == ResourceType_None)
-        return float4(0.1f, 0.1f, 0.1f, (1.0f));
-
-    switch (index)
+    switch (index & 0xFF)
     {
-        default:
-            return float4(1.0f, 0.0f, 1.0f, (1.0f));
+        default: 
+            return float4(1.0f, 0.0f, 1.0f, (0.5f));
+
+        case ResourceType_None:
+            return float4(0.0f, 0.0f, 0.0f, 1.0f);
+
+        case ResourceType_Random:
+            return float4(0.2f, 0.2f, 0.2f, 1.0f); 
 
         case ResourceType_Cotton:
         case ResourceType_Wool:
