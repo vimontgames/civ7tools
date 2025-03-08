@@ -254,14 +254,17 @@ void Map::exportModInfo()
     data += "        </Criteria>\n";
     data += "    </ActionCriteria>\n";
     data += "    <ActionGroups>\n";
-    data += "        <ActionGroup id=\"base-game-main-mapname\" scope=\"game\" criteria=\"always\">\n";
+    data += fmt::sprintf("        <ActionGroup id=\"base-game-main-%s\" scope=\"game\" criteria=\"always\">\n", getBaseName());
     data += "            <Actions>\n";
     data += "                <UpdateText>\n";
     data += "                    <Item>text/en_us/MapText.xml</Item>\n";
     data += "                </UpdateText>\n";
+    data += "		         <UpdateIcons>\n";
+	data += "		             <Item>icons/icons.xml</Item>\n";
+	data += "	             </UpdateIcons>\n";
     data += "            </Actions>\n";
     data += "        </ActionGroup>\n";
-    data += "        <ActionGroup id=\"shell-mapname\" scope=\"shell\" criteria=\"always\">\n";
+    data += fmt::sprintf("        <ActionGroup id=\"shell-%s\" scope=\"shell\" criteria=\"always\">\n", getBaseName());
     data += "            <Actions>\n";
     data += "                <UpdateDatabase>\n";
     data += "                    <Item>config/config.xml</Item>\n";
@@ -288,6 +291,12 @@ void Map::exportModInfo()
 }
 
 //--------------------------------------------------------------------------------------
+string Map::getExportMapSize(MapSize _mapSize)
+{
+    return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(asString(_mapSize)));
+}
+
+//--------------------------------------------------------------------------------------
 void Map::exportConfig()
 {
     std::string data;
@@ -298,8 +307,8 @@ void Map::exportConfig()
     data += fmt::sprintf("        <Row File=\"{%s}maps/%s\" Name=\"LOC_MAPNAME_NAME\" Description=\"LOC_MAPNAME_DESCRIPTION\" SortIndex=\"100\"/>\n", getModID(), GetFilename(m_mapPath));
     data += "    </Maps>\n";
     data += "    <SupportedValuesByMap>\n";
-    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"MAPSIZE_GREATEST_EARTH\"/>\n", getModID(), GetFilename(m_mapPath));
-    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"DistantLandsMapSizes\" Value=\"MAPSIZE_GREATEST_EARTH\"/>\n", getModID(), GetFilename(m_mapPath));
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize(m_mapSize));
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"DistantLandsMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize(m_mapSize));
     data += "    </SupportedValuesByMap>\n";
     data += "</Database>\n";
 
@@ -315,6 +324,10 @@ void Map::exportConfig()
     {
         fwrite(data.c_str(), sizeof(char), data.size(), fp);
         fclose(fp);
+    }
+    else
+    {
+        LOG_ERROR("Could not write config file \"%s\"", configPath.c_str());
     }
 }
 

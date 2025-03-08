@@ -188,6 +188,7 @@ bool Map::ImportYnAMP(const string & data)
         // save map size
         m_width = mapWidth;
         m_height = mapHeight;
+        m_mapSize = getMapSize(mapWidth, mapHeight);
 
         LOG_INFO("Map size is %ux%u", mapWidth, mapHeight);
         m_civ7TerrainType.SetSize(mapWidth, mapHeight);

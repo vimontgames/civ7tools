@@ -37,29 +37,9 @@ const char * g_saveImGuiIniPath = nullptr;
 bool g_importFile = false;
 bool g_createMap = false;
 
-enum class MapSize : int
-{
-    Custom = -1,
-
-    Tiny,
-    Small,
-    Standart,
-    Large,
-    Huge
-};
-
-static const int g_mapSizes[enumCount<MapSize>()][2] =
-{
-    {60,38},
-    {74,46},
-    {84,54},
-    {96,60},
-    {106,66}
-};
-
 string g_newMapName = "";
 int g_newMapSize[2] = { 84, 54 };
-MapSize g_newMapSizeType = MapSize::Standart;
+MapSize g_newMapSizeType = MapSize::Standard;
 
 static vector<Map*> g_maps;
 static Map * g_map = nullptr;
@@ -615,9 +595,41 @@ int main()
                     ImGui::EndCombo();
                 }                
 
+                if (g_newMapSizeType != MapSize::Custom)
+                    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+
                 ImGui::InputInt2("Size", g_newMapSize);
 
+                if (g_newMapSizeType != MapSize::Custom)
+                    ImGui::PopItemFlag();
+
                 ImGui::Separator();
+
+                bool isSizeSupported = false;
+                switch (g_newMapSizeType)
+                {
+                    case MapSize::Custom:
+                        isSizeSupported = false;
+                        break;
+
+                    case MapSize::Tiny:
+                    case MapSize::Small:
+                    case MapSize::Standard:
+                    case MapSize::Large:
+                    case MapSize::Huge:
+                    case MapSize::Greatest_Earth:
+                    case MapSize::Massive:
+                        isSizeSupported = true;
+                        break;
+
+                    case MapSize::Giant:
+                    case MapSize::Ludicrous:
+                        isSizeSupported = false;
+                        break;
+                }
+
+                if (!isSizeSupported)
+                    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
                 if (ImGui::Button("OK"))
                 {
@@ -632,11 +644,14 @@ int main()
                         g_maps.push_back(newMap);
                         g_map = newMap;
                     }
-
  
                     ImGui::CloseCurrentPopup();
                     g_createMap = false;
                 }
+
+                if (!isSizeSupported)
+                    ImGui::PopItemFlag();
+
                 ImGui::SameLine();
                 if (ImGui::Button("Cancel"))
                 {

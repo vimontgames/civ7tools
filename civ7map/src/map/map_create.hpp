@@ -33,8 +33,14 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     if (created)
         LOG_WARNING("Created text (en_us) folder \"%s\"", textFolder_en_us.c_str());
 
+    string iconsFolder = fmt::sprintf("%s\\icons", m_modFolder);
+    created = CreateFolder(iconsFolder);
+    if (created)
+        LOG_WARNING("Created icon folder \"%s\"", iconsFolder.c_str());
+
     m_width = _width;
     m_height = _height;
+    m_mapSize = getMapSize(_width, _height);
 
     m_isLoaded = true;
 

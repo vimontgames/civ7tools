@@ -185,3 +185,18 @@ uint Map::getContinentCount() const
 {
     return (uint)m_continents.size();
 }
+
+//--------------------------------------------------------------------------------------
+MapSize Map::getMapSize(uint _width, uint _height)
+{
+    for (auto val : enumValues<MapSize>())
+    {
+        const int index = (int)val.first;
+        if (index > 0)
+        {
+            if (g_mapSizes[index][0] == _width && g_mapSizes[index][1] == _height)
+                return val.first;
+        }
+    }
+    return MapSize::Custom;
+}

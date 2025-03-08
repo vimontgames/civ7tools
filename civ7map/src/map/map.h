@@ -10,6 +10,36 @@
 #define MAX_PLAYER_SPAWN 10
 
 //--------------------------------------------------------------------------------------
+enum class MapSize : int
+{
+    Custom = -1,
+
+    Tiny,           // MAPSIZE_TINY
+    Small,          // MAPSIZE_SMALL
+    Standard,       // MAPSIZE_STANDARD
+    Large,          // MAPSIZE_LARGE
+    Huge,           // MAPSIZE_HUGE
+    Greatest_Earth, // MAPSIZE_GREATEST_EARTH
+    Massive,        // MAPSIZE_MASSIVE
+    Giant,          // MAPSIZE_GIANT
+    Ludicrous       // MAPSIZE_LUDICROUS
+};
+
+//--------------------------------------------------------------------------------------
+static const int g_mapSizes[enumCount<MapSize>()][2] =
+{
+    {60,38},    // MAPSIZE_TINY
+    {74,46},    // MAPSIZE_SMALL
+    {84,54},    // MAPSIZE_STANDARD
+    {96,60},    // MAPSIZE_LARGE
+    {106,66},   // MAPSIZE_HUGE
+    {104,64},   // MAPSIZE_GREATEST_EARTH
+    {128,80},   // MAPSIZE_MASSIVE
+    {180,94},   // MAPSIZE_GIANT
+    {230,116},  // MAPSIZE_LUDICROUS
+};
+
+//--------------------------------------------------------------------------------------
 enum class MapFormat
 {
     Unknown = -1,
@@ -127,6 +157,8 @@ public:
     static string GetMapDataPathFromMapPath(const string & _mapPath);
 
     string getBaseName() const;
+    string getExportMapSize(MapSize _mapSize);
+    static MapSize getMapSize(uint _width, uint _height);
 
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
@@ -138,6 +170,7 @@ private:
     void exportConfig();
     void exportMapText();
     void exportModuleText();
+    void exportIcons();
 
     string getModID() const;
 
@@ -153,9 +186,10 @@ public:
     string              m_mapDataPath;
 
     // map data
-    string              m_author = "authorname";
+    string              m_author = "Civ7MapUser";
     u32                 m_width = 0;
     u32                 m_height = 0;
+    MapSize             m_mapSize = (MapSize)-1;
     Array2D<Civ7Tile>   m_civ7TerrainType;
     Bitmap              m_bitmaps[enumCount<MapBitmap>()];
     ResourceInfo        m_resources[enumCount<ResourceType>()];

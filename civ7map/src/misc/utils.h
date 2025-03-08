@@ -14,6 +14,8 @@ bool isDigits(const string & str);
 
 bool EndsWith(const string & _string, const string & _suffix);
 
+string ToUpperLabel(const string & str);
+
 template <typename E> inline constexpr string asString(E value)
 {
     return (string)magic_enum::enum_name(value);

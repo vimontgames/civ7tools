@@ -117,3 +117,14 @@ bool EndsWith(const string & _string, const string & _suffix)
 {
     return _string.size() >= _suffix.size() && _string.compare(_string.size() - _suffix.size(), _suffix.size(), _suffix) == 0;
 }
+
+//--------------------------------------------------------------------------------------
+string ToUpperLabel(const string & str)
+{
+    string result = str;
+    transform(result.begin(), result.end(), result.begin(), [](unsigned char c) 
+    {
+        return (std::isalpha(c)) ? std::toupper(c) : (std::isdigit(c) ? c : '_');
+    });
+    return result;
+}
