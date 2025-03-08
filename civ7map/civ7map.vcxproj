@@ -136,6 +136,7 @@
     <ClInclude Include="src\guistyle.h" />
     <ClInclude Include="src\map\map.h" />
     <ClInclude Include="src\map\map_actions.hpp" />
+    <ClInclude Include="src\map\map_create.hpp" />
     <ClInclude Include="src\map\map_export.hpp" />
     <ClInclude Include="src\map\map_import.hpp" />
     <ClInclude Include="src\map\map_refresh.hpp" />

@@ -22,10 +22,20 @@ using namespace tinyxml2;
 #include "map_import.hpp"
 #include "map_export.hpp"
 #include "map_refresh.hpp"
+#include "map_create.hpp"
 #include "map_actions.hpp"
 #include "map_render.hpp"
 
 ResourceIcon Map::s_resourceIcons[enumCount<ResourceType>()];
+
+//--------------------------------------------------------------------------------------
+string Map::GetMapDataPathFromMapPath(const string & _mapPath)
+{
+    string mapDataPath = GetFilenameWithoutExtension(_mapPath);
+    mapDataPath = mapDataPath.substr(0, mapDataPath.length() - 4); // remove "-map"
+    mapDataPath = fmt::sprintf("%s\\%s-data.js", GetFolder(_mapPath), mapDataPath);
+    return mapDataPath;
+}
 
 //--------------------------------------------------------------------------------------
 Map::Map()
@@ -95,7 +105,7 @@ void Map::loadIcons()
 //--------------------------------------------------------------------------------------
 string Map::getShortName() const
 {
-    return GetFilenameWithoutExtension(m_path);
+    return GetFilenameWithoutExtension(m_mapPath);
 }
 
 //--------------------------------------------------------------------------------------

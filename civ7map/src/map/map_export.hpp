@@ -214,33 +214,268 @@ string exportValue(const string & _value)
 }
 
 //--------------------------------------------------------------------------------------
-void Map::exportMap(const string & _cwd)
+void Map::exportFiles(const string & _cwd, bool _mapDataOnly)
 {
-    string data = fmt::sprintf
-    (
-        "/*\n"
-        "\n"
-        "--	FILE:	 GreatestEarthMap\n"
-        "--  made by djvandyke for civ5\n"
-        "--  imported to civ6\n"
-        "--  imported to civ7 by Gedemon (2025)\n"
-        "\n"
-        "*/\n"
-        "\n"
-        "console.log(\"loading greatest-earth-data.js\");\n\n"
-        "export function GetMap() {\n"
-        "\n"
-        "    let MapToConvert = [];\n"
-        "    for (let i = 0; i < %u; i++) {\n"
-        "        MapToConvert[i] = [];\n"
-        "    }\n"
-        "\n"
-        "    // Map Data (Civ7)\n"
-        "    // MapToConvert = { civ7TerrainType, civ7BiomeType, civ7FeatureType, civ7ResourceType }\n"
-        "\n"
-        "\n",
-        m_width
-    );
+    if (_mapDataOnly)
+    {
+        exportMapData();
+    }
+    else
+    {
+        exportModInfo();
+        exportConfig();
+        exportMap();
+        exportMapData();
+        exportMapText();
+        exportModuleText();
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportModInfo()
+{
+    std::string data;
+
+    data += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    data += fmt::sprintf( "<Mod id=\"%s\" version=\"1\"\n", getModID());
+    data += "    xmlns=\"ModInfo\">\n";
+    data += "    <Properties>\n";
+    data += "        <Name>LOC_MODULE_MAPNAME_NAME</Name>\n";
+    data += "        <Description>LOC_MODULE_MAPNAME_DESCRIPTION</Description>\n";
+    data += fmt::sprintf("        <Authors>%s</Authors>\n", m_author);
+    data += "        <Package>Mod</Package>\n";
+    data += "    </Properties>\n";
+    data += "    <Dependencies>\n";
+    data += "        <Mod id=\"base-standard\" title=\"LOC_MODULE_BASE_STANDARD_NAME\"/>\n";
+    data += "    </Dependencies>\n";
+    data += "    <ActionCriteria>\n";
+    data += "        <Criteria id=\"always\">\n";
+    data += "            <AlwaysMet></AlwaysMet>\n";
+    data += "        </Criteria>\n";
+    data += "    </ActionCriteria>\n";
+    data += "    <ActionGroups>\n";
+    data += "        <ActionGroup id=\"base-game-main-mapname\" scope=\"game\" criteria=\"always\">\n";
+    data += "            <Actions>\n";
+    data += "                <UpdateText>\n";
+    data += "                    <Item>text/en_us/MapText.xml</Item>\n";
+    data += "                </UpdateText>\n";
+    data += "            </Actions>\n";
+    data += "        </ActionGroup>\n";
+    data += "        <ActionGroup id=\"shell-mapname\" scope=\"shell\" criteria=\"always\">\n";
+    data += "            <Actions>\n";
+    data += "                <UpdateDatabase>\n";
+    data += "                    <Item>config/config.xml</Item>\n";
+    data += "                </UpdateDatabase>\n";
+    data += "                <UpdateText>\n";
+    data += "                    <Item>text/en_us/MapText.xml</Item>\n";
+    data += "                </UpdateText>\n";
+    data += "            </Actions>\n";
+    data += "        </ActionGroup>\n";
+    data += "    </ActionGroups>\n";
+    data += "    <LocalizedText>\n";
+    data += "        <File>text/en_us/ModuleText.xml</File>\n";
+    data += "    </LocalizedText>\n";
+    data += "</Mod>\n";
+
+    string modInfoPath = fmt::sprintf("%s\\%s.modinfo", m_modFolder, GetFilenameWithoutExtension(m_mapPath));
+    FILE * fp = fopen(modInfoPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportConfig()
+{
+    std::string data;
+
+    data += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    data += "<Database>\n";
+    data += "    <Maps>\n";
+    data += fmt::sprintf("        <Row File=\"{%s}maps/%s\" Name=\"LOC_MAPNAME_NAME\" Description=\"LOC_MAPNAME_DESCRIPTION\" SortIndex=\"100\"/>\n", getModID(), GetFilename(m_mapPath));
+    data += "    </Maps>\n";
+    data += "    <SupportedValuesByMap>\n";
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"MAPSIZE_GREATEST_EARTH\"/>\n", getModID(), GetFilename(m_mapPath));
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"DistantLandsMapSizes\" Value=\"MAPSIZE_GREATEST_EARTH\"/>\n", getModID(), GetFilename(m_mapPath));
+    data += "    </SupportedValuesByMap>\n";
+    data += "</Database>\n";
+
+    string configFolder = fmt::sprintf("%s\\config", m_modFolder);
+    bool created = CreateFolder(configFolder);
+    if (created)
+        LOG_WARNING("Folder \"%s\" created", configFolder.c_str());
+
+    string configPath = fmt::sprintf("%s\\config.xml", configFolder);
+    FILE * fp = fopen(configPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportMapText()
+{
+    string data;
+
+    data += "    <?xml version=\"1.0\" encoding=\"utf-8\"?>   \n";
+    data += "<Database>                                      \n";
+    data += "	<EnglishText>                                \n";
+    data += "		<Replace Tag=\"LOC_MAPNAME_NAME\">       \n";
+    data += fmt::sprintf("			<Text>%s[n](Civ7Map)</Text>\n", getBaseName());
+    data += "		</Replace>                               \n";
+    data += "		<Replace Tag=\"LOC_MAPNAME_DESCRIPTION\">\n";
+    data += "			<Text>TODO: Map description</Text>         \n";
+    data += "		</Replace>                               \n";
+    data += "	</EnglishText>                               \n";
+    data += "</Database>                                     \n";
+
+    const string mapTextPath = fmt::sprintf("%s\\text\\en_us\\MapText.xml", m_modFolder);
+    FILE * fp = fopen(mapTextPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+    else
+    {
+        LOG_ERROR("Could not write MapText file \"%s\"", mapTextPath.c_str());
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportModuleText()
+{
+    string data;
+
+    data += "    <?xml version=\"1.0\" encoding=\"utf-8\"?>           \n";
+    data += "<Database>                                              \n";
+    data += "	<EnglishText>                                        \n";
+    data += "		<Replace Tag=\"LOC_MODULE_MAPNAME_NAME\">        \n";
+    data += fmt::sprintf("			<Text>%s</Text>               \n", getBaseName());
+    data += "		</Replace>                                       \n";
+    data += "		<Replace Tag=\"LOC_MODULE_MAPNAME_DESCRIPTION\"> \n";
+    data += "			<Text>TODO: Map module description</Text> \n";
+    data += "		</Replace>                                       \n";
+    data += "	</EnglishText>                                       \n";
+    data += "</Database>                                             \n";
+
+    const string moduleTextPath = fmt::sprintf("%s\\text\\en_us\\ModuleText.xml", m_modFolder);
+    FILE * fp = fopen(moduleTextPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+    else
+    {
+        LOG_ERROR("Could not write MapText file \"%s\"", moduleTextPath.c_str());
+    }
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getBaseName() const
+{
+    string name = GetFilename(m_mapPath);
+    name = name.substr(0, name.length() - 7); // remove "-map.js"
+    return name;
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getModID() const
+{
+    return fmt::sprintf("%s-%s", m_author, getBaseName());
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportMap()
+{
+    string baseName = getBaseName();
+
+    std::string data;
+
+    data += "// " + GetFilename(m_mapPath) + "\n";
+    data += "/**\n";
+    data += "* " + baseName + "\n";
+    data += "* \n";
+    data += "*/\n";
+    data += fmt::sprintf("console.log(\"loading script %s\");\n", GetFilename(m_mapPath));
+    data += "import { generateYnAMP } from '/ged-ynamp/maps/ynamp-map-loading.js';\n";
+    data += fmt::sprintf("import { GetMap } from '/%s/maps/%s';\n", getModID(), GetFilename(m_mapDataPath));
+    data += "\n";
+    data += "function requestMapData(initParams) {\n";
+    data += fmt::sprintf("    initParams.width = 104;\n", m_width);
+    data += fmt::sprintf("    initParams.height = 64;\n", m_height);
+    data += "    console.log(initParams.width);\n";
+    data += "    console.log(initParams.height);\n";
+    data += "    console.log(initParams.topLatitude);\n";
+    data += "    console.log(initParams.bottomLatitude);\n";
+    data += "    console.log(initParams.wrapX);\n";
+    data += "    console.log(initParams.wrapY);\n";
+    data += "    console.log(initParams.mapSize);\n";
+    data += "    engine.call(\"SetMapInitData\", initParams);\n";
+    data += "}\n";
+    data += "function generateMap() {\n";
+    data += fmt::sprintf("    const mapName = '%s';\n", getBaseName());
+    data += "    let genParameters = {\n";
+    data += "        westStart: 1,\n";
+    data += "        westEnd: 31,\n";
+    data += "        eastStart: 32,\n";
+    data += "        eastEnd: 102\n";
+    data += "    };\n";
+    data += "    let importedMap = GetMap();\n";
+    data += "    generateYnAMP(mapName, importedMap, genParameters);\n";
+    data += "}\n";
+    data += "\n";
+    data += "// Register listeners.\n";
+    data += "engine.on('RequestMapInitData', requestMapData);\n";
+    data += "engine.on('GenerateMap', generateMap);\n";
+    data += "\n";
+    data += fmt::sprintf("console.log(\"Loaded %s\");\n", GetFilename(m_mapPath));
+
+    FILE * fp = fopen(m_mapPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+    else
+    {
+        LOG_ERROR("Could not write map file \"%s\"", m_mapPath.c_str());
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportMapData()
+{
+    string data;
+
+    data += "/*\n";
+    data += "\n";
+    data += fmt::sprintf("--	FILE:	 %s\n", getBaseName());
+    data += fmt::sprintf("--  made by %s\n", m_author);
+    data += "\n";
+    data += "*/\n";
+    data += "\n";
+    data += fmt::sprintf("console.log(\"loading %s\");\n\n", GetFilename(m_mapPath));
+    data += "export function GetMap() {\n";
+    data += "\n";
+    data += "    let MapToConvert = [];\n";
+    data += fmt::sprintf("    for (let i = 0; i < %u; i++) {\n", m_width);
+    data += "        MapToConvert[i] = [];\n";
+    data += "    }\n";
+    data += "\n";
+    data += "    // Map Data (Civ7)\n";
+    data += "    // MapToConvert = { civ7TerrainType, civ7BiomeType, civ7FeatureType, civ7ResourceType }\n";
+    data += "\n\n";
 
     for (uint j = 0; j < m_height; ++j)
     {
@@ -248,8 +483,8 @@ void Map::exportMap(const string & _cwd)
         {
             const Civ7Tile & tile = m_civ7TerrainType.get(i, j);
 
-            data += fmt::sprintf("    MapToConvert[%u][%u]=[%s, %s, %s, %s];\n", 
-                i, j, 
+            data += fmt::sprintf("    MapToConvert[%u][%u]=[%s, %s, %s, %s];\n",
+                i, j,
                 exportValue(getTerrainTypeAsString(tile.terrain)),
                 exportValue(getBiomeTypeAsString(tile.biome)),
                 exportValue(getFeatureTypeAsString(tile.feature)),
@@ -265,12 +500,16 @@ void Map::exportMap(const string & _cwd)
         "console.log(\"loaded greatest-earth-data.js\");\n"
         "//\n";
 
-    FILE * fp = fopen(m_path.c_str(), "wb");
-    
+    FILE * fp = fopen(m_mapDataPath.c_str(), "wb");
+
     if (fp)
     {
         fwrite(data.c_str(), sizeof(char), data.size(), fp);
         fclose(fp);
+    }
+    else
+    {
+        LOG_ERROR("Could not write map data file \"%s\"", m_mapPath.c_str());
     }
 }
 

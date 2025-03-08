@@ -165,9 +165,9 @@ bool Map::ImportYnAMP(const string & data)
             m_mapDataPath = data.substr(importGetMap + importGetMapToken.length(), endImportGetMap - importGetMap - importGetMapToken.length());
 
             // Expect the data file to be in the same folder as the original file ...
-            m_mapDataPath = GetFolder(m_path) + "\\" + GetFilename(m_mapDataPath);
+            m_mapDataPath = GetFolder(m_mapPath) + "\\" + GetFilename(m_mapDataPath);
 
-            LOG_INFO("File \"%s\" imports GetMap from \"%s\"", GetFilename(m_path).c_str(), m_mapDataPath.c_str());
+            LOG_INFO("File \"%s\" imports GetMap from \"%s\"", GetFilename(m_mapPath).c_str(), m_mapDataPath.c_str());
 
             string getmapData;
             if (ReadFile(m_mapDataPath, getmapData))
@@ -176,7 +176,7 @@ bool Map::ImportYnAMP(const string & data)
             }
         }
 
-        LOG_ERROR("Could not find \"%s\" in file \"%s\"", label.c_str(), GetFilename(m_path).c_str());
+        LOG_ERROR("Could not find \"%s\" in file \"%s\"", label.c_str(), GetFilename(m_mapPath).c_str());
         return false;
     }
 
@@ -194,7 +194,7 @@ bool Map::ImportYnAMP(const string & data)
     }
     else
     {
-        LOG_ERROR("Could not get map size from file \"%s\"", GetFilename(m_path).c_str());
+        LOG_ERROR("Could not get map size from file \"%s\"", GetFilename(m_mapPath).c_str());
         return false;
     }
 
@@ -242,7 +242,7 @@ bool Map::ImportYnAMP(const string & data)
                     while (GetNextValue(line, dummyPos, dummyS))
                         paramCount++;
 
-                    if (paramCount == 14)
+                    if (paramCount == 14 || paramCount == 15) // "greatest-earth-map" has regular 14 but "giant-earth-map" has extra "-1"
                         mapFmt = MapFormat::Civ6;
                     else
                         mapFmt = MapFormat::Civ7;
@@ -989,11 +989,14 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::importMap(const string & _cwd)
+bool Map::importFiles(const string & _cwd)
 {
     string data;
-    if (ReadFile(m_path, data))
+    if (ReadFile(m_mapPath, data))
     {
+        string name = getBaseName();
+        m_modFolder = fmt::sprintf("%s\\mods\\%s", _cwd, name);
+
         // We're looking for a map script with a "generate format" function
         const string genMapToken = "generateMap()";
         auto generateMap = data.find(genMapToken);
@@ -1008,7 +1011,7 @@ bool Map::importMap(const string & _cwd)
         }
         else
         {
-            LOG_ERROR("\"%s\" not found. File \"%s\" is not a valid YnAMP map.", genMapToken.c_str(), GetFilename(m_path).c_str());
+            LOG_ERROR("\"%s\" not found. File \"%s\" is not a valid YnAMP map.", genMapToken.c_str(), GetFilename(m_mapPath).c_str());
         }
     }
 

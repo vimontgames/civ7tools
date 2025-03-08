@@ -1,0 +1,11 @@
+    <?xml version="1.0" encoding="utf-8"?>           
+<Database>                                              
+	<EnglishText>                                        
+		<Replace Tag="LOC_MODULE_MAPNAME_NAME">        
+			<Text>Test4</Text>               
+		</Replace>                                       
+		<Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION"> 
+			<Text>TODO: Map module description</Text> 
+		</Replace>                                       
+	</EnglishText>                                       
+</Database>                                             

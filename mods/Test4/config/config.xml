@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{authorname-Test4}maps/Test4-map.js" Name="LOC_MAPNAME_NAME" Description="LOC_MAPNAME_DESCRIPTION" SortIndex="100"/>
+    </Maps>
+    <SupportedValuesByMap>
+        <Row Map="{authorname-Test4}maps/Test4-map.js" Domain="StandardMapSizes" Value="MAPSIZE_GREATEST_EARTH"/>
+        <Row Map="{authorname-Test4}maps/Test4-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_GREATEST_EARTH"/>
+    </SupportedValuesByMap>
+</Database>

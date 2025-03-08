@@ -10,7 +10,7 @@ bool isBorder(float2 uv)
     
     float2 center = getTileUV(uv, texSize, passFlags);
     
-    float2 invScreenSize = 1.5f / screenSize.xy * float2(1.0f, 0.5f);
+    float2 invScreenSize = 1.5f / (texSize.xy*16.0f) * float2(1.0f, 0.5f);
     
     float2 left   = getTileUV(uv + float2(-invScreenSize.x, 0), texSize, passFlags);
     float2 right  = getTileUV(uv + float2(+invScreenSize.x, 0), texSize, passFlags);
@@ -123,7 +123,7 @@ void main()
     Tile center = getTile(uv);
     float4 color = getTileColor(center);
         
-    float2 invScreenSize = 1.5f / screenSize.xy * float2(1.0f, 0.5f);
+    float2 invScreenSize = 1.5f / (texSize.xy * 16.0f) * float2(1.0f, 0.5f);
         
     Tile left     = getTile(uv + float2(-invScreenSize.x, 0));
     Tile right    = getTile(uv + float2(+invScreenSize.x, 0));

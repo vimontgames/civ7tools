@@ -124,6 +124,9 @@
     <ClInclude Include="..\data\shader\common.h">
       <Filter>shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\map\map_create.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

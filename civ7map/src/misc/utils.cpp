@@ -1,3 +1,16 @@
+
+//--------------------------------------------------------------------------------------
+bool CreateFolder(const string & path)
+{
+    return CreateDirectoryA(path.c_str(), nullptr);
+}
+
+//--------------------------------------------------------------------------------------
+//string GetParentFolder(const string & path)
+//{
+//    return std::filesystem::path(path).parent_path().string();
+//}
+
 //--------------------------------------------------------------------------------------
 string GetFolder(const string & _fullpath)
 {
@@ -97,4 +110,10 @@ string CapitalizeWords(const string & input)
 bool isDigits(const string & str)
 {
     return !str.empty() && all_of(str.begin(), str.end(), ::isdigit);
+}
+
+//--------------------------------------------------------------------------------------
+bool EndsWith(const string & _string, const string & _suffix)
+{
+    return _string.size() >= _suffix.size() && _string.compare(_string.size() - _suffix.size(), _suffix.size(), _suffix) == 0;
 }

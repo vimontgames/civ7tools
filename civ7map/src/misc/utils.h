@@ -1,5 +1,7 @@
 #pragma once
 
+bool CreateFolder(const string & path);
+string GetParentFolder(const string & path);
 string GetFolder(const string & _fullpath);
 string GetFilename(const string & _fullpath);
 string GetFilenameWithoutExtension(const string & _fullpath);
@@ -9,6 +11,8 @@ bool ReadFile(const string & path, string & _data);
 
 string CapitalizeWords(const string & input);
 bool isDigits(const string & str);
+
+bool EndsWith(const string & _string, const string & _suffix);
 
 template <typename E> inline constexpr string asString(E value)
 {

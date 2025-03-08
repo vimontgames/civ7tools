@@ -18,7 +18,7 @@ float4 getTerrainColor(uint terrain)
 
         case TerrainType_Moutain:        return float4(0.9f, 0.9f, 0.9f, (1.0f));
         case TerrainType_Hill:           return float4(0.6f, 0.6f, 0.6f, (1.0f));
-        case TerrainType_Flat:           return float4(0.3f, 0.3f, 0.3f, (1.0f));
+        case TerrainType_Flat:           return float4(0.4f, 0.4f, 0.4f, (1.0f));
         case TerrainType_Coast:          return float4(0.0f, 0.5f, 1.0f, (1.0f));
         case TerrainType_Ocean:          return float4(0.0f, 0.0f, 1.0f, (1.0f));
         case TerrainType_NavigableRiver: return float4(0.0f, 1.0f, 1.0f, (1.0f));
@@ -51,9 +51,9 @@ float4 getBiomeColor(uint biome)
         default:                    return float4(1.0f, 0.0f, 1.0f, (1.0f));
 
         case BiomeType_Tundra:      return float4(0.8f, 1.0f, 0.8f, (1.0f));
-        case BiomeType_Grassland:   return float4(0.0f, 1.0f, 0.0f, (1.0f));
+        case BiomeType_Grassland:   return float4(0.2f, 0.9f, 0.0f, (1.0f));
         case BiomeType_Plains:      return float4(0.5f, 0.8f, 0.0f, (1.0f));
-        case BiomeType_Tropical:    return float4(0.0f, 0.3f, 0.0f, (1.0f));
+        case BiomeType_Tropical:    return float4(0.0f, 0.5f, 0.0f, (1.0f));
         case BiomeType_Desert:      return float4(1.0f, 1.0f, 0.0f, (1.0f));
         case BiomeType_Marine:      return float4(0.0f, 0.0f, 1.0f, (1.0f));
     }

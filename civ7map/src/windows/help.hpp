@@ -26,13 +26,15 @@ bool HelpWindow::Draw(const RenderWindow & window)
         {
             SetColumnWidth(0, 96.0f);
 
+            ImGui::Text("Select");
             ImGui::Text("Pan");
             ImGui::Text("Zoom");
         }
         ImGui::NextColumn();
         {
-            ImGui::Text("Left Mouse Button");
-            ImGui::Text("Mouse Wheel");
+            ImGui::Text("Left mouse button");
+            ImGui::Text("Right mouse button");
+            ImGui::Text("Mouse wheel");
         }
     }
     ImGui::End();

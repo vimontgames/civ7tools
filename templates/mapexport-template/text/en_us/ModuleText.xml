@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Replace Tag="LOC_MODULE_MAPNAME_NAME">
+			<Text>My Map Template</Text>
+		</Replace>
+		<Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION">
+			<Text>A template mod for adding Map</Text>
+		</Replace>
+	</EnglishText>
+</Database>

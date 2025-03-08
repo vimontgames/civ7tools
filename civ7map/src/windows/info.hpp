@@ -23,9 +23,18 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
     if (Begin("Map Infos###Infos", &m_visible) && g_map)
     {
-        char temp[256];
+        char temp[4096];
+        sprintf_s(temp, "%s", GetFilenameWithoutExtension(g_map->m_mapPath).c_str());
+        ImGui::InputText("Map", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        //sprintf_s(temp, "%s", GetFilename(g_map->m_mapDataPath).c_str());
+        //ImGui::InputText("Data", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        //sprintf_s(temp, "%s", GetFolder(g_map->m_path).c_str());
+        //ImGui::InputText("Folder", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
         sprintf_s(temp, g_map->m_author.c_str());
-        ImGui::InputText("Author", temp, 256, ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputText("Author", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
         if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
         {
@@ -71,7 +80,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
             }
 
             TreePop();
-        }
+        }     
     }
 
     ImGui::End();

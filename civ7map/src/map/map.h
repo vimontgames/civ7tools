@@ -84,12 +84,14 @@ struct Map
 public:
     Map();
 
+    bool create(const string & _cwd, const string & _name, int _width, int _height);
+
     // map_import.hpp
-    bool importMap(const string & _cwd);
+    bool importFiles(const string & _cwd);
     bool importMapSize(const string & data, int & mapWidth, int & mapHeight) const;
 
     // map_export.hpp
-    void exportMap(const string & _cwd);
+    void exportFiles(const string & _cwd, bool _mapDataOnly = false);
     void saveBitmap(const Array2D<u32> _bitmap, tinyxml2::XMLElement * _xmlTerrainSave, const string & _field);
 
     // map_actions.hpp
@@ -122,10 +124,22 @@ public:
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
 
+    static string GetMapDataPathFromMapPath(const string & _mapPath);
+
+    string getBaseName() const;
+
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
     bool ImportYnAMP(const string & data);
+    void exportModInfo();
+    void exportMap();
+    void exportMapData();  
+    void exportConfig();
+    void exportMapText();
+    void exportModuleText();
+
+    string getModID() const;
 
     Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
         
@@ -134,11 +148,12 @@ public:
     static ResourceIcon s_resourceIcons[enumCount<ResourceType>()];
 
     // file(s)
-    string              m_path;
+    string              m_modFolder;
+    string              m_mapPath;
     string              m_mapDataPath;
 
     // map data
-    string              m_author;
+    string              m_author = "authorname";
     u32                 m_width = 0;
     u32                 m_height = 0;
     Array2D<Civ7Tile>   m_civ7TerrainType;

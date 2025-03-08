@@ -31,6 +31,20 @@ bool DebugWindow::Draw(const RenderWindow & window)
 
         ImGui::Separator();
 
+        char temp[4096] = "";
+
+        if (g_map)
+            sprintf_s(temp, "%s", GetFilename(g_map->m_mapPath).c_str());
+        ImGui::InputText("Map file", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        if (g_map)
+            sprintf_s(temp, "%s", GetFilename(g_map->m_mapDataPath).c_str());
+        ImGui::InputText("Data file", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        if (g_map)
+            sprintf_s(temp, "%s", GetFolder(g_map->m_mapPath).c_str());
+        ImGui::InputText("Mod folder", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
         ImGui::TreeNodeEx("Mouse", ImGuiTreeNodeFlags_DefaultOpen);
         {
             ImGui::Columns(2, "mycolumns2", false);

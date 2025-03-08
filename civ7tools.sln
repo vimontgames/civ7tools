@@ -38,6 +38,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debug", "Debug", "{23E951F9
 		C:\Users\benua\AppData\Local\Firaxis Games\Sid Meier's Civilization VII\Logs\Scripting.log = C:\Users\benua\AppData\Local\Firaxis Games\Sid Meier's Civilization VII\Logs\Scripting.log
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "template", "template", "{6BB35210-3436-49D1-AAA4-215360FB1270}"
+	ProjectSection(SolutionItems) = preProject
+		templates\mapexport-template\mapscript-template.modinfo = templates\mapexport-template\mapscript-template.modinfo
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{EE39DD5E-207F-404E-B711-E07CF5AA6940}"
+	ProjectSection(SolutionItems) = preProject
+		templates\mapexport-template\config\config.xml = templates\mapexport-template\config\config.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{F7E954F5-9C8F-4419-AC89-A1B6DCEDC2C5}"
+	ProjectSection(SolutionItems) = preProject
+		templates\mapexport-template\maps\testmap-data.js = templates\mapexport-template\maps\testmap-data.js
+		templates\mapexport-template\maps\testmap-map.js = templates\mapexport-template\maps\testmap-map.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "text", "text", "{9CC588D8-463E-4105-A897-925874972D64}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en_us", "en_us", "{4503D203-5166-4D96-A49E-CD6811876A6B}"
+	ProjectSection(SolutionItems) = preProject
+		templates\mapexport-template\text\en_us\MapText.xml = templates\mapexport-template\text\en_us\MapText.xml
+		templates\mapexport-template\text\en_us\ModuleText.xml = templates\mapexport-template\text\en_us\ModuleText.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -58,6 +82,11 @@ Global
 		{200660D8-004D-4E12-8F53-572759199C90} = {0BB17153-729C-48C5-808A-3781915FA9C4}
 		{CDAF4FE8-EA65-4C7F-83DB-974323E81AFD} = {0BB17153-729C-48C5-808A-3781915FA9C4}
 		{23E951F9-88EF-415A-96C7-08505496BE62} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
+		{6BB35210-3436-49D1-AAA4-215360FB1270} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
+		{EE39DD5E-207F-404E-B711-E07CF5AA6940} = {6BB35210-3436-49D1-AAA4-215360FB1270}
+		{F7E954F5-9C8F-4419-AC89-A1B6DCEDC2C5} = {6BB35210-3436-49D1-AAA4-215360FB1270}
+		{9CC588D8-463E-4105-A897-925874972D64} = {6BB35210-3436-49D1-AAA4-215360FB1270}
+		{4503D203-5166-4D96-A49E-CD6811876A6B} = {9CC588D8-463E-4105-A897-925874972D64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B29936D3-D786-4B14-82AD-70BEBC6F7AF9}

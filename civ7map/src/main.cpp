@@ -31,23 +31,35 @@ static const u32 g_fixedTextLengthShort = 10;
 static const u32 g_fixedTextLengthLarge = 20;
 
 bool g_saveFileDialog = false;
+bool g_saveMapDataOnly = false;
 
 const char * g_saveImGuiIniPath = nullptr;
+bool g_importFile = false;
+bool g_createMap = false;
 
-enum ImportFile
+enum class MapSize : int
 {
-    None,
-    Civ6YnAMP
-};
-ImportFile g_importFile = ImportFile::None;
+    Custom = -1,
 
-const char * g_importFileNames[] =
+    Tiny,
+    Small,
+    Standart,
+    Large,
+    Huge
+};
+
+static const int g_mapSizes[enumCount<MapSize>()][2] =
 {
-    "",                     
-    "Import YnAMP map" 
+    {60,38},
+    {74,46},
+    {84,54},
+    {96,60},
+    {106,66}
 };
 
-const char * g_importFileName = nullptr;
+string g_newMapName = "";
+int g_newMapSize[2] = { 84, 54 };
+MapSize g_newMapSizeType = MapSize::Standart;
 
 static vector<Map*> g_maps;
 static Map * g_map = nullptr;
@@ -63,6 +75,11 @@ Vector2i g_selectedCell = Vector2i(-1, -1);
 #include "windows/inspector.hpp"
 
 static vector<BaseWindow *> g_windows;
+
+static const char * newMap = "Create new map mod";
+static const char * importMap = "Import map";
+static const char * exportMap = "Export all map mod files";
+static const char * exportMapDataOnly = "Export map data only";
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public stringbuf
@@ -80,7 +97,9 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 
 #include "imgui_internal.h"
 
-const char * version = "civ7map 0.03";
+const int g_version_major = 0;
+const int g_version_minor = 1;
+const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
 int main() 
@@ -116,7 +135,8 @@ int main()
     mainWindow.setFramerateLimit(60);
     Init(mainWindow);
 
-    LOG_INFO("%s", version);
+    const string windowTitle = fmt::sprintf("%s %i.%i", g_appName, g_version_major, g_version_minor);
+    LOG_INFO(windowTitle.c_str());
 
     ShaderManager::init();
 
@@ -141,9 +161,9 @@ int main()
     Clock deltaClock;
     while (mainWindow.isOpen()) 
     {
-        string title = version;
+        string title = windowTitle;
         if (g_map)
-            title += string(" - ") + g_map->m_path;
+            title += string(" - ") + g_map->getBaseName();
 
         mainWindow.setTitle(title.c_str());
 
@@ -217,17 +237,30 @@ int main()
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Import YnAMP map"))
+                if (ImGui::MenuItem(newMap))
                 {
-                    g_importFile = ImportFile::Civ6YnAMP;
-                    g_importFileName = g_importFileNames[ImportFile::Civ6YnAMP];
+                    g_createMap = true;
+                }
+
+                if (ImGui::MenuItem(importMap))
+                {
+                    g_importFile = true;
                 }
 
                 if (!g_map)
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
-                if(ImGui::MenuItem("Export YnAMP map"))
+                if (ImGui::MenuItem(exportMap))
+                {
                     g_saveFileDialog = true;
+                    g_saveMapDataOnly = false;
+                }
+
+                if (ImGui::MenuItem(exportMapDataOnly))
+                {
+                    g_saveFileDialog = true;
+                    g_saveMapDataOnly = true;
+                }
 
                 if (!g_map)
                     ImGui::PopItemFlag();
@@ -521,74 +554,186 @@ int main()
         if (demo)
             ImGui::ShowDemoWindow(&demo);
 
-        if (g_importFile != ImportFile::None)
+        if (g_createMap)
         {
-            ImGui::OpenPopup(g_importFileName);
-            g_importFile = ImportFile::None;
+            ImGui::OpenPopup(newMap);
+            SetCurrentDirectory(g_myDocumentsPath.c_str());
+            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+        }
+        else if (g_importFile)
+        {
+            ImGui::OpenPopup(importMap);
+            g_importFile = false;
             SetCurrentDirectory(g_myDocumentsPath.c_str());
             ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
         }
         else if (g_saveFileDialog)
         {
-            ImGui::OpenPopup("Export");
-            g_saveFileDialog = false;
-            SetCurrentDirectory(g_myDocumentsPath.c_str());
-            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+            if (g_saveMapDataOnly)
+            {
+                ImGui::OpenPopup(exportMapDataOnly);
+                g_saveFileDialog = false;
+                SetCurrentDirectory(g_myDocumentsPath.c_str());
+                ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+            }
+            else
+            {
+                ImGui::OpenPopup(exportMap);
+                g_saveFileDialog = false;
+                SetCurrentDirectory(g_myDocumentsPath.c_str());
+                ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+            }
         }
 
-        if (g_importFileName != nullptr && g_fileDialog.showFileDialog(g_importFileName, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
+        if (g_createMap)
+        {
+            if (ImGui::BeginPopupModal(newMap, nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                char temp[1024];
+                sprintf(temp, "%s", g_newMapName.c_str());
+
+                if (ImGui::InputText("Name", temp, sizeof(g_newMapName)))
+                    g_newMapName = fmt::sprintf("%s", temp);
+
+                int selectedIndex = -2;
+                if (ImGui::BeginCombo("###Size", asString(g_newMapSizeType).c_str()))
+                {
+                    for (auto val : enumValues<MapSize>())
+                    {
+                        bool isSelected = (selectedIndex == (int)val.first);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                        {
+                            g_newMapSizeType = val.first;
+
+                            if ((int)val.first > 0)
+                            {
+                                g_newMapSize[0] = g_mapSizes[(int)val.first][0];
+                                g_newMapSize[1] = g_mapSizes[(int)val.first][1];
+                            }
+                        }
+                    }
+                    ImGui::EndCombo();
+                }                
+
+                ImGui::InputInt2("Size", g_newMapSize);
+
+                ImGui::Separator();
+
+                if (ImGui::Button("OK"))
+                {
+                    // Create new map
+                    Map * newMap = new Map();
+
+                    SetCurrentDirectory(g_currentWorkingDirectory.c_str());
+                    ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
+
+                    if (newMap->create(g_currentWorkingDirectory, g_newMapName, g_newMapSize[0], g_newMapSize[1]))
+                    {
+                        g_maps.push_back(newMap);
+                        g_map = newMap;
+                    }
+
+ 
+                    ImGui::CloseCurrentPopup();
+                    g_createMap = false;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel"))
+                {
+                    ImGui::CloseCurrentPopup(); // Discard changes
+                    g_newMapName = "";
+                    g_createMap = false;
+                }
+
+                ImGui::EndPopup();
+            }
+           
+        }
+        else if (g_fileDialog.showFileDialog(importMap, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
         {
             const string newFilePath = g_fileDialog.selected_path;
 
-            // Create new map
-            Map * newMap = new Map();
-            newMap->m_path = newFilePath;
-            
-            // Import it
-            if (newMap->importMap(g_currentWorkingDirectory))
+            if (EndsWith(newFilePath, "-map.js"))
             {
-                SetCurrentDirectory(g_currentWorkingDirectory.c_str());
-                ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
-                newMap->refresh();
-                newMap->resetCamera();
+                // Create new map
+                Map * newMap = new Map();
+                newMap->m_mapPath = newFilePath;
 
-                // Is the map already loaded?
-                u32 mapIndex = u32(-1);
-                for (u32 i = 0; i < g_maps.size(); ++i)
+                // Import it
+                if (newMap->importFiles(g_currentWorkingDirectory))
                 {
-                    if (g_maps[i]->m_path == newFilePath)
+                    SetCurrentDirectory(g_currentWorkingDirectory.c_str());
+                    ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
+                    newMap->refresh();
+                    newMap->resetCamera();
+
+                    // Is the map already loaded?
+                    u32 mapIndex = u32(-1);
+                    for (u32 i = 0; i < g_maps.size(); ++i)
                     {
-                        mapIndex = i;
-                        break;
+                        if (g_maps[i]->m_mapPath == newFilePath)
+                        {
+                            mapIndex = i;
+                            break;
+                        }
                     }
-                }
 
-                if (u32(-1) == mapIndex)
-                {
-                    g_maps.push_back(newMap);
-                }
-                else
-                {
-                    SAFE_DELETE(g_maps[mapIndex]);
-                    g_maps[mapIndex] = newMap;
-                }    
+                    if (u32(-1) == mapIndex)
+                    {
+                        g_maps.push_back(newMap);
+                    }
+                    else
+                    {
+                        SAFE_DELETE(g_maps[mapIndex]);
+                        g_maps[mapIndex] = newMap;
+                    }
 
-                // This is the new current edited map
-                g_map = newMap;
+                    // This is the new current edited map
+                    g_map = newMap;
+                }
+            }
+            else
+            {
+                LOG_ERROR("\"%s\" is not a valid map filename to import. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
             }
         }
-        else if (g_fileDialog.showFileDialog("Export", ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js"))
+        else if (g_fileDialog.showFileDialog(exportMap, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js")
+              || g_fileDialog.showFileDialog(exportMapDataOnly, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js"))
         {
             if (g_map)
             {
-                const string prevFilename = g_map->m_path;
+                auto * map = g_map;
 
-                const string newFilePath = g_fileDialog.selected_path;
-                g_map->m_path = newFilePath;
-                g_map->exportMap(g_currentWorkingDirectory);
+                const string prevFilename = map->m_mapPath;
 
-                if (prevFilename != g_map->m_path)
-                    g_map->m_isDocked = false;
+                string newFilePath = g_fileDialog.selected_path;
+
+                bool canExport = false;
+
+                if (g_saveMapDataOnly)
+                {
+                    if (!EndsWith(newFilePath, "-data.js"))
+                        LOG_ERROR("\"%s\" is not a valid map filename to export. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
+                    else
+                        canExport = true;
+                }
+                else
+                {
+                    if (!EndsWith(newFilePath, "-map.js"))
+                        LOG_ERROR("\"%s\" is not a valid mapdata filename to export. Mapdata filenames should end with \"-data.js\"", GetFilename(newFilePath).c_str());
+                    else
+                        canExport = true;
+                }
+
+                if (canExport)
+                {
+                    map->m_mapPath = newFilePath;
+                    map->m_mapDataPath = Map::GetMapDataPathFromMapPath(map->m_mapPath);
+                    map->exportFiles(g_currentWorkingDirectory, g_saveMapDataOnly);
+
+                    if (prevFilename != map->m_mapPath)
+                        map->m_isDocked = false;
+                }
             }
 
             SetCurrentDirectory(g_currentWorkingDirectory.c_str());
