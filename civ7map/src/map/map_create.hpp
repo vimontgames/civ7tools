@@ -9,6 +9,11 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
 
     bool created;
 
+    string modsFolder = fmt::sprintf("%s\\mods", _cwd);
+    created = CreateFolder(modsFolder);
+    if (created)
+        LOG_WARNING("Created mods folder \"%s\"", modsFolder.c_str());
+
     created = CreateFolder(m_modFolder);
     if (created)
         LOG_WARNING("Created mod folder \"%s\"", m_modFolder.c_str());

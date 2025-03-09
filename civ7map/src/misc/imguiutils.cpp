@@ -43,3 +43,39 @@ bool DrawColoredCheckbox(const float4 & _color, bool * _checked)
 
     return changed;
 }
+
+static vector<bool> g_disabledStack;
+static float g_backupAlpha;
+
+//--------------------------------------------------------------------------------------
+void ApplyDisabledStyle(bool _disabled)
+{
+    if (_disabled)
+        GImGui->Style.Alpha = g_backupAlpha * 0.5f;
+    else
+        GImGui->Style.Alpha = g_backupAlpha;
+}
+
+//--------------------------------------------------------------------------------------
+void PushDisabled(bool _disabled)
+{
+    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, _disabled);
+
+    if (g_disabledStack.size() == 0)
+        g_backupAlpha = GImGui->Style.Alpha;
+
+    ApplyDisabledStyle(_disabled);
+    g_disabledStack.push_back(_disabled);
+}
+
+//--------------------------------------------------------------------------------------
+void PopDisabled()
+{
+    if (g_disabledStack.size() > 0)
+    {
+        g_disabledStack.pop_back();
+        bool disabled = g_disabledStack.size() > 0 && g_disabledStack.back();
+        ApplyDisabledStyle(disabled);
+    }
+    ImGui::PopItemFlag();
+}

@@ -106,3 +106,22 @@ struct float4
         float value[4];
     };
 };
+
+struct int2
+{
+    int2(int _x = 0, int _y = 0) :
+        x(_x),
+        y(_y)
+    {
+
+    }
+
+    union
+    {
+        struct
+        {
+            int x, y;
+        };
+        int value[2];
+    };
+};

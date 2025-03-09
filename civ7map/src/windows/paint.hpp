@@ -27,99 +27,139 @@ bool PaintWindow::Draw(const RenderWindow & window)
         ImGui::PopItemFlag();
 
         // Continent
+        if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            DrawColoredCheckbox(getContinentColor(m_continentType), &m_paintContinentType);
+            ImGui::Checkbox("Enable###PaintContinent", &m_paintContinentType);
 
-            string continentName = map? map->getContinentShortName(m_continentType) : Map::s_noContinentName;
-            
-            if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str()))
+            PushDisabled(!m_paintContinentType);
             {
-                // None
-                {
-                    bool isSelected = ((int)m_continentType == -1);
-                    if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName((ContinentType)-1) : Map::s_noContinentName).c_str(), isSelected))
-                    {
-                        m_continentType = (ContinentType)-1;
-                    }
-                }
+                DrawColoredSquare(getContinentColor(m_continentType));
 
-                if (map)
+                string continentName = map? map->getContinentShortName(m_continentType) : Map::s_noContinentName;
+            
+                if (ImGui::BeginCombo("Continent###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str()))
                 {
-                    for (uint i = 0; i < map->getContinentCount(); ++i)
+                    // None
                     {
-                        bool isSelected = ((int)m_continentType == i);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+                        bool isSelected = ((int)m_continentType == -1);
+                        if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName((ContinentType)-1) : Map::s_noContinentName).c_str(), isSelected))
                         {
-                            m_continentType = (ContinentType)i;
+                            m_continentType = (ContinentType)-1;
                         }
                     }
+
+                    if (map)
+                    {
+                        for (uint i = 0; i < map->getContinentCount(); ++i)
+                        {
+                            bool isSelected = ((int)m_continentType == i);
+                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+                            {
+                                m_continentType = (ContinentType)i;
+                            }
+                        }
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
             }
+            PopDisabled();
         }
+        ImGui::Spacing();
 
         // TerrainType
+        if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            DrawColoredCheckbox(getTerrainColor(m_terrainType), &m_paintTerrainType);
+            ImGui::Checkbox("Enable###PaintTerrain", &m_paintTerrainType);
 
-            if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str()))
+            PushDisabled(!m_paintTerrainType);
             {
-                for (auto val : enumValues<TerrainType>())
+                DrawColoredSquare(getTerrainColor(m_terrainType));
+
+                if (ImGui::BeginCombo("Terrain###SelectPaintTerrainCombo", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str()))
                 {
-                    bool isSelected = (val.first == m_terrainType);
-                    if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                        m_terrainType = val.first;
+                    for (auto val : enumValues<TerrainType>())
+                    {
+                        bool isSelected = (val.first == m_terrainType);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                            m_terrainType = val.first;
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
             }
+
+            ImGui::Checkbox("Automatic Coasts###AutoCoast", &m_autoCoast);
+
+            PopDisabled();
         }
+        ImGui::Spacing();
 
         // BiomeType
+        if (ImGui::CollapsingHeader("Biome", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            DrawColoredCheckbox(getBiomeColor(m_biomeType), &m_paintBiomeType);
+            ImGui::Checkbox("Enable###PaintBiome", &m_paintBiomeType);
 
-            if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(m_biomeType), (int)m_biomeType).c_str()))
+            PushDisabled(!m_paintBiomeType);
             {
-                for (auto val : enumValues<BiomeType>())
+                DrawColoredSquare(getBiomeColor(m_biomeType));
+
+                if (ImGui::BeginCombo("Biome###SelectPaintBiomeCombo", fmt::sprintf("%s (%i)", asString(m_biomeType), (int)m_biomeType).c_str()))
                 {
-                    bool isSelected = (val.first == m_biomeType);
-                    if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                        m_biomeType = val.first;
+                    for (auto val : enumValues<BiomeType>())
+                    {
+                        bool isSelected = (val.first == m_biomeType);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                            m_biomeType = val.first;
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
             }
+            PopDisabled();
         }
 
         // FeatureType
+        if (ImGui::CollapsingHeader("Feature", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            DrawColoredCheckbox(getFeatureColor(m_featureType), &m_paintFeature);
+            ImGui::Checkbox("Enable###PaintFeature", &m_paintFeature);
 
-            if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str()))
+            PushDisabled(!m_paintFeature);
             {
-                for (auto val : enumValues<FeatureType>())
+                DrawColoredSquare(getFeatureColor(m_featureType));
+
+                if (ImGui::BeginCombo("Feature###SelectPaintFeatureCombo", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str()))
                 {
-                    bool isSelected = (val.first == m_featureType);
-                    if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                        m_featureType = val.first;
+                    for (auto val : enumValues<FeatureType>())
+                    {
+                        bool isSelected = (val.first == m_featureType);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                            m_featureType = val.first;
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
             }
+            PopDisabled();
         }
 
         // ResourceType
+        if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            DrawColoredCheckbox(getResourceColor(m_resourceType), &m_paintResource);
+            ImGui::Checkbox("Enable###PaintResource", &m_paintResource);
 
-            if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(m_resourceType), (int)m_resourceType).c_str()))
+            PushDisabled(!m_paintResource);
             {
-                for (auto val : enumValues<ResourceType>())
+                DrawColoredSquare(getResourceColor(m_resourceType));
+
+                if (ImGui::BeginCombo("Resource###SelectPaintResourceCombo", fmt::sprintf("%s (%i)", asString(m_resourceType), (int)m_resourceType).c_str()))
                 {
-                    bool isSelected = (val.first == m_resourceType);
-                    if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                        m_resourceType = val.first;
+                    for (auto val : enumValues<ResourceType>())
+                    {
+                        bool isSelected = (val.first == m_resourceType);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                            m_resourceType = val.first;
+                    }
+                    ImGui::EndCombo();
                 }
-                ImGui::EndCombo();
             }
+            PopDisabled();
         }
     }
 

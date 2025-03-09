@@ -40,6 +40,10 @@ If you want to compile the tool yourself rather than using a released version, o
 
 - Create map from scratch using YnAMP's
 
+## v0.2 (WIP)
+
+- Automatic coasts
+
 ## v0.1
 
 ![Screenshot](doc/img/v0.1.png)

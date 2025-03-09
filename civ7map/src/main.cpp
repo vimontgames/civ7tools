@@ -80,7 +80,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 1;
+const int g_version_minor = 11;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
@@ -104,11 +104,11 @@ int main()
     {
         g_myDocumentsPath = g_currentWorkingDirectory + "\\mods";
     }
-    else
-    {
-        if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_LOCAL_APPDATA, NULL, CSIDL_LOCAL_APPDATA, userFolder)))
-            g_myDocumentsPath = ws2s(wstring(userFolder)) + "\\Firaxis Games\\Sid Meier's Civilization VII\\Mods";
-    }
+    //else
+    //{
+    //    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_LOCAL_APPDATA, NULL, CSIDL_LOCAL_APPDATA, userFolder)))
+    //        g_myDocumentsPath = ws2s(wstring(userFolder)) + "\\Firaxis Games\\Sid Meier's Civilization VII\\Mods";
+    //}
 
     sf::ContextSettings contextSettings;
                         contextSettings.sRgbCapable = false;

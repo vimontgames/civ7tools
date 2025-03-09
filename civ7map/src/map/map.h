@@ -109,6 +109,36 @@ struct ResourceIcon
 };
 
 //--------------------------------------------------------------------------------------
+// Each hex tile has 6 sides
+//        
+//       /\   /\
+//      /  \ /  \           TL: TopLeft
+//     | T  |  T |          TR: TopRight
+//     | L  |  R |
+//    /\   / \  /\
+//   /   \/   \/  \
+//  |  L |    |  R |        L: Left
+//  |    |    |    |        R: Right
+//   \  / \  / \  /
+//    \/   \/   \/
+//    |  B |  B |           BL: BottomLeft
+//    |  L |  R |           BR: BottomRight
+//     \  / \  /
+//      \/   \/
+//--------------------------------------------------------------------------------------
+
+enum HexTileSide
+{
+    TopLeft = 0,
+    TopRight,
+    Left,
+    Right,
+    BottomLeft,
+    BottomRight
+};
+
+
+//--------------------------------------------------------------------------------------
 struct Map
 {
 public:
@@ -117,6 +147,8 @@ public:
     void BeginPaint();
     void Paint(int _x, int _y);
     void EndPaint();
+
+    bool getHexSideTile(int _x, int _y, HexTileSide _side, int2 & _result) const;
 
     bool setTerrain(int _x, int _y, TerrainType _value);
     bool setBiome(int _x, int _y, BiomeType _value);
