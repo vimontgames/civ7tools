@@ -8,6 +8,7 @@
 #include "maths.h"
 #include "map/map.h"
 #include "shader/common.h"
+#include "undoredo/UndoRedo.h"
 
 using namespace std;
 using namespace sf;
@@ -41,7 +42,7 @@ string g_newMapName = "";
 int g_newMapSize[2] = { 84, 54 };
 MapSize g_newMapSizeType = MapSize::Standard;
 
-static vector<Map*> g_maps;
+vector<Map*> g_maps;
 static Map * g_map = nullptr;
 
 Vector2i g_hoveredCell = Vector2i(-1, -1);
@@ -53,6 +54,7 @@ Vector2i g_selectedCell = Vector2i(-1, -1);
 #include "windows/display.hpp"
 #include "windows/console.hpp"
 #include "windows/inspector.hpp"
+#include "windows/paint.hpp"
 
 static vector<BaseWindow *> g_windows;
 
@@ -134,6 +136,7 @@ int main()
     g_windows.push_back(new HelpWindow());
     g_windows.push_back(new InfoWindow());
     g_windows.push_back(new InspectorWindow());
+    g_windows.push_back(new PaintWindow());
 
     // static init
     Map::loadIcons();
@@ -326,6 +329,21 @@ int main()
                     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
                         g_map = map;
 
+                    ImGuiContext & g = *GImGui;
+                    ImGuiIO & io = g.IO;
+
+                    if (0 != (io.KeyMods & ImGuiKeyModFlags_Ctrl))
+                    {
+                        if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Z]))
+                        {
+                            UndoRedoStack::Undo();
+                        }
+                        else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Y]))
+                        {
+                            UndoRedoStack::Redo();
+                        }
+                    }
+
                     ImGui::ImageButton(map->m_renderTexture, (sf::Vector2f)map->m_renderTexture.getSize(), 0, sf::Color::White, sf::Color::White);
 
                     if (IsItemHovered())
@@ -342,10 +360,10 @@ int main()
 
                         if (relativeMousePos.x > 0 && relativeMousePos.y > 0 && relativeMousePos.x  < size.x && relativeMousePos.y < (size.y- ImGui::GetFrameHeight()))
                         {
-                            if (ImGui::IsMouseDown(0))
-                            {
-                                int i = 42;
-                            }
+                            //if (ImGui::IsMouseDown(0))
+                            //{
+                            //    int i = 42;
+                            //}
 
                             float2 renderTargetSize = float2((float)map->m_renderTexture.getSize().x, (float)map->m_renderTexture.getSize().y);
                             Vector2f size = Vector2f(renderTargetSize.x, renderTargetSize.y);
@@ -416,6 +434,8 @@ int main()
                                 }
                             }
 
+                            const bool tileJustSelected = ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Space]);
+
                             if (uv.x > 0.0f + hS && uv.y > 0.0f && uv.x < 1.0f + hE && uv.y < 1.0f)
                             {
                                 Vector2i cell;
@@ -454,7 +474,7 @@ int main()
                                 cell.y = clamp(cell.y, 0, (int)(map->m_height-1));
 
                                 g_hoveredCell = cell;
-                                if (ImGui::IsMouseDown(0))
+                                if (tileJustSelected)
                                     g_selectedCell = cell;
 
                                 const Civ7Tile tile = g_map->m_civ7TerrainType.get(cell.x, cell.y);
@@ -504,7 +524,7 @@ int main()
                             else
                             {
                                 g_hoveredCell = Vector2i(-1, -1);
-                                if (ImGui::IsMouseDown(0))
+                                if (tileJustSelected)
                                     g_selectedCell = Vector2i(-1, -1);
                             }
                         }
@@ -762,8 +782,26 @@ int main()
         const float panSpeed = 1.0f;
         const float zoomSpeed = 1.1f;
 
-         if (g_map && g_map->m_isHovered)
+        if (g_map && g_map->m_isHovered)
         {
+            static bool painting = false;
+
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                if (!painting)
+                {
+                    g_map->BeginPaint();
+                    painting = true;
+                }
+
+                g_map->Paint(g_hoveredCell.x, g_hoveredCell.y);
+            }
+            else if (painting)
+            {
+                g_map->EndPaint();
+                painting = false;
+            }
+
             if (Mouse::isButtonPressed(Mouse::Right))
             {
                 if (!g_map->m_cameraPan)

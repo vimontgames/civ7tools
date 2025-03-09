@@ -21,9 +21,17 @@ TODO
 
 | Key                | Description |
 |--------------------|-------------|
-| Left mouse button  | Select plot |
+| Left mouse button  | Paint       |
 | Right mouse button | Pan camera  |
 | Mouse wheel        | Zoom        |
+
+## Keyboard
+
+| Key                | Description |
+|--------------------|-------------|
+| Space              | Select plot |
+| Ctrl-Z             | Undo        |
+| Ctrl-Y             | Redo        |
 
 # Build
 If you want to compile the tool yourself rather than using a released version, open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [here](https://visualstudio.microsoft.com/downloads/)), selection $(SolutionDir) as the working directory, then build solution.

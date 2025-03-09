@@ -127,6 +127,20 @@ struct Civ7Tile
     FeatureType   feature   = FeatureType::Random;
     ContinentType continent = ContinentType::None;              
     ResourceType  resource  = ResourceType::Random;
+
+    inline bool operator==(const Civ7Tile & _other) const
+    {
+        return terrain == _other.terrain
+            && biome == _other.biome
+            && feature == _other.feature
+            && continent == _other.continent
+            && resource == _other.resource;
+    }
+
+    inline bool operator!=(const Civ7Tile & _other) const
+    {
+        return !operator==(_other);
+    }
 };
 
 //--------------------------------------------------------------------------------------

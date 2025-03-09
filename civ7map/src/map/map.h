@@ -114,6 +114,16 @@ struct Map
 public:
     Map();
 
+    void BeginPaint();
+    void Paint(int _x, int _y);
+    void EndPaint();
+
+    bool setTerrain(int _x, int _y, TerrainType _value);
+    bool setBiome(int _x, int _y, BiomeType _value);
+    bool setFeature(int _x, int _y, FeatureType _value);
+    bool setContinent(int _x, int _y, ContinentType _value);
+    bool setResource(int _x, int _y, ResourceType _value);
+
     bool create(const string & _cwd, const string & _name, int _width, int _height);
 
     // map_import.hpp
@@ -159,6 +169,8 @@ public:
     string getBaseName() const;
     string getExportMapSize(MapSize _mapSize);
     static MapSize getMapSize(uint _width, uint _height);
+
+    static const string s_noContinentName;
 
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);

@@ -1,4 +1,5 @@
 #include "BaseWindow.h"
+#include "misc/imguiutils.h"
 
 //--------------------------------------------------------------------------------------
 class InspectorWindow : public BaseWindow
@@ -10,7 +11,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 InspectorWindow::InspectorWindow() :
-    BaseWindow("Tile")
+    BaseWindow("Inspector")
 {
 
 }
@@ -24,52 +25,58 @@ bool InspectorWindow::Draw(const RenderWindow & window)
     {
         Civ7Tile * tile = nullptr;
         Map * map = g_map;
+
+        const auto x = g_selectedCell.x;
+        const auto y = g_selectedCell.y;
         
-        if (map && (uint)g_selectedCell.x < map->m_width && (uint)g_selectedCell.y < map->m_height)
-            tile = &map->m_civ7TerrainType.get(g_selectedCell.x, g_selectedCell.y);
+        if (map && (uint)x < map->m_width && (uint)y < map->m_height)
+            tile = &map->m_civ7TerrainType.get(x, y);
 
         if (!tile)
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
         bool dirty = false;
 
-        if (tile)
+        if (!tile)
+        {
+            ImGui::Text("Press \"Space\" to select  tile");
+        }
+        else
         {
             ImGui::InputInt2("Plot", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
 
-            int engineLoc[2] =
-            {
-                g_selectedCell.x,
-                g_selectedCell.y + 2
-            };
-            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-            ImGui::InputInt2("Engine Plot", engineLoc, ImGuiInputTextFlags_EnterReturnsTrue);
-            ImGui::PopItemFlag();
+            //int engineLoc[2] =
+            //{
+            //    x,
+            //    y + 2
+            //};
+            //ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            //ImGui::InputInt2("Plot (engine)", engineLoc, ImGuiInputTextFlags_EnterReturnsTrue);
+            //ImGui::PopItemFlag();
 
             // Continent
             {
-                float4 color = getContinentColor(tile->continent);
-                float f3Color[] = { color.r, color.g,  color.b };
+                DrawColoredSquare(getContinentColor(tile->continent));
+
                 string continentName = map->getContinentShortName(tile->continent);
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
                 {
                     // None
                     {
-                        bool isSelected = (selectedIndex == -1);
+                        bool isSelected = ((int)tile->continent == -1);
                         if (ImGui::Selectable(fmt::sprintf("%s (-1)", map->getContinentShortName((ContinentType)-1)).c_str(), isSelected))
                         {
-                            tile->continent = (ContinentType)-1;
-                            dirty = true;
+                            if (map->setContinent(x, y, (ContinentType)-1))
+                                dirty = true;
                         }
                     }
                     for (uint i = 0; i < map->getContinentCount(); ++i)
                     {
-                        bool isSelected = (selectedIndex == i);
+                        bool isSelected = ((int)tile->continent == i);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
                         {
-                            tile->continent = (ContinentType)i;
-                            dirty = true;
+                            if (map->setContinent(x, y, (ContinentType)i))
+                                dirty = true;
                         }
                     }
                     ImGui::EndCombo();
@@ -78,21 +85,18 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             // TerrainType
             {
-                float4 color = getTerrainColor(tile->terrain);
-                float f3Color[] = { color.r, color.g,  color.b };
+                DrawColoredSquare(getTerrainColor(tile->terrain));
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(tile->terrain), (int)tile->terrain).c_str()))
                 {
                     for (auto val : enumValues<TerrainType>())
                     {
                         const int index = (int)val.first;
-                        bool isSelected = (selectedIndex == index);
+                        bool isSelected = ((int)tile->terrain == index);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = index;
-                            tile->terrain = val.first;
-                            dirty = true;
+                            if (map->setTerrain(x, y, val.first))
+                                dirty = true;
                         }
                     }
                     ImGui::EndCombo();
@@ -101,21 +105,18 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             // Biome
             {
-                float4 color = getBiomeColor(tile->biome);
-                float f3Color[] = { color.r, color.g,  color.b };
+                DrawColoredSquare(getBiomeColor(tile->biome));
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(tile->biome), (int)tile->biome).c_str()))
                 {
                     for (auto val : enumValues<BiomeType>())
                     {
                         const int index = (int)val.first;
-                        bool isSelected = (selectedIndex == index);
+                        bool isSelected = ((int)tile->biome == index);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = index;
-                            tile->biome = val.first;
-                            dirty = true;
+                            if (map->setBiome(x, y, val.first))
+                                dirty = true;
                         }
                     }
                     ImGui::EndCombo();
@@ -124,21 +125,18 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             // Feature
             {
-                float4 color = getFeatureColor(tile->feature);
-                float f3Color[] = { color.r, color.g,  color.b };
+                DrawColoredSquare(getFeatureColor(tile->feature));
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(tile->feature), (int)tile->feature).c_str()))
                 {
                     for (auto val : enumValues<FeatureType>())
                     {
                         const int index = (int)val.first;
-                        bool isSelected = (selectedIndex == index);
+                        bool isSelected = ((int)tile->feature == index);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = index;
-                            tile->feature = val.first;
-                            dirty = true;
+                             if (map->setFeature(x, y, val.first))
+                                dirty = true;
                         }
                     }
                     ImGui::EndCombo();
@@ -147,21 +145,18 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             // Resource
             {
-                float4 color = getResourceColor(tile->resource);
-                float f3Color[] = { color.r, color.g,  color.b };
+                DrawColoredSquare(getResourceColor(tile->resource));
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(tile->resource), (int)tile->resource).c_str()))
                 {
                     for (auto val : enumValues<ResourceType>())
                     {
                         const int index = (int)val.first;
-                        bool isSelected = (selectedIndex == index);
+                        bool isSelected = ((int)tile->resource == index);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
-                            selectedIndex = index;
-                            tile->resource = val.first;
-                            dirty = true;
+                            if (map->setResource(x, y, val.first))
+                                dirty = true;
                         }
                     }
                     ImGui::EndCombo();

@@ -95,6 +95,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\misc\imguiutils.cpp" />
+    <ClCompile Include="src\undoredo\UndoRedo.cpp" />
     <None Include="..\data\shader\copyRGB_ps.fx">
       <FileType>Document</FileType>
     </None>
@@ -142,6 +144,7 @@
     <ClInclude Include="src\map\map_refresh.hpp" />
     <ClInclude Include="src\map\map_render.hpp" />
     <ClInclude Include="src\maths.h" />
+    <ClInclude Include="src\misc\imguiutils.h" />
     <ClInclude Include="src\misc\utils.h" />
     <ClInclude Include="src\misc\logger.h" />
     <ClInclude Include="src\precomp.h" />
@@ -149,6 +152,8 @@
     <ClInclude Include="src\stringconvert.h" />
     <ClInclude Include="src\tile\civ6tile.h" />
     <ClInclude Include="src\tile\civ7tile.h" />
+    <ClInclude Include="src\undoredo\UndoRedo.h" />
+    <ClInclude Include="src\undoredo\UndoRedoTile.h" />
     <ClInclude Include="src\windows\console.hpp" />
     <ClInclude Include="src\windows\debug.hpp" />
     <ClInclude Include="src\windows\display.hpp" />
@@ -156,6 +161,8 @@
     <ClInclude Include="src\windows\info.hpp" />
     <ClInclude Include="src\windows\baseWindow.h" />
     <ClInclude Include="src\windows\inspector.hpp" />
+    <ClInclude Include="src\windows\paint.h" />
+    <ClInclude Include="src\windows\paint.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\default_ps.fx">

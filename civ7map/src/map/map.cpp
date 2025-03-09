@@ -4,7 +4,7 @@
 #include "tinyxml2.h"
 #include "zip_file.hpp"
 #include "base64.hpp"
-
+#include "undoredo/UndoRedoTile.h"
 #include "shader/common.h"
 
 #define STBI_ONLY_PNG
@@ -27,6 +27,7 @@ using namespace tinyxml2;
 #include "map_render.hpp"
 
 ResourceIcon Map::s_resourceIcons[enumCount<ResourceType>()];
+const string Map::s_noContinentName = "No continent";
 
 //--------------------------------------------------------------------------------------
 string Map::GetMapDataPathFromMapPath(const string & _mapPath)
@@ -176,7 +177,7 @@ string Map::getContinentShortName(ContinentType continent) const
     }
     else
     {
-        return "No continent";
+        return s_noContinentName;
     }
 }
 
@@ -199,4 +200,89 @@ MapSize Map::getMapSize(uint _width, uint _height)
         }
     }
     return MapSize::Custom;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setTerrain(int _x, int _y, TerrainType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.terrain != _value)
+    {
+        tile.terrain = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setBiome(int _x, int _y, BiomeType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.biome != _value)
+    {
+        tile.biome = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setFeature(int _x, int _y, FeatureType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.feature != _value)
+    {
+        tile.feature = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setResource(int _x, int _y, ResourceType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.resource != _value)
+    {
+        tile.resource = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setContinent(int _x, int _y, ContinentType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.continent != _value)
+    {
+        tile.continent = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
 }

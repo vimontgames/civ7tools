@@ -59,57 +59,59 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
         }       
     }
 
-    // Make 4 islands boy
+    // Default west & east islands
 
-    // Tundra island
-    for (uint j = 0+2; j < m_height/2-2; ++j)
+    // west
     {
-        for (uint i = 0 + 2; i < m_width/2-2; ++i)
-        {
-            Civ7Tile & tile = m_civ7TerrainType.get(i, j);
+        uint startX = 1, endX = m_width / 2 - 1;
+        uint startY = 1, endY = m_height - 1;
 
-            tile.terrain = TerrainType::Flat;
-            tile.biome = BiomeType::Tundra;
-            tile.continent = ContinentType::None;
+        for (uint j = startY; j < endY; ++j)
+        {
+            for (uint i = startX; i < endX; ++i)
+            {
+                Civ7Tile & tile = m_civ7TerrainType.get(i, j);
+
+                if (i == startX || i == endX - 1 || j == startY || j == endY - 1)
+                {
+                    tile.terrain = TerrainType::Coast;
+                    tile.biome = BiomeType::Marine;
+                    tile.continent = ContinentType::None;
+                }
+                else
+                {
+                    tile.terrain = TerrainType::Flat;
+                    tile.biome = BiomeType::Grassland;
+                    tile.continent = ContinentType::None;
+                }
+            }
         }
     }
 
-    // Grassland hills island
-    for (uint j = 0 + 2; j < m_height / 2 - 2; ++j)
+    // east
     {
-        for (uint i = m_width / 2 + 2; i < m_width - 2; ++i)
+        uint startX = m_width/2+1, endX = m_width-1;
+        uint startY = 1, endY = m_height - 1;
+
+        for (uint j = startY; j < endY; ++j)
         {
-            Civ7Tile & tile = m_civ7TerrainType.get(i, j);
+            for (uint i = startX; i < endX; ++i)
+            {
+                Civ7Tile & tile = m_civ7TerrainType.get(i, j);
 
-            tile.terrain = TerrainType::Hill;
-            tile.biome = BiomeType::Grassland;
-            tile.continent = ContinentType::None;
-        }
-    }
-
-    // Desert island
-    for (uint j = m_height / 2 + 2; j < m_height - 2; ++j)
-    {
-        for (uint i = 0 + 2; i < m_width / 2 - 2; ++i)
-        {
-            Civ7Tile & tile = m_civ7TerrainType.get(i, j);
-
-            tile.terrain = TerrainType::Flat;
-            tile.biome = BiomeType::Desert;
-            tile.continent = ContinentType::None;
-        }
-    }
-
-    // Grassland flag island
-    for (uint j = m_height / 2 + 2; j < m_height - 2; ++j)
-    {
-        for (uint i = m_width / 2 + 2; i < m_width - 2; ++i)
-        {
-            Civ7Tile & tile = m_civ7TerrainType.get(i, j);
-
-            tile.terrain = TerrainType::Flat;
-            tile.biome = BiomeType::Grassland;
-            tile.continent = ContinentType::None;
+                if (i == startX || i == endX - 1 || j == startY || j == endY - 1)
+                {
+                    tile.terrain = TerrainType::Coast;
+                    tile.biome = BiomeType::Marine;
+                    tile.continent = ContinentType::None;
+                }
+                else
+                {
+                    tile.terrain = TerrainType::Flat;
+                    tile.biome = BiomeType::Grassland;
+                    tile.continent = ContinentType::None;
+                }
+            }
         }
     }
 

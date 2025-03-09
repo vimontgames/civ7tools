@@ -39,6 +39,12 @@
     <ClCompile Include="src\misc\utils.cpp">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="src\undoredo\UndoRedo.cpp">
+      <Filter>undoredo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\misc\imguiutils.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extern\base64\base64.hpp" />
@@ -127,6 +133,21 @@
     <ClInclude Include="src\map\map_create.hpp">
       <Filter>map</Filter>
     </ClInclude>
+    <ClInclude Include="src\windows\paint.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\undoredo\UndoRedo.h">
+      <Filter>undoredo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\undoredo\UndoRedoTile.h">
+      <Filter>undoredo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\misc\imguiutils.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\paint.h">
+      <Filter>windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">
@@ -172,6 +193,9 @@
     </Filter>
     <Filter Include="tile">
       <UniqueIdentifier>{3938cb73-3d31-426c-8cbb-14b3d51d01ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="undoredo">
+      <UniqueIdentifier>{b2b62d2c-dcc2-49e3-8735-57ea06165d1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

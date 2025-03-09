@@ -21,7 +21,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Map Infos###Infos", &m_visible) && g_map)
+    if (Begin("Map###Infos", &m_visible) && g_map)
     {
         char temp[4096];
         sprintf_s(temp, "%s", GetFilenameWithoutExtension(g_map->m_mapPath).c_str());
@@ -36,7 +36,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
         sprintf_s(temp, g_map->m_author.c_str());
         ImGui::InputText("Author", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
-        if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
+        //if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
         {
             int editMapSize[2] =
             {
@@ -44,26 +44,26 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 (int)g_map->m_height
             };
 
-            const bool editX = ImGui::InputInt("horizontal", &editMapSize[0], 1, 100, ImGuiInputTextFlags_ReadOnly);
-            const bool editY = ImGui::InputInt("vertical", &editMapSize[1], 1, 100, ImGuiInputTextFlags_ReadOnly);
+            const bool editX = ImGui::InputInt("Width", &editMapSize[0], 1, 100, ImGuiInputTextFlags_ReadOnly);
+            const bool editY = ImGui::InputInt("Height", &editMapSize[1], 1, 100, ImGuiInputTextFlags_ReadOnly);
 
             if (editX || editY)
             {
 
             }
 
-            TreePop();
+            //TreePop();
         }
 
-        if (TreeNodeEx("Offset", ImGuiTreeNodeFlags_DefaultOpen))
+        //if (TreeNodeEx("Offset", ImGuiTreeNodeFlags_DefaultOpen))
         {
             int editMapOffset[2] =
             {
                 g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
             };
 
-            const bool editX = ImGui::InputInt("horizontal", &editMapOffset[0]);
-            const bool editY = ImGui::InputInt("vertical", &editMapOffset[1]);
+            const bool editX = ImGui::InputInt("Offset X", &editMapOffset[0]);
+            const bool editY = ImGui::InputInt("Offset Y", &editMapOffset[1]);
 
             if (editX || editY)
             {
@@ -79,7 +79,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 g_map->refresh();
             }
 
-            TreePop();
+            //TreePop();
         }     
     }
 
