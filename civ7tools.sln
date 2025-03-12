@@ -14,22 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{1BAF69DA-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Civ7-YnAMP", "Civ7-YnAMP", "{0BB17153-729C-48C5-808A-3781915FA9C4}"
 	ProjectSection(SolutionItems) = preProject
-		mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js = mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js
-		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "giant-earth-map", "giant-earth-map", "{200660D8-004D-4E12-8F53-572759199C90}"
-	ProjectSection(SolutionItems) = preProject
-		mods\Civ7-YnAMP\modules\maps\giant-earth-map\giant-earth-data.js = mods\Civ7-YnAMP\modules\maps\giant-earth-map\giant-earth-data.js
-		mods\Civ7-YnAMP\modules\maps\giant-earth-map\giant-earth-map.js = mods\Civ7-YnAMP\modules\maps\giant-earth-map\giant-earth-map.js
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "greatest-earth-map", "greatest-earth-map", "{CDAF4FE8-EA65-4C7F-83DB-974323E81AFD}"
-	ProjectSection(SolutionItems) = preProject
-		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\CityMap.xml
-		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-data.js
-		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\greatest-earth-map.js
-		mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml = mods\Civ7-YnAMP\modules\maps\greatest-earth-map\Map.xml
+		mods\Civ7-YnAMP\modules\version.sql = mods\Civ7-YnAMP\modules\version.sql
+		mods\Civ7-YnAMP\modules\ynamp.modinfo = mods\Civ7-YnAMP\modules\ynamp.modinfo
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debug", "Debug", "{23E951F9-88EF-415A-96C7-08505496BE62}"
@@ -62,6 +48,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en_us", "en_us", "{4503D203
 		templates\mapexport-template\text\en_us\ModuleText.xml = templates\mapexport-template\text\en_us\ModuleText.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{A151EE1A-B9C4-4858-9404-440454A3BADF}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js = mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js
+		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -79,14 +71,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1BAF69DA-B88E-40CD-B36D-1432342A3D32} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
 		{0BB17153-729C-48C5-808A-3781915FA9C4} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{200660D8-004D-4E12-8F53-572759199C90} = {0BB17153-729C-48C5-808A-3781915FA9C4}
-		{CDAF4FE8-EA65-4C7F-83DB-974323E81AFD} = {0BB17153-729C-48C5-808A-3781915FA9C4}
 		{23E951F9-88EF-415A-96C7-08505496BE62} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
 		{6BB35210-3436-49D1-AAA4-215360FB1270} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
 		{EE39DD5E-207F-404E-B711-E07CF5AA6940} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{F7E954F5-9C8F-4419-AC89-A1B6DCEDC2C5} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{9CC588D8-463E-4105-A897-925874972D64} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{4503D203-5166-4D96-A49E-CD6811876A6B} = {9CC588D8-463E-4105-A897-925874972D64}
+		{A151EE1A-B9C4-4858-9404-440454A3BADF} = {0BB17153-729C-48C5-808A-3781915FA9C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B29936D3-D786-4B14-82AD-70BEBC6F7AF9}

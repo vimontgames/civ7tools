@@ -103,8 +103,8 @@ float4 getFeatureColor(uint feature)
     switch (feature & 0xFF)
     {
         default:                                        return float4(1.0f, 0.0f, 1.0f, (0.5f));
-        case FeatureType_None:                          return float4(0.0f, 0.0f, 0.0f, (1.0f));
-        case FeatureType_Random:                        return float4(0.2f, 0.2f, 0.2f, (1.0f));
+        case FeatureType_None:                          return float4(0.1f, 0.1f, 0.1f, (1.0f));
+        case FeatureType_Random:                        return float4(0.3f, 0.3f, 0.3f, (1.0f));
         case FeatureType_SagebrushSteppe:               return float4(0.5f, 0.5f, 0.5f, (1.0f));
         case FeatureType_Oasis:                         return float4(1.0f, 0.5f, 0.0f, (1.0f));
         case FeatureType_DesertFloodplainMinor:         return float4(1.0f, 1.0f, 0.5f, (1.0f));

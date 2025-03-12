@@ -314,6 +314,24 @@ string Map::getExportMapSize(MapSize _mapSize)
 }
 
 //--------------------------------------------------------------------------------------
+// e.g. LOC_MAPNAME_NAME
+//--------------------------------------------------------------------------------------
+string Map::getLocMapName() const
+{
+    string locMapName = fmt::sprintf("LOC_%s_NAME", ToUpperLabel(getBaseName()));
+    return locMapName;
+}
+
+//--------------------------------------------------------------------------------------
+// e.g. LOC_MAPNAME_DESCRIPTION
+//--------------------------------------------------------------------------------------
+string Map::getLocMapDescription() const
+{
+    string locMapDescription = fmt::sprintf("LOC_%s_DESCRIPTION", ToUpperLabel(getBaseName()));
+    return locMapDescription;
+}
+
+//--------------------------------------------------------------------------------------
 void Map::exportConfig()
 {
     std::string data;
@@ -321,7 +339,7 @@ void Map::exportConfig()
     data += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
     data += "<Database>\n";
     data += "    <Maps>\n";
-    data += fmt::sprintf("        <Row File=\"{%s}maps/%s\" Name=\"LOC_MAPNAME_NAME\" Description=\"LOC_MAPNAME_DESCRIPTION\" SortIndex=\"100\"/>\n", getModID(), GetFilename(m_mapPath));
+    data += fmt::sprintf("        <Row File=\"{%s}maps/%s\" Name=\"%s\" Description=\"%s\" SortIndex=\"100\"/>\n", getModID(), GetFilename(m_mapPath), getLocMapName(), getLocMapDescription());
     data += "    </Maps>\n";
     data += "    <SupportedValuesByMap>\n";
     data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize(m_mapSize));
@@ -357,10 +375,10 @@ void Map::exportMapText()
     data += "    <?xml version=\"1.0\" encoding=\"utf-8\"?>   \n";
     data += "<Database>                                      \n";
     data += "	<EnglishText>                                \n";
-    data += "		<Replace Tag=\"LOC_MAPNAME_NAME\">       \n";
+    data += fmt::sprintf("		<Replace Tag=\"%s\">       \n", getLocMapName());
     data += fmt::sprintf("			<Text>%s[n](Civ7Map)</Text>\n", getBaseName());
     data += "		</Replace>                               \n";
-    data += "		<Replace Tag=\"LOC_MAPNAME_DESCRIPTION\">\n";
+    data += fmt::sprintf("		<Replace Tag=\"%s\">\n", getLocMapDescription());
     data += "			<Text>TODO: Map description</Text>         \n";
     data += "		</Replace>                               \n";
     data += "	</EnglishText>                               \n";

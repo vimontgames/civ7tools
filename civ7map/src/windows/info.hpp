@@ -28,8 +28,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
         sprintf_s(temp, "%s", g_map->getPrettyName().c_str());
         ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
         
-        sprintf_s(temp, "%s", g_map->getBaseName().c_str());
-        ImGui::InputText("Prefix", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
+        ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
         //sprintf_s(temp, "%s", GetFilename(g_map->m_mapDataPath).c_str());
         //ImGui::InputText("Data", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
@@ -48,10 +48,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 (int)g_map->m_height
             };
 
-            const bool editX = ImGui::InputInt("Width", &editMapSize[0], 1, 100, ImGuiInputTextFlags_ReadOnly);
-            const bool editY = ImGui::InputInt("Height", &editMapSize[1], 1, 100, ImGuiInputTextFlags_ReadOnly);
-
-            if (editX || editY)
+            if (ImGui::InputInt2("Width", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
             {
 
             }
@@ -66,10 +63,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
             };
 
-            const bool editX = ImGui::InputInt("Offset X", &editMapOffset[0]);
-            const bool editY = ImGui::InputInt("Offset Y", &editMapOffset[1]);
-
-            if (editX || editY)
+            if (ImGui::InputInt2("Offset", editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 g_map->m_mapOffset[0].x = editMapOffset[0];
                 g_map->m_mapOffset[0].y = editMapOffset[1];

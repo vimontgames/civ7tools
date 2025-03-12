@@ -55,7 +55,7 @@ void Map::refresh()
 
             if (m_showResources)
             {
-                if (ResourceType::Random != tile.resource)
+                if (ResourceType::Random != tile.resource && ResourceType::None != tile.resource)
                 {
                     uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
                     auto & info = m_resources[resIndex];

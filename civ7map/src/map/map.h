@@ -230,6 +230,9 @@ public:
 
     string getBaseName() const;
     string getPrettyName() const;
+    string getLocMapName() const;
+    string getLocMapDescription() const;
+
     string getExportMapSize(MapSize _mapSize);
     static MapSize getMapSize(uint _width, uint _height);
 

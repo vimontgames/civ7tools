@@ -62,7 +62,7 @@ void Map::Paint(int _x, int _y)
         {
             for (int x = _x -r + 1; x <= _x + r - 1; ++x)
             {
-                if (x < 0 || x >= m_width || y < 0 || y >= m_height)
+                if (x < 0 || x >= (int)m_width || y < 0 || y >= (int)m_height)
                     continue;
 
                 if (cellDist(int2(_x,_y), int2(x,y)) >= r)
