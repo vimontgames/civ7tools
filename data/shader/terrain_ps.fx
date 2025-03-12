@@ -194,7 +194,7 @@ void main()
     }
     
     //else if (cell.x == hoveredCell.x && cell.y == hoveredCell.y)
-    else if (cellDist(int2(cell.xy), int2(hoveredCell.xy)) < hoveredCell.z)
+    else if (cellDist(int2(cell.xy), int2(hoveredCell.xy)) < hoveredCell.z && hoveredCell.x != -1 && hoveredCell.y != -1)
     {
         hovered = true;
         borderColor.rgba =  float4(0,10,0, 0.05f); //(color.rgb * 0.8f) + (1.0f - color.rgb) * 0.2f;

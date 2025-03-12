@@ -230,10 +230,10 @@ float4 getResourceColor(uint index)
             return float4(1.0f, 0.0f, 1.0f, (0.5f));
 
         case ResourceType_None:
-            return float4(0.0f, 0.0f, 0.0f, 1.0f);
+            return float4(0.1f, 0.1f, 0.1f, 1.0f);
 
         case ResourceType_Random:
-            return float4(0.2f, 0.2f, 0.2f, 1.0f); 
+            return float4(0.3f, 0.3f, 0.3f, 1.0f); 
 
         case ResourceType_Cotton:
         case ResourceType_Wool:
