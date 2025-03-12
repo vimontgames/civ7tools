@@ -39,10 +39,12 @@ bool InspectorWindow::Draw(const RenderWindow & window)
         if (!tile)
         {
             ImGui::Text("Press \"Space\" to select  tile");
+            ImGui::Separator();
         }
         else
         {
             ImGui::InputInt2("Plot", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
+            ImGui::Separator();
 
             //int engineLoc[2] =
             //{
@@ -160,6 +162,82 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                         }
                     }
                     ImGui::EndCombo();
+                }
+            }
+
+            // TSL
+            {
+                bool anyTSL = false;
+                for (int c = 0; c < map->m_civilizations.size(); ++c)
+                {
+                    const auto & civ = map->m_civilizations[c];
+                    for (int t = 0; t < civ.tsl.size(); ++t)
+                    {
+                        const auto & tsl = civ.tsl[t];
+                        if (tsl.pos.x == x && tsl.pos.y == y)
+                        {
+                            anyTSL = true;
+                            break;
+                        }
+                    }
+                }
+
+                //if (anyTSL)
+                {
+                    if (ImGui::CollapsingHeader("TSL", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+                    {
+                        for (int c = 0; c < map->m_civilizations.size(); ++c)
+                        {
+                            auto & civ = map->m_civilizations[c];
+                            for (int t = 0; t < civ.tsl.size(); ++t)
+                            {
+                                auto & tsl = civ.tsl[t];
+                                if (tsl.pos.x == x && tsl.pos.y == y)
+                                {
+                                    const uint id = (c << 8) | t;
+
+                                    DrawColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
+
+                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s #%u", civ.name.c_str(), t).c_str()))
+                                    {
+                                        for (uint i = 0; i < map->m_civilizations.size(); ++i)
+                                        {
+                                            bool isSelected = i == c;
+                                            auto & dstCiv = map->m_civilizations[i];
+                                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv.name, i).c_str(), isSelected))
+                                            {
+                                                civ.tsl.erase(civ.tsl.begin() + t);
+                                                TSL newTSL;
+                                                newTSL.pos.x = x;
+                                                newTSL.pos.y = y;
+                                                dstCiv.tsl.push_back(newTSL);
+                                                map->refresh();
+                                            }
+                                        }
+
+                                        ImGui::EndCombo();
+                                    }
+
+                                    ImGui::SameLine();
+                                     
+                                    if (ImGui::Button(fmt::sprintf("Remove###Remove%u", id).c_str()))
+                                    {
+                                        civ.tsl.erase(civ.tsl.begin() + t);
+                                        map->refresh();
+                                    }
+                                }
+                            }
+                        }
+
+                        if (ImGui::Button("Add TSL"))
+                        {
+                            TSL newTSL;
+                            newTSL.pos.x = x;
+                            newTSL.pos.y = y;
+                            map->m_civilizations[0].tsl.push_back(newTSL);
+                            map->refresh();
+                        }
+                    }
                 }
             }
         }

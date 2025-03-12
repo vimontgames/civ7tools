@@ -32,7 +32,7 @@ static const u32 g_fixedTextLengthShort = 10;
 static const u32 g_fixedTextLengthLarge = 20;
 
 bool g_saveFileDialog = false;
-bool g_saveMapDataOnly = false;
+//bool g_saveMapDataOnly = false;
 
 const char * g_saveImGuiIniPath = nullptr;
 bool g_importFile = false;
@@ -59,9 +59,9 @@ Vector2i g_selectedCell = Vector2i(-1, -1);
 static vector<BaseWindow *> g_windows;
 
 static const char * newMap = "Create new map mod";
-static const char * importMap = "Import map";
-static const char * exportMap = "Export all map mod files";
-static const char * exportMapDataOnly = "Export map data only";
+static const char * importMap = "Import";
+static const char * exportMap = "Export";
+//static const char * exportMapDataOnly = "Export map data";
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public stringbuf
@@ -99,7 +99,7 @@ int main()
     g_currentWorkingDirectory = string(cwd);
 
     // default path
-    WCHAR userFolder[MAX_PATH];
+    //WCHAR userFolder[MAX_PATH];
     if (IsDebuggerPresent())
     {
         g_myDocumentsPath = g_currentWorkingDirectory + "\\mods";
@@ -140,6 +140,7 @@ int main()
 
     // static init
     Map::loadIcons();
+    Map::loadFlags();
 
     Clock deltaClock;
     while (mainWindow.isOpen()) 
@@ -236,14 +237,14 @@ int main()
                 if (ImGui::MenuItem(exportMap))
                 {
                     g_saveFileDialog = true;
-                    g_saveMapDataOnly = false;
+                    //g_saveMapDataOnly = false;
                 }
 
-                if (ImGui::MenuItem(exportMapDataOnly))
-                {
-                    g_saveFileDialog = true;
-                    g_saveMapDataOnly = true;
-                }
+                //if (ImGui::MenuItem(exportMapDataOnly))
+                //{
+                //    g_saveFileDialog = true;
+                //    g_saveMapDataOnly = true;
+                //}
 
                 if (!g_map)
                     ImGui::PopItemFlag();
@@ -511,8 +512,30 @@ int main()
 
                                     ImGui::Separator();
 
-                                    #if _DEBUG
+                                    bool anyTSL = false;
+                                    for (int c = 0; c < g_map->m_civilizations.size(); ++c)
                                     {
+                                        const auto & civ = g_map->m_civilizations[c];
+                                        for (int t = 0; t < civ.tsl.size(); ++t)
+                                        {
+                                            const auto & tsl = civ.tsl[t];
+                                            if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                            {
+                                                float f3Color[] = { pow(civ.color.r, 1.0f/2.2f), pow(civ.color.g, 1.0f / 2.2f) , pow(civ.color.b, 1.0f / 2.2f) };
+                                                ImGui::ColorEdit3(fmt::sprintf("###%s", civ.name).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+                                                ImGui::SameLine();
+                                                ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                                ImGui::Text("%s (#%u)", civ.name.c_str(), t);
+                                                anyTSL = true;
+                                            }
+                                        }
+                                    }
+
+                                    #if _DEBUG0
+                                    {
+                                        if (anyTSL)
+                                            ImGui::Separator();
+
                                         ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
                                         ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
                                         ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
@@ -569,20 +592,20 @@ int main()
         }
         else if (g_saveFileDialog)
         {
-            if (g_saveMapDataOnly)
-            {
-                ImGui::OpenPopup(exportMapDataOnly);
-                g_saveFileDialog = false;
-                SetCurrentDirectory(g_myDocumentsPath.c_str());
-                ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
-            }
-            else
-            {
+            //if (g_saveMapDataOnly)
+            //{
+            //    ImGui::OpenPopup(exportMapDataOnly);
+            //    g_saveFileDialog = false;
+            //    SetCurrentDirectory(g_myDocumentsPath.c_str());
+            //    ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+            //}
+            //else
+            //{
                 ImGui::OpenPopup(exportMap);
                 g_saveFileDialog = false;
                 SetCurrentDirectory(g_myDocumentsPath.c_str());
                 ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
-            }
+            //}
         }
 
         if (g_createMap)
@@ -732,8 +755,7 @@ int main()
                 LOG_ERROR("\"%s\" is not a valid map filename to import. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
             }
         }
-        else if (g_fileDialog.showFileDialog(exportMap, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js")
-              || g_fileDialog.showFileDialog(exportMapDataOnly, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js"))
+        else if (g_fileDialog.showFileDialog(exportMap, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js"))
         {
             if (g_map)
             {
@@ -745,29 +767,34 @@ int main()
 
                 bool canExport = false;
 
-                if (g_saveMapDataOnly)
-                {
-                    if (!EndsWith(newFilePath, "-data.js"))
-                        LOG_ERROR("\"%s\" is not a valid map filename to export. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
-                    else
-                        canExport = true;
-                }
-                else
-                {
-                    if (!EndsWith(newFilePath, "-map.js"))
-                        LOG_ERROR("\"%s\" is not a valid mapdata filename to export. Mapdata filenames should end with \"-data.js\"", GetFilename(newFilePath).c_str());
-                    else
-                        canExport = true;
-                }
-
-                if (canExport)
+                if (EndsWith(newFilePath, "-map.js"))
                 {
                     map->m_mapPath = newFilePath;
                     map->m_mapDataPath = Map::GetMapDataPathFromMapPath(map->m_mapPath);
-                    map->exportFiles(g_currentWorkingDirectory, g_saveMapDataOnly);
+
+                    // Dirty check to detect if we're using mod template (TODO: export options panel?)
+                    bool useModTemplate = false;
+                    const string mapTextPath = fmt::sprintf("%s\\text\\en_us\\MapText.xml", map->m_modFolder);
+                    string data;
+                    if (FileExists(mapTextPath) && ReadFile(mapTextPath, data))
+                    {
+                        if (-1 != data.find("(Civ7Map)"))
+                            useModTemplate = true;
+                    }
+
+                    if (useModTemplate)
+                        LOG_WARNING("Map \"%s\" is using Civ7Map mod template. All mod files will be updated.", GetFilename(newFilePath).c_str());
+                    else
+                        LOG_WARNING("Map \"%s\" is not using Civ7Map mod template. Only map and TSL files will be updated.", GetFilename(newFilePath).c_str());
+
+                    map->exportFiles(g_currentWorkingDirectory, useModTemplate);
 
                     if (prevFilename != map->m_mapPath)
                         map->m_isDocked = false;
+                }
+                else
+                {
+                    LOG_ERROR("\"%s\" is not a valid map file to export. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
                 }
             }
 
@@ -786,20 +813,23 @@ int main()
         {
             static bool painting = false;
 
-            if (Mouse::isButtonPressed(Mouse::Left))
+            if (g_hoveredCell.x >= 0 && g_hoveredCell.x < (int)g_map->m_width && g_hoveredCell.y >= 0 && g_hoveredCell.y < (int)g_map->m_height)
             {
-                if (!painting)
+                if (Mouse::isButtonPressed(Mouse::Left))
                 {
-                    g_map->BeginPaint();
-                    painting = true;
-                }
+                    if (!painting)
+                    {
+                        g_map->BeginPaint();
+                        painting = true;
+                    }
 
-                g_map->Paint(g_hoveredCell.x, g_hoveredCell.y);
-            }
-            else if (painting)
-            {
-                g_map->EndPaint();
-                painting = false;
+                    g_map->Paint(g_hoveredCell.x, g_hoveredCell.y);
+                }
+                else if (painting)
+                {
+                    g_map->EndPaint();
+                    painting = false;
+                }
             }
 
             if (Mouse::isButtonPressed(Mouse::Right))

@@ -67,7 +67,12 @@ bool DisplayWindow::Draw(const RenderWindow & window)
         if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
         {
             needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
-            needRefresh |= Checkbox("Show Borders", &g_map->m_showBorders);
+
+            needRefresh |= Checkbox("Grid", &g_map->m_showBorders);
+            ImGui::SameLine();
+            needRefresh |= Checkbox("Resources", &g_map->m_showResources);
+            ImGui::SameLine();
+            needRefresh |= Checkbox("Resources", &g_map->m_showTSL);
 
             ImGui::Separator();
 

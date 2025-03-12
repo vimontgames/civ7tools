@@ -59,8 +59,6 @@ void Map::render(RenderWindow & _window)
                 if (shader)
                 {
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
-                    shader->setUniform("mapSize", Vector2f((float)m_width, (float)m_height));
-                    shader->setUniform("screenSize", Vector2f(float(g_screenWidth), float(g_screenHeight)));
                     shader->setUniform("hoveredCell", Vector2f((float)g_hoveredCell.x, (float)g_hoveredCell.y));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
 
@@ -128,7 +126,6 @@ void Map::render(RenderWindow & _window)
                     if (shader)
                     {
                         shader->setUniform("texSize", (Vector2f)spriteInfo.sprite.getTexture()->getSize());
-                        shader->setUniform("screenSize", Vector2f(float(g_screenWidth), float(g_screenHeight)));
 
                         auto color = Glsl::Vec4(spriteInfo.sprite.getColor());
                         shader->setUniform("color", color);

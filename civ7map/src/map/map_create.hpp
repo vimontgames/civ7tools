@@ -7,6 +7,9 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     m_mapDataPath = Map::GetMapDataPathFromMapPath(m_mapPath);
     m_modFolder = fmt::sprintf("%s\\mods\\%s", _cwd, _name);
 
+    // TODO: let user specify pretty name? Default to base file name for now.
+    m_prettyName = getBaseName();
+
     bool created;
 
     string modsFolder = fmt::sprintf("%s\\mods", _cwd);
@@ -37,6 +40,11 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     created = CreateFolder(textFolder_en_us);
     if (created)
         LOG_WARNING("Created text (en_us) folder \"%s\"", textFolder_en_us.c_str());
+
+    string dataFolder = fmt::sprintf("%s\\data", m_modFolder.c_str());
+    created = CreateFolder(dataFolder);
+    if (created)
+        LOG_WARNING("Created data folder \"%s\"", dataFolder.c_str());
 
     string iconsFolder = fmt::sprintf("%s\\icons", m_modFolder);
     created = CreateFolder(iconsFolder);
@@ -124,7 +132,7 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     resetCamera();
 
     // Create all files
-    exportFiles(_cwd);
+    exportFiles(_cwd, true);
 
     return true;
 }

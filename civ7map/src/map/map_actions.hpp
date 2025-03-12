@@ -70,7 +70,7 @@ void Map::Paint(int _x, int _y)
                 // When painting Ocean, add coasts to land tiles around painted tile
                 if (paintWindow->m_terrainType == TerrainType::Ocean)
                 {
-                    for (int i = 0; i < enumCount<HexTileSide>(); ++i)
+                    for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
                     {
                         int2 coords;
                         if (getHexSideTile(_x, _y, (HexTileSide)i, coords))
@@ -89,7 +89,7 @@ void Map::Paint(int _x, int _y)
                 else if (paintWindow->m_terrainType != TerrainType::Coast)
                 {
                     // When painting land, add coast to ocean tiles around painted tile
-                    for (int i = 0; i < enumCount<HexTileSide>(); ++i)
+                    for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
                     {
                         int2 coords;
                         if (getHexSideTile(_x, _y, (HexTileSide)i, coords))

@@ -24,8 +24,12 @@ bool InfoWindow::Draw(const RenderWindow & window)
     if (Begin("Map###Infos", &m_visible) && g_map)
     {
         char temp[4096];
-        sprintf_s(temp, "%s", GetFilenameWithoutExtension(g_map->m_mapPath).c_str());
-        ImGui::InputText("Map", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        sprintf_s(temp, "%s", g_map->getPrettyName().c_str());
+        ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        
+        sprintf_s(temp, "%s", g_map->getBaseName().c_str());
+        ImGui::InputText("Prefix", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
         //sprintf_s(temp, "%s", GetFilename(g_map->m_mapDataPath).c_str());
         //ImGui::InputText("Data", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
@@ -33,8 +37,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
         //sprintf_s(temp, "%s", GetFolder(g_map->m_path).c_str());
         //ImGui::InputText("Folder", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
-        sprintf_s(temp, g_map->m_author.c_str());
-        ImGui::InputText("Author", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        //sprintf_s(temp, g_map->m_author.c_str());
+        //ImGui::InputText("Author", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
         //if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
         {

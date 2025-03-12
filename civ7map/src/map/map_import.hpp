@@ -56,43 +56,43 @@ bool GetNextValue(string & input, size_t & pos, string & value)
         ++pos;
     }
 
-    if (pos >= input.size()) 
+if (pos >= input.size())
+{
+    return false; // End of string
+}
+
+// Extract an identifier (letters, digits, underscores)
+if (isalpha(input[pos]) || input[pos] == '_')
+{
+    while (pos < input.size() && (isalnum(input[pos]) || input[pos] == '_'))
     {
-        return false; // End of string
+        value += input[pos++];
     }
+    return true;
+}
 
-    // Extract an identifier (letters, digits, underscores)
-    if (isalpha(input[pos]) || input[pos] == '_') 
+// Extract a number (including negative numbers)
+if (isdigit(input[pos]) || (input[pos] == '-' && pos + 1 < input.size() && isdigit(input[pos + 1])))
+{
+    if (input[pos] == '-')
+        value += input[pos++]; // Include negative sign if present
+
+    while (pos < input.size() && isdigit(input[pos]))
     {
-        while (pos < input.size() && (isalnum(input[pos]) || input[pos] == '_')) 
-        {
-            value += input[pos++];
-        }
-        return true;
+        value += input[pos++];
     }
+    return true;
+}
 
-    // Extract a number (including negative numbers)
-    if (isdigit(input[pos]) || (input[pos] == '-' && pos + 1 < input.size() && isdigit(input[pos + 1]))) 
-    {
-        if (input[pos] == '-') 
-            value += input[pos++]; // Include negative sign if present
+// Extract individual symbols (e.g., `{`, `}`, `[`, `]`, `,`, `=`)
+if (string("{}[]=,").find(input[pos]) != string::npos) {
+    value = input[pos++];
+    return true;
+}
 
-        while (pos < input.size() && isdigit(input[pos]))
-        {
-            value += input[pos++];
-        }
-        return true;
-    }
-
-    // Extract individual symbols (e.g., `{`, `}`, `[`, `]`, `,`, `=`)
-    if (string("{}[]=,").find(input[pos]) != string::npos) {
-        value = input[pos++];
-        return true;
-    }
-
-    // If we reach here, move to the next character and retry
-    ++pos;
-    return GetNextValue(input, pos, value);
+// If we reach here, move to the next character and retry
+++pos;
+return GetNextValue(input, pos, value);
 }
 
 //--------------------------------------------------------------------------------------
@@ -145,7 +145,34 @@ bool Map::importMapSize(const string & data, int & mapWidth, int & mapHeight) co
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::ImportYnAMP(const string & data)
+bool Map::importPrettyName(const string & data)
+{
+    //default
+    m_prettyName = getBaseName();
+
+    string token = "const mapName";
+    auto pos = data.find(token);
+    if (-1 != pos)
+    {
+        auto begin = data.find("'", pos + token.length());
+        if (-1 != begin)
+        {
+            auto end = data.find("'", begin + 1);
+            {
+                string mapName = data.substr(begin + 1, end - begin - 1);
+                LOG_WARNING("Map pretty name is \"%s\"", mapName.c_str());
+                m_prettyName = mapName;
+                return true;
+            }
+        }
+    }
+
+    LOG_ERROR("Could not find map name");
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::importYnAMP(const string & data)
 {
     const string label = "MapToConvert";
     const string token = label + (string)"[";
@@ -172,7 +199,7 @@ bool Map::ImportYnAMP(const string & data)
             string getmapData;
             if (ReadFile(m_mapDataPath, getmapData))
             {
-                return ImportYnAMP(getmapData);
+                return importYnAMP(getmapData);
             }
         }
 
@@ -990,6 +1017,152 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
 }
 
 //--------------------------------------------------------------------------------------
+struct Attribute 
+{
+    string label;
+    string value;
+};
+
+//--------------------------------------------------------------------------------------
+// Function to trim spaces at the beginning and end of a string
+//--------------------------------------------------------------------------------------
+string trim(const string & str) 
+{
+    size_t start = str.find_first_not_of(" \t");
+    size_t end = str.find_last_not_of(" \t");
+    if (start == string::npos || end == string::npos) 
+        return "";
+    return str.substr(start, end - start + 1);
+}
+
+//--------------------------------------------------------------------------------------
+// Function to parse attributes in a single line
+//--------------------------------------------------------------------------------------
+vector<Attribute> parseAttributes(const string & line)
+{
+    vector<Attribute> attributes;
+    size_t pos = 0;
+
+    // Loop to process all attributes in the line
+    while ((pos = line.find('=', pos)) != string::npos) 
+    {
+        // Find the start of the key by scanning backward for the first non-space character
+        size_t keyEnd = pos;
+        size_t keyStart = keyEnd;
+        while (keyStart > 0 && isspace(line[keyStart - 1])) 
+            --keyStart;
+
+        size_t keyStartReal = keyStart;
+        while (keyStartReal > 0 && (isalpha(line[keyStartReal - 1]) || line[keyStartReal - 1] == '_')) 
+            --keyStartReal;
+
+        string key = trim(line.substr(keyStartReal, keyEnd - keyStartReal));
+
+        // Find the start and end of the value (ensure it is between double quotes)
+        size_t valueStart = line.find('"', pos) + 1;
+        if (valueStart == string::npos) 
+            break;
+        size_t valueEnd = line.find('"', valueStart);
+        if (valueEnd == string::npos) 
+            break;
+
+        string value = trim(line.substr(valueStart, valueEnd - valueStart));
+
+        // Store 
+        attributes.push_back({ key, value });
+
+        pos = valueEnd + 1;
+    }
+
+    return attributes;
+}
+
+//--------------------------------------------------------------------------------------
+string getExportCivName(const string & _civName)
+{
+    return fmt::sprintf("CIVILIZATION_%s", ToUpperLabel(_civName));
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::importTSL()
+{
+    const string tslPath = fmt::sprintf("%s\\%s.xml", GetFolder(m_mapPath), getBaseName());
+    string tslData;
+    if (ReadFile(tslPath, tslData))
+    {
+        const string startLabel = "<StartPosition>";
+        const string endLabel = "</StartPosition>";
+
+        auto tslStart = tslData.find(startLabel);
+        if (-1 == tslStart)
+        {
+            LOG_ERROR("Could not find \"%s\" in TSL data", "<StartPosition>");
+            return false;
+        }
+
+        auto tslEnd = tslData.find(endLabel);
+        if (-1 != tslEnd)
+        {
+            // Extract the relevant portion of the input
+            string relevantInput = tslData.substr(tslStart + startLabel.length(), tslEnd - tslStart - startLabel.length());
+
+            // Split relevant input into lines
+            stringstream ss(relevantInput);
+            string line;
+
+            while (getline(ss, line)) 
+            {
+                // Check if line contains a <Replace> tag
+                if (line.find("<Replace") != string::npos)
+                {
+                    //LOG_INFO("%s", line.c_str());
+
+                    // Parse the attributes in this line
+                    vector<Attribute> attributes = parseAttributes(line);
+
+                    TSL tsl;
+                    int civIndex = -1;
+                    for (const auto & attribute : attributes)
+                    {
+                        if (attribute.label == "Civilization")
+                        {
+                            for (uint i = 0; i < m_civilizations.size(); ++i)
+                            {
+                                const string civName = m_civilizations[i].name;
+                                if (getExportCivName(civName) == attribute.value)
+                                {
+                                    civIndex = i;
+                                }
+                            }
+                        }
+                        else if (attribute.label == "X")
+                        {
+                            tsl.pos.x = atoi(attribute.value.c_str());
+                        }
+                        else if (attribute.label == "Y")
+                        {
+                            tsl.pos.y = atoi(attribute.value.c_str());
+                        }
+                    }
+
+                    if (civIndex != -1 && tsl.pos.x != -1 && tsl.pos.y != -1)
+                    {
+                        auto & civ = m_civilizations[civIndex];
+                        LOG_INFO("Add TSL for \"%s\" at (%i, %i)", civ.name.c_str(), tsl.pos.x, tsl.pos.y);
+                        civ.tsl.push_back(tsl);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    LOG_WARNING("Could not read TSL data from \"%s\"", tslPath.c_str());
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::importFiles(const string & _cwd)
 {
     string data;
@@ -1005,8 +1178,13 @@ bool Map::importFiles(const string & _cwd)
         {
             m_isLoaded = true;
 
-            if (!ImportYnAMP(data))
+            // Get pretty name (for some it's different than the file name)
+            importPrettyName(data);
+
+            if (!importYnAMP(data))
                 return false;
+
+            importTSL();
 
             return true;
         }

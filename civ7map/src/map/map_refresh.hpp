@@ -4,8 +4,9 @@ void Map::refresh()
     if (!m_isLoaded)
         return;
 
-    // Refresh icons
+    // Refresh textures
     loadIcons();
+    loadFlags();
 
     createBitmaps();
     initResources();
@@ -52,18 +53,47 @@ void Map::refresh()
             
             terrain.image.setPixel(w, h + m_height, color1);
 
-            if (ResourceType::Random != tile.resource)
+            if (m_showResources)
             {
-                uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
-                auto & info = m_resources[resIndex];
-                auto & icons = s_resourceIcons[resIndex];
-
-                if (icons.texture.getSize().x > 0)
+                if (ResourceType::Random != tile.resource)
                 {
-                    SpriteInfo & spriteInfo = resources.sprites.emplace_back();
-                    spriteInfo.sprite.setTexture(icons.texture);
-                    spriteInfo.x = w;
-                    spriteInfo.y = h;
+                    uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
+                    auto & info = m_resources[resIndex];
+                    auto & icons = s_resourceIcons[resIndex];
+
+                    if (icons.texture.getSize().x > 0)
+                    {
+                        SpriteInfo & spriteInfo = resources.sprites.emplace_back();
+                        spriteInfo.sprite.setTexture(icons.texture);
+                        spriteInfo.x = w;
+                        spriteInfo.y = h;
+                    }
+                }
+            }
+
+            if (m_showTSL)
+            {
+                for (int c = 0; c < m_civilizations.size(); ++c)
+                {
+                    const auto & civ = m_civilizations[c];
+                    for (int t = 0; t < civ.tsl.size(); ++t)
+                    {
+                        const auto & tsl = civ.tsl[t];
+                        if (tsl.pos.x == w && tsl.pos.y == h)
+                        {
+                            auto & icons = s_defaultFlag;
+
+                            if (icons.texture.getSize().x > 0)
+                            {
+                                SpriteInfo & spriteInfo = resources.sprites.emplace_back();
+                                spriteInfo.sprite.setTexture(icons.texture);
+                                const Color color = Color((u8)(pow(civ.color.r, 1.0f / 2.2f) * 255.0f), (u8)(pow(civ.color.g, 1.0f / 2.2f) * 255.0f), (u8)(pow(civ.color.b, 1.0f / 2.2f) * 255.0f), 255);
+                                spriteInfo.sprite.setColor(color);
+                                spriteInfo.x = w;
+                                spriteInfo.y = h;
+                            }
+                        }
+                    }
                 }
             }
         }

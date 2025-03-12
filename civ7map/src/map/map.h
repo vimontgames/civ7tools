@@ -7,8 +7,6 @@
 #include "tile/civ7tile.h"
 #include "tile/civ6tile.h"
 
-#define MAX_PLAYER_SPAWN 10
-
 //--------------------------------------------------------------------------------------
 enum class MapSize : int
 {
@@ -102,7 +100,7 @@ struct Bitmap
 };
 
 //--------------------------------------------------------------------------------------
-struct ResourceIcon
+struct SharedIcon
 {
     bool dirty = true;
     sf::Texture texture;
@@ -137,6 +135,36 @@ enum HexTileSide
     BottomRight
 };
 
+//--------------------------------------------------------------------------------------
+enum class Era : int 
+{
+    Antiquity,
+    Exploration,
+    Modern
+};
+
+//--------------------------------------------------------------------------------------
+struct TSL
+{
+    int2 pos = int2(-1, -1);
+};
+
+//--------------------------------------------------------------------------------------
+struct Civilization
+{
+    Civilization(const string & _name="", Era _era = (Era)-1, const float4 _color = float4(1,1,1,1)) :
+        name(_name),
+        era(_era),
+        color(_color)
+    {
+
+    }
+
+    string name;
+    Era era;
+    float4 color;
+    vector<TSL> tsl;
+};
 
 //--------------------------------------------------------------------------------------
 struct Map
@@ -163,7 +191,7 @@ public:
     bool importMapSize(const string & data, int & mapWidth, int & mapHeight) const;
 
     // map_export.hpp
-    void exportFiles(const string & _cwd, bool _mapDataOnly = false);
+    void exportFiles(const string & _cwd, bool _useModTemplate);
     void saveBitmap(const Array2D<u32> _bitmap, tinyxml2::XMLElement * _xmlTerrainSave, const string & _field);
 
     // map_actions.hpp
@@ -178,6 +206,7 @@ public:
     void createBitmaps();
     void initResources();
     static void loadIcons();
+    static void loadFlags();
 
     string getShortName() const;
 
@@ -199,22 +228,30 @@ public:
     static string GetMapDataPathFromMapPath(const string & _mapPath);
 
     string getBaseName() const;
+    string getPrettyName() const;
     string getExportMapSize(MapSize _mapSize);
     static MapSize getMapSize(uint _width, uint _height);
+
+    static Era getEra(Civilization _civ);
 
     static const string s_noContinentName;
 
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
-    bool ImportYnAMP(const string & data);
+    
+    bool importYnAMP(const string & data);
+    bool importPrettyName(const string & data);
+    bool importTSL();
+
     void exportModInfo();
+    void exportSQLTables();
     void exportMap();
     void exportMapData();  
     void exportConfig();
     void exportMapText();
     void exportModuleText();
-    void exportIcons();
+    void exportTSL();
 
     string getModID() const;
 
@@ -222,10 +259,12 @@ private:
         
 public:
     // shared
-    static ResourceIcon s_resourceIcons[enumCount<ResourceType>()];
+    static SharedIcon   s_resourceIcons[enumCount<ResourceType>()];
+    static SharedIcon   s_defaultFlag;
 
     // file(s)
     string              m_modFolder;
+    string              m_prettyName;
     string              m_mapPath;
     string              m_mapDataPath;
 
@@ -238,6 +277,7 @@ public:
     Bitmap              m_bitmaps[enumCount<MapBitmap>()];
     ResourceInfo        m_resources[enumCount<ResourceType>()];
     vector<string>      m_continents;
+    vector<Civilization> m_civilizations; 
 
     //map view
     bool                m_isLoaded = false;
@@ -245,6 +285,8 @@ public:
     MapFilter           m_mapFilter = MapFilter::TerrainType;
     GridType            m_gridType = GridType::Hexagon;
     bool                m_showBorders = true;
+    bool                m_showResources = true;
+    bool                m_showTSL = true;
     sf::RenderTexture   m_renderTexture;
     bool                m_isHovered = false;
     bool                m_isDocked = false;
