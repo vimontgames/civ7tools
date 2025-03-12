@@ -24,7 +24,7 @@ uniform int passFlags;
 uniform float2 texSize;
 uniform float2 mapSize;
 uniform float2 screenSize;
-uniform float2 hoveredCell;
+uniform float3 hoveredCell;
 uniform float2 selectedCell;
 uniform float4 color;
 uniform sampler2D texture;
@@ -122,5 +122,22 @@ inline float2 getTileUV(float2 uv, float2 size, int flags)
     uv.x /= size.x;
     uv.y /= size.y;
     return uv;
+}
+
+inline float2 getCellPos(int2 cell)
+{
+    if (0 != (int(cell.y) & 1))
+        return float2(float(cell.x) + 0.5f + 0.25f, float(cell.y) + 0.5f);
+    else
+        return float2(float(cell.x) + 0.5f - 0.25f, float(cell.y) + 0.5f);
+}
+
+inline float cellDist(int2 a, int2 b)
+{
+    float2 cell = getCellPos(a);
+    float2 cursor = getCellPos(b);
+
+    float d = length(float2(cell.x - cursor.x, cell.y - cursor.y));
+    return round(d);
 }
 

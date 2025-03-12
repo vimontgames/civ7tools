@@ -26,7 +26,7 @@ u32 g_screenHeight = g_initScreenHeight;
 
 static ImGuiFileBrowser g_fileDialog;
 static string g_myDocumentsPath;
-static string g_currentWorkingDirectory;
+string g_currentWorkingDirectory;
 static float g_comboxItemWidth = 120;
 static const u32 g_fixedTextLengthShort = 10;
 static const u32 g_fixedTextLengthLarge = 20;
@@ -531,14 +531,17 @@ int main()
                                         }
                                     }
 
-                                    #if _DEBUG0
+                                    #if _DEBUG
                                     {
-                                        if (anyTSL)
-                                            ImGui::Separator();
+                                        //if (anyTSL)
+                                        //    ImGui::Separator();
 
-                                        ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
-                                        ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
-                                        ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
+                                        //ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
+                                        //ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
+                                        //ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
+                                        float d = cellDist(int2(g_selectedCell.x, g_selectedCell.y), int2(cell.x, cell.y));
+                                        ImGui::Text("HexDist %.1f",d);
+
                                     }
                                     #endif
                                 }

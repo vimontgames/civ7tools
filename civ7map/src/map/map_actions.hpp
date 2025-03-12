@@ -55,73 +55,97 @@ void Map::Paint(int _x, int _y)
 {
     if (auto * paintWindow = PaintWindow::get())
     {
-        Civ7Tile & tileRef = m_civ7TerrainType.get(_x, _y);
-        Civ7Tile tileCopy = tileRef;
-
-        if (paintWindow->m_paintContinentType)
-            tileCopy.continent = paintWindow->m_continentType;
-
-        if (paintWindow->m_paintTerrainType)
+        const int r = paintWindow->m_brushRadius;
+        int count = 0;
+        
+        for (int y = _y -r + 1; y <= _y+r-1; ++y)
         {
-            tileCopy.terrain = paintWindow->m_terrainType;
-            
-            if (paintWindow->m_autoCoast)
+            for (int x = _x -r + 1; x <= _x + r - 1; ++x)
             {
-                // When painting Ocean, add coasts to land tiles around painted tile
-                if (paintWindow->m_terrainType == TerrainType::Ocean)
+                if (x < 0 || x >= m_width || y < 0 || y >= m_height)
+                    continue;
+
+                if (cellDist(int2(_x,_y), int2(x,y)) >= r)
+                    continue;
+
+                count++;
+ 
+                //LOG_WARNING("Paint x = %i to %i (%u tiles)", _x -r + 1, _x + r - 1, count);
+
+                Civ7Tile & tileRef = m_civ7TerrainType.get(x, y);
+                Civ7Tile tileCopy = tileRef;
+
+                if (paintWindow->m_paintContinentType)
+                    tileCopy.continent = paintWindow->m_continentType;
+
+                if (paintWindow->m_paintTerrainType)
+                    tileCopy.terrain = paintWindow->m_terrainType;            
+
+                if (paintWindow->m_paintBiomeType)
+                    tileCopy.biome = paintWindow->m_biomeType; 
+
+                if (paintWindow->m_paintFeature)
+                    tileCopy.feature = paintWindow->m_featureType;
+
+                if (paintWindow->m_paintResource)
+                    tileCopy.resource = paintWindow->m_resourceType;
+
+                if (tileCopy != tileRef)
                 {
-                    for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
+                    undoRedoPaintTile->add(x, y, tileRef, tileCopy);
+                    tileRef = tileCopy;
+
+                    // Fix neightbours
+                    if (paintWindow->m_paintTerrainType)
                     {
-                        int2 coords;
-                        if (getHexSideTile(_x, _y, (HexTileSide)i, coords))
+                        tileCopy.terrain = paintWindow->m_terrainType;
+
+                        if (paintWindow->m_autoCoast)
                         {
-                            Civ7Tile & sideTile = m_civ7TerrainType.get(coords.x, coords.y);
-                            if (sideTile.terrain != TerrainType::Ocean)
+                            // When painting Ocean, add coasts to land tiles around painted tile
+                            if (paintWindow->m_terrainType == TerrainType::Ocean)
                             {
-                                Civ7Tile sideTileCopy = sideTile;
-                                sideTileCopy.terrain = TerrainType::Coast;
-                                undoRedoPaintTile->add(coords.x, coords.y, sideTile, sideTileCopy);
-                                sideTile = sideTileCopy;
+                                for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
+                                {
+                                    int2 coords;
+                                    if (getHexSideTile(x, y, (HexTileSide)i, coords))
+                                    {
+                                        Civ7Tile & sideTile = m_civ7TerrainType.get(coords.x, coords.y);
+                                        if (sideTile.terrain != TerrainType::Ocean)
+                                        {
+                                            Civ7Tile sideTileCopy = sideTile;
+                                            sideTileCopy.terrain = TerrainType::Coast;
+                                            undoRedoPaintTile->add(coords.x, coords.y, sideTile, sideTileCopy);
+                                            sideTile = sideTileCopy;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (paintWindow->m_terrainType != TerrainType::Coast)
+                            {
+                                // When painting land, add coast to ocean tiles around painted tile
+                                for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
+                                {
+                                    int2 coords;
+                                    if (getHexSideTile(x, y, (HexTileSide)i, coords))
+                                    {
+                                        Civ7Tile & sideTile = m_civ7TerrainType.get(coords.x, coords.y);
+                                        if (sideTile.terrain == TerrainType::Ocean)
+                                        {
+                                            Civ7Tile sideTileCopy = sideTile;
+                                            sideTileCopy.terrain = TerrainType::Coast;
+                                            undoRedoPaintTile->add(coords.x, coords.y, sideTile, sideTileCopy);
+                                            sideTile = sideTileCopy;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                }
-                else if (paintWindow->m_terrainType != TerrainType::Coast)
-                {
-                    // When painting land, add coast to ocean tiles around painted tile
-                    for (uint i = 0; i < enumCount<HexTileSide>(); ++i)
-                    {
-                        int2 coords;
-                        if (getHexSideTile(_x, _y, (HexTileSide)i, coords))
-                        {
-                            Civ7Tile & sideTile = m_civ7TerrainType.get(coords.x, coords.y);
-                            if (sideTile.terrain == TerrainType::Ocean)
-                            {
-                                Civ7Tile sideTileCopy = sideTile;
-                                sideTileCopy.terrain = TerrainType::Coast;
-                                undoRedoPaintTile->add(coords.x, coords.y, sideTile, sideTileCopy);
-                                sideTile = sideTileCopy;
-                            }
-                        }
-                    }
+
+                    refresh();
                 }
             }
-        }
-
-        if (paintWindow->m_paintBiomeType)
-            tileCopy.biome = paintWindow->m_biomeType; 
-
-        if (paintWindow->m_paintFeature)
-            tileCopy.feature = paintWindow->m_featureType;
-
-        if (paintWindow->m_paintResource)
-            tileCopy.resource = paintWindow->m_resourceType;
-
-        if (tileCopy != tileRef)
-        {
-            undoRedoPaintTile->add(_x, _y, tileRef, tileCopy);
-            tileRef = tileCopy;
-            refresh();
         }
     }
 }

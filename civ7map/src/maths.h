@@ -17,3 +17,15 @@ inline float frac(float _val)
 {
     return _val - floor(_val);
 }
+
+//--------------------------------------------------------------------------------------
+inline float length(float2 v)
+{
+    return sqrtf(v.x * v.x + v.y * v.y);
+}
+
+//--------------------------------------------------------------------------------------
+inline float length(float3 v)
+{
+    return sqrtf(v.x * v.x + v.y * v.y + v.z*v.z);
+}

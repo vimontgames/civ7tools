@@ -82,6 +82,30 @@ struct float2
     };
 };
 
+struct float3
+{
+    float3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f) :
+        x(_x),
+        y(_y),
+        z(_z)
+    {
+
+    }
+
+    union
+    {
+        struct
+        {
+            float x, y, z;
+        };
+        struct
+        {
+            float r, g, b;
+        };
+        float value[3];
+    };
+};
+
 struct float4
 {
     float4(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f, float _w = 0.0f) :

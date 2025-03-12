@@ -202,12 +202,18 @@ void Map::translate(const sf::Vector2i & _offset)
 
     LOG_INFO("Translate map by {%i,%i}", offsetX, offsetY);
 
-    //for (u32 i = 0; i < allSpawnsPoints.size(); ++i)
-    //{
-    //    SpawnPoint & spawn = allSpawnsPoints[i];
-    //    spawn.pos.x = ((int)spawn.pos.x + (int)m_width - offsetX) % (int)m_width;
-    //    spawn.pos.y = ((int)spawn.pos.y + (int)m_height - offsetY) % (int)m_height;
-    //}
+    // move spawn points also
+    for (uint c = 0; c < m_civilizations.size(); ++c)
+    {
+        auto & civ = m_civilizations[c];
+        for (uint t = 0; t < civ.tsl.size(); ++t)
+        {
+            auto & tsl = civ.tsl[t];
+
+            tsl.pos.x = (tsl.pos.x - _offset.x) % m_width;
+            tsl.pos.y = (tsl.pos.y - _offset.y) % m_height;
+        }
+    }
 
     m_civ7TerrainType.translate(offsetX, offsetY);
 }

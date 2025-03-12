@@ -185,6 +185,7 @@ public:
     bool setResource(int _x, int _y, ResourceType _value);
 
     bool create(const string & _cwd, const string & _name, int _width, int _height);
+    bool createFolders();
 
     // map_import.hpp
     bool importFiles(const string & _cwd);

@@ -160,7 +160,7 @@ bool Map::importPrettyName(const string & data)
             auto end = data.find("'", begin + 1);
             {
                 string mapName = data.substr(begin + 1, end - begin - 1);
-                LOG_WARNING("Map pretty name is \"%s\"", mapName.c_str());
+                LOG_INFO("Map pretty name is \"%s\"", mapName.c_str());
                 m_prettyName = mapName;
                 return true;
             }
@@ -271,11 +271,15 @@ bool Map::importYnAMP(const string & data)
                         paramCount++;
 
                     if (paramCount == 14 || paramCount == 15) // "greatest-earth-map" has regular 14 but "giant-earth-map" has extra "-1"
+                    {
                         mapFmt = MapFormat::Civ6;
+                        LOG_WARNING("Imported file uses the %s map map format (%u parameters)", asString(mapFmt).c_str(), paramCount);
+                    }
                     else
+                    {
                         mapFmt = MapFormat::Civ7;
-
-                    LOG_WARNING("Import from %s map format (%u parameters)", asString(mapFmt).c_str(), paramCount);
+                        LOG_INFO("Imported file uses the %s map map format (%u parameters)", asString(mapFmt).c_str(), paramCount);
+                    }                    
                 }
 
                 if (mapFmt == MapFormat::Civ6)

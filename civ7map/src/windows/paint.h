@@ -11,6 +11,8 @@ public:
 //private:
     static inline PaintWindow * s_instance = nullptr;
 
+    int m_brushRadius = 1;
+
     bool m_paintContinentType = false;
     ContinentType m_continentType = (ContinentType)-1;
 

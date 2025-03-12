@@ -479,6 +479,8 @@ string Map::getModID() const
 //--------------------------------------------------------------------------------------
 void Map::exportMap()
 {
+    createFolders();
+
     string baseName = getBaseName();
 
     std::string data;

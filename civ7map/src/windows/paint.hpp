@@ -26,6 +26,8 @@ bool PaintWindow::Draw(const RenderWindow & window)
         ImGui::InputInt2("Plot", (int *)&g_hoveredCell, ImGuiInputTextFlags_EnterReturnsTrue);
         ImGui::PopItemFlag();
 
+        ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
+
         // Continent
         if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {

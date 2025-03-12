@@ -56,10 +56,12 @@ void Map::render(RenderWindow & _window)
                 rs.shader = shader;
                 rs.blendMode = bitmap.quadblend;
 
+                const float paintRadius = (float)PaintWindow::get()->m_brushRadius;
+
                 if (shader)
                 {
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
-                    shader->setUniform("hoveredCell", Vector2f((float)g_hoveredCell.x, (float)g_hoveredCell.y));
+                    shader->setUniform("hoveredCell", Vector3f((float)g_hoveredCell.x, (float)g_hoveredCell.y, paintRadius));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
 
                     int passFlags = 0;
