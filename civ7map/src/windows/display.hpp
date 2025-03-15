@@ -11,7 +11,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 DisplayWindow::DisplayWindow() :
-    BaseWindow("Display")
+    BaseWindow(ICON_FA_DISPLAY" Display")
 {
 
 }
@@ -62,17 +62,15 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Display", &m_visible) && g_map)
+    if (Begin(ICON_FA_DISPLAY" Display###Display", &m_visible) && g_map)
     {
         if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
+            needRefresh |= Checkbox("Show Resources", &g_map->m_showResources);
+            needRefresh |= Checkbox("Show TSL", &g_map->m_showTSL);
+            needRefresh |= Checkbox("Show Grid", &g_map->m_showBorders);
 
-            needRefresh |= Checkbox("Grid", &g_map->m_showBorders);
-            ImGui::SameLine();
-            needRefresh |= Checkbox("Resources", &g_map->m_showResources);
-            ImGui::SameLine();
-            needRefresh |= Checkbox("Resources", &g_map->m_showTSL);
+            //needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
 
             ImGui::Separator();
 

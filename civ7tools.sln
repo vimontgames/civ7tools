@@ -51,6 +51,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{A151EE1A-B9C4-4858-9404-440454A3BADF}"
 	ProjectSection(SolutionItems) = preProject
 		mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js = mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js
+		mods\Civ7-YnAMP\modules\maps\ynamp-resource-generator.js = mods\Civ7-YnAMP\modules\maps\ynamp-resource-generator.js
 		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
 	EndProjectSection
 EndProject

@@ -10,7 +10,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 HelpWindow::HelpWindow() :
-    BaseWindow("Help")
+    BaseWindow(ICON_FA_CIRCLE_QUESTION" Help")
 {
 
 }
@@ -20,7 +20,7 @@ bool HelpWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Help", &m_visible))
+    if (Begin(ICON_FA_CIRCLE_QUESTION" Help###Help", &m_visible))
     {
         ImGui::Columns(2, "mycolumns2", false);
         {

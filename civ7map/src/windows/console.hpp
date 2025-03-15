@@ -28,7 +28,7 @@ private:
 
 //--------------------------------------------------------------------------------------
 ConsoleWindow::ConsoleWindow() : 
-    BaseWindow("Console")
+    BaseWindow(ICON_FA_TERMINAL" Console")
 {
     memset(m_inputBuffer, 0, sizeof(m_inputBuffer));
     m_historyPos = -1;
@@ -213,7 +213,7 @@ bool ConsoleWindow::Draw(const RenderWindow & window)
 
     ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
 
-    if(Begin("Console", &m_visible))
+    if(Begin(ICON_FA_TERMINAL" Console###Console", &m_visible))
     {
         const auto warningColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
         const auto errorColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{Civ7MapUser-WorstMapEver}maps/WorstMapEver-map.js" Name="LOC_MAPNAME_NAME" Description="LOC_MAPNAME_DESCRIPTION" SortIndex="100"/>
+    </Maps>
+    <SupportedValuesByMap>
+        <Row Map="{Civ7MapUser-WorstMapEver}maps/WorstMapEver-map.js" Domain="StandardMapSizes" Value="MAPSIZE_SMALL"/>
+        <Row Map="{Civ7MapUser-WorstMapEver}maps/WorstMapEver-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_SMALL"/>
+    </SupportedValuesByMap>
+</Database>

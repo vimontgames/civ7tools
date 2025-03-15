@@ -115,9 +115,9 @@ void Map::loadIcons()
 {
     for (auto val : enumValues<ResourceType>())
     {
-        int index = (int)val.first;
-        if (index != -1)
+        if (ResourceType::Random != val.first)
         {
+            int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
             if (resIcon.dirty)
             {
@@ -126,7 +126,8 @@ void Map::loadIcons()
                 auto path = fmt::sprintf("data/img/resources/%s.png", asString((ResourceType)index));
                 if (!FileExists(path))
                 {
-                    LOG_WARNING("Texture \"%s\" not found", GetFilename(path).c_str());
+                    if (ResourceType::None != val.first)
+                        LOG_WARNING("Texture \"%s\" not found", GetFilename(path).c_str());
                     path = fmt::sprintf("data/img/resources/%s.png", "Default");
                     dirty = true;
                 }

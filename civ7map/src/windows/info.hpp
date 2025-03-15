@@ -10,7 +10,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 InfoWindow::InfoWindow() :
-    BaseWindow("Info")
+    BaseWindow(ICON_FA_GLOBE" Map")
 {
 
 }
@@ -21,7 +21,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Map###Infos", &m_visible) && g_map)
+    if (Begin(ICON_FA_GLOBE " Map###Map", &m_visible) && g_map)
     {
         char temp[4096];
 

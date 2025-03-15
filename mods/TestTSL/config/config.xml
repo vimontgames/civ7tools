@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{Civ7MapUser-TestTSL}maps/TestTSL-map.js" Name="LOC_TESTTSL_NAME" Description="LOC_TESTTSL_DESCRIPTION" SortIndex="100"/>
+    </Maps>
+    <SupportedValuesByMap>
+        <Row Map="{Civ7MapUser-TestTSL}maps/TestTSL-map.js" Domain="StandardMapSizes" Value="MAPSIZE_STANDARD"/>
+        <Row Map="{Civ7MapUser-TestTSL}maps/TestTSL-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_STANDARD"/>
+    </SupportedValuesByMap>
+</Database>

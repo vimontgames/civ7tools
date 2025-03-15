@@ -48,6 +48,8 @@ static Map * g_map = nullptr;
 Vector2i g_hoveredCell = Vector2i(-1, -1);
 Vector2i g_selectedCell = Vector2i(-1, -1);
 
+ImFont * font = nullptr;
+
 #include "windows/help.hpp"
 #include "windows/debug.hpp"
 #include "windows/info.hpp"
@@ -61,7 +63,6 @@ static vector<BaseWindow *> g_windows;
 static const char * newMap = "Create new map mod";
 static const char * importMap = "Import";
 static const char * exportMap = "Export";
-//static const char * exportMapDataOnly = "Export map data";
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public stringbuf
@@ -80,7 +81,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 2;
+const int g_version_minor = 3;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
@@ -115,7 +116,7 @@ int main()
 
     RenderWindow mainWindow(VideoMode(g_screenWidth, g_screenHeight), "", Style::Titlebar | Style::Resize | Style::Close, contextSettings);
     mainWindow.setFramerateLimit(60);
-    Init(mainWindow);
+    Init(mainWindow, false);
 
     const string windowTitle = fmt::sprintf("%s %i.%i", g_appName, g_version_major, g_version_minor);
     LOG_INFO(windowTitle.c_str());
@@ -124,7 +125,24 @@ int main()
 
     // Setup dear ImGui
     ImGui::CreateContext();
+
+    // Load custom font with icons
+    const float baseFontSize = 16;
+    const float iconFontSize = baseFontSize;
+
     ImGuiIO & io = ImGui::GetIO();
+    ImFont * font1 = io.Fonts->AddFontFromFileTTF("data/fonts/ubuntu/UbuntuMono-R.ttf", 16);
+
+    // merge in icons from Font Awesome
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    icons_config.GlyphMinAdvanceX = iconFontSize;
+    font = io.Fonts->AddFontFromFileTTF("data/fonts/Font-Awesome-6.x/" FONT_ICON_FILE_NAME_FAS, iconFontSize, &icons_config, icons_ranges);
+
+    ImGui::SFML::UpdateFontTexture();
+
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingTransparentPayload = true;
 
@@ -222,29 +240,16 @@ int main()
             if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem(newMap))
-                {
                     g_createMap = true;
-                }
-
+ 
                 if (ImGui::MenuItem(importMap))
-                {
                     g_importFile = true;
-                }
 
                 if (!g_map)
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
                 if (ImGui::MenuItem(exportMap))
-                {
                     g_saveFileDialog = true;
-                    //g_saveMapDataOnly = false;
-                }
-
-                //if (ImGui::MenuItem(exportMapDataOnly))
-                //{
-                //    g_saveFileDialog = true;
-                //    g_saveMapDataOnly = true;
-                //}
 
                 if (!g_map)
                     ImGui::PopItemFlag();
@@ -595,20 +600,10 @@ int main()
         }
         else if (g_saveFileDialog)
         {
-            //if (g_saveMapDataOnly)
-            //{
-            //    ImGui::OpenPopup(exportMapDataOnly);
-            //    g_saveFileDialog = false;
-            //    SetCurrentDirectory(g_myDocumentsPath.c_str());
-            //    ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
-            //}
-            //else
-            //{
-                ImGui::OpenPopup(exportMap);
-                g_saveFileDialog = false;
-                SetCurrentDirectory(g_myDocumentsPath.c_str());
-                ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
-            //}
+            ImGui::OpenPopup(exportMap);
+            g_saveFileDialog = false;
+            SetCurrentDirectory(g_myDocumentsPath.c_str());
+            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
         }
 
         if (g_createMap)

@@ -27,6 +27,9 @@
 #include "fmt/include/fmt/format.h" 
 #include "fmt/include/fmt/printf.h"
 
+// Find icon using https://fontawesome.com/search?ic=free
+#include "IconFont/IconsFontAwesome6.h"
+
 using i32 = int;
 using i8 = signed char;
 using u32 = unsigned int;

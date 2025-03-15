@@ -40,9 +40,14 @@ If you want to compile the tool yourself rather than using a released version, o
 
 - Create map from scratch using YnAMP's
 
-## v0.2 (WIP)
+## v0.3
+
+- New font with icons
+
+## v0.2
 
 - Automatic coasts
+- Painting Terrain, Biome & Features
 
 ## v0.1
 
@@ -67,8 +72,10 @@ If you want to compile the tool yourself rather than using a released version, o
 
 * [SFML](https://github.com/SFML/SFML) >= 2.5.1 (*)
 * [Dear ImGui](https://github.com/ocornut/imgui) >= 1.80
+* [Font-Awesome]( https://github.com/FortAwesome/Font-Awesome/tree/6.x)
 * [ImGui-SFML](https://github.com/eliasdaler/imgui-sfml) >= 2.3+
 * [ImGui-Addons](https://github.com/wflohry/imgui-addons)
+* [IconFont_CppHeaders](https://github.com/juliettef/IconFontCppHeaders)
 * [miniz-cpp](https://github.com/tfussell/miniz-cpp)
 * [TinyXML-2](https://github.com/leethomason/tinyxml2)
 * [Base64](https://github.com/terrakuh/base64)

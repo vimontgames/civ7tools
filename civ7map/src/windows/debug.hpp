@@ -10,7 +10,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 DebugWindow::DebugWindow() :
-    BaseWindow("Debug")
+    BaseWindow(ICON_FA_BUG_SLASH" Debug")
 {
 
 }
@@ -20,7 +20,7 @@ bool DebugWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Debug", &m_visible))
+    if (Begin(ICON_FA_BUG_SLASH" Debug###Debug", &m_visible))
     {
         if (ImGui::Button("Refresh"))
         {

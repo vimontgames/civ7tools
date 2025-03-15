@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>     
+<Database>                                     
+                                               
+	<!-- +++++++++++++++++++++++++++++++++++ -->
+	<!-- "WorstMapEver" start position -->
+	<!-- +++++++++++++++++++++++++++++++++++ -->
+	                                            
+	<!-- Major Civilizations -->                
+	<StartPosition>                             
+		<Replace MapName="WorstMapEver" Civilization="CIVILIZATION_EGYPT" X="18" Y="21" />
+		<Replace MapName="WorstMapEver" Civilization="CIVILIZATION_ROME" X="61" Y="13" />
+	</StartPosition>                            
+</Database>                                    

@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------------------
 PaintWindow::PaintWindow() :
-    BaseWindow("Paint")
+    BaseWindow(ICON_FA_PAINT_ROLLER" Paint")
 {
     s_instance = this;
 }
@@ -18,7 +18,7 @@ bool PaintWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Paint", &m_visible))
+    if (Begin(ICON_FA_PAINT_ROLLER " Paint###Paint", &m_visible))
     {
         Map * map = g_map;
 

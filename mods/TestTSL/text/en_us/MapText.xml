@@ -1,0 +1,11 @@
+    <?xml version="1.0" encoding="utf-8"?>   
+<Database>                                      
+	<EnglishText>                                
+		<Replace Tag="LOC_TESTTSL_NAME">       
+			<Text>TestTSL[n](Civ7Map)</Text>
+		</Replace>                               
+		<Replace Tag="LOC_TESTTSL_DESCRIPTION">
+			<Text>TODO: Map description</Text>         
+		</Replace>                               
+	</EnglishText>                               
+</Database>                                     

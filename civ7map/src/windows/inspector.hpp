@@ -11,7 +11,7 @@ public:
 
 //--------------------------------------------------------------------------------------
 InspectorWindow::InspectorWindow() :
-    BaseWindow("Inspector")
+    BaseWindow(ICON_FA_MAGNIFYING_GLASS" Inspector")
 {
 
 }
@@ -21,7 +21,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
 
-    if (Begin("Inspector", &m_visible))
+    if (Begin(ICON_FA_MAGNIFYING_GLASS" Inspector###Inspector", &m_visible))
     {
         Civ7Tile * tile = nullptr;
         Map * map = g_map;

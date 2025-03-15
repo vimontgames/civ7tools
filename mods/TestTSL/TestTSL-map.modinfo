@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="Civ7MapUser-TestTSL" version="1"
+    xmlns="ModInfo">
+    <Properties>
+        <Name>LOC_MODULE_MAPNAME_NAME</Name>
+        <Description>LOC_MODULE_MAPNAME_DESCRIPTION</Description>
+        <Authors>Civ7MapUser</Authors>
+        <Package>Mod</Package>
+    </Properties>
+    <Dependencies>
+        <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+    </Dependencies>
+    <ActionCriteria>
+        <Criteria id="always">
+            <AlwaysMet></AlwaysMet>
+        </Criteria>
+    </ActionCriteria>
+    <ActionGroups>
+<ActionGroup id="base-game-init-TestTSL" scope="game" criteria="always">
+		<Properties>                                                          
+			<LoadOrder>-999</LoadOrder>                                       
+		</Properties>                                                         
+		<Actions>                                                             
+			<UpdateDatabase>                                                  
+				<Item>data/tables.sql</Item>                                  
+			</UpdateDatabase>                                                 
+		</Actions>                                                            
+	</ActionGroup>                                                            
+        <ActionGroup id="base-game-main-TestTSL" scope="game" criteria="always">
+            <Actions>
+                <UpdateDatabase>
+                   <Item>maps/TestTSL.xml</Item>
+                </UpdateDatabase>
+                <UpdateText>
+                    <Item>text/en_us/MapText.xml</Item>
+                </UpdateText>
+		         <UpdateIcons>
+		             <Item>icons/icons.xml</Item>
+	             </UpdateIcons>
+            </Actions>
+        </ActionGroup>
+        <ActionGroup id="shell-TestTSL" scope="shell" criteria="always">
+            <Actions>
+                <UpdateDatabase>
+                    <Item>config/config.xml</Item>
+                    <Item>maps/TestTSL.xml</Item>
+                </UpdateDatabase>
+                <UpdateText>
+                    <Item>text/en_us/MapText.xml</Item>
+                </UpdateText>
+            </Actions>
+        </ActionGroup>
+    </ActionGroups>
+    <LocalizedText>
+        <File>text/en_us/ModuleText.xml</File>
+    </LocalizedText>
+</Mod>
