@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="tmb" version="0"
+	xmlns="ModInfo">
+	<Properties>
+		<Name>TMB</Name>
+		<Description>Twice more beliefs to increase player limit.</Description>
+		<Authors>Benualdo</Authors>
+		<Package>Mod</Package>
+		<AffectsSavedGames>0</AffectsSavedGames>
+	</Properties>
+	<Dependencies>
+		<Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+	</Dependencies>
+    <ActionCriteria>
+        <Criteria id="always">
+            <AlwaysMet></AlwaysMet>
+        </Criteria>
+        <Criteria id="antiquity" any="true">
+            <AgeInUse>AGE_ANTIQUITY</AgeInUse>
+        </Criteria>
+        <Criteria id="exploration" any="true">
+            <AgeInUse>AGE_EXPLORATION</AgeInUse>
+        </Criteria>
+    </ActionCriteria>
+	<ActionGroups>
+        <ActionGroup id="age-antiquity-main-twicemorebeliefs" scope="game" criteria="antiquity">
+            <Properties>
+                <LoadOrder>1</LoadOrder>
+            </Properties>
+            <Actions>
+                <UpdateDatabase>
+                    <Item>data/tmb_antiquity_beliefs.xml</Item>
+                </UpdateDatabase>
+            </Actions>
+        </ActionGroup>
+        <ActionGroup id="age-exploration-main-twicemorebeliefs" scope="game" criteria="exploration">
+            <Properties>
+                <LoadOrder>1</LoadOrder>
+            </Properties>
+            <Actions>
+                <UpdateDatabase>
+                    <Item>data/tmb_exploration_beliefs.xml</Item>
+                </UpdateDatabase>
+            </Actions>
+        </ActionGroup>
+	</ActionGroups>
+    <ActionGroup id="game-twicemorebeliefs-always" scope="game" criteria="always">
+        <Properties>
+            <LoadOrder>10</LoadOrder>
+        </Properties>
+        <Actions>
+            <UpdateIcons>
+                <Item>data/tmb_antiquity_icons.xml.sql</Item>
+                <Item>data/tmb_exploration_icons.xml.sql</Item>
+            </UpdateIcons>
+        </Actions>
+    </ActionGroup>
+</Mod>
