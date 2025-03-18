@@ -55,7 +55,7 @@ enum class MapBitmap
 //--------------------------------------------------------------------------------------
 enum class MapFilter
 {
-    Combined = 0,
+    All = 0,
     TerrainType,
     Biome,
     Feature,
@@ -293,7 +293,7 @@ public:
     //map view
     bool                m_isLoaded = false;
     bool                m_isOpen = true;
-    MapFilter           m_mapFilter = MapFilter::TerrainType;
+    MapFilter           m_mapFilter = MapFilter::All;
     GridType            m_gridType = GridType::Hexagon;
     bool                m_showBorders = true;
     bool                m_showResources = true;

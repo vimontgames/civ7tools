@@ -90,6 +90,9 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
         uint startX = 1, endX = m_width / 2 - 1;
         uint startY = 1, endY = m_height - 1;
 
+        m_westStart = startX;
+        m_westEnd = endX;
+
         for (uint j = startY; j < endY; ++j)
         {
             for (uint i = startX; i < endX; ++i)
@@ -116,6 +119,9 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     {
         uint startX = m_width/2+1, endX = m_width-1;
         uint startY = 1, endY = m_height - 1;
+
+        m_eastStart = startX;
+        m_eastEnd = endX;
 
         for (uint j = startY; j < endY; ++j)
         {

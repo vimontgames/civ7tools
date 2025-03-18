@@ -58,6 +58,14 @@ void DrawColor(const Map * _map, ResourceType _resource)
 }
 
 //--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, BiomeType _biome, TerrainType _terrain)
+{
+    float4 color = getBiomeTerrainColor(_biome, _terrain);
+    float f3Color[] = { color.r, color.g,  color.b };
+    ImGui::ColorEdit3( fmt::sprintf("%s %s", asString(_biome), asString(_terrain)).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
 bool DisplayWindow::Draw(const RenderWindow & window)
 {
     bool needRefresh = false;
@@ -76,7 +84,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Colors", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "Combined\0Terrain\0Biome\0Feature\0Continents\0Resource\0\0");
+            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "All\0Terrain\0Biome\0Feature\0Continents\0Resource\0\0");
 
             ImGui::Spacing();
 
@@ -86,11 +94,34 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                     LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
                     break;
 
-                //case MapFilter::Combined:
-                //{
-                //
-                //}
-                //break;
+                case MapFilter::All:
+                {
+                    for (uint i = 0; i < enumCount<BiomeType>(); ++i)
+                    {
+                        for (uint j = 0; j < enumCount<TerrainType>(); ++j)
+                        {
+                            BiomeType biome = (BiomeType)i;
+                            TerrainType terrain = (TerrainType)j;
+                            if (BiomeType::Marine == biome)
+                            {
+                                if (terrain != TerrainType::Ocean && terrain != TerrainType::Coast)
+                                    continue;
+                            }
+                            else
+                            {
+                                if (terrain == TerrainType::Ocean || terrain == TerrainType::Coast)
+                                    continue;
+                            }
+
+                            if (terrain == TerrainType::NavigableRiver)
+                                continue;
+
+                            DrawColor(g_map, biome, terrain);
+                        }
+                        ImGui::Separator();
+                    }
+                }
+                break;
 
                 case MapFilter::TerrainType:
                 {

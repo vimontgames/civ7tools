@@ -3,19 +3,9 @@ civ7map
 
 An unofficial map editor for Civilization VII.
 
+![Screenshot](doc/img/v0.3.png)
+
 # How to use?
-
-## Create new map
-
-TODO
-
-## Load existing map
-
-TODO
-
-## Save map
-
-TODO
 
 ## Mouse
 
@@ -35,37 +25,6 @@ TODO
 
 # Build
 If you want to compile the tool yourself rather than using a released version, open civ7tools.sln using Visual Studio 2022 (free version can be downloaded [here](https://visualstudio.microsoft.com/downloads/)), selection $(SolutionDir) as the working directory, then build solution.
-
-# Changelog
-
-- Create map from scratch using YnAMP's
-
-## v0.3
-
-- New font with icons
-
-## v0.2
-
-- Automatic coasts
-- Painting Terrain, Biome & Features
-
-## v0.1
-
-![Screenshot](doc/img/v0.1.png)
-
-- Resource icons
-- Create new map from scratch using [Gedemon](https://github.com/Gedemon)'s YnAMP map mod template 
-
-## v0.02
-
-- Add support for 'GetMap' being imported from a separate file
-- Separate parsing map data and Civ6 => Civ7 tile format conversion
-- Import continents and resources
-
-## v0.01
-
-- Import terrain type from .js (Civ VII) or .lua (Civ VI) files (Civ VI terrain tiles are then converted to Civ VII's TerrainType and biome)
-- Picking terrain plots
 
 # Dependencies
 

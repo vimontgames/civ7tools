@@ -2,7 +2,7 @@
 #pragma once
 #endif
 
-#define PASS_TYPE_COMBINED      0
+#define PASS_TYPE_ALL           0
 #define PASS_TYPE_TERRAIN       1
 #define PASS_TYPE_BIOME         2
 #define PASS_TYPE_FEATURE       3

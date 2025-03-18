@@ -60,9 +60,9 @@ ImFont * font = nullptr;
 
 static vector<BaseWindow *> g_windows;
 
-static const char * newMap = "Create new map mod";
-static const char * importMap = "Import";
-static const char * exportMap = "Export";
+static const char * newMap = ICON_FA_FOLDER_PLUS" Create Map";
+static const char * importMap = ICON_FA_FOLDER_OPEN" Import Map";
+static const char * exportMap = ICON_FA_FLOPPY_DISK" Export Map";
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public stringbuf
@@ -485,72 +485,75 @@ int main()
 
                                 const Civ7Tile tile = g_map->m_civ7TerrainType.get(cell.x, cell.y);
 
-                                ImGui::BeginTooltip();
+                                if (!ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopup))
                                 {
-                                    ImGui::Text("%i,%i", cell.x, cell.y);
-                                    ImGui::Separator();
-
-                                    DrawColor(g_map, tile.continent);
-                                    ImGui::SameLine();
-                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                    ImGui::Text("(%i)", (int)tile.continent);
-
-                                    DrawColor(g_map, tile.terrain);
-                                    ImGui::SameLine();
-                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                    ImGui::Text("(%i)", (int)tile.terrain);
-                                
-                                    DrawColor(g_map, tile.biome);
-                                    ImGui::SameLine();
-                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                    ImGui::Text("(%i)", (int)tile.biome);
-
-                                    DrawColor(g_map, tile.feature);
-                                    ImGui::SameLine();
-                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                    ImGui::Text("(%i)",(int)tile.feature);
-
-                                    DrawColor(g_map, tile.resource);
-                                    ImGui::SameLine();
-                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                    ImGui::Text("(%i)", (int)tile.resource);
-
-                                    ImGui::Separator();
-
-                                    bool anyTSL = false;
-                                    for (int c = 0; c < g_map->m_civilizations.size(); ++c)
+                                    ImGui::BeginTooltip();
                                     {
-                                        const auto & civ = g_map->m_civilizations[c];
-                                        for (int t = 0; t < civ.tsl.size(); ++t)
+                                        ImGui::Text("%i,%i", cell.x, cell.y);
+                                        ImGui::Separator();
+
+                                        DrawColor(g_map, tile.continent);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)", (int)tile.continent);
+
+                                        DrawColor(g_map, tile.terrain);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)", (int)tile.terrain);
+                                
+                                        DrawColor(g_map, tile.biome);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)", (int)tile.biome);
+
+                                        DrawColor(g_map, tile.feature);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)",(int)tile.feature);
+
+                                        DrawColor(g_map, tile.resource);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)", (int)tile.resource);
+
+                                        ImGui::Separator();
+
+                                        bool anyTSL = false;
+                                        for (int c = 0; c < g_map->m_civilizations.size(); ++c)
                                         {
-                                            const auto & tsl = civ.tsl[t];
-                                            if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                            const auto & civ = g_map->m_civilizations[c];
+                                            for (int t = 0; t < civ.tsl.size(); ++t)
                                             {
-                                                float f3Color[] = { pow(civ.color.r, 1.0f/2.2f), pow(civ.color.g, 1.0f / 2.2f) , pow(civ.color.b, 1.0f / 2.2f) };
-                                                ImGui::ColorEdit3(fmt::sprintf("###%s", civ.name).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
-                                                ImGui::SameLine();
-                                                ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                                ImGui::Text("%s (#%u)", civ.name.c_str(), t);
-                                                anyTSL = true;
+                                                const auto & tsl = civ.tsl[t];
+                                                if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                                {
+                                                    float f3Color[] = { pow(civ.color.r, 1.0f/2.2f), pow(civ.color.g, 1.0f / 2.2f) , pow(civ.color.b, 1.0f / 2.2f) };
+                                                    ImGui::ColorEdit3(fmt::sprintf("###%s", civ.name).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+                                                    ImGui::SameLine();
+                                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                                    ImGui::Text("%s (#%u)", civ.name.c_str(), t);
+                                                    anyTSL = true;
+                                                }
                                             }
                                         }
+
+                                        #if _DEBUG0
+                                        {
+                                            //if (anyTSL)
+                                            //    ImGui::Separator();
+
+                                            //ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
+                                            //ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
+                                            //ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
+                                            float d = cellDist(int2(g_selectedCell.x, g_selectedCell.y), int2(cell.x, cell.y));
+                                            ImGui::Text("Distance %.1f",d);
+
+                                        }
+                                        #endif
                                     }
-
-                                    #if _DEBUG0
-                                    {
-                                        //if (anyTSL)
-                                        //    ImGui::Separator();
-
-                                        //ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
-                                        //ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
-                                        //ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
-                                        float d = cellDist(int2(g_selectedCell.x, g_selectedCell.y), int2(cell.x, cell.y));
-                                        ImGui::Text("Distance %.1f",d);
-
-                                    }
-                                    #endif
+                                    ImGui::EndTooltip();
                                 }
-                                ImGui::EndTooltip();
                             }
                             else
                             {
@@ -616,12 +619,11 @@ int main()
                 if (ImGui::InputText("Name", temp, sizeof(g_newMapName)))
                     g_newMapName = fmt::sprintf("%s", temp);
 
-                int selectedIndex = -2;
                 if (ImGui::BeginCombo("###Size", asString(g_newMapSizeType).c_str()))
                 {
                     for (auto val : enumValues<MapSize>())
                     {
-                        bool isSelected = (selectedIndex == (int)val.first);
+                        bool isSelected = (g_newMapSizeType == val.first);
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
                         {
                             g_newMapSizeType = val.first;
@@ -643,8 +645,6 @@ int main()
 
                 if (g_newMapSizeType != MapSize::Custom)
                     ImGui::PopItemFlag();
-
-                ImGui::Separator();
 
                 bool isSizeSupported = false;
                 switch (g_newMapSizeType)
@@ -669,8 +669,14 @@ int main()
                         break;
                 }
 
-                if (!isSizeSupported)
-                    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+                const bool isNameValid = !g_newMapName.empty();
+
+                bool invalidSettings = !isSizeSupported || isNameValid;
+
+                if (!invalidSettings)
+                    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);    
+
+                ImGui::Separator();
 
                 if (ImGui::Button("OK"))
                 {
@@ -690,7 +696,7 @@ int main()
                     g_createMap = false;
                 }
 
-                if (!isSizeSupported)
+                if (!invalidSettings)
                     ImGui::PopItemFlag();
 
                 ImGui::SameLine();

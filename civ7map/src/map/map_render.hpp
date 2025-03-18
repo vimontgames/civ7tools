@@ -74,8 +74,8 @@ void Map::render(RenderWindow & _window)
                             LOG_ERROR("Missing case \"%s\" (%i)", asString(m_mapFilter).c_str(), (int)m_mapFilter);
                             break;
 
-                        case MapFilter::Combined:
-                            passFlags = PASS_TYPE_COMBINED;
+                        case MapFilter::All:
+                            passFlags = PASS_TYPE_ALL;
                             break;
 
                         case MapFilter::TerrainType:

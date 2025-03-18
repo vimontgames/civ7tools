@@ -65,18 +65,12 @@ float4 getTileColor(Tile tile)
         default:
             break;
         
-        case PASS_TYPE_COMBINED:
+        case PASS_TYPE_ALL:
         {
-            uint terrainType = uint(tile.color0.r * 255.0f);
-            float4 terrainColor = getTerrainColor(terrainType);
-            
             uint biomeType = uint(tile.color0.g * 255.0f);
-            float4 biomeColor = getBiomeColor(biomeType);
-
-            color = terrainColor;
+            uint terrainType = uint(tile.color0.r * 255.0f);
             
-            if (!isWater)
-                color *= biomeColor;
+            color = getBiomeTerrainColor(biomeType, terrainType);
         }
         break;
 

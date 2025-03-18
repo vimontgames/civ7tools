@@ -52,9 +52,9 @@ float4 getBiomeColor(uint biome)
 
         case BiomeType_Tundra:      return float4(0.8f, 1.0f, 0.8f, (1.0f));
         case BiomeType_Grassland:   return float4(0.2f, 0.9f, 0.0f, (1.0f));
-        case BiomeType_Plains:      return float4(0.5f, 0.8f, 0.0f, (1.0f));
-        case BiomeType_Tropical:    return float4(0.0f, 0.5f, 0.0f, (1.0f));
-        case BiomeType_Desert:      return float4(1.0f, 1.0f, 0.0f, (1.0f));
+        case BiomeType_Plains:      return float4(0.8f, 0.6f, 0.0f, (1.0f));
+        case BiomeType_Tropical:    return float4(0.0f, 0.4f, 0.3f, (1.0f));
+        case BiomeType_Desert:      return float4(1.0f, 1.0f, 0.2f, (1.0f));
         case BiomeType_Marine:      return float4(0.0f, 0.0f, 1.0f, (1.0f));
     }
 }
@@ -336,5 +336,34 @@ float4 getResourceColor(uint index)
 float4 getResourceColor(ResourceType res)
 {
     return getResourceColor((uint)res);
+}
+#endif
+
+float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
+{
+    float4 terrainColor = getTerrainColor(terrainType);
+    float4 biomeColor = getBiomeColor(biomeType);
+
+    float4 color = terrainColor;
+
+    bool isWater = false;
+    if (terrainType == TerrainType_Ocean || terrainType == TerrainType_Coast)
+        isWater = true;
+
+    if (!isWater)
+    {
+        color.r = terrainColor.r * 0.6f + biomeColor.r * 0.4f;
+        color.g = terrainColor.g * 0.6f + biomeColor.g * 0.4f;
+        color.b = terrainColor.b * 0.6f + biomeColor.b * 0.4f;
+        color.a = terrainColor.a * 0.6f + biomeColor.a * 0.4f;
+    }
+
+    return color;
+}
+
+#ifdef __cplusplus
+float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
+{
+    return getBiomeTerrainColor((uint)biomeType, (uint)terrainType);
 }
 #endif
