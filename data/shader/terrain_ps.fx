@@ -4,8 +4,11 @@ struct Tile
     float4 color1;
 };
 
-bool isBorder(float2 uv)
+bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder)
 {
+    isWestBorder = false;
+    isEastBorder = false;
+    
     uv.y = uv.y * 0.5;
     
     float2 center = getTileUV(uv, texSize, passFlags);
@@ -16,6 +19,12 @@ bool isBorder(float2 uv)
     float2 right  = getTileUV(uv + float2(+invScreenSize.x, 0), texSize, passFlags);
     float2 bottom = getTileUV(uv + float2(0, -invScreenSize.y), texSize, passFlags);
     float2 up     = getTileUV(uv + float2(0, +invScreenSize.y), texSize, passFlags);
+    
+    if (left.x * texSize.x < west.x && right.x * texSize.x > west.x || left.x * texSize.x < west.y && right.x * texSize.x > west.y)
+        isWestBorder = true;
+    
+    if (left.x * texSize.x < east.x && right.x * texSize.x > east.x || left.x * texSize.x < east.y && right.x * texSize.x > east.y)
+        isEastBorder = true;
         
     if (floor(left.x * texSize.x)   != floor(center.x * texSize.x) || floor(left.y * texSize.y)   != floor(center.y * texSize.y)
      || floor(right.x * texSize.x)  != floor(center.x * texSize.x) || floor(right.y * texSize.y)  != floor(center.y * texSize.y)
@@ -55,6 +64,21 @@ float4 getTileColor(Tile tile)
     {
         default:
             break;
+        
+        case PASS_TYPE_COMBINED:
+        {
+            uint terrainType = uint(tile.color0.r * 255.0f);
+            float4 terrainColor = getTerrainColor(terrainType);
+            
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            float4 biomeColor = getBiomeColor(biomeType);
+
+            color = terrainColor;
+            
+            if (!isWater)
+                color *= biomeColor;
+        }
+        break;
 
         case PASS_TYPE_TERRAIN:
         {
@@ -204,8 +228,26 @@ void main()
     //color = float4(int(tileUV / texSize.xy) & 1 ? 1 :0, 0, 0, 1);
     
     bool showBorders = (0 != (PASS_FLAG_BORDERS & passFlags));
-    if (isBorder(uv) && (showBorders || hovered || selected))
-        color.rgb = lerp(color.rgb, borderColor.rgb, borderColor.a);
+    bool isWestBorder = false;
+    bool isEastBorder = false;
+    bool isBorder = isBorder(uv, isWestBorder, isEastBorder);
+    
+    if (isBorder)
+    {
+        if (showBorders || hovered || selected)
+        {
+            color.rgb = lerp(color.rgb, borderColor.rgb, borderColor.a);
+        }
         
+        if (isWestBorder)
+        {
+            color.rgb = lerp(color.rgb, float3(0, 1, 1), 0.5);
+        }
+        else if (isEastBorder)
+        {
+            color.rgb = lerp(color.rgb, float3(1, 0, 0), 0.5);
+        }
+    }
+            
     gl_FragColor = float4(color.rgb, 1);   
 }

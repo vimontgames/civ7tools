@@ -63,6 +63,8 @@ void Map::render(RenderWindow & _window)
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
                     shader->setUniform("hoveredCell", Vector3f((float)g_hoveredCell.x, (float)g_hoveredCell.y, paintRadius));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
+                    shader->setUniform("west", Vector2f((float)m_westStart, (float)m_westEnd));
+                    shader->setUniform("east", Vector2f((float)m_eastStart, (float)m_eastEnd));
 
                     int passFlags = 0;
 
@@ -70,6 +72,10 @@ void Map::render(RenderWindow & _window)
                     {
                         default:
                             LOG_ERROR("Missing case \"%s\" (%i)", asString(m_mapFilter).c_str(), (int)m_mapFilter);
+                            break;
+
+                        case MapFilter::Combined:
+                            passFlags = PASS_TYPE_COMBINED;
                             break;
 
                         case MapFilter::TerrainType:

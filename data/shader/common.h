@@ -2,11 +2,12 @@
 #pragma once
 #endif
 
-#define PASS_TYPE_TERRAIN       0
-#define PASS_TYPE_BIOME         1
-#define PASS_TYPE_FEATURE       2
-#define PASS_TYPE_CONTINENT    3
-#define PASS_TYPE_RESOURCE      4
+#define PASS_TYPE_COMBINED      0
+#define PASS_TYPE_TERRAIN       1
+#define PASS_TYPE_BIOME         2
+#define PASS_TYPE_FEATURE       3
+#define PASS_TYPE_CONTINENT     4
+#define PASS_TYPE_RESOURCE      5
 
 #define PASS_TYPE_MASK          0xF
 
@@ -26,6 +27,8 @@ uniform float2 mapSize;
 uniform float2 screenSize;
 uniform float3 hoveredCell;
 uniform float2 selectedCell;
+uniform float2 west;
+uniform float2 east;
 uniform float4 color;
 uniform sampler2D texture;
 #define inline

@@ -64,17 +64,21 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
     if (Begin(ICON_FA_DISPLAY" Display###Display", &m_visible) && g_map)
     {
-        if (TreeNodeEx("Map", ImGuiTreeNodeFlags_DefaultOpen))
+        if (ImGui::CollapsingHeader("Show", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            needRefresh |= Checkbox("Show Resources", &g_map->m_showResources);
-            needRefresh |= Checkbox("Show TSL", &g_map->m_showTSL);
-            needRefresh |= Checkbox("Show Grid", &g_map->m_showBorders);
+            needRefresh |= Checkbox("Grid", &g_map->m_showBorders);
+            needRefresh |= Checkbox("Hemispheres", &g_map->m_showHemispheres);
+            needRefresh |= Checkbox("Resources", &g_map->m_showResources);
+            needRefresh |= Checkbox("TSL", &g_map->m_showTSL);            
+        }
 
-            //needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
+        //needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");
 
-            ImGui::Separator();
+        if (ImGui::CollapsingHeader("Colors", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        {
+            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "Combined\0Terrain\0Biome\0Feature\0Continents\0Resource\0\0");
 
-            needRefresh |= Combo("Layer", (int *)&g_map->m_mapFilter, "TerrainType\0Biome\0Feature\0Continents\0Resource\0\0");
+            ImGui::Spacing();
 
             switch (g_map->m_mapFilter)
             {
@@ -82,8 +86,14 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                     LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
                     break;
 
+                //case MapFilter::Combined:
+                //{
+                //
+                //}
+                //break;
+
                 case MapFilter::TerrainType:
-                {       
+                {
                     for (uint i = 0; i < enumCount<TerrainType>(); ++i)
                         DrawColor(g_map, (TerrainType)i);
                 }
@@ -117,11 +127,9 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 }
                 break;
             }
+        }
             
-            g_map->m_bitmaps[(int)MapBitmap::TerrainData].visible = true; // g_map->territoryBackground != TerritoryBackground::None;
-
-            TreePop();
-        }        
+        g_map->m_bitmaps[(int)MapBitmap::TerrainData].visible = true; // g_map->territoryBackground != TerritoryBackground::None;   
     }
     ImGui::End();
 

@@ -22,7 +22,7 @@ bool DebugWindow::Draw(const RenderWindow & window)
 
     if (Begin(ICON_FA_BUG_SLASH" Debug###Debug", &m_visible))
     {
-        if (ImGui::Button("Refresh"))
+        if (ImGui::Button("Refresh") ||sf::Keyboard::isKeyPressed(Keyboard::F7))
         {
             ShaderManager::deinit();
             ShaderManager::init();

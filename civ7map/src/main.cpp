@@ -536,7 +536,7 @@ int main()
                                         }
                                     }
 
-                                    #if _DEBUG
+                                    #if _DEBUG0
                                     {
                                         //if (anyTSL)
                                         //    ImGui::Separator();
@@ -545,7 +545,7 @@ int main()
                                         //ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
                                         //ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
                                         float d = cellDist(int2(g_selectedCell.x, g_selectedCell.y), int2(cell.x, cell.y));
-                                        ImGui::Text("HexDist %.1f",d);
+                                        ImGui::Text("Distance %.1f",d);
 
                                     }
                                     #endif

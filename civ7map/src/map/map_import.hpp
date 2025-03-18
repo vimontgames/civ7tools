@@ -172,6 +172,57 @@ bool Map::importPrettyName(const string & data)
 }
 
 //--------------------------------------------------------------------------------------
+int importWestEastValue(const string & data, const string & token)
+{
+    auto westStart = data.find(token);
+    if (-1 != westStart)
+    {
+        auto eol = data.find_first_of("\n", westStart + 1);
+        string value = data.substr(westStart + token.length(), eol - westStart - token.length());
+        return atoi(value.c_str());
+    }
+    return -1;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::importHemispheres(const string & data)
+{
+    m_westStart = importWestEastValue(data, "westStart:");
+    m_westEnd = importWestEastValue(data, "westEnd:");
+
+    m_eastStart = importWestEastValue(data, "eastStart:");
+    m_eastEnd = importWestEastValue(data, "eastEnd:");
+
+    LOG_INFO("West: %i..%i", m_westStart, m_westEnd);
+    LOG_INFO("East: %i..%i", m_eastStart, m_eastEnd);
+
+    return m_westStart != -1 && m_westEnd != -1 && m_eastStart != -1 && m_eastEnd != -1;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::fixHemispheres()
+{
+    m_westStart = clamp(m_westStart, 0, m_width - 1);
+    m_westEnd = clamp(m_westEnd, m_westStart+1, m_width - 1);
+    m_eastStart = clamp(m_eastStart, m_westEnd+1, m_width - 1);
+    m_eastEnd = clamp(m_eastEnd, m_eastStart+1, m_width - 1);
+
+    if (m_westStart != -1 && m_westEnd != -1 && m_eastStart != -1 && m_eastEnd != -1)
+        return false;
+
+    LOG_WARNING("Invalid hemispheres (West: %i..%i, East:%i..%i) have been fixed", m_westStart, m_westEnd, m_eastStart, m_eastEnd);
+
+    int buffer = 1;
+    m_westStart = buffer;
+    m_westEnd = m_width / 2 - buffer;
+
+    m_eastStart = m_width / 2 + buffer;
+    m_eastEnd = m_width - buffer;
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::importYnAMP(const string & data)
 {
     const string label = "MapToConvert";
@@ -1185,9 +1236,12 @@ bool Map::importFiles(const string & _cwd)
             // Get pretty name (for some it's different than the file name)
             importPrettyName(data);
 
+            importHemispheres(data);
+
             if (!importYnAMP(data))
                 return false;
 
+            fixHemispheres();
             importTSL();
 
             return true;

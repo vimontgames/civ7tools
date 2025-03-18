@@ -22,21 +22,42 @@ bool HelpWindow::Draw(const RenderWindow & window)
 
     if (Begin(ICON_FA_CIRCLE_QUESTION" Help###Help", &m_visible))
     {
-        ImGui::Columns(2, "mycolumns2", false);
+        if (ImGui::CollapsingHeader("Mouse", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            SetColumnWidth(0, 96.0f);
+            ImGui::Columns(2, "MouseColumns", false);
+            {
+                SetColumnWidth(0, 96.0f);
 
-            ImGui::Text("Select");
-            ImGui::Text("Paint");
-            ImGui::Text("Pan");
-            ImGui::Text("Zoom");
+                ImGui::Text("Select");
+                ImGui::Text("Paint");
+                ImGui::Text("Pan");
+                ImGui::Text("Zoom");
+            }
+            ImGui::NextColumn();
+            {
+                ImGui::Text("Space");
+                ImGui::Text("Left mouse button");
+                ImGui::Text("Right mouse button");
+                ImGui::Text("Mouse wheel");
+            }
         }
-        ImGui::NextColumn();
+
+        ImGui::Columns(1);
+
+        if (ImGui::CollapsingHeader("Keyboard", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            ImGui::Text("Space");
-            ImGui::Text("Left mouse button");
-            ImGui::Text("Right mouse button");
-            ImGui::Text("Mouse wheel");
+            ImGui::Columns(2, "KeyboardColumns", false);
+            {
+                SetColumnWidth(0, 96.0f);
+
+                ImGui::Text("Shaders");
+                ImGui::Text("Refresh");
+            }
+            ImGui::NextColumn();
+            {
+                ImGui::Text("F6");
+                ImGui::Text("F7");
+            }
         }
     }
     ImGui::End();

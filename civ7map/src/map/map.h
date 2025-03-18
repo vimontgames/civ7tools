@@ -55,7 +55,8 @@ enum class MapBitmap
 //--------------------------------------------------------------------------------------
 enum class MapFilter
 {
-    TerrainType = 0,
+    Combined = 0,
+    TerrainType,
     Biome,
     Feature,
     Continent,
@@ -239,6 +240,7 @@ public:
     static Era getEra(Civilization _civ);
 
     static const string s_noContinentName;
+    bool fixHemispheres();
 
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
@@ -246,6 +248,7 @@ private:
     
     bool importYnAMP(const string & data);
     bool importPrettyName(const string & data);
+    bool importHemispheres(const string & data);
     bool importTSL();
 
     void exportModInfo();
@@ -276,6 +279,10 @@ public:
     string              m_author = "Civ7MapUser";
     u32                 m_width = 0;
     u32                 m_height = 0;
+    u32                 m_westStart = -1;
+    u32                 m_westEnd = -1;
+    u32                 m_eastStart = -1;
+    u32                 m_eastEnd = -1;
     MapSize             m_mapSize = (MapSize)-1;
     Array2D<Civ7Tile>   m_civ7TerrainType;
     Bitmap              m_bitmaps[enumCount<MapBitmap>()];
@@ -291,6 +298,7 @@ public:
     bool                m_showBorders = true;
     bool                m_showResources = true;
     bool                m_showTSL = true;
+    bool                m_showHemispheres = true;
     sf::RenderTexture   m_renderTexture;
     bool                m_isHovered = false;
     bool                m_isDocked = false;

@@ -48,7 +48,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 (int)g_map->m_height
             };
 
-            if (ImGui::InputInt2("Width", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
+            if (ImGui::InputInt2("Size", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
             {
 
             }
@@ -79,6 +79,33 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
             //TreePop();
         }     
+
+        if (ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        {
+            int editWest[2] =
+            {
+                (int)g_map->m_westStart,
+                (int)g_map->m_westEnd
+            };
+            if (ImGui::InputInt2("West", editWest, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                g_map->m_westStart = editWest[0];
+                g_map->m_westEnd = editWest[1];
+                g_map->fixHemispheres();
+            }
+
+            int editEast[2] =
+            {
+                (int)g_map->m_eastStart,
+                (int)g_map->m_eastEnd
+            };
+            if (ImGui::InputInt2("East", editEast, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                g_map->m_eastStart = editEast[0];
+                g_map->m_eastEnd = editEast[1];
+                g_map->fixHemispheres();
+            }
+        }        
     }
 
     ImGui::End();
