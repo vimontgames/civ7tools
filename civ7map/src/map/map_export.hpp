@@ -527,10 +527,10 @@ void Map::exportMap()
     data += "function generateMap() {\n";
     data += fmt::sprintf("    const mapName = '%s';\n", getPrettyName());
     data += "    let genParameters = {\n";
-    data += "        westStart: 1,\n";
-    data += "        westEnd: 31,\n";
-    data += "        eastStart: 32,\n";
-    data += "        eastEnd: 102\n";
+    data += fmt::sprintf("        westStart: %i,\n", m_westStart);
+    data += fmt::sprintf("        westEnd: %i,\n", m_westEnd);
+    data += fmt::sprintf("        eastStart: %i,\n", m_eastStart);
+    data += fmt::sprintf("        eastEnd: %i\n", m_eastEnd);
     data += "    };\n";
     data += "    let importedMap = GetMap();\n";
     data += "    generateYnAMP(mapName, importedMap, genParameters);\n";
