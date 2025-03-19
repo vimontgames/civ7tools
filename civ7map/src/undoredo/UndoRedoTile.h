@@ -50,6 +50,8 @@ void UndoRedoTile::add(int _x, int _y, const Civ7Tile & _before, const Civ7Tile 
         entry.m_after = _after;
 
         m_entries.push_back(entry);
+
+        //LOG_INFO("Backup tile (%i,%i)", _x, _y);
     }
 }
 
@@ -62,11 +64,12 @@ void UndoRedoTile::Undo()
     {
         if (map == m_map)
         {
-            for (auto & entry : m_entries)
+            for (int i = m_entries.size()-1; i >= 0; --i)
             {
+                auto & entry = m_entries[i];
                 auto & tile = map->m_civ7TerrainType.get(entry.m_x, entry.m_y);
+                //LOG_INFO("Restore tile (%i,%i)", entry.m_x, entry.m_y);
                 tile = entry.m_before;
-                int i = 42;
             }
 
             map->refresh();

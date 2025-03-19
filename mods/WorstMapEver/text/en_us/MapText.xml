@@ -1,10 +1,10 @@
     <?xml version="1.0" encoding="utf-8"?>   
 <Database>                                      
 	<EnglishText>                                
-		<Replace Tag="LOC_MAPNAME_NAME">       
+		<Replace Tag="LOC_WORSTMAPEVER_NAME">       
 			<Text>WorstMapEver[n](Civ7Map)</Text>
 		</Replace>                               
-		<Replace Tag="LOC_MAPNAME_DESCRIPTION">
+		<Replace Tag="LOC_WORSTMAPEVER_DESCRIPTION">
 			<Text>TODO: Map description</Text>         
 		</Replace>                               
 	</EnglishText>                               

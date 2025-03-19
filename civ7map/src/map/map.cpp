@@ -115,7 +115,7 @@ void Map::loadIcons()
 {
     for (auto val : enumValues<ResourceType>())
     {
-        if (ResourceType::Random != val.first)
+        if (ResourceType::Random != val.first && ResourceType::None != val.first)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
