@@ -49,6 +49,7 @@ enum class MapFormat
 enum class MapBitmap
 {
     TerrainData = 0,       // TerrainType | Biome | Feature | Continent then Resource | ? | ? | ?
+    Features,
     Resources
 };
 
@@ -77,6 +78,7 @@ struct SpriteInfo
 {
     sf::Sprite sprite;
     int x, y;
+    float scale = 1.0f;
 };
 
 //--------------------------------------------------------------------------------------
@@ -199,16 +201,20 @@ public:
     // map_actions.hpp
 
     // map_refresh.hpp
-    void refresh();
+    void refresh(bool _reload = false);
 
     // map_render.hpp
     void render(sf::RenderWindow & _window);
 
     // misc
     void createBitmaps();
-    void initResources();
-    static void loadIcons();
-    static void loadFlags();
+    static void loadIcons(bool _reload);
+    static void loadFlags(bool _reload);
+
+    void initTerrainInfos(bool _reload);
+    void initBiomeInfos(bool _reload);
+    void initResourceInfos(bool _reload);
+    void initFeatureInfos(bool _reload);
 
     string getShortName() const;
 
@@ -242,6 +248,21 @@ public:
     static const string s_noContinentName;
     bool fixHemispheres();
 
+    TerrainInfo & getTerrainInfo(TerrainType _terrain) { return m_terrainInfos[(int)_terrain]; }
+    const TerrainInfo & getTerrainInfo(TerrainType _terrain) const { return m_terrainInfos[(int)_terrain]; }
+
+    BiomeInfo & getBiomeInfo(BiomeType _biome) { return m_biomeInfos[(int)_biome]; }
+    const BiomeInfo & getBiomeInfo(BiomeType _biome) const { return m_biomeInfos[(int)_biome]; }
+
+    ResourceInfo & getResourceInfo(ResourceType _resource) { return m_resourceInfos[(int)_resource + 1]; }
+    const ResourceInfo & getResourceInfo(ResourceType _resource )const { return m_resourceInfos[(int)_resource + 1]; }
+
+    FeatureInfo & getFeatureInfo(FeatureType _feature) { return m_featureInfos[(int)_feature + 1]; }
+    const FeatureInfo & getFeatureInfo(FeatureType _feature) const { return m_featureInfos[(int)_feature + 1]; }
+
+    void clearResources();
+    void clearFeatures();
+
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
@@ -267,6 +288,7 @@ private:
 public:
     // shared
     static SharedIcon   s_resourceIcons[enumCount<ResourceType>()];
+    static SharedIcon   s_featureIcons[enumCount<FeatureType>()];
     static SharedIcon   s_defaultFlag;
 
     // file(s)
@@ -286,7 +308,7 @@ public:
     MapSize             m_mapSize = (MapSize)-1;
     Array2D<Civ7Tile>   m_civ7TerrainType;
     Bitmap              m_bitmaps[enumCount<MapBitmap>()];
-    ResourceInfo        m_resources[enumCount<ResourceType>()];
+
     vector<string>      m_continents;
     vector<Civilization> m_civilizations; 
 
@@ -297,6 +319,7 @@ public:
     GridType            m_gridType = GridType::Hexagon;
     bool                m_showBorders = true;
     bool                m_showResources = true;
+    bool                m_showFeatures = true;
     bool                m_showTSL = true;
     bool                m_showHemispheres = true;
     sf::RenderTexture   m_renderTexture;
@@ -310,4 +333,11 @@ public:
     float               m_mouseWheelDelta = 0;
     ShaderID            m_copyRGBshader = invalidShaderID;
     sf::Vector2i        m_mapOffset[2] = { sf::Vector2i(0,0), sf::Vector2i(0,0) };
+
+private:
+    TerrainInfo         m_terrainInfos[enumCount<TerrainType>()];
+    BiomeInfo           m_biomeInfos[enumCount<BiomeType>()];
+    ResourceInfo        m_resourceInfos[enumCount<ResourceType>()];
+    FeatureInfo         m_featureInfos[enumCount<FeatureType>()];
+    bool                m_firstRefresh = true;
 };

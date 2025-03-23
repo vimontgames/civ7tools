@@ -20,10 +20,10 @@ bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder)
     float2 bottom = getTileUV(uv + float2(0, -invScreenSize.y), texSize, passFlags);
     float2 up     = getTileUV(uv + float2(0, +invScreenSize.y), texSize, passFlags);
     
-    if (left.x * texSize.x < west.x && right.x * texSize.x > west.x || left.x * texSize.x < west.y && right.x * texSize.x > west.y)
+    if (left.x * texSize.x < west.x && right.x * texSize.x > west.x || left.x * texSize.x < (west.y + 1) && right.x * texSize.x > (west.y + 1))
         isWestBorder = true;
     
-    if (left.x * texSize.x < east.x && right.x * texSize.x > east.x || left.x * texSize.x < east.y && right.x * texSize.x > east.y)
+    if (left.x * texSize.x < east.x && right.x * texSize.x > east.x || left.x * texSize.x < (east.y + 1) && right.x * texSize.x > (east.y + 1))
         isEastBorder = true;
         
     if (floor(left.x * texSize.x)   != floor(center.x * texSize.x) || floor(left.y * texSize.y)   != floor(center.y * texSize.y)
@@ -233,13 +233,17 @@ void main()
             color.rgb = lerp(color.rgb, borderColor.rgb, borderColor.a);
         }
         
-        if (isWestBorder)
+        if (isWestBorder && isEastBorder)
         {
-            color.rgb = lerp(color.rgb, float3(0, 1, 1), 0.5);
+            color.rgb = lerp(color.rgb, float3(1, 0.5, 1), 0.75);
+        }
+        else if (isWestBorder)
+        {
+            color.rgb = lerp(color.rgb, float3(0, 1, 1), 0.75);
         }
         else if (isEastBorder)
         {
-            color.rgb = lerp(color.rgb, float3(1, 0, 0), 0.5);
+            color.rgb = lerp(color.rgb, float3(1, 0, 0), 0.75);
         }
     }
             

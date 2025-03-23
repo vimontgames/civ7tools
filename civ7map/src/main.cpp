@@ -157,8 +157,8 @@ int main()
     g_windows.push_back(new PaintWindow());
 
     // static init
-    Map::loadIcons();
-    Map::loadFlags();
+    Map::loadIcons(true);
+    Map::loadFlags(true);
 
     Clock deltaClock;
     while (mainWindow.isOpen()) 
@@ -807,7 +807,7 @@ int main()
         }
 
         if (needRefresh)
-            g_map->refresh();
+            g_map->refresh(true);
 
         // update "camera"
         const float panSpeed = 1.0f;

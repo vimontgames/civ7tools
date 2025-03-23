@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{1BAF69DA-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Civ7-YnAMP", "Civ7-YnAMP", "{0BB17153-729C-48C5-808A-3781915FA9C4}"
 	ProjectSection(SolutionItems) = preProject
+		mods\Civ7-YnAMP\modules\config\config.xml = mods\Civ7-YnAMP\modules\config\config.xml
 		mods\Civ7-YnAMP\modules\version.sql = mods\Civ7-YnAMP\modules\version.sql
 		mods\Civ7-YnAMP\modules\ynamp.modinfo = mods\Civ7-YnAMP\modules\ynamp.modinfo
 	EndProjectSection

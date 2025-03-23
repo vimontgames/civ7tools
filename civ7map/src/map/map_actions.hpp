@@ -159,3 +159,49 @@ void Map::EndPaint()
         undoRedoPaintTile = nullptr;
     }
 }
+
+//--------------------------------------------------------------------------------------
+void Map::clearFeatures()
+{
+    BeginPaint();
+    {
+        for (uint y = 0; y < m_height; ++y)
+        {
+            for (uint x = 0; x < m_width; ++x)
+            {
+                Civ7Tile tile = m_civ7TerrainType.get(x, y);
+                if (tile.feature != FeatureType::Random)
+                {
+                    tile.feature = FeatureType::Random;
+                    undoRedoPaintTile->add(x, y, m_civ7TerrainType.get(x, y), tile);
+                    m_civ7TerrainType.get(x, y) = tile;
+                }
+            }
+        }
+    }
+    EndPaint();
+    refresh();
+}
+
+//--------------------------------------------------------------------------------------
+void Map::clearResources()
+{
+    BeginPaint();
+    {
+        for (uint y = 0; y < m_height; ++y)
+        {
+            for (uint x = 0; x < m_width; ++x)
+            {
+                Civ7Tile tile = m_civ7TerrainType.get(x, y);
+                if (tile.resource != ResourceType::Random)
+                {
+                    tile.resource = ResourceType::Random;
+                    undoRedoPaintTile->add(x, y, m_civ7TerrainType.get(x, y), tile);
+                    m_civ7TerrainType.get(x, y) = tile;
+                }
+            }
+        }
+    }
+    EndPaint();
+    refresh();
+}

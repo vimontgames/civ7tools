@@ -12,14 +12,26 @@ enum class TerrainType : i8
 };
 
 //--------------------------------------------------------------------------------------
+struct TerrainInfo
+{
+    u32 count = 0;
+};
+
+//--------------------------------------------------------------------------------------
 enum class BiomeType : i8
 {
-    Tundra,
+    Tundra =0,
     Grassland,
     Plains,
     Tropical,
     Desert,
     Marine
+};
+
+//--------------------------------------------------------------------------------------
+struct BiomeInfo
+{
+    u32 count = 0;
 };
 
 //--------------------------------------------------------------------------------------
@@ -62,6 +74,14 @@ enum class FeatureType : i8
     TundraFloodplainMinor           = 22,
     TundraFloodplainNavigable       = 23,
     Volcano                         = 24,
+};
+
+//--------------------------------------------------------------------------------------
+struct FeatureInfo
+{
+    u32 count = 0;
+    u8 compatibleBiomes = -1;
+    u8 compatibleTerrains = -1;
 };
 
 //--------------------------------------------------------------------------------------
@@ -114,6 +134,14 @@ enum class ResourceType
 };
 
 //--------------------------------------------------------------------------------------
+struct ResourceInfo
+{
+    u32 count = 0;
+    u8 compatibleBiomes = -1;
+    u8 compatibleTerrains = -1;
+};
+
+//--------------------------------------------------------------------------------------
 enum class ContinentType : i8
 {
     None = -1
@@ -141,11 +169,4 @@ struct Civ7Tile
     {
         return !operator==(_other);
     }
-};
-
-//--------------------------------------------------------------------------------------
-struct ResourceInfo
-{
-    bool visible = true;
-    u32 count = 0;
 };

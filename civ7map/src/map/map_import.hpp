@@ -1189,6 +1189,9 @@ bool Map::importTSL()
                                     civIndex = i;
                                 }
                             }
+
+                            if (civIndex == -1)
+                                LOG_ERROR("Cannot import TSL for invalid Civilization \"%s\"", attribute.value.c_str());
                         }
                         else if (attribute.label == "X")
                         {

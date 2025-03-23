@@ -1,15 +1,79 @@
+
 //--------------------------------------------------------------------------------------
-void Map::refresh()
+void Map::initTerrainInfos(bool _reload)
+{
+    for (auto val : enumValues<TerrainType>())
+    {
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            TerrainInfo & info = m_terrainInfos[index];
+            info.count = 0;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::initBiomeInfos(bool _reload)
+{
+    for (auto val : enumValues<BiomeType>())
+    {
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            BiomeInfo & info = m_biomeInfos[index];
+            info.count = 0;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::initResourceInfos(bool _reload)
+{
+    for (auto val : enumValues<ResourceType>())
+    {
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            ResourceInfo & info = m_resourceInfos[index];
+            info.count = 0;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::initFeatureInfos(bool _reload)
+{
+    for (auto val : enumValues<FeatureType>())
+    {
+        int index = (int)val.first;
+        if (index > 0)
+        {
+            FeatureInfo & info = m_featureInfos[index];
+            info.count = 0;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::refresh(bool _reload)
 {
     if (!m_isLoaded)
         return;
 
+    initTerrainInfos(m_firstRefresh);
+    initBiomeInfos(m_firstRefresh);
+    initResourceInfos(m_firstRefresh);
+    initFeatureInfos(m_firstRefresh);
+
+    if (m_firstRefresh)
+        m_firstRefresh = true;
+
     // Refresh textures
-    loadIcons();
-    loadFlags();
+    loadIcons(_reload);
+    loadFlags(_reload);
 
     createBitmaps();
-    initResources();
 
     Bitmap & terrain = m_bitmaps[(int)MapBitmap::TerrainData];
 
@@ -21,6 +85,7 @@ void Map::refresh()
     scale.y *= ar;
 
     auto & resources = m_bitmaps[(int)MapBitmap::Resources];
+    auto & features = m_bitmaps[(int)MapBitmap::Features];
 
     for (u32 h = 0; h < m_height; ++h)
     {
@@ -35,11 +100,32 @@ void Map::refresh()
             // Red is terrain type
             color0.r = (u8)tile.terrain;
 
+            getTerrainInfo(tile.terrain).count++;
+
             // Green is biome
             color0.g = (u8)tile.biome;
+            getBiomeInfo(tile.biome).count++;
 
             // Blue is feature
             color0.b = (u8)tile.feature;
+            getFeatureInfo(tile.feature).count++;
+
+            if (m_showFeatures)
+            {
+                if (FeatureType::Random != tile.feature && FeatureType::None != tile.feature)
+                {
+                    uint featIndex = (int)tile.feature;
+                    auto & icons = s_featureIcons[featIndex];
+
+                    if (icons.texture.getSize().x > 0)
+                    {
+                        SpriteInfo & spriteInfo = features.sprites.emplace_back();
+                        spriteInfo.sprite.setTexture(icons.texture);
+                        spriteInfo.x = w;
+                        spriteInfo.y = h;
+                    }
+                }
+            }
 
             // Alpha is continent
             color0.a = (u8)tile.continent;
@@ -53,12 +139,13 @@ void Map::refresh()
             
             terrain.image.setPixel(w, h + m_height, color1);
 
+            getResourceInfo(tile.resource).count++;
+
             if (m_showResources)
             {
                 if (ResourceType::Random != tile.resource && ResourceType::None != tile.resource)
                 {
-                    uint resIndex = (int)/*ResourceType::Gold*/ tile.resource;
-                    auto & info = m_resources[resIndex];
+                    uint resIndex = (int)tile.resource;
                     auto & icons = s_resourceIcons[resIndex];
 
                     if (icons.texture.getSize().x > 0)
@@ -67,6 +154,7 @@ void Map::refresh()
                         spriteInfo.sprite.setTexture(icons.texture);
                         spriteInfo.x = w;
                         spriteInfo.y = h;
+                        spriteInfo.scale = 0.75f;
                     }
                 }
             }
@@ -129,6 +217,11 @@ void Map::refresh()
                 break;
                 
             case MapBitmap::Resources:
+                bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
+                bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
+                break;
+
+            case MapBitmap::Features:
                 bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
                 bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
                 break;

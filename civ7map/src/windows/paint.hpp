@@ -72,9 +72,15 @@ bool PaintWindow::Draw(const RenderWindow & window)
         if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Enable###PaintTerrain", &m_paintTerrainType);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Enable painting terrain type");
 
             PushDisabled(!m_paintTerrainType);
             {
+                ImGui::Checkbox("Automatic Coasts###AutoCoast", &m_autoCoast);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Add coasts around continents when painting ocean or continents");
+
                 DrawColoredSquare(getTerrainColor(m_terrainType));
 
                 if (ImGui::BeginCombo("Terrain###SelectPaintTerrainCombo", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str()))
@@ -89,8 +95,6 @@ bool PaintWindow::Draw(const RenderWindow & window)
                 }
             }
 
-            ImGui::Checkbox("Automatic Coasts###AutoCoast", &m_autoCoast);
-
             PopDisabled();
         }
         ImGui::Spacing();
@@ -99,6 +103,8 @@ bool PaintWindow::Draw(const RenderWindow & window)
         if (ImGui::CollapsingHeader("Biome", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Enable###PaintBiome", &m_paintBiomeType);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Enable painting biome type");
 
             PushDisabled(!m_paintBiomeType);
             {
@@ -122,9 +128,28 @@ bool PaintWindow::Draw(const RenderWindow & window)
         if (ImGui::CollapsingHeader("Feature", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Enable###PaintFeature", &m_paintFeature);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Enable painting feature type");
+
+            PushDisabled(!map);
+            {
+                float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
+                ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
+                if (ImGui::Button("Clear###ClearFeatures"))
+                    map->clearFeatures();
+            }
+            PopDisabled();
 
             PushDisabled(!m_paintFeature);
             {
+                //ImGui::Checkbox("Force compatible Terrain###FeatureAutoTerrain", &m_featureAutoTerrain);
+                //if (ImGui::IsItemHovered())
+                //    ImGui::SetTooltip("Force compatible terrain when placing feature");
+                //
+                //ImGui::Checkbox("Force compatible Biome###FeatureAutoBiome", &m_featureAutoBiome);
+                //if (ImGui::IsItemHovered())
+                //    ImGui::SetTooltip("Force compatible biome when placing feature");
+
                 DrawColoredSquare(getFeatureColor(m_featureType));
 
                 if (ImGui::BeginCombo("Feature###SelectPaintFeatureCombo", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str()))
@@ -138,6 +163,7 @@ bool PaintWindow::Draw(const RenderWindow & window)
                     ImGui::EndCombo();
                 }
             }
+
             PopDisabled();
         }
 
@@ -145,6 +171,15 @@ bool PaintWindow::Draw(const RenderWindow & window)
         if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Enable###PaintResource", &m_paintResource);
+
+            PushDisabled(!map);
+            {
+                float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
+                ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
+                if (ImGui::Button("Clear###ClearResources"))
+                    map->clearResources();
+            }
+            PopDisabled();
 
             PushDisabled(!m_paintResource);
             {

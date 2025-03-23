@@ -64,7 +64,7 @@ void UndoRedoTile::Undo()
     {
         if (map == m_map)
         {
-            for (int i = m_entries.size()-1; i >= 0; --i)
+            for (int i = (int)m_entries.size()-1; i >= 0; --i)
             {
                 auto & entry = m_entries[i];
                 auto & tile = map->m_civ7TerrainType.get(entry.m_x, entry.m_y);

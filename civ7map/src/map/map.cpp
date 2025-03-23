@@ -27,6 +27,7 @@ using namespace tinyxml2;
 #include "map_render.hpp"
 
 SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];
+SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
 SharedIcon Map::s_defaultFlag;
 const string Map::s_noContinentName = "No continent";
 
@@ -45,7 +46,7 @@ Map::Map()
     // init with default civ list (TODO: parse mod files for custom civs?)
 
     // Antiquity Age Civilizations
-    m_civilizations.push_back(Civilization("Aksuma", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));        // Amanitore's color (GREEN_DK)
+    m_civilizations.push_back(Civilization("Aksum", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));         // Amanitore's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Egypt", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));      // Hatshepsut's color (YELLOW_LT)
     m_civilizations.push_back(Civilization("Greece", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));     // Pericles's color (YELLOW_LT)
     m_civilizations.push_back(Civilization("Han", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));           // Ibn Battuta's color (GREEN_DK)
@@ -55,7 +56,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Mississippian", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f))); // Pocatello's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Persia", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     // Xerxes's color (WHITE_LT)
     m_civilizations.push_back(Civilization("Rome", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));          // Augustus's color (PURPLE_DK)
-    m_civilizations.push_back(Civilization("Carthage", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f))); // Assumed color (ORANGE_MD)
+    m_civilizations.push_back(Civilization("Carthage", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));    // Assumed color (ORANGE_MD)
 
     // Exploration Age Civilizations
     m_civilizations.push_back(Civilization("Abbasid", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Harun al-Rashid's color (GREEN_DK)
@@ -68,8 +69,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Norman", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));      // William the Conqueror's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Songhai", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Askia Muhammad I's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Spain", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));     // Isabella's color (ORANGE_MD)
-    m_civilizations.push_back(Civilization("Buganda", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f))); // Assumed color (ORANGE_MD)
-    m_civilizations.push_back(Civilization("Shawnee", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f))); // Tecumseh's color (ORANGE_DK)
+    m_civilizations.push_back(Civilization("Shawnee", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));     // Tecumseh's color (ORANGE_DK)
 
     // Modern Age Civilizations
     m_civilizations.push_back(Civilization("America", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Benjamin Franklin's color (RED_DK)
@@ -80,9 +80,22 @@ Map::Map()
     m_civilizations.push_back(Civilization("Qing", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));             // Kangxi Emperor's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Russia", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));         // Catherine's color (YELLOW_MD)
     m_civilizations.push_back(Civilization("Siam", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));             // Ramkhamhaeng's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("America", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Benjamin Franklin's color (RED_DK)
     m_civilizations.push_back(Civilization("Great Britain", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f))); // Assumed color (WHITE_LT)
     m_civilizations.push_back(Civilization("Meiji", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Assumed color (YELLOW_MD)
+    m_civilizations.push_back(Civilization("Buganda", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));        // Assumed color (ORANGE_MD)
+
+    // Extra civilizations
+
+    // Antiquity
+    m_civilizations.push_back(Civilization("Germania", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Saxon", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     
+    m_civilizations.push_back(Civilization("Sanseb Tagalog", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
+
+    // Exploration
+    m_civilizations.push_back(Civilization("England", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+
+    // Philippines
+    m_civilizations.push_back(Civilization("Sanseb Philippines", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));          
 }
 
 //--------------------------------------------------------------------------------------
@@ -97,21 +110,7 @@ void Map::createBitmaps()
 }
 
 //--------------------------------------------------------------------------------------
-void Map::initResources()
-{
-    for (auto val : enumValues<ResourceType>())
-    {
-        int index = (int)val.first;
-        if (index > 0)
-        {
-            ResourceInfo & info = m_resources[index];
-            info.count = 0;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------
-void Map::loadIcons()
+void Map::loadIcons(bool _reload)
 {
     for (auto val : enumValues<ResourceType>())
     {
@@ -119,7 +118,7 @@ void Map::loadIcons()
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
-            if (resIcon.dirty)
+            if (resIcon.dirty || _reload)
             {
                 bool dirty = false;
 
@@ -127,33 +126,64 @@ void Map::loadIcons()
                 if (!FileExists(path))
                 {
                     if (ResourceType::None != val.first)
-                        LOG_WARNING("Texture \"%s\" not found", GetFilename(path).c_str());
+                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
                     path = fmt::sprintf("data/img/resources/%s.png", "Default");
                     dirty = true;
                 }
 
-                if (resIcon.texture.loadFromFile(path))
+                if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
                     LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
-                else
-                    LOG_ERROR("Texture \"%s\" could not be loaded", GetFilename(path).c_str());
+                else if (!dirty)
+                    LOG_ERROR("Resource texture \"%s\" could not be loaded", (path).c_str());
+            }
+        }
+    }
+
+    for (auto val : enumValues<FeatureType>())
+    {
+        if (FeatureType::Random != val.first && FeatureType::None != val.first)
+        {
+            int index = (int)val.first;
+            SharedIcon & resIcon = s_featureIcons[index];
+            if (resIcon.dirty || _reload)
+            {
+                bool dirty = false;
+
+                auto path = fmt::sprintf("data/img/features/%s.png", asString((FeatureType)index));
+                if (!FileExists(path))
+                {
+                    if (FeatureType::None != val.first)
+                        LOG_WARNING("Feature texture \"%s\" not found", (path).c_str());
+                    path = fmt::sprintf("data/img/features/%s.png", "Default");
+                    dirty = true;
+                }
+
+                if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
+                {
+                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    resIcon.dirty = dirty;
+                    resIcon.texture.generateMipmap();
+                }
+                else if (!dirty)
+                    LOG_ERROR("Feature texture \"%s\" could not be loaded", (path).c_str());
             }
         }
     }
 }
 
 //--------------------------------------------------------------------------------------
-void Map::loadFlags()
+void Map::loadFlags(bool _reload)
 {
     SharedIcon & defaultFlagIcon = s_defaultFlag;
-    if (defaultFlagIcon.dirty)
+    if (defaultFlagIcon.dirty || _reload)
     {
         bool dirty = false;
         string path = "data/img/tsl/white.png";
-        if (defaultFlagIcon.texture.loadFromFile(path))
+        if (_reload && defaultFlagIcon.texture.loadFromFile(path))
         {
             LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
             defaultFlagIcon.dirty = dirty;
@@ -319,6 +349,8 @@ bool Map::setFeature(int _x, int _y, FeatureType _value)
     }
     return false;
 }
+
+
 
 //--------------------------------------------------------------------------------------
 bool Map::setResource(int _x, int _y, ResourceType _value)

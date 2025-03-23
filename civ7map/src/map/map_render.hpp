@@ -39,6 +39,11 @@ void Map::render(RenderWindow & _window)
                 bitmap.drawQuad = false;
                 bitmap.drawSprites = true;
                 break;
+
+            case MapBitmap::Features:
+                bitmap.drawQuad = false;
+                bitmap.drawSprites = true;
+                break;
         }
 
         if (bitmap.visible)
@@ -63,8 +68,17 @@ void Map::render(RenderWindow & _window)
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
                     shader->setUniform("hoveredCell", Vector3f((float)g_hoveredCell.x, (float)g_hoveredCell.y, paintRadius));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
-                    shader->setUniform("west", Vector2f((float)m_westStart, (float)m_westEnd));
-                    shader->setUniform("east", Vector2f((float)m_eastStart, (float)m_eastEnd));
+
+                    if (m_showHemispheres)
+                    {
+                        shader->setUniform("west", Vector2f((float)m_westStart, (float)m_westEnd));
+                        shader->setUniform("east", Vector2f((float)m_eastStart, (float)m_eastEnd));
+                    }
+                    else
+                    {
+                        shader->setUniform("west", Vector2f(-1,-1));
+                        shader->setUniform("east", Vector2f(-1,-1));
+                    }
 
                     int passFlags = 0;
 
@@ -161,10 +175,14 @@ void Map::render(RenderWindow & _window)
                     float texScaleX = scaleX / (float)spriteInfo.sprite.getTexture()->getSize().x;
                     float texScaleY = scaleY / (float)spriteInfo.sprite.getTexture()->getSize().y;
 
-                    spriteInfo.sprite.setOrigin(0, 0);
+                    spriteInfo.sprite.setOrigin(128, 128);
 
-                    const float fGridX = (float)(spriteInfo.x) * scaleX;
-                    const float fGridY = (float)(m_height - spriteInfo.y - 1) * scaleY;
+                    float fGridX = (float)(spriteInfo.x+0.5f) * scaleX;
+                    float fGridY = (float)(m_height - spriteInfo.y - 1 + 0.5f) * scaleY;
+
+                    const float scale = spriteInfo.scale;
+                    texScaleX *= scale;
+                    texScaleY *= scale;
 
                     switch (m_gridType)
                     {

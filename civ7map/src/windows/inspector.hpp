@@ -198,21 +198,57 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                                     DrawColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
 
-                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s #%u", civ.name.c_str(), t).c_str()))
+                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.name.c_str(), civ.tsl.size()).c_str()))
                                     {
-                                        for (uint i = 0; i < map->m_civilizations.size(); ++i)
+                                        // Sort by era then alphabetical order
+                                        vector<Civilization *> sortedCivs(map->m_civilizations.size());
+                                        for (int p = 0; p < map->m_civilizations.size(); ++p)
+                                            sortedCivs[p] = &map->m_civilizations[p];
+
+                                        sort(sortedCivs.begin(), sortedCivs.end(), [](const Civilization * a, const Civilization * b) {
+                                            if (a->era == b->era)
+                                                return a->name < b->name;  // Sort by name if categories are the same
+                                            return (int)a->era < (int)b->era;  // Otherwise, sort by category
+                                            });
+
+                                        Era prevEra = (Era)-1;
+
+                                        for (uint i = 0; i < sortedCivs.size(); ++i)
                                         {
                                             bool isSelected = i == c;
-                                            auto & dstCiv = map->m_civilizations[i];
-                                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv.name, i).c_str(), isSelected))
+                                            auto * dstCiv = sortedCivs[i];
+                                            Era era = dstCiv->era;
+
+                                            if (era != prevEra)
+                                            {
+                                                int eraCivsCount = 0;
+                                                int eraCivsCountWithTSL = 0;
+
+                                                for (int cc = 0; cc < map->m_civilizations.size(); ++cc)
+                                                {
+                                                    auto & cciv = map->m_civilizations[cc];
+                                                    if (cciv.era == era)
+                                                    {
+                                                        eraCivsCount++;
+                                                        if (cciv.tsl.size() > 0)
+                                                            eraCivsCountWithTSL++;
+                                                    }
+                                                }
+
+                                                ImGui::TextDisabled(fmt::sprintf("%s (%u/%u)", asString(era), eraCivsCountWithTSL, eraCivsCount).c_str());
+                                            }
+
+                                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv->name, dstCiv->tsl.size()).c_str(), isSelected))
                                             {
                                                 civ.tsl.erase(civ.tsl.begin() + t);
                                                 TSL newTSL;
                                                 newTSL.pos.x = x;
                                                 newTSL.pos.y = y;
-                                                dstCiv.tsl.push_back(newTSL);
+                                                dstCiv->tsl.push_back(newTSL);
                                                 map->refresh();
                                             }
+
+                                            prevEra = era;
                                         }
 
                                         ImGui::EndCombo();
