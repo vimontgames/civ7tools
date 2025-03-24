@@ -77,16 +77,16 @@ string Map::getFeatureTypeAsString(FeatureType _type)
             return "FEATURE_COLD_REEF";
         case FeatureType::Ice:
             return "FEATURE_ICE";
-        case FeatureType::SavanaWoodland:
-            return "FEATURE_SAVANAWOODLAND";
+        case FeatureType::SavannaWoodland:
+            return "FEATURE_SAVANNA_WOODLAND";
         case FeatureType::WateringHole:
-            return "FEATURE_WATERINGHOLE";
+            return "FEATURE_WATERING_HOLE";
         case FeatureType::PlainsFloodplainMinor:
             return "FEATURE_PLAINS_FLOODPLAIN_MINOR";
         case FeatureType::PlainsFloodplainNavigable:
             return "FEATURE_PLAINS_FLOODPLAIN_NAVIGABLE";
         case FeatureType::RainForest:
-            return "FEATURE_RAIN_FOREST";
+            return "FEATURE_RAINFOREST";
         case FeatureType::Mangrove:
             return "FEATURE_MANGROVE";
         case FeatureType::TropicalFloodplainMinor:

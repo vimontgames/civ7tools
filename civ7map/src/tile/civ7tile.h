@@ -61,7 +61,7 @@ enum class FeatureType : i8
     Reef                            = 9,
     ColdReef                        = 10,
     Ice                             = 11,
-    SavanaWoodland                  = 12,
+    SavannaWoodland                 = 12,
     WateringHole                    = 13,
     PlainsFloodplainMinor           = 14,
     PlainsFloodplainNavigable       = 15,
