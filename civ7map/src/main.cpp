@@ -81,7 +81,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 4;
+const int g_version_minor = 42;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
@@ -492,10 +492,10 @@ int main()
                                         ImGui::Text("%i,%i", cell.x, cell.y);
                                         ImGui::Separator();
 
-                                        DrawColor(g_map, tile.continent);
-                                        ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                        ImGui::Text("(%i)", (int)tile.continent);
+                                        //DrawColor(g_map, tile.continent);
+                                        //ImGui::SameLine();
+                                        //ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        //ImGui::Text("(%i)", (int)tile.continent);
 
                                         DrawColor(g_map, tile.terrain);
                                         ImGui::SameLine();

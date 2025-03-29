@@ -29,44 +29,44 @@ bool PaintWindow::Draw(const RenderWindow & window)
         ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
 
         // Continent
-        if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-        {
-            ImGui::Checkbox("Enable###PaintContinent", &m_paintContinentType);
-
-            PushDisabled(!m_paintContinentType);
-            {
-                DrawColoredSquare(getContinentColor(m_continentType));
-
-                string continentName = map? map->getContinentShortName(m_continentType) : Map::s_noContinentName;
-            
-                if (ImGui::BeginCombo("Continent###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str()))
-                {
-                    // None
-                    {
-                        bool isSelected = ((int)m_continentType == -1);
-                        if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName((ContinentType)-1) : Map::s_noContinentName).c_str(), isSelected))
-                        {
-                            m_continentType = (ContinentType)-1;
-                        }
-                    }
-
-                    if (map)
-                    {
-                        for (uint i = 0; i < map->getContinentCount(); ++i)
-                        {
-                            bool isSelected = ((int)m_continentType == i);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
-                            {
-                                m_continentType = (ContinentType)i;
-                            }
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-            PopDisabled();
-        }
-        ImGui::Spacing();
+        //if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        //{
+        //    ImGui::Checkbox("Enable###PaintContinent", &m_paintContinentType);
+        //
+        //    PushDisabled(!m_paintContinentType);
+        //    {
+        //        DrawColoredSquare(getContinentColor(m_continentType));
+        //
+        //        string continentName = map? map->getContinentShortName(m_continentType) : Map::s_noContinentName;
+        //    
+        //        if (ImGui::BeginCombo("Continent###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str()))
+        //        {
+        //            // None
+        //            {
+        //                bool isSelected = ((int)m_continentType == -1);
+        //                if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName((ContinentType)-1) : Map::s_noContinentName).c_str(), isSelected))
+        //                {
+        //                    m_continentType = (ContinentType)-1;
+        //                }
+        //            }
+        //
+        //            if (map)
+        //            {
+        //                for (uint i = 0; i < map->getContinentCount(); ++i)
+        //                {
+        //                    bool isSelected = ((int)m_continentType == i);
+        //                    if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+        //                    {
+        //                        m_continentType = (ContinentType)i;
+        //                    }
+        //                }
+        //            }
+        //            ImGui::EndCombo();
+        //        }
+        //    }
+        //    PopDisabled();
+        //}
+        //ImGui::Spacing();
 
         // TerrainType
         if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

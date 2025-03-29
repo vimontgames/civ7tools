@@ -77,7 +77,7 @@ void DrawColor(const Map * _map, BiomeType _biome, TerrainType _terrain, bool _c
     float4 color = getBiomeTerrainColor(_biome, _terrain);
     float f3Color[] = { color.r, color.g,  color.b };
     if (_count)
-        ImGui::ColorEdit3( fmt::sprintf("%s %s (?)", asString(_biome), asString(_terrain)).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3( fmt::sprintf("%s %s (%u)", asString(_biome), asString(_terrain), _map->getBiomeTerrainInfo(_biome, _terrain).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
     else
         ImGui::ColorEdit3(fmt::sprintf("%s %s", asString(_biome), asString(_terrain)).c_str(), f3Color, ImGuiColorEditFlags_NoInputs); // TODO
 }

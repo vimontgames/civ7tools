@@ -28,6 +28,29 @@ void Map::initBiomeInfos(bool _reload)
 }
 
 //--------------------------------------------------------------------------------------
+void Map::initBiomeTerrainInfos(bool _reload)
+{
+    for (auto val : enumValues<BiomeType>())
+    {
+        int biomeIndex = (int)val.first;
+        if (biomeIndex > 0)
+        {
+            for (auto val2 : enumValues<TerrainType>())
+            {
+                int terrainIndex = (int)val2.first;
+                if (terrainIndex > 0)
+                {
+                    BiomeTerrainInfo & info = m_biomeTerrainInfos[biomeIndex][terrainIndex];
+                    info.count = 0;
+                }
+            }
+        }
+    }
+}
+
+
+
+//--------------------------------------------------------------------------------------
 void Map::initResourceInfos(bool _reload)
 {
     for (auto val : enumValues<ResourceType>())
@@ -63,6 +86,7 @@ void Map::refresh(bool _reload)
 
     initTerrainInfos(m_firstRefresh);
     initBiomeInfos(m_firstRefresh);
+    initBiomeTerrainInfos(m_firstRefresh);
     initResourceInfos(m_firstRefresh);
     initFeatureInfos(m_firstRefresh);
 
@@ -105,6 +129,9 @@ void Map::refresh(bool _reload)
             // Green is biome
             color0.g = (u8)tile.biome;
             getBiomeInfo(tile.biome).count++;
+
+            // stats
+            getBiomeTerrainInfo(tile.biome, tile.terrain).count++;
 
             // Blue is feature
             color0.b = (u8)tile.feature;

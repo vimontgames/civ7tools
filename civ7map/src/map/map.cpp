@@ -57,6 +57,8 @@ Map::Map()
     m_civilizations.push_back(Civilization("Persia", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     // Xerxes's color (WHITE_LT)
     m_civilizations.push_back(Civilization("Rome", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));          // Augustus's color (PURPLE_DK)
     m_civilizations.push_back(Civilization("Carthage", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));    // Assumed color (ORANGE_MD)
+    m_civilizations.push_back(Civilization("Assyria", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));    
+    m_civilizations.push_back(Civilization("Silla", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
     // Exploration Age Civilizations
     m_civilizations.push_back(Civilization("Abbasid", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Harun al-Rashid's color (GREEN_DK)
@@ -70,6 +72,9 @@ Map::Map()
     m_civilizations.push_back(Civilization("Songhai", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Askia Muhammad I's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Spain", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));     // Isabella's color (ORANGE_MD)
     m_civilizations.push_back(Civilization("Shawnee", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));     // Tecumseh's color (ORANGE_DK)
+    m_civilizations.push_back(Civilization("Bulgaria", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Dai Viet", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("TCS Outremer", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
     // Modern Age Civilizations
     m_civilizations.push_back(Civilization("America", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Benjamin Franklin's color (RED_DK)
@@ -83,6 +88,8 @@ Map::Map()
     m_civilizations.push_back(Civilization("Great Britain", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f))); // Assumed color (WHITE_LT)
     m_civilizations.push_back(Civilization("Meiji", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Assumed color (YELLOW_MD)
     m_civilizations.push_back(Civilization("Buganda", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));        // Assumed color (ORANGE_MD)
+    m_civilizations.push_back(Civilization("Nepal", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Qajar", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
     // Extra civilizations
 
@@ -90,6 +97,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Germania", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Saxon", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     
     m_civilizations.push_back(Civilization("Sanseb Tagalog", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Gauls", Era::Antiquity, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
 
     // Exploration
     m_civilizations.push_back(Civilization("England", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));

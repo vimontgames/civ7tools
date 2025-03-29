@@ -3,7 +3,7 @@ civ7map
 
 An unofficial map editor for Civilization VII.
 
-![Screenshot](doc/img/v0.3.png)
+![Screenshot](doc/img/v0.42.png)
 
 # How to use?
 

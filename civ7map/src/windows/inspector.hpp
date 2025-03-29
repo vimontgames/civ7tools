@@ -56,34 +56,34 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             //ImGui::PopItemFlag();
 
             // Continent
-            {
-                DrawColoredSquare(getContinentColor(tile->continent));
-
-                string continentName = map->getContinentShortName(tile->continent);
-
-                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
-                {
-                    // None
-                    {
-                        bool isSelected = ((int)tile->continent == -1);
-                        if (ImGui::Selectable(fmt::sprintf("%s (-1)", map->getContinentShortName((ContinentType)-1)).c_str(), isSelected))
-                        {
-                            if (map->setContinent(x, y, (ContinentType)-1))
-                                dirty = true;
-                        }
-                    }
-                    for (uint i = 0; i < map->getContinentCount(); ++i)
-                    {
-                        bool isSelected = ((int)tile->continent == i);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
-                        {
-                            if (map->setContinent(x, y, (ContinentType)i))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
+            //{
+            //    DrawColoredSquare(getContinentColor(tile->continent));
+            //
+            //    string continentName = map->getContinentShortName(tile->continent);
+            //
+            //    if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
+            //    {
+            //        // None
+            //        {
+            //            bool isSelected = ((int)tile->continent == -1);
+            //            if (ImGui::Selectable(fmt::sprintf("%s (-1)", map->getContinentShortName((ContinentType)-1)).c_str(), isSelected))
+            //            {
+            //                if (map->setContinent(x, y, (ContinentType)-1))
+            //                    dirty = true;
+            //            }
+            //        }
+            //        for (uint i = 0; i < map->getContinentCount(); ++i)
+            //        {
+            //            bool isSelected = ((int)tile->continent == i);
+            //            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+            //            {
+            //                if (map->setContinent(x, y, (ContinentType)i))
+            //                    dirty = true;
+            //            }
+            //        }
+            //        ImGui::EndCombo();
+            //    }
+            //}
 
             // TerrainType
             {
@@ -198,7 +198,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                                     DrawColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
 
-                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.name.c_str(), civ.tsl.size()).c_str()))
+                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.name.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLargest))
                                     {
                                         // Sort by era then alphabetical order
                                         vector<Civilization *> sortedCivs(map->m_civilizations.size());

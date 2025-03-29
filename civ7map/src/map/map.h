@@ -213,6 +213,7 @@ public:
 
     void initTerrainInfos(bool _reload);
     void initBiomeInfos(bool _reload);
+    void initBiomeTerrainInfos(bool _reload);
     void initResourceInfos(bool _reload);
     void initFeatureInfos(bool _reload);
 
@@ -253,6 +254,9 @@ public:
 
     BiomeInfo & getBiomeInfo(BiomeType _biome) { return m_biomeInfos[(int)_biome]; }
     const BiomeInfo & getBiomeInfo(BiomeType _biome) const { return m_biomeInfos[(int)_biome]; }
+
+    BiomeTerrainInfo & getBiomeTerrainInfo(BiomeType _biome, TerrainType _terrain) { return m_biomeTerrainInfos[(int)_biome][(int)_terrain]; }
+    const BiomeTerrainInfo & getBiomeTerrainInfo(BiomeType _biome, TerrainType _terrain) const { return m_biomeTerrainInfos[(int)_biome][(int)_terrain]; }
 
     ResourceInfo & getResourceInfo(ResourceType _resource) { return m_resourceInfos[(int)_resource + 1]; }
     const ResourceInfo & getResourceInfo(ResourceType _resource )const { return m_resourceInfos[(int)_resource + 1]; }
@@ -337,6 +341,7 @@ public:
 private:
     TerrainInfo         m_terrainInfos[enumCount<TerrainType>()];
     BiomeInfo           m_biomeInfos[enumCount<BiomeType>()];
+    BiomeTerrainInfo    m_biomeTerrainInfos[enumCount<BiomeType>()][enumCount<TerrainType>()];
     ResourceInfo        m_resourceInfos[enumCount<ResourceType>()];
     FeatureInfo         m_featureInfos[enumCount<FeatureType>()];
     bool                m_firstRefresh = true;
