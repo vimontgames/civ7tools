@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="config">
+      <UniqueIdentifier>{b6c28563-c8ad-4ed2-b749-ad4b08c89e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="icons">
+      <UniqueIdentifier>{11696950-d425-4499-9940-56baee4d165c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="maps">
+      <UniqueIdentifier>{36323d44-bf22-4585-a762-dbbfb18c6cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texts">
+      <UniqueIdentifier>{ac8efdfc-271c-4c7f-a508-1a95e9710604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texts\en_us">
+      <UniqueIdentifier>{e94f011c-613d-4ae5-9fac-336b23ebe941}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Colonization-map.modinfo" />
+    <None Include="data\tables.sql">
+      <Filter>data</Filter>
+    </None>
+    <None Include="maps\Colonization-data.js">
+      <Filter>maps</Filter>
+    </None>
+    <None Include="maps\Colonization-map.js">
+      <Filter>maps</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config\config.xml">
+      <Filter>config</Filter>
+    </Xml>
+    <Xml Include="data\maps.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="maps\Colonization.xml">
+      <Filter>maps</Filter>
+    </Xml>
+    <Xml Include="text\en_us\MapText.xml">
+      <Filter>Texts</Filter>
+    </Xml>
+    <Xml Include="text\en_us\ModuleText.xml">
+      <Filter>Texts</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

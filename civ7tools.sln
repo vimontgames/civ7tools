@@ -12,13 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{1BAF69DA-B88E-40CD-B36D-1432342A3D32}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Civ7-YnAMP", "Civ7-YnAMP", "{0BB17153-729C-48C5-808A-3781915FA9C4}"
-	ProjectSection(SolutionItems) = preProject
-		mods\Civ7-YnAMP\modules\config\config.xml = mods\Civ7-YnAMP\modules\config\config.xml
-		mods\Civ7-YnAMP\modules\version.sql = mods\Civ7-YnAMP\modules\version.sql
-		mods\Civ7-YnAMP\modules\ynamp.modinfo = mods\Civ7-YnAMP\modules\ynamp.modinfo
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debug", "Debug", "{23E951F9-88EF-415A-96C7-08505496BE62}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\Steam\steamapps\common\Sid Meier's Civilization VII\Base\modules\base-standard\maps\feature-biome-generator.js = ..\..\..\Steam\steamapps\common\Sid Meier's Civilization VII\Base\modules\base-standard\maps\feature-biome-generator.js
@@ -49,58 +42,73 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en_us", "en_us", "{4503D203
 		templates\mapexport-template\text\en_us\ModuleText.xml = templates\mapexport-template\text\en_us\ModuleText.xml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{A151EE1A-B9C4-4858-9404-440454A3BADF}"
-	ProjectSection(SolutionItems) = preProject
-		mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js = mods\Civ7-YnAMP\modules\maps\ynamp-map-loading.js
-		mods\Civ7-YnAMP\modules\maps\ynamp-resource-generator.js = mods\Civ7-YnAMP\modules\maps\ynamp-resource-generator.js
-		mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js = mods\Civ7-YnAMP\modules\maps\ynamp-utilities.js
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TwiceMoreBeliefs", "TwiceMoreBeliefs", "{7E4AF189-0C37-4BC6-B4F4-5B84CEE4EA13}"
-	ProjectSection(SolutionItems) = preProject
-		mods\TwiceMoreBeliefs\twicemorebeliefs.modinfo = mods\TwiceMoreBeliefs\twicemorebeliefs.modinfo
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{CDE01A10-4FED-4B6C-BBA2-01C6830778E2}"
 	ProjectSection(SolutionItems) = preProject
 		mods\Civ7-YnAMP\modules\data\tables.sql = mods\Civ7-YnAMP\modules\data\tables.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{3AC8C623-EB28-41E4-9AA0-22F9A5FE393D}"
-	ProjectSection(SolutionItems) = preProject
-		mods\TwiceMoreBeliefs\data\tmb_antiquity_beliefs.xml = mods\TwiceMoreBeliefs\data\tmb_antiquity_beliefs.xml
-		mods\TwiceMoreBeliefs\data\tmb_antiquity_icons.xml = mods\TwiceMoreBeliefs\data\tmb_antiquity_icons.xml
-		mods\TwiceMoreBeliefs\data\tmb_exploration_beliefs.xml = mods\TwiceMoreBeliefs\data\tmb_exploration_beliefs.xml
-		mods\TwiceMoreBeliefs\data\tmb_exploration_icons.xml = mods\TwiceMoreBeliefs\data\tmb_exploration_icons.xml
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Colonization", "mods\Colonization\Colonization.vcxproj", "{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwiceMoreBeliefs", "mods\TwiceMoreBeliefs\TwiceMoreBeliefs.vcxproj", "{6633F30C-D26B-469D-A8F4-D4BAD01AA505}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Civ7-YnAMP", "mods\Civ7-YnAMP\Civ7-YnAMP.vcxproj", "{5138E0FC-B88D-465E-A5EF-7D2430938F18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Debug|x64.ActiveCfg = Debug|x64
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Debug|x64.Build.0 = Debug|x64
+		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Debug|x86.ActiveCfg = Debug|x64
+		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Debug|x86.Build.0 = Debug|x64
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x64.ActiveCfg = Release|x64
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x64.Build.0 = Release|x64
+		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x86.ActiveCfg = Release|x64
+		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x86.Build.0 = Release|x64
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x64.ActiveCfg = Debug|x64
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x64.Build.0 = Debug|x64
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x86.ActiveCfg = Debug|Win32
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x86.Build.0 = Debug|Win32
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x64.ActiveCfg = Release|x64
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x64.Build.0 = Release|x64
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x86.ActiveCfg = Release|Win32
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x86.Build.0 = Release|Win32
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x64.ActiveCfg = Debug|x64
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x64.Build.0 = Debug|x64
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x86.ActiveCfg = Debug|Win32
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x86.Build.0 = Debug|Win32
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x64.ActiveCfg = Release|x64
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x64.Build.0 = Release|x64
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x86.ActiveCfg = Release|Win32
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x86.Build.0 = Release|Win32
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x64.ActiveCfg = Debug|x64
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x64.Build.0 = Debug|x64
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x86.ActiveCfg = Debug|Win32
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x86.Build.0 = Debug|Win32
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x64.ActiveCfg = Release|x64
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x64.Build.0 = Release|x64
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x86.ActiveCfg = Release|Win32
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1BAF69DA-B88E-40CD-B36D-1432342A3D32} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
-		{0BB17153-729C-48C5-808A-3781915FA9C4} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
 		{23E951F9-88EF-415A-96C7-08505496BE62} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
 		{6BB35210-3436-49D1-AAA4-215360FB1270} = {442CD92C-D428-4182-9FD2-DE7F7D56156B}
 		{EE39DD5E-207F-404E-B711-E07CF5AA6940} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{F7E954F5-9C8F-4419-AC89-A1B6DCEDC2C5} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{9CC588D8-463E-4105-A897-925874972D64} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{4503D203-5166-4D96-A49E-CD6811876A6B} = {9CC588D8-463E-4105-A897-925874972D64}
-		{A151EE1A-B9C4-4858-9404-440454A3BADF} = {0BB17153-729C-48C5-808A-3781915FA9C4}
-		{7E4AF189-0C37-4BC6-B4F4-5B84CEE4EA13} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
 		{CDE01A10-4FED-4B6C-BBA2-01C6830778E2} = {6BB35210-3436-49D1-AAA4-215360FB1270}
-		{3AC8C623-EB28-41E4-9AA0-22F9A5FE393D} = {7E4AF189-0C37-4BC6-B4F4-5B84CEE4EA13}
+		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{6633F30C-D26B-469D-A8F4-D4BAD01AA505} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{5138E0FC-B88D-465E-A5EF-7D2430938F18} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B29936D3-D786-4B14-82AD-70BEBC6F7AF9}

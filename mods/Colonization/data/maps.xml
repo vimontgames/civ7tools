@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<Replace Type="MAPSIZE_COLONIZATION" Kind="KIND_MAPSIZE"/>
+	</Types>
+	<Maps>
+		<Replace MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_NAME" Description="LOC_MAP_COLONIZATION_DESCRIPTION" DefaultPlayers="10" PlayersLandmass1="5" PlayersLandmass2="3" GridWidth="96" GridHeight="60" NumNaturalWonders="10" OceanWidth="8" LakeSizeCutoff="8" LakeGenerationFrequency="25" Continents="4" StartSectorRows="4" StartSectorCols="3"/>
+	</Maps>	
+	<AgeProgressionEvents>
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_ANTIQUITY" MapSizeType="MAPSIZE_COLONIZATION"/>
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED"	Points="15"	AgeType="AGE_ANTIQUITY" MapSizeType="MAPSIZE_COLONIZATION"/>
+		
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_EXPLORATION" MapSizeType="MAPSIZE_COLONIZATION"/>
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED"	Points="10"	AgeType="AGE_EXPLORATION" MapSizeType="MAPSIZE_COLONIZATION"/>
+		
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_MODERN" MapSizeType="MAPSIZE_COLONIZATION"/>
+		<Replace AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED"	Points="10"	AgeType="AGE_MODERN" MapSizeType="MAPSIZE_COLONIZATION"/>
+	</AgeProgressionEvents>
+</Database>

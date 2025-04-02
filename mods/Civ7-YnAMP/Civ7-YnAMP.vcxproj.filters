@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="ynamp.dep" />
+    <None Include="modules\package.json">
+      <Filter>modules</Filter>
+    </None>
+    <None Include="modules\version.sql">
+      <Filter>modules</Filter>
+    </None>
+    <None Include="modules\ynamp.modinfo">
+      <Filter>modules</Filter>
+    </None>
+    <None Include="modules\data\tables.sql">
+      <Filter>modules\data</Filter>
+    </None>
+    <None Include="modules\maps\continents-ynamp.js">
+      <Filter>modules\maps</Filter>
+    </None>
+    <None Include="modules\maps\ynamp-map-loading.js">
+      <Filter>modules\maps</Filter>
+    </None>
+    <None Include="modules\maps\ynamp-resource-generator.js">
+      <Filter>modules\maps</Filter>
+    </None>
+    <None Include="modules\maps\ynamp-utilities.js">
+      <Filter>modules\maps</Filter>
+    </None>
+    <None Include="modules\maps\giant-earth-map\giant-earth-data.js">
+      <Filter>modules\maps\giant-earth-map</Filter>
+    </None>
+    <None Include="modules\maps\giant-earth-map\giant-earth-map.js">
+      <Filter>modules\maps\giant-earth-map</Filter>
+    </None>
+    <None Include="modules\maps\greatest-earth-map\greatest-earth-data.js">
+      <Filter>modules\maps\greatest-earth-map</Filter>
+    </None>
+    <None Include="modules\maps\greatest-earth-map\greatest-earth-map.js">
+      <Filter>modules\maps\greatest-earth-map</Filter>
+    </None>
+    <None Include="modules\scenario\test.js">
+      <Filter>scenario</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="modules">
+      <UniqueIdentifier>{9d5fa378-fb12-4608-9e30-c2edc458e7f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\config">
+      <UniqueIdentifier>{d4b836ec-c240-4eb7-b748-381a283c9fd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\data">
+      <UniqueIdentifier>{47e628f0-2ea8-42cd-b10b-2d7086dd7add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\icons">
+      <UniqueIdentifier>{bd7e17ca-e831-487b-a694-086ed8f9eca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\maps">
+      <UniqueIdentifier>{c324bd23-e2bc-466a-9de6-941df4a12d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\maps\giant-earth-map">
+      <UniqueIdentifier>{0b9cc65c-def2-4afc-a62f-0fbab5208753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\maps\greatest-earth-map">
+      <UniqueIdentifier>{845453c0-ec3b-4277-8f62-d3b4a1cd84bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scenario">
+      <UniqueIdentifier>{5d90d634-360e-40fa-a4b8-9fb06ab298cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="text">
+      <UniqueIdentifier>{a406c4df-7b47-4a76-9124-967c914c984b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="text\en_us">
+      <UniqueIdentifier>{a3b8be3b-05a5-41b9-b8a5-67b75a70e55b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="modules\config\config.xml">
+      <Filter>modules\config</Filter>
+    </Xml>
+    <Xml Include="modules\data\maps.xml">
+      <Filter>modules\data</Filter>
+    </Xml>
+    <Xml Include="modules\icons\ynamp-icons.xml">
+      <Filter>modules\icons</Filter>
+    </Xml>
+    <Xml Include="modules\maps\giant-earth-map\giant-earth.xml">
+      <Filter>modules\maps\giant-earth-map</Filter>
+    </Xml>
+    <Xml Include="modules\maps\giant-earth-map\giant-earth-city.xml">
+      <Filter>modules\maps\giant-earth-map</Filter>
+    </Xml>
+    <Xml Include="modules\maps\greatest-earth-map\greatest-earth.xml">
+      <Filter>modules\maps\greatest-earth-map</Filter>
+    </Xml>
+    <Xml Include="modules\maps\greatest-earth-map\greatest-earth-city.xml">
+      <Filter>modules\maps\greatest-earth-map</Filter>
+    </Xml>
+    <Xml Include="modules\text\de_DE_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\es_ES_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\fr_FR_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\it_IT_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\ja_JP_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\ko_KR_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\ModuleText.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\pl_PL_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\pt_BR_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\ru_RU_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\zh_Hans_CN_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\zh_Hant_HK_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
+    <Xml Include="modules\text\en_us\MapText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="modules\text\en_us\ModuleText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="modules\icons\civ6_earth.png">
+      <Filter>modules\icons</Filter>
+    </Image>
+    <Image Include="modules\icons\happy_cat.png">
+      <Filter>modules\icons</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
