@@ -45,6 +45,9 @@ Map::Map()
 {
     // init with default civ list (TODO: parse mod files for custom civs?)
 
+    // Invalid civ
+    m_civilizations.push_back(Civilization("Unknown", Era::Invalid, float4(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f)));         
+
     // Antiquity Age Civilizations
     m_civilizations.push_back(Civilization("Aksum", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));         // Amanitore's color (GREEN_DK)
     m_civilizations.push_back(Civilization("Egypt", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));      // Hatshepsut's color (YELLOW_LT)
@@ -229,15 +232,22 @@ void Map::resetCamera()
 }
 
 //--------------------------------------------------------------------------------------
+void Map::crop(const sf::Vector2i & _newSize)
+{
+    m_width = _newSize.x;
+    m_height = _newSize.y;
+}
+
+//--------------------------------------------------------------------------------------
 void Map::translate(const sf::Vector2i & _offset)
 {
     int offsetX = _offset.x;
     int offsetY = _offset.y;
 
     while (offsetX < 0)
-        offsetX += m_width;
+        offsetX += m_civ7TerrainType.Width();
     while (offsetY < 0)
-        offsetY += m_height;
+        offsetY += m_civ7TerrainType.Height();
 
     LOG_INFO("Translate map by {%i,%i}", offsetX, offsetY);
 
@@ -249,8 +259,8 @@ void Map::translate(const sf::Vector2i & _offset)
         {
             auto & tsl = civ.tsl[t];
 
-            tsl.pos.x = (tsl.pos.x - _offset.x) % m_width;
-            tsl.pos.y = (tsl.pos.y - _offset.y) % m_height;
+            tsl.pos.x = (tsl.pos.x - _offset.x) % m_civ7TerrainType.Width();
+            tsl.pos.y = (tsl.pos.y - _offset.y) % m_civ7TerrainType.Height();
         }
     }
 

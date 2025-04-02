@@ -1,4 +1,5 @@
 #include "paint.h"
+#include "undoredo\UndoRedoTile.h"
 
 //--------------------------------------------------------------------------------------
 PaintWindow::PaintWindow() :
@@ -197,6 +198,41 @@ bool PaintWindow::Draw(const RenderWindow & window)
                 }
             }
             PopDisabled();
+        }
+
+        
+        if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        {
+            if (ImGui::Button("Add Borders"))
+            {
+                UndoRedoTile * undoRedoPaintTile = new UndoRedoTile(map);
+
+                const int borderSize = 3;
+
+                for (uint y = 0; y < map->m_height; ++y)
+                {
+                    for (uint x = 0; x < map->m_width; ++x)
+                    {
+                        if (x >= borderSize && x < map->m_width - borderSize)
+                            continue;
+
+                        const Civ7Tile & before = map->m_civ7TerrainType.get(x, y);
+                        Civ7Tile after = before;
+                        after.biome = BiomeType::Marine;
+                        after.terrain = TerrainType::Moutain;
+                        after.feature = FeatureType::None;
+                        after.resource = ResourceType::None;
+                        after.continent = (ContinentType::None);
+
+                        undoRedoPaintTile->add(x, y, before, after);
+                        map->m_civ7TerrainType.get(x, y) = after;
+                    }
+                }
+
+                map->refresh();
+
+                UndoRedoStack::add(undoRedoPaintTile);
+            }
         }
     }
 

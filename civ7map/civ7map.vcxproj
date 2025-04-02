@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="src\misc\imguiutils.cpp" />
     <ClCompile Include="src\undoredo\UndoRedo.cpp" />
+    <ClCompile Include="src\undoredo\UndoRedoTile.cpp" />
     <None Include="..\data\shader\copyRGB_ps.fx">
       <FileType>Document</FileType>
     </None>

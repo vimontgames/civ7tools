@@ -45,6 +45,9 @@
     <ClCompile Include="src\misc\imguiutils.cpp">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="src\undoredo\UndoRedoTile.cpp">
+      <Filter>undoredo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extern\base64\base64.hpp" />

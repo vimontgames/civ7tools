@@ -202,6 +202,11 @@ bool Map::importHemispheres(const string & data)
 //--------------------------------------------------------------------------------------
 bool Map::fixHemispheres()
 {
+    m_westStart = clamp(m_westStart, 0, m_width - 4);
+    m_westEnd = clamp(m_westEnd, 1, m_width - 3);
+    m_eastStart = clamp(m_eastStart, 0, m_width - 2);
+    m_eastEnd = clamp(m_eastEnd, 1, m_width - 1);
+
     m_westStart = clamp(m_westStart, 0, m_width - 1);
     m_westEnd = clamp(m_westEnd, m_westStart+1, m_width - 1);
     m_eastStart = clamp(m_eastStart, m_westEnd+1, m_width - 1);
@@ -1175,8 +1180,21 @@ bool Map::importTSL()
                     // Parse the attributes in this line
                     vector<Attribute> attributes = parseAttributes(line);
 
+                    int xStart = -1, yStart = -1;
+                    for (const auto & attribute : attributes)
+                    {
+                        if (attribute.label == "X")
+                        {
+                            xStart = atoi(attribute.value.c_str());
+                        }
+                        else if (attribute.label == "Y")
+                        {
+                            yStart = atoi(attribute.value.c_str());
+                        }
+                    }
+
                     TSL tsl;
-                    int civIndex = -1;
+                    int civIndex = 0; // First Civ is "Invalid" civ
                     for (const auto & attribute : attributes)
                     {
                         if (attribute.label == "Civilization")
@@ -1190,8 +1208,10 @@ bool Map::importTSL()
                                 }
                             }
 
-                            if (civIndex == -1)
-                                LOG_ERROR("Cannot import TSL for invalid Civilization \"%s\"", attribute.value.c_str());
+                            if (civIndex == 0)
+                            {
+                                LOG_ERROR("Invalid civilization \"%s\" for TSL at (%i,%i) ", attribute.value.c_str(), xStart, yStart);
+                            }
                         }
                         else if (attribute.label == "X")
                         {
@@ -1203,11 +1223,19 @@ bool Map::importTSL()
                         }
                     }
 
-                    if (civIndex != -1 && tsl.pos.x != -1 && tsl.pos.y != -1)
+                    if (xStart >= 0 && xStart < (int)m_width && yStart >= 0 && yStart <= (int)m_height)
                     {
+                        tsl.pos.x = xStart;
+                        tsl.pos.y = yStart;
+
                         auto & civ = m_civilizations[civIndex];
-                        LOG_INFO("Add TSL for \"%s\" at (%i, %i)", civ.name.c_str(), tsl.pos.x, tsl.pos.y);
+                        LOG_INFO("Add TSL for civilization \"%s\" at (%i, %i)", civ.name.c_str(), tsl.pos.x, tsl.pos.y);
                         civ.tsl.push_back(tsl);
+                    }
+                    else
+                    {
+                        const auto & civ = m_civilizations[civIndex];
+                        LOG_ERROR("Civilization \"%s\" has invalid TSL at (%i,%i) ", civ.name.c_str(), xStart, yStart);
                     }
                 }
             }

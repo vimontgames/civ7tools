@@ -211,7 +211,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                             return (int)a->era < (int)b->era;  // Otherwise, sort by category
                                             });
 
-                                        Era prevEra = (Era)-1;
+                                        Era prevEra = (Era)-2;
 
                                         for (uint i = 0; i < sortedCivs.size(); ++i)
                                         {

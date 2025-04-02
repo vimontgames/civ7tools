@@ -141,9 +141,10 @@ enum HexTileSide
 //--------------------------------------------------------------------------------------
 enum class Era : int 
 {
-    Antiquity,
-    Exploration,
-    Modern
+    Invalid = -1,
+    Antiquity = 0,
+    Exploration = 1,
+    Modern = 2
 };
 
 //--------------------------------------------------------------------------------------
@@ -223,6 +224,7 @@ public:
     void resetCameraZoom();
     void resetCamera();
 
+    void crop(const sf::Vector2i & _newSize);
     void translate(const sf::Vector2i & _offset);
 
     string getContinentName(ContinentType continent) const;

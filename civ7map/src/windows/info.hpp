@@ -31,54 +31,54 @@ bool InfoWindow::Draw(const RenderWindow & window)
         sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
         ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
-        //sprintf_s(temp, "%s", GetFilename(g_map->m_mapDataPath).c_str());
-        //ImGui::InputText("Data", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
-
-        //sprintf_s(temp, "%s", GetFolder(g_map->m_path).c_str());
-        //ImGui::InputText("Folder", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
-
-        //sprintf_s(temp, g_map->m_author.c_str());
-        //ImGui::InputText("Author", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
-
-        //if (TreeNodeEx("Size", ImGuiTreeNodeFlags_DefaultOpen))
+        int editMapSize[2] =
         {
-            int editMapSize[2] =
-            {
-                (int)g_map->m_width,
-                (int)g_map->m_height
-            };
+            (int)g_map->m_width,
+            (int)g_map->m_height
+        };
 
-            if (ImGui::InputInt2("Size", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
-            {
+        bool isValidMapSize = g_map->getMapSize(editMapSize[0], editMapSize[1]) != MapSize::Custom;
 
-            }
-
-            //TreePop();
+        if (ImGui::InputInt2("Size", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            g_map->crop(sf::Vector2i(editMapSize[0], editMapSize[1]));
+            g_map->refresh();
         }
 
-        //if (TreeNodeEx("Offset", ImGuiTreeNodeFlags_DefaultOpen))
+        ImGui::SameLine();
+        if (!isValidMapSize)
+            ImGui::TextColored(ImVec4(1,0.5,0,1),ICON_FA_TRIANGLE_EXCLAMATION);            
+        else
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), ICON_FA_CHECK);
+
+        if (ImGui::IsItemHovered())
         {
-            int editMapOffset[2] =
+            string invalidMapSizeMsg = isValidMapSize ? "Valid map sizes:\n" : "Please use a valid map size!\n";
+            for (auto val : enumValues<MapSize>())
             {
-                g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
-            };
-
-            if (ImGui::InputInt2("Offset", editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
-            {
-                g_map->m_mapOffset[0].x = editMapOffset[0];
-                g_map->m_mapOffset[0].y = editMapOffset[1];
-
-                Vector2i delta = g_map->m_mapOffset[0] - g_map->m_mapOffset[1];
-
-                g_map->translate(delta);
-
-                g_map->m_mapOffset[1] = g_map->m_mapOffset[0];
-
-                g_map->refresh();
+                if (val.first == MapSize::Custom)
+                    continue;
+                invalidMapSizeMsg += fmt::sprintf("- %s (%ix%i)\n", asString(val.first), g_mapSizes[(int)val.first][0], g_mapSizes[(int)val.first][1]);
             }
+            ImGui::SetTooltip(invalidMapSizeMsg.c_str());
+        }
+        
+        int editMapOffset[2] =
+        {
+            g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
+        };
 
-            //TreePop();
-        }     
+        if (ImGui::InputInt2("Offset", editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            g_map->m_mapOffset[0].x = editMapOffset[0];
+            g_map->m_mapOffset[0].y = editMapOffset[1];
+
+            Vector2i delta = g_map->m_mapOffset[0] - g_map->m_mapOffset[1];
+
+            g_map->translate(delta);
+            g_map->m_mapOffset[1] = g_map->m_mapOffset[0];
+            g_map->refresh();
+        }  
 
         if (ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
