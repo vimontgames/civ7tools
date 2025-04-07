@@ -7,11 +7,17 @@
 		<Replace Tag="LOC_COLONIZATION_DESCRIPTION">
 			<Text>Map of Europe and North-America</Text>         
 		</Replace>
-        <Replace Tag="LOC_MAP_COLONIZATION_SIZE_NAME">
-            <Text>Colonization (92x60, 10 players)</Text>
+        <Replace Tag="LOC_MAP_COLONIZATION_10P_SIZE_NAME">
+            <Text>Colonization (10 players)</Text>
         </Replace>
-        <Replace Tag="LOC_MAP_COLONIZATION_SIZE_DESCRIPTION">
-            <Text>10 players on a Large map</Text>
+        <Replace Tag="LOC_MAP_COLONIZATION_10P_SIZE_DESCRIPTION">
+            <Text>12 players on a 92x60 map</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_COLONIZATION_12P_SIZE_NAME">
+            <Text>Colonization (12 players)</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_COLONIZATION_12P_SIZE_DESCRIPTION">
+            <Text>12 players on a 92x60 map</Text>
         </Replace>
     </EnglishText>                               
 </Database>                                     

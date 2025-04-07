@@ -7,21 +7,17 @@
 	                                            
 	<!-- Major Civilizations -->                
 	<StartPosition>                             
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_AKSUM" X="83" Y="6" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_EGYPT" X="77" Y="21" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_GREECE" X="76" Y="28" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAYA" X="13" Y="19" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAYA" X="21" Y="11" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_MISSISSIPPIAN" X="6" Y="21" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_MISSISSIPPIAN" X="8" Y="27" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_PERSIA" X="90" Y="21" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_ROME" X="68" Y="29" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_CARTHAGE" X="65" Y="24" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_ASSYRIA" X="87" Y="25" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_SPAIN" X="55" Y="29" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_AMERICA" X="23" Y="36" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_GERMANIA" X="74" Y="43" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_SAXON" X="59" Y="45" />
-		<Replace MapName="Colonization" Civilization="CIVILIZATION_GAULS" X="61" Y="39" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_AKSUM" X="79" Y="3" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_EGYPT" X="73" Y="14" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_GREECE" X="72" Y="22" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAURYA" X="81" Y="8" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAYA" X="19" Y="31" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_MISSISSIPPIAN" X="15" Y="49" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_PERSIA" X="89" Y="14" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_ROME" X="64" Y="24" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_CARTHAGE" X="62" Y="18" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_GERMANIA" X="69" Y="38" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_SAXON" X="56" Y="38" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_GAULS" X="57" Y="33" />
 	</StartPosition>                            
 </Database>                                    
