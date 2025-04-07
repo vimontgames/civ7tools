@@ -22,10 +22,10 @@ function requestMapData(initParams) {
 function generateMap() {
     const mapName = 'Colonization';
     let genParameters = {
-        westStart: 0,
+        westStart: 3,
         westEnd: 43,
         eastStart: 48,
-        eastEnd: 95
+        eastEnd: 92
     };
     let importedMap = GetMap();
     generateYnAMP(mapName, importedMap, genParameters);

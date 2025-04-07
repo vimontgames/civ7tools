@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="Civ7MapUser-Colonization" version="1"
+<Mod id="Civ7MapUser-Colonization" version="0.1"
     xmlns="ModInfo">
     <Properties>
         <Name>LOC_MODULE_MAPNAME_NAME</Name>

@@ -5,7 +5,13 @@
 			<Text>Colonization[n](Civ7Map)</Text>
 		</Replace>                               
 		<Replace Tag="LOC_COLONIZATION_DESCRIPTION">
-			<Text>TODO: Map description</Text>         
-		</Replace>                               
-	</EnglishText>                               
+			<Text>Map of Europe and North-America</Text>         
+		</Replace>
+        <Replace Tag="LOC_MAP_COLONIZATION_SIZE_NAME">
+            <Text>Colonization (92x60, 10 players)</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_COLONIZATION_SIZE_DESCRIPTION">
+            <Text>10 players on a Large map</Text>
+        </Replace>
+    </EnglishText>                               
 </Database>                                     

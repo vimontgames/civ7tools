@@ -5,7 +5,7 @@
     </Maps>
 
 	<MapSizes>
-		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_SIZE_NAME" Description="LOC_MAP_COLONIZATION_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="10" DefaultPlayers="10" SortIndex="51"/>
+		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_SIZE_NAME" Description="LOC_MAP_COLONIZATION_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="8" DefaultPlayers="10" SortIndex="51"/>
 		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_SIZE_NAME" Description="LOC_MAP_COLONIZATION_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="5" DefaultPlayers="10" SortIndex="51"/>
 	</MapSizes>
 	

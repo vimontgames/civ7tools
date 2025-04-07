@@ -4,7 +4,7 @@
 		<Replace Type="MAPSIZE_COLONIZATION" Kind="KIND_MAPSIZE"/>
 	</Types>
 	<Maps>
-		<Replace MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_NAME" Description="LOC_MAP_COLONIZATION_DESCRIPTION" DefaultPlayers="10" PlayersLandmass1="5" PlayersLandmass2="3" GridWidth="96" GridHeight="60" NumNaturalWonders="10" OceanWidth="8" LakeSizeCutoff="8" LakeGenerationFrequency="25" Continents="4" StartSectorRows="4" StartSectorCols="3"/>
+		<Replace MapSizeType="MAPSIZE_COLONIZATION" Name="LOC_MAP_COLONIZATION_NAME" Description="LOC_MAP_COLONIZATION_DESCRIPTION" DefaultPlayers="10" PlayersLandmass1="8" PlayersLandmass2="2" GridWidth="96" GridHeight="60" NumNaturalWonders="10" OceanWidth="8" LakeSizeCutoff="8" LakeGenerationFrequency="25" Continents="4" StartSectorRows="0" StartSectorCols="0"/>
 	</Maps>	
 	<AgeProgressionEvents>
 		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_ANTIQUITY" MapSizeType="MAPSIZE_COLONIZATION"/>

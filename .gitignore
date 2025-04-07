@@ -35,6 +35,12 @@
 .vs
 *.pdb
 enc_temp_folder
+*.log
+*.recipe
+*.lastbuildstate
 
 # Build
 tmp
+
+#misc
+*.zip
