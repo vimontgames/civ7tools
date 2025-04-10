@@ -1,5 +1,7 @@
 extern Vector2i g_hoveredCell;
 extern Vector2i g_selectedCell;
+extern Vector2i g_selectedRectMin;
+extern Vector2i g_selectedRectMax;
 
 void Map::render(RenderWindow & _window)
 {
@@ -68,6 +70,8 @@ void Map::render(RenderWindow & _window)
                     shader->setUniform("texSize", (Vector2f)texture.getSize());
                     shader->setUniform("hoveredCell", Vector3f((float)g_hoveredCell.x, (float)g_hoveredCell.y, paintRadius));
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
+                    shader->setUniform("selectedRectBegin", Vector2f((float)g_selectedRectMin.x, (float)g_selectedRectMin.y));
+                    shader->setUniform("selectedRectEnd", Vector2f((float)g_selectedRectMax.x, (float)g_selectedRectMax.y));
 
                     if (m_showHemispheres)
                     {

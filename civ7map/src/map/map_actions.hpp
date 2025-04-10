@@ -205,3 +205,74 @@ void Map::clearResources()
     EndPaint();
     refresh();
 }
+
+Array2D<Civ7Tile> g_copyTiles;
+vector<TSL> g_copyTsl;
+
+//--------------------------------------------------------------------------------------
+void Map::copyRect(sf::Vector2i _begin, sf::Vector2i _end)
+{
+    const auto w = _end.x - _begin.x + 1;
+    const auto h = _end.y - _begin.y + 1;
+    g_copyTiles.SetSize(w, h);
+
+    for (int j = 0; j < h; ++j)
+    {
+        for (int i = 0; i < w; ++i)
+        {
+            g_copyTiles.get(i, j) = m_civ7TerrainType.get(_begin.x + i, _begin.y + j);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::pasteRect(sf::Vector2i _origin)
+{
+    if (_origin.x >= 0 && _origin.x < (int)m_width && _origin.y >= 0 && _origin.y <= (int)m_height)
+    {
+        BeginPaint();
+
+        for (int j = 0; j < (int)g_copyTiles.Height(); ++j)
+        {
+            for (int i = 0; i < (int)g_copyTiles.Width(); ++i)
+            {
+                if (_origin.x + i >= (int)m_width || _origin.y + j >= (int)m_height)
+                    continue;
+
+                undoRedoPaintTile->add(_origin.x + i, _origin.y + j, m_civ7TerrainType.get(_origin.x + i, _origin.y + j), g_copyTiles.get(i, j));
+                m_civ7TerrainType.get(_origin.x + i, _origin.y + j) = g_copyTiles.get(i, j);
+            }
+        }
+
+        EndPaint();
+        refresh();
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::cutRect(sf::Vector2i _begin, sf::Vector2i _end)
+{
+    copyRect(_begin, _end);
+
+    const auto w = _end.x - _begin.x + 1;
+    const auto h = _end.y - _begin.y + 1;
+
+    BeginPaint();
+
+    for (int j = 0; j < h; ++j)
+    {
+        for (int i = 0; i < w; ++i)
+        {
+            auto tile = m_civ7TerrainType.get(_begin.x + i, _begin.y + j);
+            tile = Civ7Tile();
+            tile.terrain = TerrainType::Ocean;
+            tile.biome = BiomeType::Marine;
+
+            undoRedoPaintTile->add(_begin.x + i, _begin.y + j, m_civ7TerrainType.get(_begin.x + i, _begin.y + j), tile);
+            m_civ7TerrainType.get(_begin.x + i, _begin.y + j) = tile;
+        }
+    }
+
+    EndPaint();
+    refresh();
+}

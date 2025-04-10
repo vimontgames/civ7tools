@@ -48,6 +48,13 @@ static Map * g_map = nullptr;
 Vector2i g_hoveredCell = Vector2i(-1, -1);
 Vector2i g_selectedCell = Vector2i(-1, -1);
 
+Vector2i g_selectedRectBeginEdit = Vector2i(-1, -1);
+Vector2i g_selectedRectEndEdit = Vector2i(-1, -1);
+
+Vector2i g_selectedRectMin = Vector2i(-1, -1);
+Vector2i g_selectedRectMax = Vector2i(-1, -1);
+bool g_selectingRect = false;
+
 ImFont * font = nullptr;
 
 #include "windows/help.hpp"
@@ -483,6 +490,61 @@ int main()
                                 if (tileJustSelected)
                                     g_selectedCell = cell;
 
+                                // User can select area if shift pressed
+                                if (0 != (io.KeyMods & ImGuiKeyModFlags_Shift))
+                                {
+
+                                    if (Mouse::isButtonPressed(Mouse::Left))
+                                    {
+                                        if (!g_selectingRect)
+                                        {
+                                            g_selectingRect = true;
+                                            g_selectedRectBeginEdit = g_hoveredCell;
+                                            g_selectedRectEndEdit = g_hoveredCell;
+                                        }
+                                        else
+                                        {
+                                            g_selectedRectEndEdit = g_hoveredCell;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (g_selectingRect)
+                                        {
+                                            g_selectingRect = false;
+                                            g_selectedRectEndEdit = g_hoveredCell;
+                                        }
+                                    }
+
+                                    g_selectedRectMin.x = min(g_selectedRectBeginEdit.x, g_selectedRectEndEdit.x);
+                                    g_selectedRectMin.y = min(g_selectedRectBeginEdit.y, g_selectedRectEndEdit.y);
+
+                                    g_selectedRectMax.x = max(g_selectedRectBeginEdit.x, g_selectedRectEndEdit.x);
+                                    g_selectedRectMax.y = max(g_selectedRectBeginEdit.y, g_selectedRectEndEdit.y);
+                                }
+
+                                if (0 != (io.KeyMods & ImGuiKeyModFlags_Ctrl))
+                                {
+                                    if (g_selectedRectMax.x > g_selectedRectMin.x && g_selectedRectMax.y > g_selectedRectMin.y)
+                                    {
+                                        if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_C]))
+                                        {
+                                            map->copyRect(g_selectedRectMin, g_selectedRectMax);
+                                            g_selectedRectBeginEdit = g_selectedRectEndEdit = g_selectedRectMin = g_selectedRectMax = Vector2i(-1, -1);
+                                        }
+                                        else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_X]))
+                                        {
+                                            map->cutRect(g_selectedRectMin, g_selectedRectMax);
+                                            g_selectedRectBeginEdit = g_selectedRectEndEdit = g_selectedRectMin = g_selectedRectMax = Vector2i(-1, -1);
+                                        }
+                                    }
+
+                                    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_V]))
+                                    {
+                                        map->pasteRect(g_hoveredCell);
+                                    }
+                                }
+
                                 const Civ7Tile tile = g_map->m_civ7TerrainType.get(cell.x, cell.y);
 
                                 if (!ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopup))
@@ -819,7 +881,7 @@ int main()
 
             if (g_hoveredCell.x >= 0 && g_hoveredCell.x < (int)g_map->m_width && g_hoveredCell.y >= 0 && g_hoveredCell.y < (int)g_map->m_height)
             {
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && 0 == (io.KeyMods & ImGuiKeyModFlags_Shift) )
                 {
                     if (!painting)
                     {

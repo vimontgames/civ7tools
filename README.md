@@ -19,6 +19,7 @@ An unofficial map editor for Civilization VII.
 
 | Key                | Description |
 |--------------------|-------------|
+| Shift (hold)       | Select area |
 | Space              | Select plot |
 | Ctrl-Z             | Undo        |
 | Ctrl-Y             | Redo        |

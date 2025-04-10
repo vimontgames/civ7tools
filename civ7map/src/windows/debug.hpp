@@ -1,5 +1,10 @@
 #include "BaseWindow.h"
 
+extern Vector2i g_hoveredCell;
+extern Vector2i g_selectedCell;
+extern Vector2i g_selectedRectMin;
+extern Vector2i g_selectedRectMax;
+
 //--------------------------------------------------------------------------------------
 class DebugWindow : public BaseWindow
 {
@@ -44,6 +49,23 @@ bool DebugWindow::Draw(const RenderWindow & window)
         if (g_map)
             sprintf_s(temp, "%s", GetFolder(g_map->m_mapPath).c_str());
         ImGui::InputText("Mod folder", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        ImGui::TreeNodeEx("Selection", ImGuiTreeNodeFlags_DefaultOpen);
+        {
+            ImGui::InputInt2("Hovered", (int*)&g_hoveredCell, ImGuiInputTextFlags_ReadOnly);
+            ImGui::InputInt2("Selected", (int *)&g_selectedCell, ImGuiInputTextFlags_ReadOnly);
+
+            int rect[4] =
+            {
+                g_selectedRectMin.x,
+                g_selectedRectMin.y,
+                g_selectedRectMax.x,
+                g_selectedRectMax.y
+            };
+            ImGui::InputInt4("Rect", rect, ImGuiInputTextFlags_ReadOnly);
+
+            ImGui::TreePop();
+        }
 
         ImGui::TreeNodeEx("Mouse", ImGuiTreeNodeFlags_DefaultOpen);
         {

@@ -268,6 +268,10 @@ public:
 
     void clearResources();
     void clearFeatures();
+  
+    void copyRect(sf::Vector2i _begin, sf::Vector2i _end);
+    void pasteRect(sf::Vector2i _origin);
+    void cutRect(sf::Vector2i _begin, sf::Vector2i _end);
 
 private:
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);

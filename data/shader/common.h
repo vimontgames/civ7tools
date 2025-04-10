@@ -27,6 +27,8 @@ uniform float2 mapSize;
 uniform float2 screenSize;
 uniform float3 hoveredCell;
 uniform float2 selectedCell;
+uniform float2 selectedRectBegin;
+uniform float2 selectedRectEnd;
 uniform float2 west;
 uniform float2 east;
 uniform float4 color;

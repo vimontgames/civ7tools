@@ -4,28 +4,50 @@ struct Tile
     float4 color1;
 };
 
-bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder)
+bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder, out bool isRectBorder)
 {
     isWestBorder = false;
     isEastBorder = false;
+    isRectBorder = false;
     
     uv.y = uv.y * 0.5;
     
     float2 center = getTileUV(uv, texSize, passFlags);
     
-    float2 invScreenSize = 1.5f / (texSize.xy*16.0f) * float2(1.0f, 0.5f);
+    float2 invScreenSize = 1.5f / (texSize.xy*16.0f) * float2(0.5f, 0.5f);
     
     float2 left   = getTileUV(uv + float2(-invScreenSize.x, 0), texSize, passFlags);
     float2 right  = getTileUV(uv + float2(+invScreenSize.x, 0), texSize, passFlags);
     float2 bottom = getTileUV(uv + float2(0, -invScreenSize.y), texSize, passFlags);
     float2 up     = getTileUV(uv + float2(0, +invScreenSize.y), texSize, passFlags);
     
-    if (left.x * texSize.x < west.x && right.x * texSize.x > west.x || left.x * texSize.x < (west.y + 1) && right.x * texSize.x > (west.y + 1))
+    float2 centerCell = float2(center.x * texSize.x, center.y * texSize.y);
+    float2 leftCell   = float2(  left.x * texSize.x,   left.y * texSize.y);
+    float2 rightCell  = float2( right.x * texSize.x,  right.y * texSize.y);
+    float2 bottomCell = float2(bottom.x * texSize.x, bottom.y * texSize.y);
+    float2 upCell     = float2    (up.x * texSize.x,     up.y * texSize.y);
+    
+    if (leftCell.x < west.x && rightCell.x >= west.x || leftCell.x < (west.y + 1) && rightCell.x >= (west.y + 1))
         isWestBorder = true;
     
-    if (left.x * texSize.x < east.x && right.x * texSize.x > east.x || left.x * texSize.x < (east.y + 1) && right.x * texSize.x > (east.y + 1))
+    if (leftCell.x < east.x && rightCell.x >= east.x || leftCell.x < (east.y + 1) && rightCell.x >= (east.y + 1))
         isEastBorder = true;
         
+    ////if ((centerCell.y >= selectedRectBegin.y && centerCell.y <= selectedRectEnd.y + 1))
+    //{
+    //    if ((leftCell.x < selectedRectBegin.x && rightCell.x > selectedRectBegin.x) || (leftCell.x < selectedRectEnd.x + 1 && rightCell.x > selectedRectEnd.x + 1))
+    //        isRectBorder = true;
+    //}
+    //
+    ////if ((centerCell.x >= selectedRectBegin.x && centerCell.x <= selectedRectEnd.x + 1))
+    //{
+    //    if ((bottomCell.y < selectedRectBegin.y && upCell.y > selectedRectBegin.y) || (bottomCell.y < selectedRectEnd.y + 1 && upCell.y > selectedRectEnd.y + 1))
+    //        isRectBorder = true;
+    //}
+    
+    if ((centerCell.y >= selectedRectBegin.y && centerCell.y <= selectedRectEnd.y + 1) && (centerCell.x >= selectedRectBegin.x && centerCell.x <= selectedRectEnd.x + 1))
+        isRectBorder = true;
+            
     if (floor(left.x * texSize.x)   != floor(center.x * texSize.x) || floor(left.y * texSize.y)   != floor(center.y * texSize.y)
      || floor(right.x * texSize.x)  != floor(center.x * texSize.x) || floor(right.y * texSize.y)  != floor(center.y * texSize.y)
      || floor(bottom.x * texSize.x) != floor(center.x * texSize.x) || floor(bottom.y * texSize.y) != floor(center.y * texSize.y)
@@ -224,7 +246,9 @@ void main()
     bool showBorders = (0 != (PASS_FLAG_BORDERS & passFlags));
     bool isWestBorder = false;
     bool isEastBorder = false;
-    bool isBorder = isBorder(uv, isWestBorder, isEastBorder);
+    bool isRectBorder = false;
+    
+    bool isBorder = isBorder(uv, isWestBorder, isEastBorder, isRectBorder);
     
     if (isBorder)
     {
@@ -245,7 +269,13 @@ void main()
         {
             color.rgb = lerp(color.rgb, float3(1, 0, 0), 0.75);
         }
+        
+        // select rect (for copy-pasta)
+        if (isRectBorder)
+            color.rgb = float3(1, 1, 1);
     }
+    
+    
             
     gl_FragColor = float4(color.rgb, 1);   
 }
