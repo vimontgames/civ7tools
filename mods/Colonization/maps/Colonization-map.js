@@ -23,8 +23,8 @@ function generateMap() {
     const mapName = 'Colonization';
     let genParameters = {
         westStart: 3,
-        westEnd: 43,
-        eastStart: 48,
+        westEnd: 39,
+        eastStart: 45,
         eastEnd: 92
     };
     let importedMap = GetMap();

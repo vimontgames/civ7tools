@@ -10,14 +10,19 @@
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_AKSUM" X="79" Y="3" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_EGYPT" X="73" Y="14" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_GREECE" X="72" Y="22" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_HAN" X="89" Y="35" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_KHMER" X="89" Y="42" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAURYA" X="81" Y="8" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_MAYA" X="19" Y="31" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_MISSISSIPPIAN" X="15" Y="49" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_PERSIA" X="89" Y="14" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_ROME" X="64" Y="24" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_CARTHAGE" X="62" Y="18" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_ASSYRIA" X="87" Y="20" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_SILLA" X="75" Y="44" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_GERMANIA" X="69" Y="38" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_SAXON" X="56" Y="38" />
+		<Replace MapName="Colonization" Civilization="CIVILIZATION_SANSEB_TAGALOG" X="5" Y="23" />
 		<Replace MapName="Colonization" Civilization="CIVILIZATION_GAULS" X="57" Y="33" />
 	</StartPosition>                            
 </Database>                                    

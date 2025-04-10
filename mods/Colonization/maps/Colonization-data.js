@@ -196,7 +196,7 @@ export function GetMap() {
     MapToConvert[79][1]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[80][1]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[81][1]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
-    MapToConvert[82][1]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
+    MapToConvert[82][1]=["TERRAIN_FLAT", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[83][1]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[84][1]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[85][1]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
@@ -526,7 +526,7 @@ export function GetMap() {
     MapToConvert[25][5]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[26][5]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[27][5]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
-    MapToConvert[28][5]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
+    MapToConvert[28][5]=["TERRAIN_HILL", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[29][5]=["TERRAIN_MOUNTAIN", "BIOME_TUNDRA", -1, -1];
     MapToConvert[30][5]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
     MapToConvert[31][5]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
@@ -1294,7 +1294,7 @@ export function GetMap() {
     MapToConvert[25][13]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[26][13]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[27][13]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
-    MapToConvert[28][13]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
+    MapToConvert[28][13]=["TERRAIN_HILL", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[29][13]=["TERRAIN_MOUNTAIN", "BIOME_TUNDRA", -1, -1];
     MapToConvert[30][13]=["TERRAIN_MOUNTAIN", "BIOME_GRASSLAND", -1, -1];
     MapToConvert[31][13]=["TERRAIN_FLAT", "BIOME_GRASSLAND", -1, -1];
@@ -1533,7 +1533,7 @@ export function GetMap() {
     MapToConvert[72][15]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
     MapToConvert[73][15]=["TERRAIN_FLAT", "BIOME_DESERT", "FEATURE_DESERT_FLOODPLAIN_MINOR", -1];
     MapToConvert[74][15]=["TERRAIN_FLAT", "BIOME_GRASSLAND", -1, -1];
-    MapToConvert[75][15]=["TERRAIN_FLAT", "BIOME_GRASSLAND", "FEATURE_GRASSLAND_FLOODPLAIN_NAVIGABLE", -1];
+    MapToConvert[75][15]=["TERRAIN_NAVIGABLE_RIVER", "BIOME_GRASSLAND", "FEATURE_GRASSLAND_FLOODPLAIN_NAVIGABLE", -1];
     MapToConvert[76][15]=["TERRAIN_FLAT", "BIOME_DESERT", "FEATURE_DESERT_FLOODPLAIN_MINOR", -1];
     MapToConvert[77][15]=["TERRAIN_FLAT", "BIOME_DESERT", -1, -1];
     MapToConvert[78][15]=["TERRAIN_FLAT", "BIOME_DESERT", -1, -1];
@@ -1772,7 +1772,7 @@ export function GetMap() {
     MapToConvert[23][18]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[24][18]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
     MapToConvert[25][18]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
-    MapToConvert[26][18]=["TERRAIN_MOUNTAIN", "BIOME_TUNDRA", -1, -1];
+    MapToConvert[26][18]=["TERRAIN_MOUNTAIN", "BIOME_TUNDRA", "FEATURE_VOLCANO", -1];
     MapToConvert[27][18]=["TERRAIN_MOUNTAIN", "BIOME_TUNDRA", -1, -1];
     MapToConvert[28][18]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[29][18]=["TERRAIN_HILL", "BIOME_TROPICAL", "FEATURE_RAINFOREST", -1];
@@ -2196,7 +2196,7 @@ export function GetMap() {
     MapToConvert[63][22]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[64][22]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[65][22]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
-    MapToConvert[66][22]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
+    MapToConvert[66][22]=["TERRAIN_FLAT", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[67][22]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
     MapToConvert[68][22]=["TERRAIN_FLAT", "BIOME_PLAINS", -1, -1];
     MapToConvert[69][22]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
@@ -2918,7 +2918,7 @@ export function GetMap() {
     MapToConvert[17][30]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[18][30]=["TERRAIN_HILL", "BIOME_TROPICAL", "FEATURE_FOREST", -1];
     MapToConvert[19][30]=["TERRAIN_MOUNTAIN", "BIOME_PLAINS", -1, -1];
-    MapToConvert[20][30]=["TERRAIN_MOUNTAIN", "BIOME_GRASSLAND", -1, -1];
+    MapToConvert[20][30]=["TERRAIN_MOUNTAIN", "BIOME_GRASSLAND", "FEATURE_VOLCANO", -1];
     MapToConvert[21][30]=["TERRAIN_HILL", "BIOME_GRASSLAND", -1, -1];
     MapToConvert[22][30]=["TERRAIN_FLAT", "BIOME_GRASSLAND", -1, -1];
     MapToConvert[23][30]=["TERRAIN_HILL", "BIOME_TROPICAL", "FEATURE_RAINFOREST", -1];
@@ -3486,7 +3486,7 @@ export function GetMap() {
     MapToConvert[9][36]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[10][36]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[11][36]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
-    MapToConvert[12][36]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
+    MapToConvert[12][36]=["TERRAIN_HILL", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[13][36]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[14][36]=["TERRAIN_HILL", "BIOME_GRASSLAND", -1, -1];
     MapToConvert[15][36]=["TERRAIN_HILL", "BIOME_GRASSLAND", -1, -1];
@@ -4825,7 +4825,7 @@ export function GetMap() {
     MapToConvert[4][50]=["TERRAIN_OCEAN", "BIOME_MARINE", -1, -1];
     MapToConvert[5][50]=["TERRAIN_COAST", "BIOME_MARINE", -1, -1];
     MapToConvert[6][50]=["TERRAIN_FLAT", "BIOME_GRASSLAND", -1, -1];
-    MapToConvert[7][50]=["TERRAIN_MOUNTAIN", "BIOME_PLAINS", -1, -1];
+    MapToConvert[7][50]=["TERRAIN_MOUNTAIN", "BIOME_PLAINS", "FEATURE_VOLCANO", -1];
     MapToConvert[8][50]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[9][50]=["TERRAIN_HILL", "BIOME_PLAINS", -1, -1];
     MapToConvert[10][50]=["TERRAIN_MOUNTAIN", "BIOME_PLAINS", -1, -1];
