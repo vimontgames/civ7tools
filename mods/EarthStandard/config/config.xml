@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Name="LOC_EARTHSTANDARD_NAME" Description="LOC_EARTHSTANDARD_DESCRIPTION" SortIndex="100"/>
+    </Maps>
+	
+	<MapSizes>
+		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_10P" Name="LOC_MAP_EARTHSTANDARD_10P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_10P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="8" DefaultPlayers="10" SortIndex="70"/>
+		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_10P" Name="LOC_MAP_EARTHSTANDARD_10P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_10P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="5" DefaultPlayers="10" SortIndex="90"/>
+
+        <Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_12P" Name="LOC_MAP_EARTHSTANDARD_12P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_12P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="12" MaxHumans="8" DefaultPlayers="12" SortIndex="72"/>
+        <Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_12P" Name="LOC_MAP_EARTHSTANDARD_12P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_12P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="12" MaxHumans="5" DefaultPlayers="12" SortIndex="91"/>
+	</MapSizes>
+	
+    <SupportedValuesByMap>
+        <Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="StandardMapSizes" Value="MAPSIZE_STANDARD"/>
+        <Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_STANDARD"/>
+		<Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="StandardMapSizes" Value="MAPSIZE_EARTHSTANDARD_10P"/>
+        <Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTHSTANDARD_10P"/>
+        <Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="StandardMapSizes" Value="MAPSIZE_EARTHSTANDARD_12P"/>
+        <Row Map="{Civ7MapUser-EARTHSTANDARD}maps/EARTHSTANDARD-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTHSTANDARD_12P"/>  
+    </SupportedValuesByMap>
+</Database>
