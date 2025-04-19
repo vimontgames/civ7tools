@@ -225,6 +225,7 @@ public:
     void resetCamera();
 
     void crop(const sf::Vector2i & _newSize);
+    void rescale(const sf::Vector2i & _newSize);
     void translate(const sf::Vector2i & _offset);
 
     string getContinentName(ContinentType continent) const;
@@ -319,6 +320,9 @@ public:
     Array2D<Civ7Tile>   m_civ7TerrainType;
     Bitmap              m_bitmaps[enumCount<MapBitmap>()];
 
+    int                 m_editMapOffset[2] = { 0,0 };
+    int                 m_editMapSize[2] = { 0,0 };
+
     vector<string>      m_continents;
     vector<Civilization> m_civilizations; 
 
@@ -332,6 +336,9 @@ public:
     bool                m_showFeatures = true;
     bool                m_showTSL = true;
     bool                m_showHemispheres = true;
+    bool                m_showOverlayImage = false;
+    float               m_overlayOpacity = 0.5f;
+    sf::Texture         m_overlayTex;
     sf::RenderTexture   m_renderTexture;
     bool                m_isHovered = false;
     bool                m_isDocked = false;

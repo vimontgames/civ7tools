@@ -1,4 +1,5 @@
 #include "BaseWindow.h"
+#include "misc\imguiutils.h"
 
 //--------------------------------------------------------------------------------------
 class InfoWindow : public BaseWindow
@@ -25,60 +26,74 @@ bool InfoWindow::Draw(const RenderWindow & window)
     {
         char temp[4096];
 
+        ImGui::PushItemWidth(ImGui::GetFontSize() * 10.0f); 
+
         sprintf_s(temp, "%s", g_map->getPrettyName().c_str());
         ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
         
         sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
         ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
-        int editMapSize[2] =
+        if (ImGui::CollapsingHeader("Map size", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            (int)g_map->m_width,
-            (int)g_map->m_height
-        };
-
-        bool isValidMapSize = g_map->getMapSize(editMapSize[0], editMapSize[1]) != MapSize::Custom;
-
-        if (ImGui::InputInt2("Size", editMapSize, ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            g_map->crop(sf::Vector2i(editMapSize[0], editMapSize[1]));
-            g_map->refresh();
-        }
-
-        ImGui::SameLine();
-        if (!isValidMapSize)
-            ImGui::TextColored(ImVec4(1,0.5,0,1),ICON_FA_TRIANGLE_EXCLAMATION);            
-        else
-            ImGui::TextColored(ImVec4(0, 1, 0, 1), ICON_FA_CHECK);
-
-        if (ImGui::IsItemHovered())
-        {
-            string invalidMapSizeMsg = isValidMapSize ? "Valid map sizes:\n" : "Please use a valid map size!\n";
-            for (auto val : enumValues<MapSize>())
+            if (ImGui::InputInt2("Offset", g_map->m_editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
             {
-                if (val.first == MapSize::Custom)
-                    continue;
-                invalidMapSizeMsg += fmt::sprintf("- %s (%ix%i)\n", asString(val.first), g_mapSizes[(int)val.first][0], g_mapSizes[(int)val.first][1]);
+                g_map->m_mapOffset[0].x = g_map->m_editMapOffset[0];
+                g_map->m_mapOffset[0].y = g_map->m_editMapOffset[1];
+
+                Vector2i delta = g_map->m_mapOffset[0] - g_map->m_mapOffset[1];
+
+                g_map->translate(delta);
+                g_map->m_mapOffset[1] = g_map->m_mapOffset[0];
+                g_map->refresh();
             }
-            ImGui::SetTooltip(invalidMapSizeMsg.c_str());
+
+            bool isValidMapSize = g_map->getMapSize(g_map->m_editMapSize[0], g_map->m_editMapSize[1]) != MapSize::Custom;
+
+            ImGui::InputInt2("Size", g_map->m_editMapSize, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            ImGui::SameLine();
+
+            const bool editing = g_map->m_width != g_map->m_editMapSize[0] || g_map->m_height != g_map->m_editMapSize[1];
+            PushDisabled(!editing);
+            {
+                if (ImGui::Button(ICON_FA_CROP))
+                {
+                    g_map->crop(sf::Vector2i(g_map->m_editMapSize[0], g_map->m_editMapSize[1]));
+                    g_map->refresh();
+                }
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Crop");
+
+                ImGui::SameLine();
+                if (ImGui::Button(ICON_FA_MAXIMIZE))
+                {
+                    g_map->rescale(sf::Vector2i(g_map->m_editMapSize[0], g_map->m_editMapSize[1]));
+                    g_map->refresh();
+                }
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Rescale");
+            }
+            PopDisabled();
+
+            ImGui::SameLine();
+            if (!isValidMapSize)
+                ImGui::TextColored(ImVec4(1, 0.5, 0, 1), ICON_FA_TRIANGLE_EXCLAMATION);
+            else
+                ImGui::TextColored(ImVec4(0, 1, 0, 1), ICON_FA_CHECK);
+
+            if (ImGui::IsItemHovered())
+            {
+                string invalidMapSizeMsg = isValidMapSize ? "Valid map sizes:\n" : "Please use a valid map size!\n";
+                for (auto val : enumValues<MapSize>())
+                {
+                    if (val.first == MapSize::Custom)
+                        continue;
+                    invalidMapSizeMsg += fmt::sprintf("- %s (%ix%i)\n", asString(val.first), g_mapSizes[(int)val.first][0], g_mapSizes[(int)val.first][1]);
+                }
+                ImGui::SetTooltip(invalidMapSizeMsg.c_str());
+            }                
         }
-        
-        int editMapOffset[2] =
-        {
-            g_map->m_mapOffset[0].x, g_map->m_mapOffset[0].y
-        };
-
-        if (ImGui::InputInt2("Offset", editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            g_map->m_mapOffset[0].x = editMapOffset[0];
-            g_map->m_mapOffset[0].y = editMapOffset[1];
-
-            Vector2i delta = g_map->m_mapOffset[0] - g_map->m_mapOffset[1];
-
-            g_map->translate(delta);
-            g_map->m_mapOffset[1] = g_map->m_mapOffset[0];
-            g_map->refresh();
-        }  
 
         if (ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
@@ -105,7 +120,9 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 g_map->m_eastEnd = editEast[1];
                 g_map->fixHemispheres();
             }
-        }        
+        }  
+
+        ImGui::PopItemWidth();
     }
 
     ImGui::End();

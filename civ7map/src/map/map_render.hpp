@@ -72,6 +72,8 @@ void Map::render(RenderWindow & _window)
                     shader->setUniform("selectedCell", Vector2f((float)g_selectedCell.x, (float)g_selectedCell.y));
                     shader->setUniform("selectedRectBegin", Vector2f((float)g_selectedRectMin.x, (float)g_selectedRectMin.y));
                     shader->setUniform("selectedRectEnd", Vector2f((float)g_selectedRectMax.x, (float)g_selectedRectMax.y));
+                    shader->setUniform("overlay", m_overlayTex);
+                    shader->setUniform("overlayOpacity", m_showOverlayImage ? m_overlayOpacity : 0.0f);
 
                     if (m_showHemispheres)
                     {

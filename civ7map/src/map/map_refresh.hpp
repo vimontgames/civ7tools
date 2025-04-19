@@ -111,6 +111,9 @@ void Map::refresh(bool _reload)
     auto & resources = m_bitmaps[(int)MapBitmap::Resources];
     auto & features = m_bitmaps[(int)MapBitmap::Features];
 
+    resources.sprites.clear();
+    features.sprites.clear();
+
     for (u32 h = 0; h < m_height; ++h)
     {
         for (u32 w = 0; w < m_width; ++w)
@@ -217,10 +220,6 @@ void Map::refresh(bool _reload)
     for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)
     {
         auto & bitmap = m_bitmaps[i];
-        bitmap.texture.loadFromImage(bitmap.image);
-        bitmap.sprite.setTexture(bitmap.texture);
-        bitmap.sprite.setTextureRect(IntRect(0, 0, bitmap.texture.getSize().x, bitmap.texture.getSize().y));
-        bitmap.sprite.setScale(Vector2f(scale.x * 2.0f, scale.y));
 
         //if (bitmap.quadshader == invalidShaderID)
         {
@@ -230,6 +229,10 @@ void Map::refresh(bool _reload)
                 break;
 
             case MapBitmap::TerrainData:
+                bitmap.texture.loadFromImage(bitmap.image);
+                bitmap.sprite.setTexture(bitmap.texture);
+                bitmap.sprite.setTextureRect(IntRect(0, 0, bitmap.texture.getSize().x, bitmap.texture.getSize().y));
+                bitmap.sprite.setScale(Vector2f(scale.x * 2.0f, scale.y));
                 bitmap.quadshader = ShaderManager::add("data/shader/terrain_vs.fx", "data/shader/terrain_ps.fx");
                 bitmap.quadblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
                 break;

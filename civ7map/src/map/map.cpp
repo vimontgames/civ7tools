@@ -115,8 +115,12 @@ void Map::createBitmaps()
     for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)
     {
         auto & bitmap = m_bitmaps[i];
-        bitmap.image.create(m_width, m_height * 2);
-        bitmap.sprites.clear();
+
+        if ((MapBitmap)i == MapBitmap::TerrainData)
+        {
+            bitmap.image.create(m_width, m_height * 2);
+            bitmap.sprites.clear();
+        }
     }
 }
 
@@ -239,6 +243,44 @@ void Map::crop(const sf::Vector2i & _newSize)
 }
 
 //--------------------------------------------------------------------------------------
+sf::Vector2i ResizeCoords(int x, int y, const sf::Vector2i& _oldSize, const sf::Vector2i& _newSize)
+{
+    int newX = x * _newSize.x / _oldSize.x;
+    int newY = y * _newSize.y / _oldSize.y;
+    return sf::Vector2i(newX, newY);
+}
+
+//--------------------------------------------------------------------------------------
+void Map::rescale(const sf::Vector2i & _newSize)
+{
+    const sf::Vector2i oldSize = sf::Vector2i(m_width, m_height);
+    auto oldMapData = m_civ7TerrainType;
+    for (int y = 0; y < _newSize.y; ++y)
+    {
+        for (int x = 0; x < _newSize.x; ++x)
+        {
+            auto oldPos = ResizeCoords(x, y, _newSize, oldSize);
+            m_civ7TerrainType.get(x,y) = oldMapData.get(oldPos.x, oldPos.y);
+        }
+    }
+
+    for (uint c = 0; c < m_civilizations.size(); ++c)
+    {
+        auto & civ = m_civilizations[c];
+        for (uint t = 0; t < civ.tsl.size(); ++t)
+        {
+            auto & tsl = civ.tsl[t];
+
+            auto newTSLPos = ResizeCoords(tsl.pos.x, tsl.pos.y, oldSize, _newSize);
+            tsl.pos.x = newTSLPos.x;
+            tsl.pos.y = newTSLPos.y;
+        }
+    }
+
+    crop(_newSize);
+}
+
+//--------------------------------------------------------------------------------------
 void Map::translate(const sf::Vector2i & _offset)
 {
     int offsetX = _offset.x;
@@ -308,7 +350,7 @@ MapSize Map::getMapSize(uint _width, uint _height)
     for (auto val : enumValues<MapSize>())
     {
         const int index = (int)val.first;
-        if (index > 0)
+        if (index >= 0)
         {
             if (g_mapSizes[index][0] == _width && g_mapSizes[index][1] == _height)
                 return val.first;

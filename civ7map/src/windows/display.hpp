@@ -82,6 +82,8 @@ void DrawColor(const Map * _map, BiomeType _biome, TerrainType _terrain, bool _c
         ImGui::ColorEdit3(fmt::sprintf("%s %s", asString(_biome), asString(_terrain)).c_str(), f3Color, ImGuiColorEditFlags_NoInputs); // TODO
 }
 
+bool g_selectOverlayImage = false;
+
 //--------------------------------------------------------------------------------------
 bool DisplayWindow::Draw(const RenderWindow & window)
 {
@@ -95,7 +97,44 @@ bool DisplayWindow::Draw(const RenderWindow & window)
             needRefresh |= Checkbox("Hemispheres", &g_map->m_showHemispheres);
             needRefresh |= Checkbox("Features", &g_map->m_showFeatures);
             needRefresh |= Checkbox("Resources", &g_map->m_showResources);
-            needRefresh |= Checkbox("TSL", &g_map->m_showTSL);            
+            needRefresh |= Checkbox("TSL", &g_map->m_showTSL);   
+            needRefresh |= Checkbox("Overlay", &g_map->m_showOverlayImage);
+            
+            ImGui::SameLine();
+            if (ImGui::Button(ICON_FA_IMAGE))
+            {
+                g_selectOverlayImage = true;
+            }
+
+            ImGui::SameLine();
+
+            ImGui::SliderFloat("Opacity", &g_map->m_overlayOpacity, 0.0f, 1.0f);
+        }
+
+        if (g_selectOverlayImage)
+        {
+            ImGui::OpenPopup("Select Overlay");
+            g_selectOverlayImage = false;
+            SetCurrentDirectory(g_myDocumentsPath.c_str());
+            ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
+        }
+
+        if (g_fileDialog.showFileDialog("Select Overlay", ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".png,.tga,.jpg"))
+        {
+            const string newFilePath = g_fileDialog.selected_path;
+            
+            if (g_map->m_overlayTex.loadFromFile(newFilePath))
+            {
+                LOG_INFO("Overlay texture \"%s\" loaded.", newFilePath.c_str());
+                g_map->m_overlayTex.generateMipmap();
+            }
+            else
+            {
+                LOG_ERROR("Could not load overlay texture \"%s\".", newFilePath.c_str());
+            }        
+
+            SetCurrentDirectory(g_currentWorkingDirectory.c_str());
+            ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
         }
 
         //needRefresh |= Combo("GridType", (int *)&g_map->m_gridType, "Regular\0Offset\0Hexagon\0\0");

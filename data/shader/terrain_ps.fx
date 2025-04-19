@@ -275,7 +275,9 @@ void main()
             color.rgb = float3(1, 1, 1);
     }
     
-    
+    float4 over = texture2D( overlay, float2(uv.x, 1-uv.y));
+    //color = float4(uv, 0, 1); //    over;
+    color = lerp(color, over, overlayOpacity);
             
     gl_FragColor = float4(color.rgb, 1);   
 }

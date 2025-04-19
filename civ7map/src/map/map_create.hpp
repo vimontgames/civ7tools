@@ -66,6 +66,9 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
     m_height = _height;
     m_mapSize = getMapSize(_width, _height);
 
+    m_editMapSize[0] = m_width;
+    m_editMapSize[1] = m_height;
+
     m_isLoaded = true;
 
     m_civ7TerrainType.SetSize(m_width, m_height);

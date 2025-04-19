@@ -33,6 +33,8 @@ uniform float2 west;
 uniform float2 east;
 uniform float4 color;
 uniform sampler2D texture;
+uniform sampler2D overlay;
+uniform float overlayOpacity;
 #define inline
 #endif
 
