@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="Civ7MapUser-EarthStandard" version="1"
+<Mod id="Civ7MapUser-Westeros" version="1"
     xmlns="ModInfo">
     <Properties>
         <Name>LOC_MODULE_MAPNAME_NAME</Name>
         <Description>LOC_MODULE_MAPNAME_DESCRIPTION</Description>
-        <Authors>Benualdo</Authors>
+        <Authors>Civ7MapUser</Authors>
         <Package>Mod</Package>
     </Properties>
     <Dependencies>
@@ -16,7 +16,7 @@
         </Criteria>
     </ActionCriteria>
     <ActionGroups>
-<ActionGroup id="base-game-init-EarthStandard" scope="game" criteria="always">
+<ActionGroup id="base-game-init-Westeros" scope="game" criteria="always">
 		<Properties>                                                          
 			<LoadOrder>-999</LoadOrder>                                       
 		</Properties>                                                         
@@ -26,11 +26,10 @@
 			</UpdateDatabase>                                                 
 		</Actions>                                                            
 	</ActionGroup>                                                            
-        <ActionGroup id="base-game-main-EarthStandard" scope="game" criteria="always">
+        <ActionGroup id="base-game-main-Westeros" scope="game" criteria="always">
             <Actions>
                 <UpdateDatabase>
-                    <Item>data/maps.xml</Item>
-                    <Item>maps/EarthStandard.xml</Item>
+                   <Item>maps/Westeros.xml</Item>
                 </UpdateDatabase>
                 <UpdateText>
                     <Item>text/en_us/MapText.xml</Item>
@@ -40,10 +39,11 @@
 	             </UpdateIcons>
             </Actions>
         </ActionGroup>
-        <ActionGroup id="shell-EarthStandard" scope="shell" criteria="always">
+        <ActionGroup id="shell-Westeros" scope="shell" criteria="always">
             <Actions>
                 <UpdateDatabase>
                     <Item>config/config.xml</Item>
+                    <Item>maps/Westeros.xml</Item>
                 </UpdateDatabase>
                 <UpdateText>
                     <Item>text/en_us/MapText.xml</Item>

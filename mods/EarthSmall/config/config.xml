@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Name="LOC_EARTHSMALL_NAME" Description="LOC_EARTHSMALL_DESCRIPTION" SortIndex="99"/>
+    </Maps>
+	
+	<MapSizes>
+        <Row Domain="StandardMapSizes"     MapSizeType="MAPSIZE_EARTHSMALL_10P" Name="LOC_MAP_EARTHSMALL_10P_SIZE_NAME" Description="LOC_MAP_EARTHSMALL_10P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="8" DefaultPlayers="10" SortIndex="120"/>
+        <Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSMALL_10P" Name="LOC_MAP_EARTHSMALL_10P_SIZE_NAME" Description="LOC_MAP_EARTHSMALL_10P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="10" MaxHumans="5" DefaultPlayers="10" SortIndex="130"/>
+        <Row Domain="StandardMapSizes"     MapSizeType="MAPSIZE_EARTHSMALL_12P" Name="LOC_MAP_EARTHSMALL_12P_SIZE_NAME" Description="LOC_MAP_EARTHSMALL_12P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="12" MaxHumans="8" DefaultPlayers="12" SortIndex="122"/>
+        <Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSMALL_12P" Name="LOC_MAP_EARTHSMALL_12P_SIZE_NAME" Description="LOC_MAP_EARTHSMALL_12P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="12" MaxHumans="5" DefaultPlayers="12" SortIndex="131"/>
+	</MapSizes>
+	
+    <SupportedValuesByMap>
+        <Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="StandardMapSizes"      Value="MAPSIZE_STANDARD"/>
+        <Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="DistantLandsMapSizes"  Value="MAPSIZE_STANDARD"/>
+		<Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="StandardMapSizes"      Value="MAPSIZE_EARTHSMALL_10P"/>
+        <Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="DistantLandsMapSizes"  Value="MAPSIZE_EARTHSMALL_10P"/>
+        <Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="StandardMapSizes"      Value="MAPSIZE_EARTHSMALL_12P"/>
+        <Row Map="{Civ7MapUser-EarthSmall}maps/EarthSmall-map.js" Domain="DistantLandsMapSizes"  Value="MAPSIZE_EARTHSMALL_12P"/>
+    </SupportedValuesByMap>
+</Database>

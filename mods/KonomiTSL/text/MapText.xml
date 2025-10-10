@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_MAP_KNM_WORLD_MAP_STANDARD_NAME">
+			<Text>World Outline (Standard Map Size)</Text>
+		</Row>
+		<Row Tag="LOC_MAP_KNM_WORLD_MAP_STANDARD_DESCRIPTION">
+			<Text>[BLIST][LI]Landmass shapes​​ match the real-world Earth map.[LI]Biomes, Natural Wonders, starting locations​​, and other features are ​​randomized​​.[LI]Important:​​ Due to current game limitations, [B]​​you must select the "Standard" map size​​ when using this map—other sizes may cause terrain glitches or crashes[/B].[/LIST]</Text>
+		</Row>
+	</EnglishText>
+
+  <LocalizedText>
+    <Replace Tag="LOC_MAP_KNM_WORLD_MAP_STANDARD_DESCRIPTION" Language="zh_Hans_CN">
+      <Text>[BLIST][LI]陆地轮廓与世界地图一致。[LI]生物群系、自然奇观、出生点等随机。[LI]因当前游戏版本存在问题，[B]使用该地图时请务必选择“标准”地图尺寸，其他尺寸可能导致地形异常或崩溃[/B]。[/LIST]</Text>
+    </Replace>
+    <Replace Tag="LOC_MAP_KNM_WORLD_MAP_STANDARD_NAME" Language="zh_Hans_CN">
+      <Text>标准尺寸世界地图轮廓</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>     
+<Database>                                     
+                                               
+	<!-- +++++++++++++++++++++++++++++++++++ -->
+	<!-- "EarthSmall" start position -->
+	<!-- +++++++++++++++++++++++++++++++++++ -->
+	                                            
+	<!-- Major Civilizations -->                
+	<StartPosition>                             
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_AKSUM" X="46" Y="20" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_EGYPT" X="42" Y="25" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_GREECE" X="42" Y="30" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_HAN" X="58" Y="35" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_KHMER" X="59" Y="29" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MAURYA" X="55" Y="27" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MAYA" X="11" Y="22" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MISSISSIPPIAN" X="7" Y="34" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_PERSIA" X="47" Y="28" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_ROME" X="36" Y="31" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_CARTHAGE" X="34" Y="26" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_ASSYRIA" X="45" Y="28" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_SILLA" X="64" Y="39" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_ABBASID" X="45" Y="27" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_CHOLA" X="41" Y="13" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MING" X="61" Y="34" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MONGOLIA" X="57" Y="40" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_SONGHAI" X="32" Y="17" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_SHAWNEE" X="11" Y="34" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_BULGARIA" X="39" Y="33" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_AMERICA" X="13" Y="33" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_PRUSSIA" X="39" Y="40" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_QING" X="61" Y="40" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_RUSSIA" X="42" Y="42" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_MEIJI" X="69" Y="34" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_BUGANDA" X="41" Y="13" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_QAJAR" X="47" Y="30" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_GERMANIA" X="39" Y="40" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_SAXON" X="29" Y="39" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_SANSEB_TAGALOG" X="64" Y="25" />
+		<Replace MapName="EarthSmall" Civilization="CIVILIZATION_GAULS" X="29" Y="35" />
+	</StartPosition>                            
+</Database>                                    

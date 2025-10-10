@@ -20,7 +20,7 @@ function requestMapData(initParams) {
     engine.call("SetMapInitData", initParams);
 }
 function generateMap() {
-    const mapName = 'EARTHSTANDARD';
+    const mapName = 'EarthSmall';
     let genParameters = {
         westStart: 1,
         westEnd: 25,

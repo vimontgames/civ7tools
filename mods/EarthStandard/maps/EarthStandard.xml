@@ -2,7 +2,7 @@
 <Database>                                     
                                                
 	<!-- +++++++++++++++++++++++++++++++++++ -->
-	<!-- "EARTHSTANDARD" start position -->
+	<!-- "EarthStandard" start position -->
 	<!-- +++++++++++++++++++++++++++++++++++ -->
 	                                            
 	<!-- Major Civilizations -->                
@@ -22,19 +22,27 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SILLA" X="75" Y="43" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ABBASID" X="52" Y="32" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_CHOLA" X="47" Y="16" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HAWAII" X="2" Y="27" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_INCA" X="18" Y="14" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MAJAPAHIT" X="69" Y="21" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MING" X="70" Y="40" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MONGOLIA" X="65" Y="48" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_NORMAN" X="31" Y="40" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SONGHAI" X="37" Y="21" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SPAIN" X="29" Y="33" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SHAWNEE" X="13" Y="40" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_BULGARIA" X="45" Y="39" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_DAI_VIET" X="67" Y="34" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_TCS_OUTREMER" X="51" Y="32" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_AMERICA" X="15" Y="39" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_FRENCH_EMPIRE" X="34" Y="41" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MEXICO" X="9" Y="30" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MUGHAL" X="60" Y="32" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_PRUSSIA" X="45" Y="47" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_QING" X="70" Y="47" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_RUSSIA" X="48" Y="50" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SIAM" X="67" Y="32" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GREAT_BRITAIN" X="32" Y="45" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MEIJI" X="79" Y="40" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_BUGANDA" X="47" Y="16" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_NEPAL" X="61" Y="34" />
@@ -43,5 +51,7 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SAXON" X="32" Y="45" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SANSEB_TAGALOG" X="72" Y="29" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GAULS" X="34" Y="41" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ENGLAND" X="32" Y="45" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SANSEB_PHILIPPINES" X="73" Y="28" />
 	</StartPosition>                            
 </Database>                                    

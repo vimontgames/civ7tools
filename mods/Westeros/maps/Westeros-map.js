@@ -1,15 +1,15 @@
-// EarthStandard-map.js
+// Westeros-map.js
 /**
-* EarthStandard
+* Westeros
 * 
 */
-console.log("loading script EarthStandard-map.js");
+console.log("loading script Westeros-map.js");
 import { generateYnAMP } from '/ged-ynamp/maps/ynamp-map-loading.js';
-import { GetMap } from '/Civ7MapUser-EarthStandard/maps/EarthStandard-data.js';
+import { GetMap } from '/Civ7MapUser-Westeros/maps/Westeros-data.js';
 
 function requestMapData(initParams) {
-    initParams.width = 84;
-    initParams.height = 54;
+    initParams.width = 96;
+    initParams.height = 60;
     console.log(initParams.width);
     console.log(initParams.height);
     console.log(initParams.topLatitude);
@@ -20,12 +20,12 @@ function requestMapData(initParams) {
     engine.call("SetMapInitData", initParams);
 }
 function generateMap() {
-    const mapName = 'EARTHSTANDARD';
+    const mapName = 'Westeros';
     let genParameters = {
         westStart: 1,
-        westEnd: 25,
-        eastStart: 28,
-        eastEnd: 83
+        westEnd: 47,
+        eastStart: 49,
+        eastEnd: 95
     };
     let importedMap = GetMap();
     generateYnAMP(mapName, importedMap, genParameters);
@@ -35,4 +35,4 @@ function generateMap() {
 engine.on('RequestMapInitData', requestMapData);
 engine.on('GenerateMap', generateMap);
 
-console.log("Loaded EarthStandard-map.js");
+console.log("Loaded Westeros-map.js");

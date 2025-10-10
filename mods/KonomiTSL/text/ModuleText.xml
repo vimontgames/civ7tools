@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_MODULE_KNM_WORLD_MAP_NAME">
+			<Text>Konomi's World Outline (Standard Map Size)</Text>
+		</Row>
+		<Row Tag="LOC_MODULE_KNM_WORLD_MAP_DESCRIPTION">
+			<Text>​​Added a new map type: World Outline (Standard Map Size).​​ [n][BLIST][LI]Landmass shapes​​ match the real-world Earth map.[LI]Biomes, Natural Wonders, starting locations​​, and other features are ​​randomized​​.[LI]Important:​​ Due to current game limitations, [B]​​you must select the "Standard" map size​​ when using this map—other sizes may cause terrain glitches or crashes[/B].[/LIST]</Text>
+		</Row>
+		<Row Tag="LOC_MODULE_KNM_WORLD_MAP_AUTHOR">
+			<Text>Konomi</Text>
+		</Row>
+	</EnglishText>
+
+  <LocalizedText>
+	<Replace Tag="LOC_MODULE_KNM_WORLD_MAP_AUTHOR" Language="zh_Hans_CN">
+		<Text>浪子</Text>
+	  </Replace>
+    <Replace Tag="LOC_MODULE_KNM_WORLD_MAP_DESCRIPTION" Language="zh_Hans_CN">
+      <Text>引入1种新地图：标准尺寸世界地图轮廓。[n][BLIST][LI]陆地轮廓与世界地图一致。[LI]生物群系、自然奇观、出生点等随机。[LI]因当前游戏版本存在问题，[B]使用该地图时请务必选择“标准”地图尺寸，其他尺寸可能导致地形异常或崩溃[/B]。[/LIST]</Text>
+    </Replace>
+    <Replace Tag="LOC_MODULE_KNM_WORLD_MAP_NAME" Language="zh_Hans_CN">
+      <Text>浪子的标准尺寸世界地图轮廓</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

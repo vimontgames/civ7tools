@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <EnglishText>
+        
+        <Replace Tag="LOC_EARTHSMALL_NAME">
+            <Text>Earth Small (74x46)[n](Civ7Map)</Text>
+        </Replace>
+        <Replace Tag="LOC_EARTHSMALL_DESCRIPTION">
+            <Text>Small Earth map</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSMALL_10P_SIZE_NAME">
+            <Text>Earth Small (74x46, 10 players)</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSMALL_10P_SIZE_DESCRIPTION">
+            <Text>12 players on a 74x46 map</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSMALL_12P_SIZE_NAME">
+            <Text>Earth Small (74x46, 12 players)</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSMALL_12P_SIZE_DESCRIPTION">
+            <Text>12 players on a 74x46 map</Text>
+        </Replace>        
+    </EnglishText>
+</Database>

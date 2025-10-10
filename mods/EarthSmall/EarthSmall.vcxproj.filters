@@ -22,26 +22,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Colonization-map.modinfo" />
-    <None Include="data\tables.sql">
-      <Filter>data</Filter>
-    </None>
-    <None Include="maps\Colonization-data.js">
-      <Filter>maps</Filter>
-    </None>
-    <None Include="maps\Colonization-map.js">
-      <Filter>maps</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="config\config.xml">
       <Filter>config</Filter>
     </Xml>
     <Xml Include="data\maps.xml">
       <Filter>data</Filter>
-    </Xml>
-    <Xml Include="maps\Colonization.xml">
-      <Filter>maps</Filter>
     </Xml>
     <Xml Include="text\en_us\MapText.xml">
       <Filter>Texts\en_us</Filter>
@@ -49,5 +34,20 @@
     <Xml Include="text\en_us\ModuleText.xml">
       <Filter>Texts\en_us</Filter>
     </Xml>
+    <Xml Include="maps\EarthSmall.xml">
+      <Filter>maps</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\tables.sql">
+      <Filter>data</Filter>
+    </None>
+    <None Include="EarthStandard-map.modinfo" />
+    <None Include="maps\EarthSmall-data.js">
+      <Filter>maps</Filter>
+    </None>
+    <None Include="maps\EarthSmall-map.js">
+      <Filter>maps</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,44 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Database>
-    <EnglishText>
-        
-        <Replace Tag="LOC_EARTHSMALL_NAME">
-            <Text>Earth Small (74x46)[n](Civ7Map)</Text>
+    <?xml version="1.0" encoding="utf-8"?>   
+<Database>                                      
+	<EnglishText>                                
+		<Replace Tag="LOC_EARTHSTANDARD_NAME">       
+			<Text>Benualdo's Standard Earth</Text>
+		</Replace>                               
+		<Replace Tag="LOC_EARTHSTANDARD_DESCRIPTION">
+            <Text>Benualdo's Standard Earth map (84x54)[n]Requires YnAMP mod[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>       
+		</Replace>
+        <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME">
+            <Text>Benualdo Standard Earth (84x54)</Text>
         </Replace>
-        <Replace Tag="LOC_EARTHSMALL_DESCRIPTION">
-            <Text>Small Earth map</Text>
+        <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION">
+            <Text>11 players on a 84x54 map</Text>
         </Replace>
-        <Replace Tag="LOC_MAP_EARTHSMALL_10P_SIZE_NAME">
-            <Text>Earth Small (74x46, 10 players)</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSMALL_10P_SIZE_DESCRIPTION">
-            <Text>12 players on a 74x46 map</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSMALL_12P_SIZE_NAME">
-            <Text>Earth Small (74x46, 12 players)</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSMALL_12P_SIZE_DESCRIPTION">
-            <Text>12 players on a 74x46 map</Text>
-        </Replace>
-
-        <Replace Tag="LOC_EARTHSTANDARD_NAME">
-            <Text>Earth Standard (84x54)[n](Civ7Map)</Text>
-        </Replace>
-        <Replace Tag="LOC_EARTHSTANDARD_DESCRIPTION">
-            <Text>Standard Earth map</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSTANDARD_10P_SIZE_NAME">
-            <Text>Earth Standard (84x54, 10 players)</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSTANDARD_10P_SIZE_DESCRIPTION">
-            <Text>12 players on a 84x54 map</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSTANDARD_12P_SIZE_NAME">
-            <Text>Earth Standard (84x54, 12 players)</Text>
-        </Replace>
-        <Replace Tag="LOC_MAP_EARTHSTANDARD_12P_SIZE_DESCRIPTION">
-            <Text>12 players on a 84x54 map</Text>
-        </Replace>
-        
-    </EnglishText>
-</Database>
+	</EnglishText>                               
+</Database>                                     

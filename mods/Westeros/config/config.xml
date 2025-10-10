@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <Maps>
+        <Row File="{Civ7MapUser-Westeros}maps/Westeros-map.js" Name="LOC_WESTEROS_NAME" Description="LOC_WESTEROS_DESCRIPTION" SortIndex="100"/>
+    </Maps>
+    <SupportedValuesByMap>
+        <Row Map="{Civ7MapUser-Westeros}maps/Westeros-map.js" Domain="StandardMapSizes" Value="MAPSIZE_LARGE"/>
+        <Row Map="{Civ7MapUser-Westeros}maps/Westeros-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_LARGE"/>
+    </SupportedValuesByMap>
+</Database>
