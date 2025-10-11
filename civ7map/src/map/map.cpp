@@ -62,6 +62,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Carthage", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));    // Assumed color (ORANGE_MD)
     m_civilizations.push_back(Civilization("Assyria", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));    
     m_civilizations.push_back(Civilization("Silla", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Huns ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));   // CIVILIZATION_HUNS_ROG
 
     // Exploration Age Civilizations
     m_civilizations.push_back(Civilization("Abbasid", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Harun al-Rashid's color (GREEN_DK)
@@ -98,6 +99,8 @@ Map::Map()
 
     // Antiquity
     m_civilizations.push_back(Civilization("Germania", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Germania JEC", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));  // CIVILIZATION_GERMANIA_JEC
+
     m_civilizations.push_back(Civilization("Saxon", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     
     m_civilizations.push_back(Civilization("Sanseb Tagalog", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Gauls", Era::Antiquity, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
