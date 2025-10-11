@@ -34,7 +34,10 @@
     <Xml Include="text\en_us\ModuleText.xml">
       <Filter>Texts\en_us</Filter>
     </Xml>
-    <Xml Include="maps\EarthSmall.xml">
+    <Xml Include="icons\icons.xml">
+      <Filter>icons</Filter>
+    </Xml>
+    <Xml Include="maps\EarthStandard.xml">
       <Filter>maps</Filter>
     </Xml>
   </ItemGroup>
@@ -43,10 +46,19 @@
       <Filter>data</Filter>
     </None>
     <None Include="EarthStandard-map.modinfo" />
-    <None Include="maps\EarthSmall-data.js">
+    <None Include="maps\ynamp-map-loading.js">
       <Filter>maps</Filter>
     </None>
-    <None Include="maps\EarthSmall-map.js">
+    <None Include="maps\ynamp-utilities.js">
+      <Filter>maps</Filter>
+    </None>
+    <None Include="maps\ynamp-resource-generator.js">
+      <Filter>maps</Filter>
+    </None>
+    <None Include="maps\EarthStandard-data.js">
+      <Filter>maps</Filter>
+    </None>
+    <None Include="maps\EarthStandard-map.js">
       <Filter>maps</Filter>
     </None>
   </ItemGroup>

@@ -2,17 +2,17 @@
 <Database>
     
     <Maps>
-        <Row File="{Civ7MapUser-EarthStandard}maps/EarthStandard-map.js" Name="LOC_EARTHSTANDARD_NAME" Description="LOC_EARTHSTANDARD_DESCRIPTION" SortIndex="1"/>
+        <Row File="{Benualdo-EarthStandard}maps/EarthStandard-map.js" Name="LOC_EARTHSTANDARD_NAME" Description="LOC_EARTHSTANDARD_DESCRIPTION" SortIndex="1"/>
     </Maps>
     
     <MapSizes>
-        <Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="11" MaxHumans="10" DefaultPlayers="11" SortIndex="1"/>
-        <Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="11" MaxHumans="10" DefaultPlayers="11" SortIndex="1"/>
+        <Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="16" MaxHumans="10" DefaultPlayers="11" SortIndex="1"/>
+        <Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" MinPlayers="2" MaxPlayers="16" MaxHumans="10" DefaultPlayers="11" SortIndex="1"/>
     </MapSizes>
     
     <SupportedValuesByMap>
-        <Row Map="{Civ7MapUser-EarthStandard}maps/EarthStandard-map.js" Domain="StandardMapSizes" Value="MAPSIZE_EARTHSTANDARD_11P"/>
-        <Row Map="{Civ7MapUser-EarthStandard}maps/EarthStandard-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTHSTANDARD_11P"/>
+        <Row Map="{Benualdo-EarthStandard}maps/EarthStandard-map.js" Domain="StandardMapSizes" Value="MAPSIZE_EARTHSTANDARD_11P"/>
+        <Row Map="{Benualdo-EarthStandard}maps/EarthStandard-map.js" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTHSTANDARD_11P"/>
     </SupportedValuesByMap>
     
 </Database>

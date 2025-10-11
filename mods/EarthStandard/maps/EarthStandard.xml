@@ -20,6 +20,7 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_CARTHAGE" X="38" Y="30" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ASSYRIA" X="52" Y="34" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SILLA" X="75" Y="43" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HUNS_ROG" X="59" Y="42" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ABBASID" X="52" Y="32" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_CHOLA" X="47" Y="16" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HAWAII" X="2" Y="27" />
@@ -48,6 +49,7 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_NEPAL" X="61" Y="34" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_QAJAR" X="54" Y="36" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GERMANIA" X="45" Y="47" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GERMANIA_JEC" X="44" Y="47" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SAXON" X="32" Y="45" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SANSEB_TAGALOG" X="72" Y="29" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GAULS" X="34" Y="41" />

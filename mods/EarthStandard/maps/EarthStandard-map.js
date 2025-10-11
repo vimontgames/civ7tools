@@ -4,8 +4,9 @@
 * 
 */
 console.log("loading script EarthStandard-map.js");
-import { generateYnAMP } from '/ged-ynamp/maps/ynamp-map-loading.js';
-import { GetMap } from '/Civ7MapUser-EarthStandard/maps/EarthStandard-data.js';
+//import { generateYnAMP } from '/ged-ynamp/maps/ynamp-map-loading.js';
+import { generateYnAMP } from '/Benualdo-EarthStandard/maps/ynamp-map-loading.js';
+import { GetMap } from '/Benualdo-EarthStandard/maps/EarthStandard-data.js';
 
 function requestMapData(initParams) {
     initParams.width = 84;
