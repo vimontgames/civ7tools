@@ -334,13 +334,8 @@ function assignTSL(mapName, defaultStartPositions) {
     console.log("Assigning YnAMP TSL for " + mapName);
     const startPositions = []; // Plot indices for start positions chosen
     const TSL = {};
-
-    for (let i = 0; i < GameInfo.StartPosition.length; ++i) {
-        let row = GameInfo.StartPosition[i];
-        if (row.MapName == mapName) {
-            TSL[row.Civilization] = { X: row.X, Y: row.Y };
-        }
-    }
+    const FREETSL = [];
+    let iFree = 0;
 
     // The index values we will be dealing with in this function, correspond to the index
     // in the Alive Majors array.
@@ -354,12 +349,65 @@ function assignTSL(mapName, defaultStartPositions) {
         let uiCivType = Players.getEverAlive()[iPlayer].civilizationType;
         let civTypeName = GameInfo.Civilizations.lookup(uiCivType).CivilizationType;
         //console.log("uiCivType = "+ uiCivType);
+        console.log("Civ #" + i + " = " + civTypeName + " (iPlayer = " + iPlayer + ")");
+    }
+
+    for (let i = 0; i < GameInfo.StartPosition.length; ++i) {
+        let row = GameInfo.StartPosition[i];
+        if (row.MapName == mapName) {
+
+            TSL[row.Civilization] = { X: row.X, Y: row.Y };
+
+            // Check if TSL is actually used
+            let used = false;
+            for (let j = 0; j < aliveMajorIds.length; j++) {
+
+                //console.log("j = " + j + "/" + aliveMajorIds.length);
+
+                let iPlayer = aliveMajorIds[j];
+                let uiCivType = Players.getEverAlive()[iPlayer].civilizationType;
+                let civTypeName = GameInfo.Civilizations.lookup(uiCivType).CivilizationType;
+                if (civTypeName === row.Civilization) {
+                    used = true;
+                } 
+            }
+
+            if (used) {
+                console.log("TSL #" + i + ":" + row.Civilization);
+            } else {
+                console.log("TSL #" + i + ":" + row.Civilization + " (unused)");
+                FREETSL[iFree] = { X: row.X, Y: row.Y };
+                iFree++;
+            }
+        }
+    }
+
+    console.log(iFree + " TSL are not used");
+   
+
+    for (let i = 0; i < aliveMajorIds.length; i++) {
+
+        //console.log("aliveMajorIds["+i+"] = "+ aliveMajorIds[i]);
+
+        let iPlayer = aliveMajorIds[i];
+        let uiCivType = Players.getEverAlive()[iPlayer].civilizationType;
+        let civTypeName = GameInfo.Civilizations.lookup(uiCivType).CivilizationType;
+        //console.log("uiCivType = "+ uiCivType);
         console.log("CivType = " + civTypeName);
 
         let startPosition = TSL[civTypeName];
         if (startPosition === undefined) {
-            if (defaultStartPositions.length == 0) {
+            if ((defaultStartPositions || []).length === 0) {
                 console.log("NO TSL FOR PLAYER: " + civTypeName + " " + iPlayer);
+
+                // Reuse any free TSL
+                let rIndex = Math.floor(Math.random() * FREETSL.length);
+                let rPos = FREETSL[rIndex];
+                console.log("Use random TSL #" + rIndex + " (" + rPos.X + ", " + rPos.Y + ")");
+                let iPlot = rPos.Y * GameplayMap.getGridWidth() + rPos.X;
+                startPositions[i] = iPlot;
+                StartPositioner.setStartPosition(iPlot, iPlayer);
+
             } else {
                 let iPlot = defaultStartPositions[i];
                 console.log("NO TSL FOR PLAYER: " + civTypeName + " " + iPlayer + " Use default start position (" + Math.floor(iPlot / GameplayMap.getGridWidth()) + ", " + iPlot % GameplayMap.getGridWidth() + ")");

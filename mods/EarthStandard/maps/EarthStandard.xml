@@ -20,7 +20,6 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_CARTHAGE" X="38" Y="30" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ASSYRIA" X="52" Y="34" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SILLA" X="75" Y="43" />
-		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HUNS_ROG" X="59" Y="42" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ABBASID" X="52" Y="32" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_CHOLA" X="63" Y="28" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HAWAII" X="2" Y="27" />
@@ -34,8 +33,6 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SHAWNEE" X="13" Y="40" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_BULGARIA" X="45" Y="39" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_DAI_VIET" X="67" Y="34" />
-		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_TCS_OUTREMER" X="51" Y="32" />
-		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_VENICE" X="41" Y="39" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_AMERICA" X="15" Y="39" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_FRENCH_EMPIRE" X="34" Y="41" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_MEXICO" X="9" Y="30" />
@@ -54,7 +51,13 @@
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SAXON" X="32" Y="45" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SANSEB_TAGALOG" X="72" Y="29" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_GAULS" X="34" Y="41" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_HUNS_ROG" X="59" Y="42" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ENGLAND" X="32" Y="45" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_TCS_OUTREMER" X="51" Y="32" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_VENICE" X="41" Y="39" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_DOURADOS_PORTUGAL" X="27" Y="31" />
 		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_SANSEB_PHILIPPINES" X="73" Y="28" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_NYGUITA_ARGENTINA" X="21" Y="7" />
+		<Replace MapName="EARTHSTANDARD" Civilization="CIVILIZATION_ARTHUR_SPANISH_EMPIRE" X="29" Y="33" />
 	</StartPosition>                            
 </Database>                                    
