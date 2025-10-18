@@ -79,6 +79,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Bulgaria", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Dai Viet", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("TCS Outremer", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Venice", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f)));
 
     // Modern Age Civilizations
     m_civilizations.push_back(Civilization("America", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Benjamin Franklin's color (RED_DK)
