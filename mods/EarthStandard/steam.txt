@@ -1,0 +1,45 @@
+[h1]Benualdo's Standard Earth TSL[/h1]
+Do you enjoy playing Civilization VII on an [b]Earth[/b] map with [b]T[/b]rue [b]S[/b]arting [b]L[/b]ocations, but find that existing maps are too large — making late-game turns take forever? Would you rather play at a standard pace on a more compact, densely populated map? Then this mod is made for you!
+
+[h2]YnAMP[/h2]
+This mod would not be possible without Gedemon's work on YnAMP. Unfortunately, YnAMP is not yet available on Steam Workshop so some of its files had to be included in this mod to allow it to work as standalone. Disabling other manual installation of YnAMP in the "Mods" folder is recommended to avoid incompatibility issues.
+
+[h2]Player count[/h2]
+The mods defaults to 11 players  but if you don't have [b]enought civilization for of each age[/b] the TSL and age transitions could not work as intended. You can also add more than 11 players in the setup screen if you have more than 11 civilizations available thanks to other mods.
+
+[h2]TSL[/h2]
+True Starting Locations are available for the following civilizations:
+
+[h3]Old World[/h3]
+[table]
+[tr]
+[th]         Antiquity[/th][th]   Exploration[/th][th]        Modern[/th][/tr]
+[tr][td]         Aksum[/td][td]       Abbasid[/td][td]       Buganda[/td][/tr]
+[tr][td]       Assyria[/td][td]      Bulgaria[/td][td] French Empire[/td][/tr]
+[tr][td]      Carthage[/td][td]         Chola[/td][td] Great Britain[/td][/tr]
+[tr][td]         Egypt[/td][td]      Dai Viet[/td][td]         Meiji[/td][/tr]
+[tr][td]         Gauls[/td][td]       England[/td][td]        Mughal[/td][/tr]
+[tr][td]      Germania[/td][td]     Majapahit[/td][td]         Nepal[/td][/tr]
+[tr][td]        Greece[/td][td]          Ming[/td][td]       Prussia[/td][/tr]
+[tr][td]           Han[/td][td]      Mongolia[/td][td]         Qajar[/td][/tr]
+[tr][td]          Huns[/td][td]        Norman[/td][td]          Qing[/td][/tr]
+[tr][td]         Khmer[/td][td]       Songhai[/td][td]        Russia[/td][/tr]
+[tr][td]        Maurya[/td][td]         Spain[/td][td]          Siam[/td][/tr]
+[tr][td]        Persia[/td][td]      Outremer[/td][td]   Philippines[/td][/tr]
+[tr][td]          Rome[/td][td]              [/td][td]              [/td][/tr]
+[tr][td]         Saxon[/td][td]              [/td][td]              [/td][/tr]
+[tr][td]         Silla[/td][td]              [/td][td]              [/td][/tr]
+[tr][td]       Tagalog[/td][td]              [/td][td]              [/td][/tr]
+[/table]     
+
+[h3]New World[/h3]
+[table]
+[tr]
+[th]         Antiquity[/th][th]   Exploration[/th][th]         Modern[/th][/tr]
+[tr][td]          Maya[/td][td]        Hawaii[/td][td]        America[/td][/tr]
+[tr][td] Mississippian[/td][td]          Inca[/td][td]         Mexico[/td][/tr]
+[tr][td]              [/td][td]       Shawnee[/td][td]               [/td][/tr]
+[/table]
+
+[h1]Civ7Map[/h1]
+This mod was edited with Civ7Map, an unnoffical open-source Civilization VII map editor.

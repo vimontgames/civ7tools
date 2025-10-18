@@ -23,9 +23,9 @@ function requestMapData(initParams) {
 function generateMap() {
     const mapName = 'EARTHSTANDARD';
     let genParameters = {
-        westStart: 1,
+        westStart: 0,
         westEnd: 25,
-        eastStart: 28,
+        eastStart: 26,
         eastEnd: 83
     };
     let importedMap = GetMap();

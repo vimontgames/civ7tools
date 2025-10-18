@@ -6,7 +6,7 @@
 	</Types>
     
 	<Maps>
-        <Replace MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" DefaultPlayers="11" PlayersLandmass1="8" PlayersLandmass2="3" GridWidth="84" GridHeight="54" NumNaturalWonders="8" OceanWidth="4" LakeSizeCutoff="8" LakeGenerationFrequency="25" Continents="4" StartSectorRows="4" StartSectorCols="3"/>
+        <Replace MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" DefaultPlayers="11" PlayersLandmass1="8" PlayersLandmass2="3" GridWidth="84" GridHeight="54" NumNaturalWonders="10" OceanWidth="4" LakeSizeCutoff="8" LakeGenerationFrequency="20" Continents="2" StartSectorRows="4" StartSectorCols="3"/>
     </Maps>	
     
 	<AgeProgressionEvents>
