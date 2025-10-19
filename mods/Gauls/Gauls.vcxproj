@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\icon\civ_sym_gauls" />
+    <None Include="package.json" />
+    <None Include="benualdo-gauls.modinfo" />
+    <None Include="ui\game.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\icon\buildicon_moot_hall.png" />
+    <Image Include="assets\icon\civ_sym_gauls.png" />
+    <Image Include="assets\icon\cult_gauls.png" />
+    <Image Include="assets\icon\gauls.png" />
+    <Image Include="assets\icon\impicon_sacred_grove.png" />
+    <Image Include="assets\icon\lsbg_saxon_1080.png" />
+    <Image Include="assets\icon\lsbg_saxon_720.png" />
+    <Image Include="assets\icon\unitflag_ceorl.png" />
+    <Image Include="assets\icon\wondericon_temple_of_irminsul.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config\config.xml" />
+    <Xml Include="data\ai-antiquity.xml" />
+    <Xml Include="data\citizen-names.xml" />
+    <Xml Include="data\civilizations-antiquity-ada.xml" />
+    <Xml Include="data\civilizations-antiquity.xml" />
+    <Xml Include="data\civilizations-base-standard.xml" />
+    <Xml Include="data\civilizations-gameeffects.xml" />
+    <Xml Include="data\civilizations-legacy.xml" />
+    <Xml Include="data\constructibles-gameeffects.xml" />
+    <Xml Include="data\constructibles-no-persist.xml" />
+    <Xml Include="data\constructibles.xml" />
+    <Xml Include="data\loading-info-antiquity.xml" />
+    <Xml Include="data\named-places.xml" />
+    <Xml Include="data\progression-trees-culture-common.xml" />
+    <Xml Include="data\progression-trees-culture-unique-gameeffects.xml" />
+    <Xml Include="data\progression-trees-culture-unique.xml" />
+    <Xml Include="data\progression-trees-tech.xml" />
+    <Xml Include="data\religion-gameeffects.xml" />
+    <Xml Include="data\religion.xml" />
+    <Xml Include="data\traditions-gameeffects.xml" />
+    <Xml Include="data\traditions.xml" />
+    <Xml Include="data\units-gameeffects.xml" />
+    <Xml Include="data\units.xml" />
+    <Xml Include="data\unlocks-antiquity.xml" />
+    <Xml Include="data\unlocks-base-standard.xml" />
+    <Xml Include="data\visual-remap.xml" />
+    <Xml Include="data\wonders-gameeffects.xml" />
+    <Xml Include="data\wonders.xml" />
+    <Xml Include="icons\icons.xml" />
+    <Xml Include="text\en_us\AttributesText.xml" />
+    <Xml Include="text\en_us\CitizenNamesText.xml" />
+    <Xml Include="text\en_us\CityNamesText.xml" />
+    <Xml Include="text\en_us\CivilizationLegacyText.xml" />
+    <Xml Include="text\en_us\CivilizationText.xml" />
+    <Xml Include="text\en_us\CivilopediaText.xml" />
+    <Xml Include="text\en_us\ConstructibleText.xml" />
+    <Xml Include="text\en_us\CultureText.xml" />
+    <Xml Include="text\en_us\LoadingText.xml" />
+    <Xml Include="text\en_us\ModuleText.xml" />
+    <Xml Include="text\en_us\NamedPlacesText.xml" />
+    <Xml Include="text\en_us\UnitText.xml" />
+    <Xml Include="text\en_us\UnlockText.xml" />
+    <Xml Include="text\en_us\WonderText.xml" />
+    <Xml Include="ynamp\data\greatest-earth.xml" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{05a527c7-13ff-4aaf-8937-90a21f7f14b4}</ProjectGuid>
+    <RootNamespace>Gauls</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

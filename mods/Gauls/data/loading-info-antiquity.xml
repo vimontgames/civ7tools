@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<LoadingInfo_Civilizations>
+		<Row CivilizationType="CIVILIZATION_GAULS" CivilizationText="LOC_LOADING_CIV_INTRO_TEXT_GAULS" Subtitle="LOC_LOADING_VO_GAULS" Audio="VO_Loading_GAULS" BackgroundImageHigh="fs://game/benualdo-civ-gauls/assets/icon/lsbg_gauls_1080.png" BackgroundImageLow="fs://game/benualdo-civ-gauls/assets/icon/lsbg_gauls_720.png" ForegroundImage="fs://game/benualdo-civ-gauls/assets/icon/civ_line_gauls.png"  Tip="LOC_LOADING_CIV_TIPS_TEXT_GAULS"/>
+	</LoadingInfo_Civilizations>
+</Database>

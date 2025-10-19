@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<Row Type="UNIT_GALLIC_WARRIOR" Kind="KIND_UNIT"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_2" Kind="KIND_UNIT"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Kind="KIND_UNIT"/>
+
+		<Row Type="ABILITY_GALLIC_WARRIOR" Kind="KIND_ABILITY"/>
+		<!--<Row Type="ABILITY_VEGETATED_STEALTH_ESE" Kind="KIND_ABILITY"/>-->
+	</Types>
+	<Units>
+		<Row UnitType="UNIT_GALLIC_WARRIOR" Name="LOC_UNIT_GALLIC_WARRIOR_NAME" Description="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION" Tier="1" BaseSightRange="2" BaseMoves="2" UnitMovementClass="UNIT_MOVEMENT_CLASS_FOOT" Domain="DOMAIN_LAND" CoreClass="CORE_CLASS_MILITARY" FormationClass="FORMATION_CLASS_LAND_COMBAT" ZoneOfControl="true" TraitType="TRAIT_GAULS"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_2" Name="LOC_UNIT_GALLIC_WARRIOR_NAME" Description="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION" Tier="2" BaseSightRange="2" BaseMoves="2" Maintenance="1" UnitMovementClass="UNIT_MOVEMENT_CLASS_FOOT" Domain="DOMAIN_LAND" CoreClass="CORE_CLASS_MILITARY" FormationClass="FORMATION_CLASS_LAND_COMBAT" ZoneOfControl="true" TraitType="TRAIT_GAULS"/>	
+		<Row UnitType="UNIT_GALLIC_WARRIOR_3" Name="LOC_UNIT_GALLIC_WARRIOR_NAME" Description="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION" Tier="3" BaseSightRange="2" BaseMoves="2" Maintenance="2" UnitMovementClass="UNIT_MOVEMENT_CLASS_FOOT" Domain="DOMAIN_LAND" CoreClass="CORE_CLASS_MILITARY" FormationClass="FORMATION_CLASS_LAND_COMBAT" ZoneOfControl="true" TraitType="TRAIT_GAULS"/>
+	</Units>
+	<Unit_Stats>
+		<Row UnitType="UNIT_GALLIC_WARRIOR" Combat="25"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_2" Combat="30"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_3" Combat="35"/>
+	</Unit_Stats>
+	<Unit_Costs>
+		<Row UnitType="UNIT_GALLIC_WARRIOR" YieldType="YIELD_PRODUCTION" Cost="30"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_2" YieldType="YIELD_PRODUCTION" Cost="60"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_3" YieldType="YIELD_PRODUCTION" Cost="80"/>
+	</Unit_Costs>
+	
+	<UnitUpgrades>
+		<Row Unit="UNIT_GALLIC_WARRIOR" UpgradeUnit="UNIT_GALLIC_WARRIOR_2"/>
+		<Row Unit="UNIT_GALLIC_WARRIOR_2" UpgradeUnit="UNIT_GALLIC_WARRIOR_3"/>
+	</UnitUpgrades>
+	<UnitReplaces>
+		<Row CivUniqueUnitType="UNIT_GALLIC_WARRIOR" ReplacesUnitType="UNIT_WARRIOR"/>
+		<Row CivUniqueUnitType="UNIT_GALLIC_WARRIOR_2" ReplacesUnitType="UNIT_SPEARMAN"/>
+		<Row CivUniqueUnitType="UNIT_GALLIC_WARRIOR_3" ReplacesUnitType="UNIT_PHALANX"/>
+	</UnitReplaces>
+	<Tags>
+		<Row Tag="UNIT_CLASS_GALLIC_WARRIOR" Category="UNIT_CLASS"/>
+	</Tags>
+	<TypeTags>
+		<Row Type="UNIT_GALLIC_WARRIOR" Tag="UNIT_CLASS_GALLIC_WARRIOR"/>
+		<Row Type="UNIT_GALLIC_WARRIOR" Tag="UNIT_CLASS_COMBAT"/>
+		<Row Type="UNIT_GALLIC_WARRIOR" Tag="UNIT_CLASS_MELEE"/>
+		<Row Type="UNIT_GALLIC_WARRIOR" Tag="UNIT_CLASS_INFANTRY"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_2" Tag="UNIT_CLASS_GALLIC_WARRIOR"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_2" Tag="UNIT_CLASS_COMBAT"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_2" Tag="UNIT_CLASS_MELEE"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_2" Tag="UNIT_CLASS_INFANTRY"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Tag="UNIT_CLASS_GALLIC_WARRIOR"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Tag="UNIT_CLASS_COMBAT"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Tag="UNIT_CLASS_MELEE"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Tag="UNIT_CLASS_INFANTRY"/>
+		<Row Type="UNIT_GALLIC_WARRIOR_3" Tag="UNIT_CLASS_ELITE_INFANTRY"/>
+	</TypeTags>
+	<UnitClass_Abilities>
+		<Row UnitAbilityType="ABILITY_GALLIC_WARRIOR" UnitClassType="UNIT_CLASS_GALLIC_WARRIOR"/>
+	</UnitClass_Abilities>
+	<UnitAbilities>
+		<Row UnitAbilityType="ABILITY_GALLIC_WARRIOR" Name="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_NAME" Description="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_DESCRIPTION"/>
+		<!--<Row Inactive="true" UnitAbilityType="ABILITY_VEGETATED_STEALTH_ESE" Name="LOC_ABILITY_VEGETATED_STEALTH_ESE_NAME" Description="LOC_ABILITY_VEGETATED_STEALTH_ESE_DESCRIPTION"/>-->
+	</UnitAbilities>
+	<UnitAbilityModifiers>
+		<Row UnitAbilityType="ABILITY_GALLIC_WARRIOR" ModifierId="GALLIC_WARRIOR_MOD_IGNORE_VEGETATION"/>
+		<!--<Row UnitAbilityType="ABILITY_VEGETATED_STEALTH_ESE" ModifierId="VEGETATION_STEALTH_ESE_MOD_ADJUST_UNIT_HIDDEN_VISIBILITY"/>-->
+	</UnitAbilityModifiers>
+	<Unit_Advisories>
+		<Row UnitType="UNIT_GALLIC_WARRIOR" AdvisoryClassType="ADVISORY_CLASS_MILITARY"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_2" AdvisoryClassType="ADVISORY_CLASS_MILITARY"/>
+		<Row UnitType="UNIT_GALLIC_WARRIOR_3" AdvisoryClassType="ADVISORY_CLASS_MILITARY"/>
+	</Unit_Advisories>
+</Database>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_TRAIT_GAULS_NAME">
+            <Text>Magic Potion</Text>
+        </Row>
+		<Row Tag="LOC_CIVILIZATION_GAULS_DESCRIPTION">
+            <Text>The [B]Gallic warrior[/B] is stronger than regular warrior.</Text>
+		</Row>
+		<Row Tag="LOC_TRAIT_GAULS_DESCRIPTION">
+            <Text>[LIST][LI]The Gallic warrior costs more [B][icon:YIELD_GOLD]Gold[/B] but he is stronger and ignores movement penalties on Vegetated terrain.[LI]The Gauls can build the [B]Sanctuary of Corent[/B], an unique wonder that provides [B][icon:YIELD_CULTURE]Culture[/B] and [B][icon:YIELD_HAPPINESS]Happiness[/B]. [/LIST]</Text>
+		</Row>
+	</EnglishText>
+</Database>

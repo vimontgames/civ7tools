@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Kinds>
+		<InsertOrIgnore Kind="KIND_UNLOCK"/>
+	</Kinds>
+	<Types>
+		<InsertOrIgnore Type="UNLOCK_CIVILIZATION_GAULS" Kind="KIND_UNLOCK"/>
+	</Types>
+	<Unlocks>
+		<InsertOrIgnore UnlockType="UNLOCK_CIVILIZATION_GAULS"/>
+	</Unlocks>
+	<UnlockRewards>
+		<InsertOrIgnore UnlockType="UNLOCK_CIVILIZATION_GAULS" Name="LOC_CIVILIZATION_GAULS_NAME" Description="LOC_UNLOCK_ANTIQUITY_CIV_DESCRIPTION" Icon="CIVILIZATION_GAULS" UnlockRewardType="CIVILIZATION_GAULS" UnlockRewardKind="KIND_CIVILIZATION"/>
+	</UnlockRewards>
+	<RequirementSets>
+		<Row RequirementSetId="REQSET_CIVILIZATION_IS_GAULS" RequirementSetType="REQUIREMENTSET_TEST_ALL"/>
+	</RequirementSets>
+	<Requirements>
+		<Row RequirementId="REQ_CIVILIZATION_IS_GAULS" RequirementType="REQUIREMENT_PLAYER_CIVILIZATION_TYPE_MATCHES"/>
+	</Requirements>
+	<RequirementArguments>
+		<Row RequirementId="REQ_CIVILIZATION_IS_GAULS" Name="CivilizationType" Value="CIVILIZATION_GAULS"/>
+	</RequirementArguments>
+	<RequirementSetRequirements>
+		<Row RequirementSetId="REQSET_CIVILIZATION_IS_GAULS" RequirementId="REQ_CIVILIZATION_IS_GAULS"/>
+	</RequirementSetRequirements>
+	<UnlockRequirements>
+		<InsertOrIgnore UnlockType="UNLOCK_CIVILIZATION_NORMAN" RequirementSetId="REQSET_CIVILIZATION_IS_GAULS" Description="LOC_UNLOCK_PLAY_AS_GAULS_DESCRIPTION" Tooltip="LOC_UNLOCK_PLAY_AS_GAULS_TOOLTIP"/>
+	</UnlockRequirements>
+	<UnlockConfigurationValues>
+		
+	</UnlockConfigurationValues>
+</Database>

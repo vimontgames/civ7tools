@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_LOADING_VO_GAULS">
+            <Text>Brave chieftain of the Gauls, your clans unite under your banner, their spirits unbreakable. Lead them to glory!</Text>
+		</Row>
+		<Row Tag="LOC_LOADING_CIV_INTRO_TEXT_GAULS">
+            <Text>Hail, illustrious leader of the Gauls! Your people, a tapestry of fierce tribes, stand resilient against all adversities. With the wisdom of the Druids and the valor of your gallic warriors, you have preserved your ancient ways. Will you now usher in an era where your lands flourish, your clans thrive, and your name is etched into the annals of legend? The world watches, awaiting your command.</Text>
+		</Row>
+		<Row Tag="LOC_LOADING_CIV_TIPS_TEXT_GAULS">
+			<Text>Gallic warriors are expensive but stronger than regular warriors.</Text>
+		</Row>		
+	</EnglishText>
+</Database>

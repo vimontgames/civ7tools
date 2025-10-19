@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<!--Civ Unique Mastery Trees-->
+		<Row Type="TREE_CIVICS_AQ_GAULS" Kind="KIND_TREE"/>
+		<!--Civ Unique Mastery Tree Nodes-->
+		<!--<Row Type="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" Kind="KIND_TREE_NODE"/>	  -->
+		<!--<Row Type="NODE_CIVIC_AQ_GAULS_HEARTHWISU" Kind="KIND_TREE_NODE"/>	  -->
+		<!--<Row Type="NODE_CIVIC_AQ_GAULS_GARWUDU" Kind="KIND_TREE_NODE"/>		  -->
+		<!--<Row Type="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" Kind="KIND_TREE_NODE"/>-->
+	</Types>
+	<TypeQuotes>
+	</TypeQuotes>
+	<ProgressionTrees>
+		<!--Civ Unique Mastery Trees-->
+		<Row ProgressionTreeType="TREE_CIVICS_AQ_GAULS" AgeType="AGE_ANTIQUITY" SystemType="SYSTEM_CULTURE" Name="LOC_TREE_CIVICS_AQ_GAULS_NAME"/>
+	</ProgressionTrees>
+	<ProgressionTreeNodes>
+		<!--Civ Unique Mastery Tree Nodes-->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" ProgressionTree="TREE_CIVICS_AQ_GAULS" Cost="150" Name="LOC_CIVIC_SCIRGEMOT_NAME" IconString="cult_gauls"/>		  -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_HEARTHWISU" ProgressionTree="TREE_CIVICS_AQ_GAULS" Cost="150" Name="LOC_CIVIC_HEARTHWISU_NAME" IconString="cult_gauls"/>		  -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_GARWUDU" ProgressionTree="TREE_CIVICS_AQ_GAULS" Cost="250" Name="LOC_CIVIC_GARWUDU_NAME" IconString="cult_gauls"/>			  -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" ProgressionTree="TREE_CIVICS_AQ_GAULS" Cost="375" Name="LOC_CIVIC_AETHLINGRAEDEN_NAME" IconString="cult_gauls"/>-->
+	</ProgressionTreeNodes>
+	<ProgressionTreeNodeUnlocks>
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" TargetKind="KIND_CONSTRUCTIBLE" TargetType="BUILDING_MOOT_HALL" UnlockDepth="1"/>						   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" TargetKind="KIND_TRADITION" TargetType="TRADITION_WITENGAMOT" UnlockDepth="1"/>						   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" TargetKind="KIND_MODIFIER" TargetType="MOD_SCIRGEMOT_MOOT_HALL_URBAN_ADJACENCY" UnlockDepth="2"/>		   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_SCIRGEMOT" TargetKind="KIND_MODIFIER" TargetType="MOD_AQ_SETTLEMENT_CAP_INCREASE" UnlockDepth="2"/>				   -->
+		<!--																																									   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_HEARTHWISU" TargetKind="KIND_CONSTRUCTIBLE" TargetType="IMPROVEMENT_SACRED_GROVE" UnlockDepth="1"/>				   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_HEARTHWISU" TargetKind="KIND_TRADITION" TargetType="TRADITION_RUNWITA" UnlockDepth="1"/>							   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_HEARTHWISU" TargetKind="KIND_MODIFIER" TargetType="MOD_HEARTHWISU_SACRED_GROVE_VEGETATED_ADJACENCY" UnlockDepth="2"/>-->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_HEARTHWISU" TargetKind="KIND_MODIFIER" TargetType="MOD_HEARTHWISU_SACRED_GROVE_STEALTH" UnlockDepth="2"/>			   -->
+		<!--																																									   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_GARWUDU" TargetKind="KIND_TRADITION" TargetType="TRADITION_FYRD" UnlockDepth="1"/>								   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_GARWUDU" TargetKind="KIND_TRADITION" TargetType="TRADITION_BEADURAEDEN" UnlockDepth="1"/>							   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_GARWUDU" TargetKind="KIND_CONSTRUCTIBLE" TargetType="WONDER_SANCTUARY_OF_CORENT" UnlockDepth="1"/>							   -->
+		<!--																																									   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" TargetKind="KIND_TRADITION" TargetType="TRADITION_BEOHRTTALU" UnlockDepth="1"/>					   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" TargetKind="KIND_MODIFIER" TargetType="MOD_AQ_CODEX" UnlockDepth="1"/>							   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" TargetKind="KIND_MODIFIER" TargetType="MOD_AQ_SETTLEMENT_CAP_INCREASE" UnlockDepth="2"/>			   -->
+		<!--<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" TargetKind="KIND_MODIFIER" TargetType="MOD_AETHLINGRAEDEN_POLICY_SLOT" UnlockDepth="2"/>			   -->
+	</ProgressionTreeNodeUnlocks>																																				   -->
+	<ProgressionTreePrereqs>
+		<!--<Row Node="NODE_CIVIC_AQ_GAULS_GARWUDU" PrereqNode="NODE_CIVIC_AQ_GAULS_SCIRGEMOT"/>		-->
+		<!--<Row Node="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" PrereqNode="NODE_CIVIC_AQ_GAULS_GARWUDU"/>	-->
+		<!--<Row Node="NODE_CIVIC_AQ_GAULS_AETHLINGRAEDEN" PrereqNode="NODE_CIVIC_AQ_GAULS_HEARTHWISU"/>-->
+	</ProgressionTreePrereqs>
+</Database>

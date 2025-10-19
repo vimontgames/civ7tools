@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+	<Modifier id="MOD_WONDER_SANCTUARY_OF_CORENT_WILDCARD_HAPPINESS_CULTURE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">
+		<SubjectRequirements>
+			<Requirement type="REQUIREMENT_WONDER_IS_ACTIVE">
+				<Argument name="ConstructibleType">WONDER_SANCTUARY_OF_CORENT</Argument>
+			</Requirement>
+		</SubjectRequirements>
+		<Argument name="ConstructibleAdjacency">SanctuaryOfCorentHappinessCulture</Argument>
+	</Modifier>
+</GameEffects>

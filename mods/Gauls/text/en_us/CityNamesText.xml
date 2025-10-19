@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <EnglishText>
+        <Row Tag="LOC_CITY_NAME_GAULS1">
+            <Text>Lutetia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS2">
+            <Text>Bibracte</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS3">
+            <Text>Alesia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS4">
+            <Text>Massalia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS5">
+            <Text>Gergovia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS6">
+            <Text>Lugdunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS7">
+            <Text>Tolosa</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS8">
+            <Text>Narbo Martius</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS9">
+            <Text>Treverorum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS10">
+            <Text>Avaricum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS11">
+            <Text>Nemausus</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS12">
+            <Text>Rotomagus</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS13">
+            <Text>Augustodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS14">
+            <Text>Burdigala</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS15">
+            <Text>Andematunnum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS16">
+            <Text>Divio</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS17">
+            <Text>Agedincum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS18">
+            <Text>Camulodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS19">
+            <Text>Vindomora</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS20">
+            <Text>Limonum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS21">
+            <Text>Vesontio</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS22">
+            <Text>Vesunna</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS23">
+            <Text>Caesarodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS24">
+            <Text>Mediolanum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS25">
+            <Text>Barrois</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS26">
+            <Text>Cabillonum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS27">
+            <Text>Aventicum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS28">
+            <Text>Tricasses</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS29">
+            <Text>Cadurci</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS30">
+            <Text>Genabum</Text>
+        </Row>
+    </EnglishText>
+</Database>

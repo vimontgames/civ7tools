@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Database>
+    <VisualRemaps>
+        <Row>
+            <ID>REMAP_UNIT_GALLIC_WARRIOR</ID>
+            <DisplayName>LOC_UNIT_GALLIC_WARRIOR_NAME</DisplayName>
+            <Kind>UNIT</Kind>
+            <From>UNIT_GALLIC_WARRIOR</From>
+            <To>UNIT_WARRIOR</To>
+        </Row>
+        <Row>
+            <ID>REMAP_UNIT_GALLIC_WARRIOR_2</ID>
+            <DisplayName>LOC_UNIT_GALLIC_WARRIOR_NAME</DisplayName>
+            <Kind>UNIT</Kind>
+            <From>UNIT_GALLIC_WARRIOR_2</From>
+            <To>UNIT_SPEARMAN</To>
+        </Row>
+        <Row>
+            <ID>REMAP_UNIT_GALLIC_WARRIOR_3</ID>
+            <DisplayName>LOC_UNIT_GALLIC_WARRIOR_NAME</DisplayName>
+            <Kind>UNIT</Kind>
+            <From>UNIT_GALLIC_WARRIOR_3</From>
+            <To>UNIT_PHALANX</To>
+        </Row>               
+    </VisualRemaps>
+</Database>

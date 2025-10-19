@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_UNIT_GALLIC_WARRIOR_NAME">
+			<Text>Gallic warrior</Text>
+		</Row>
+		<Row Tag="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION">
+			<Text>Gallic unique melee unit. More expensive but stronger than regular warrior, and ignores movement penalties on Vegetated terrain.</Text>
+		</Row>
+		<Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_NAME">
+			<Text>Wealdgenga</Text>
+		</Row>
+		<Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_DESCRIPTION">
+			<Text>Ignores movement penalties on vegetated terrain.</Text>
+		</Row>
+		<!--<Row Tag="LOC_ABILITY_VEGETATED_STEALTH_ESE_NAME">					  -->
+		<!--	<Text>Protection of the Ēse</Text>								  -->
+		<!--</Row>																  -->
+		<!--<Row Tag="LOC_ABILITY_VEGETATED_STEALTH_ESE_DESCRIPTION">			  -->
+		<!--	<Text>Sacred Groves protect your units from hostile forces.</Text>-->
+		<!--</Row>																  -->
+	</EnglishText>
+</Database>

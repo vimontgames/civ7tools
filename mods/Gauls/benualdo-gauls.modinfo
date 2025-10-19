@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="benualdo-civ-gauls" version="1" xmlns="ModInfo">
+	<Properties>
+		<Name>Benualdo's Civs - Gauls (Antiquity)</Name>
+        <Description>Adds the Gauls as a playable civilization in the Antiquity Age.</Description>
+        <Authors>Benualdo</Authors>
+        <Version>1</Version>
+        <AffectsSavedGames>1</AffectsSavedGames>
+	</Properties>
+	<Dependencies>
+		<Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+	</Dependencies>
+	<ActionCriteria>
+		<Criteria id="antiquity-age-current">
+			<AgeInUse>AGE_ANTIQUITY</AgeInUse>
+		</Criteria>
+		<Criteria id="exploration-age-current">
+			<AgeInUse>AGE_EXPLORATION</AgeInUse>
+		</Criteria>
+		<Criteria id="modern-age-current">
+			<AgeInUse>AGE_MODERN</AgeInUse>
+		</Criteria>
+		<Criteria id="antiquity-age-persist" any="true">
+			<AgeInUse>AGE_ANTIQUITY</AgeInUse>
+			<AgeInUse>AGE_EXPLORATION</AgeInUse>
+			<AgeInUse>AGE_MODERN</AgeInUse>
+		</Criteria>
+		<Criteria id="exploration-age-persist" any="true">
+			<AgeInUse>AGE_EXPLORATION</AgeInUse>
+			<AgeInUse>AGE_MODERN</AgeInUse>
+		</Criteria>
+		<Criteria id="always">
+			<AlwaysMet></AlwaysMet>
+		</Criteria>
+		<!-- Optional compatability -->
+        <Criteria all="true" id="ged-ynamp-enable">
+            <ModInUse>ged-ynamp</ModInUse>
+        </Criteria>
+        <Criteria all="true" id="izica-unit-portrait-visual-remaps-enable">
+            <ModInUse>izica-unit-portrait-visual-remaps</ModInUse>
+        </Criteria>
+	</ActionCriteria>
+	<ActionGroups>
+		<!-- Optional compatability -->
+		<ActionGroup id="base-game-main-ged-ynamp" scope="game" criteria="ged-ynamp-enable">
+			<!-- ynamp compatability -->
+			<Actions>
+                <UpdateDatabase>
+					<Item>ynamp/data/greatest-earth.xml</Item>
+                </UpdateDatabase>
+            </Actions>
+		</ActionGroup>
+		<ActionGroup id="izica-unit-portrait-visual-remaps" scope="game" criteria="izica-unit-portrait-visual-remaps-enable">
+			<Actions>
+				<UIScripts>
+					<Item>ui/game.js</Item>
+				</UIScripts>
+			</Actions>
+		</ActionGroup>
+		<!-- Standard compatability -->
+		<ActionGroup id="benualdo-civ-gauls" scope="game" criteria="always">
+			<Actions>
+				<ImportFiles>
+					<Item>assets/icon/civ_sym_gauls</Item>
+                    <Item>assets/icon/civ_sym_gauls.png</Item>
+					<Item>assets/icon/cult_gauls.png</Item>
+					<Item>assets/icon/unitflag_gallic_warrior.png</Item>
+                    <!--<Item>assets/icon/impicon_sacred_grove.png</Item>-->
+                    <!--<Item>assets/icon/buildicon_moot_hall.png</Item> -->
+                    <Item>assets/icon/lsbg_gauls_1080.png</Item>
+                    <Item>assets/icon/lsbg_gauls_720.png</Item>
+					<Item>assets/icon/wondericon_sanctuary_of_Corent.png</Item>
+                </ImportFiles>
+				<UpdateIcons>
+					<Item>icons/icons.xml</Item>
+				</UpdateIcons>
+				<UpdateDatabase>
+					<Item>data/civilizations-legacy.xml</Item>
+					<Item>data/named-places.xml</Item>
+					<Item>data/progression-trees-culture-unique-gameeffects.xml</Item>	
+					<Item>data/progression-trees-culture-unique.xml</Item>				
+					<Item>data/traditions-gameeffects.xml</Item>						
+					<Item>data/traditions.xml</Item>								
+					<Item>data/unlocks-base-standard.xml</Item>
+					<Item>data/wonders-gameeffects.xml</Item>	
+					<Item>data/wonders.xml</Item>		
+				</UpdateDatabase>
+				<UpdateText>
+					<Item>text/en_us/CultureText.xml</Item>
+					<Item>text/en_us/CivilopediaText.xml</Item>			<!-- will return to this -->
+					<Item>text/en_us/LoadingText.xml</Item>
+					<Item>text/en_us/NamedPlacesText.xml</Item>
+					<Item>text/en_us/UnlockText.xml</Item>				<!-- will return to this -->
+					<Item>text/en_us/CivilizationLegacyText.xml</Item>
+					<Item>text/en_us/AttributesText.xml</Item>
+					<Item>text/en_us/WonderText.xml</Item>
+				</UpdateText>
+			</Actions>
+		</ActionGroup>
+		<ActionGroup id="age-antiquity-main-gauls" scope="game" criteria="antiquity-age-current">
+			<Actions>
+				<UpdateDatabase>
+					<Item>data/unlocks-antiquity.xml</Item>
+					<Item>data/citizen-names.xml</Item>
+					<Item>data/civilizations-antiquity.xml</Item>
+					<Item>data/civilizations-gameeffects.xml</Item>
+					<Item>data/constructibles-no-persist.xml</Item>
+					<Item>data/loading-info-antiquity.xml</Item>
+					<Item>data/progression-trees-tech.xml</Item> <!-- We'll get back to this -->
+					<Item>data/units.xml</Item>
+					<Item>data/units-gameeffects.xml</Item>
+					<Item>data/religion.xml</Item>
+					<Item>data/religion-gameeffects.xml</Item>
+					<Item>data/progression-trees-culture-common.xml</Item>
+				</UpdateDatabase>
+				<UpdateText>
+					<Item>text/en_us/CitizenNamesText.xml</Item>
+					<Item>text/en_us/CivilizationText.xml</Item>
+					<Item>text/en_us/UnitText.xml</Item>
+				</UpdateText>
+                <UpdateVisualRemaps>
+                    <Item>data/visual-remap.xml</Item>
+                </UpdateVisualRemaps>
+			</Actions>
+		</ActionGroup>
+		<ActionGroup id="age-antiquity-persist-gauls" scope="game" criteria="antiquity-age-persist">
+
+			<Actions>
+				<UpdateDatabase>
+					<Item>data/constructibles.xml</Item>
+					<Item>data/constructibles-gameeffects.xml</Item>
+				</UpdateDatabase>
+				<UpdateText>
+					<Item>text/en_us/CityNamesText.xml</Item>
+					<Item>text/en_us/ConstructibleText.xml</Item>
+				</UpdateText>
+			</Actions>
+		</ActionGroup>
+		<ActionGroup id="benualdo-civ-gauls-shell" scope="shell" criteria="always">
+			<Actions>
+				<ImportFiles>
+					<Item>assets/icon/civ_sym_gauls</Item>
+                    <Item>assets/icon/civ_sym_gauls.png</Item>
+					<Item>assets/icon/cult_gauls.png</Item>
+					<Item>assets/icon/unitflag_gallic_warrior.png</Item>
+                    <Item>assets/icon/impicon_sacred_grove.png</Item>
+                    <Item>assets/icon/buildicon_moot_hall.png</Item>
+                    <Item>assets/icon/lsbg_gauls_1080.png</Item>
+                    <Item>assets/icon/lsbg_gauls_720.png</Item>
+					<Item>assets/icon/wondericon_sanctuary_of_Corent.png</Item>
+                </ImportFiles>
+				<UpdateIcons>
+					<Item>icons/icons.xml</Item>
+				</UpdateIcons>
+				<UpdateDatabase>
+					<Item>config/config.xml</Item>
+				</UpdateDatabase>
+				<UpdateText>
+					<Item>text/en_us/CultureText.xml</Item>
+					<Item>text/en_us/CivilopediaText.xml</Item>			
+					<Item>text/en_us/LoadingText.xml</Item>
+					<Item>text/en_us/NamedPlacesText.xml</Item>
+					<Item>text/en_us/UnlockText.xml</Item>				
+					<Item>text/en_us/CivilizationLegacyText.xml</Item>
+					<Item>text/en_us/AttributesText.xml</Item>
+					<Item>text/en_us/CityNamesText.xml</Item>
+					<Item>text/en_us/ConstructibleText.xml</Item>
+					<Item>text/en_us/CitizenNamesText.xml</Item>
+					<Item>text/en_us/CivilizationText.xml</Item>
+					<Item>text/en_us/UnitText.xml</Item>
+					<Item>text/en_us/WonderText.xml</Item>
+				</UpdateText>
+			</Actions>
+		</ActionGroup>
+	</ActionGroups>
+</Mod>

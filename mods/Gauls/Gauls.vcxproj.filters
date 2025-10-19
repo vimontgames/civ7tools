@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="assets">
+      <UniqueIdentifier>{e3fedf67-a25a-4087-8c9d-68a6fdc8e370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\icon">
+      <UniqueIdentifier>{7000dccb-4df2-4bd2-a071-667e19dc821b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{c923b1f4-fc48-4a5b-8e7e-ece99277a1a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{5d297e37-6897-4cc8-a629-0ce3d6f83d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="icons">
+      <UniqueIdentifier>{21459d9e-70c2-4d4f-bba6-55f0155bf9b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules">
+      <UniqueIdentifier>{455af667-e6f9-4510-91aa-43a372b2fc63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="text">
+      <UniqueIdentifier>{21508767-4174-4b6c-967a-259f8b82ebf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="text\en_us">
+      <UniqueIdentifier>{01e9a643-aac5-40e8-a2f4-338ac2eb31c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{3531982d-fe9d-409c-b16b-09a12a0086f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ynamp">
+      <UniqueIdentifier>{e24b6cdd-fa1d-446a-a1de-4339dd02d603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ynamp\data">
+      <UniqueIdentifier>{46d03bf1-aae1-423b-aefd-32e3ab3818a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="package.json" />
+    <None Include="benualdo-gauls.modinfo" />
+    <None Include="ui\game.js">
+      <Filter>ui</Filter>
+    </None>
+    <None Include="assets\icon\civ_sym_gauls">
+      <Filter>assets\icon</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\icon\buildicon_moot_hall.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\impicon_sacred_grove.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\lsbg_saxon_720.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\lsbg_saxon_1080.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\unitflag_ceorl.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\wondericon_temple_of_irminsul.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\cult_gauls.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\gauls.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+    <Image Include="assets\icon\civ_sym_gauls.png">
+      <Filter>assets\icon</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config\config.xml">
+      <Filter>config</Filter>
+    </Xml>
+    <Xml Include="data\civilizations-legacy.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\constructibles.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\constructibles-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\constructibles-no-persist.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\loading-info-antiquity.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\named-places.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\progression-trees-culture-common.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\progression-trees-culture-unique.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\progression-trees-culture-unique-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\progression-trees-tech.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\religion.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\religion-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\traditions.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\traditions-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\units.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\units-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\unlocks-antiquity.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\unlocks-base-standard.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\visual-remap.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\wonders.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\wonders-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\ai-antiquity.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\citizen-names.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\civilizations-antiquity.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\civilizations-antiquity-ada.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\civilizations-base-standard.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="data\civilizations-gameeffects.xml">
+      <Filter>data</Filter>
+    </Xml>
+    <Xml Include="icons\icons.xml">
+      <Filter>icons</Filter>
+    </Xml>
+    <Xml Include="text\en_us\AttributesText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CitizenNamesText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CityNamesText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CivilizationLegacyText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CivilizationText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CivilopediaText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\ConstructibleText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\CultureText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\LoadingText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\ModuleText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\NamedPlacesText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\UnitText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\UnlockText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="text\en_us\WonderText.xml">
+      <Filter>text\en_us</Filter>
+    </Xml>
+    <Xml Include="ynamp\data\greatest-earth.xml">
+      <Filter>ynamp\data</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

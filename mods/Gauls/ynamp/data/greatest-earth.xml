@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<!-- https://www.sukrittan.com/Mod_Apps/TSLPlanner/?Map=GreatestEarthMap -->
+	<StartPosition>
+		<!-- Civ7 -->
+		<Replace MapName="GreatestEarthMap" Civilization="CIVILIZATION_GAULS"			X="41"	Y="48" />
+    </StartPosition>
+
+
+</Database>

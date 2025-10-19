@@ -1,0 +1,102 @@
+<Database>
+	<Types>
+		<!-- Major Civs -->
+		<Row Type="TRAIT_GAULS_ABILITY" Kind="KIND_TRAIT"/>
+	</Types>
+	<Kinds>
+		<InsertOrIgnore KIND="KIND_TRAIT"/>
+	</Kinds>
+	<Civilizations>
+		<!-- Full Civs -->
+		<Row CivilizationType="CIVILIZATION_GAULS" Name="LOC_CIVILIZATION_GAULS_NAME" FullName="LOC_CIVILIZATION_GAULS_FULLNAME" Description="LOC_CIVILIZATION_GAULS_DESCRIPTION" Adjective="LOC_CIVILIZATION_GAULS_ADJECTIVE" StartingCivilizationLevelType="CIVILIZATION_LEVEL_FULL_CIV" UniqueCultureProgressionTree="TREE_CIVICS_AQ_GAULS" CapitalName="LOC_CITY_NAME_GAULS1" RandomCityNameDepth="10"/>
+	</Civilizations>
+	<CivilizationFavoredWonders>
+		<Row CivilizationType="CIVILIZATION_GAULS" FavoredWonderType="WONDER_SANCTUARY_OF_CORENT" FavoredWonderName="LOC_WONDER_SANCTUARY_OF_CORENT_NAME"/>
+	</CivilizationFavoredWonders>
+	<Traits>
+		<!--Civ Traits-->
+		<Row TraitType="TRAIT_GAULS_ABILITY" Name="LOC_TRAIT_GAULS_ABILITY_NAME" Description="LOC_TRAIT_GAULS_ABILITY_DESCRIPTION" InternalOnly="true"/>
+	</Traits>
+	<TraitModifiers>
+		<Row TraitType="TRAIT_GAULS_ABILITY" ModifierId="MOD_CIV_WONDER_PRODUCTION_GAULS"/>
+		<!--<Row TraitType="TRAIT_GAULS_ABILITY" ModifierId="MOD_CIV_DOUBLE_GALLIC_WARRIORS"/>-->
+	</TraitModifiers>
+	<CivilizationTraits>
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_ANTIQUITY_CIV"/>
+
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_GAULS"/>
+
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_GAULS_ABILITY"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_ATTRIBUTE_CULTURAL"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_ATTRIBUTE_MILITARISTIC"/>
+	</CivilizationTraits>
+	<RequirementSets>
+		<Row RequirementSetId="REQSET_PLAYER_IS_GAULS" RequirementSetType="REQUIREMENTSET_TEST_ALL"/>
+	</RequirementSets>
+	<RequirementSetRequirements>
+		<Row RequirementSetId="REQSET_PLAYER_IS_GAULS" RequirementId="REQ_PLAYER_HAS_TRAIT_GAULS"/>
+	</RequirementSetRequirements>
+	<Requirements>
+		<Row RequirementId="REQ_PLAYER_HAS_TRAIT_GAULS" RequirementType="REQUIREMENT_PLAYER_HAS_CIVILIZATION_OR_LEADER_TRAIT"/>
+	</Requirements>
+	<RequirementArguments>
+		<Row RequirementId="REQ_PLAYER_HAS_TRAIT_GAULS" Name="TraitType" Value="TRAIT_GAULS"/>
+	</RequirementArguments>
+	<LeaderCivPriorities>
+		<!--This is the table used for AI, the UI uses LeaderCivilizationBias in config.xml-->
+		<Row Leader="LEADER_CHARLEMAGNE" Civilization="CIVILIZATION_GAULS" Priority="3"/>
+		<Row Leader="LEADER_ISABELLA" Civilization="CIVILIZATION_GAULS" Priority="2"/>
+	</LeaderCivPriorities>
+	<CityNames>
+		<!--SUMER-->
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS1"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS2"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS3"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS4"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS5"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS6"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS7"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS8"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS9"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS10"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS11"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS12"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS13"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS14"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS15"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS16"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS17"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS18"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS19"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS20"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS21"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS22"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS23"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS24"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS25"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS26"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS27"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS28"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS29"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" CityName="LOC_CITY_NAME_GAULS30"/>
+	</CityNames>
+	
+	<StartBiasResources>
+		<Row CivilizationType="CIVILIZATION_GAULS" ResourceType="RESOURCE_IRON" Score="20"/>
+	</StartBiasResources>
+	<StartBiasFeatureClasses>
+		<Row CivilizationType="CIVILIZATION_GAULS" FeatureClassType="FEATURE_CLASS_VEGETATED" Score="35"/>
+	</StartBiasFeatureClasses>
+	<VisArt_CivilizationBuildingCultures>
+		<Row CivilizationType="CIVILIZATION_GAULS" BuildingCulture="BUILDING_CULTURE_NAM"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" BuildingCulture="ANT_STONE"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" BuildingCulture="EXP_STONE"/>
+		<Row CivilizationType="CIVILIZATION_GAULS" BuildingCulture="MOD_STONE"/>
+	</VisArt_CivilizationBuildingCultures>
+	<VisArt_CivilizationUnitCultures>
+		<Row CivilizationType="CIVILIZATION_GAULS" UnitCulture="MED"/>
+	</VisArt_CivilizationUnitCultures>
+
+	<EndGameMovies>
+	</EndGameMovies>
+</Database>

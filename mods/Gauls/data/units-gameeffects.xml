@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+	<Modifier id="GALLIC_WARRIOR_MOD_IGNORE_VEGETATION" collection="COLLECTION_PLAYER_UNITS" effect="EFFECT_UNIT_ADJUST_IGNORE_MOVEMENT_OBSTACLE">		 
+		<SubjectRequirements>																															 
+			<Requirement type="REQUIREMENT_UNIT_CLASS_MATCHES">																							 
+				<Argument name="UnitClass">UNIT_CLASS_GALLIC_WARRIOR</Argument>																			 
+			</Requirement>																																 
+		</SubjectRequirements>																															 
+		<Argument name="FeatureClassTypes">FEATURE_CLASS_VEGETATED</Argument>																			 
+	</Modifier>																																			 
+	<!--<Modifier id="VEGETATION_STEALTH_ESE_MOD_ADJUST_UNIT_HIDDEN_VISIBILITY" collection="COLLECTION_OWNER" effect="EFFECT_ADJUST_UNIT_HIDDEN_VISIBILITY"> -->
+	<!--	<SubjectRequirements>																															 -->
+	<!--		<Requirement type="REQUIREMENT_PLOT_HAS_CONSTRUCTIBLE">																						 -->
+	<!--			<Argument name="ConstructibleType">IMPROVEMENT_SACRED_GROVE</Argument>																	 -->
+	<!--		</Requirement>																																 -->
+	<!--	</SubjectRequirements>																															 -->
+	<!--	<Argument name="Hidden">true</Argument>																											 -->
+	<!--	<String context="Preview">LOC_ABILITY_VEGETATED_STEALTH_ESE_DESCRIPTION</String>																 -->
+	<!--</Modifier>																																			 -->
+</GameEffects>

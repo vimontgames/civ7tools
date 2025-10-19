@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <EnglishText>
+    <!--Civilization Names-->
+    <Row Tag="LOC_CIVILIZATION_GAULS_NAME">
+      <Text>Gauls</Text>
+    </Row>
+    <!--Civilization Full Names-->
+    <Row Tag="LOC_CIVILIZATION_GAULS_FULLNAME">
+      <Text>The Gauls</Text>
+    </Row>
+    <!--Civilization Adjectives-->
+    <Row Tag="LOC_CIVILIZATION_GAULS_ADJECTIVE">
+      <Text>Gallic</Text>
+    </Row>
+  </EnglishText>
+
+</Database>

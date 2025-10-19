@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_TREE_CIVICS_AQ_GAULS_NAME">
+			<Text>Gauls Civics</Text>
+		</Row>																													
+		<!--<Row Tag="LOC_CIVIC_SCIRGEMOT_NAME">																				 -->
+		<!--	<Text>Scīrgemōt</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_CIVIC_HEARTHWISU_NAME">																				 -->
+		<!--	<Text>Hearthwīsu</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_CIVIC_GARWUDU_NAME">																					 -->
+		<!--	<Text>Gár-wudu</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_CIVIC_AETHLINGRAEDEN_NAME">																			 -->
+		<!--	<Text>Aethelingraeden</Text>																					 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_MOD_SCIRGEMOT_MOOT_HAL_URBAN_ADJACENCY_DESCRIPTION">													 -->
+		<!--	<Text>Moot Halls receive an influence adjacency from Urban districts.</Text>									 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_MOD_HEARTHWISU_SACRED_GROVE_PROTECTION_OF_THE_ESE_DESCRIPTION">										 -->
+		<!--	<Text>Units in Sacred Groves recieve Stealth.</Text>															 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_MOD_HEARTHWISU_SACRED_GROVE_HEALING_DESCRIPTION">														 -->
+		<!--	<Text>Units in Sacred Groves receive +5 healing per turn.</Text>												 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_MOD_HEARTHWISU_SACRED_GROVE_VEGETATED_ADJACENCY_DESCRIPTION">											 -->
+		<!--	<Text>Sacred Groves receive a minor culture adjacency from Vegetated Terrain.</Text>							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_MOD_AETHLINGRAEDEN_POLICY_SLOT_DESCRIPTION">															 -->
+		<!--	<Text>+1 Social Policy Slot.</Text>																				 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_WITENGAMOT_NAME">																			 -->
+		<!--	<Text>Witengamot</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_WITENGAMOT_DESCRIPTION">																	 -->
+		<!--	<Text>City Halls, Palaces, and Moot Halls receive +1 [icon:YIELD_FOOD] Food per age.</Text>						 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_RUNWITA_NAME">																				 -->
+		<!--	<Text>Runwita</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_RUNWITA_DESCRIPTION">																		 -->
+		<!--	<Text>Unique improvements receive +2 [icon:YIELD_CULTURE] Culture per age.</Text>								 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_FYRD_NAME">																					 -->
+		<!--	<Text>Fyrd</Text>																								 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_FYRD_DESCRIPTION">																			 -->
+		<!--	<Text>+25% [icon:YIELD_PRODUCTION] Production towards Infantry Units in your capital.</Text>					 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_BEADURAEDEN_NAME">																			 -->
+		<!--	<Text>Beaduræden</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_BEADURAEDEN_DESCRIPTION">																	 -->
+		<!--	<Text>-1 [icon:YIELD_GOLD] Gold Maintenance for Infantry Units.</Text>											 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_BEOHRTTALU_NAME">																			 -->
+		<!--	<Text>Beohrttalu</Text>																							 -->
+		<!--</Row>																												 -->
+		<!--<Row Tag="LOC_TRADITION_BEOHRTTALU_DESCRIPTION">																	 -->
+		<!--	<Text>Great Works provide +1 [icon:YIELD_CULTURE] Culture and +1 [icon:YIELD_HAPPINESS] Happiness per age.</Text>-->
+		<!--</Row>																												 -->
+	</EnglishText>
+</Database>

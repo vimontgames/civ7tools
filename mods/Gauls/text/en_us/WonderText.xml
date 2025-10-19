@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_NAME">
+			<Text>Sanctuary of Corent</Text>
+		</Row>
+		<Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_DESCRIPTION">
+			<Text>{LOC_WONDER_SANCTUARY_OF_CORENT_TOOLTIP}</Text>
+		</Row>
+		<Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_TOOLTIP">
+			<Text>Happiness buildings have a cultural adjacency with the Sanctuary of Corent.</Text>
+		</Row>
+		<Row Tag="LOC_QUOTE_WONDER_SANCTUARY_OF_CORENT">
+			<Text>The Sanctuary of Corent was a major Gaulish religious center of the Arverni tribe, where rituals and feasts were held in honor of Celtic deities.</Text>
+		</Row>
+		<Row Tag="LOC_QUOTE_AUTHOR_WONDER_SANCTUARY_OF_CORENT">
+			<Text>The Sanctuary of Corent was built by the Arverni, a powerful Gallic tribe from central Gaul.</Text>
+		</Row>
+
+    </EnglishText>
+</Database>

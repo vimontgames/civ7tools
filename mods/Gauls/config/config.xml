@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Civilizations>
+		<Row Domain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" CivilizationName="LOC_CIVILIZATION_GAULS_NAME" CivilizationFullName="LOC_CIVILIZATION_GAULS_FULLNAME" CivilizationDescription="LOC_CIVILIZATION_GAULS_DESCRIPTION" CivilizationIcon="gauls.png"/>
+	</Civilizations>
+	<LeaderCivilizationBias>
+		<InsertOrIgnore CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" LeaderDomain="StandardLeaders" LeaderType="LEADER_NAPOLEON" Bias="2" ReasonType="LOC_UNLOCK_PLAY_AS_NAPOLEON_GAULS_TOOLTIP" ChoiceType="LOC_CREATE_GAME_GEOGRAPHIC_CHOICE" />
+		<InsertOrIgnore CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" LeaderDomain="StandardLeaders" LeaderType="LEADER_AUGUSTUS" Bias="3" ReasonType="LOC_UNLOCK_PLAY_AS_AUGUSTUS_GAULS_TOOLTIP" ChoiceType="LOC_CREATE_GAME_STRATEGIC_CHOICE" />
+	</LeaderCivilizationBias>
+	<CivilizationItems>
+		<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" Type="TRAIT_GAULS" Kind="KIND_TRAIT" Name="LOC_TRAIT_GAULS_NAME" Description="LOC_TRAIT_GAULS_DESCRIPTION"/>
+		<!--<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" Type="IMPROVEMENT_SACRED_GROVE" Kind="KIND_IMPROVEMENT" Name="LOC_IMPROVEMENT_SACRED_GROVE_NAME" Description="LOC_IMPROVEMENT_SACRED_GROVE_DESCRIPTION" Icon="IMPROVEMENT_SACRED_GROVE"/>-->
+		<!--<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" Type="BUILDING_MOOT_HALL" Kind="KIND_BUILDING" Name="LOC_BUILDING_MOOT_HALL_NAME" Description="LOC_BUILDING_MOOT_HALL_DESCRIPTION" Icon="BUILDING_MOOT_HALL"/>						   -->
+		<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" Type="UNIT_GALLIC_WARRIOR" Kind="KIND_UNIT" Name="LOC_UNIT_GALLIC_WARRIOR_NAME" Description="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION" Icon="UNIT_GALLIC_WARRIOR"/>
+	</CivilizationItems>
+	<CivilizationTags>
+		<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" TagType="TAG_TRAIT_CULTURAL"/>
+		<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" TagType="TAG_TRAIT_MILITARISTIC"/>
+	</CivilizationTags>
+	<LeaderUnlocks>
+	</LeaderUnlocks>
+	<CivilizationUnlocks>
+		<Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" AgeDomain="StandardAges" AgeType="AGE_EXPLORATION" Type="CIVILIZATION_NORMAN" Kind="KIND_CIVILIZATION" Name="LOC_CIVILIZATION_NORMAN_NAME" Description="LOC_CIVILIZATION_NORMAN_DESCRIPTION" Icon="ICON_CIVILIZATION_NORMAN"/>
+        <Row CivilizationDomain="AntiquityAgeCivilizations" CivilizationType="CIVILIZATION_GAULS" AgeDomain="StandardAges" AgeType="AGE_MODERN" Type="CIVILIZATION_FRENCH_EMPIRE" Kind="KIND_CIVILIZATION" Name="LOC_CIVILIZATION_FRENCH_EMPIRE_NAME" Description="LOC_CIVILIZATION_FRENCH_EMPIRE_DESCRIPTION" Icon="ICON_CIVILIZATION_FRENCH_EMPIRE"/>
+    </CivilizationUnlocks>
+</Database>

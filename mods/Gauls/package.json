@@ -1,0 +1,15 @@
+{
+  "name": "shawnee-tecumseh",
+  "description": "Civilization 7 shawnee-tecumseh module",
+  "author": "Firaxis Games",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "modding-sdk": "workspace:*"
+  }
+}

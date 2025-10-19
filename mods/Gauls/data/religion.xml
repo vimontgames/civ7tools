@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<Database>
+	<BeliefModifiers>
+		<Row BeliefType="PANTHEON_BONUS_1" ModifierID="MOD_PANTHEON_SACRED_GROVE_YIELD_INFLUENCE"/>
+		<Row BeliefType="PANTHEON_BONUS_2" ModifierID="MOD_PANTHEON_SACRED_GROVE_MOUNTAIN_ADJACENCY"/>
+		<Row BeliefType="PANTHEON_BONUS_2" ModifierID="MOD_PANTHEON_SACRED_GROVE_NATURAL_WONDER_ADJACENCY"/>
+		<Row BeliefType="PANTHEON_BONUS_3" ModifierID="MOD_PANTHEON_SACRED_GROVE_CITY_GROWTH_RATE"/>
+		<Row BeliefType="PANTHEON_BONUS_4" ModifierID="MOD_PANTHEON_SACRED_GROVE_URBAN_CULTURE"/>
+		<Row BeliefType="PANTHEON_BONUS_5" ModifierID="MOD_PANTHEON_SACRED_GROVE_UNIT_HEALING"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_PASTURE_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_PLANTATION_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_DESERT_FLOODPLAIN_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_GRASSLAND_FLOODPLAIN_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_PLAINS_FLOODPLAIN_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_TROPICAL_FLOODPLAIN_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_TUNDRA_FLOODPLAIN_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_6" ModifierID="MOD_PANTHEON_SACRED_GROVE_FLAT_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_7" ModifierID="MOD_PANTHEON_SACRED_GROVE_CAMP_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_7" ModifierID="MOD_PANTHEON_SACRED_GROVE_WOODCUTTER_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_7" ModifierID="MOD_PANTHEON_SACRED_GROVE_VEGETATED_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_8" ModifierID="MOD_PANTHEON_SACRED_GROVE_BUILDING_PRODUCTION"/>
+		<Row BeliefType="PANTHEON_BONUS_9" ModifierID="MOD_PANTHEON_SACRED_GROVE_FISHING_BOAT_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_9" ModifierID="MOD_PANTHEON_SACRED_GROVE_REEF_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_9" ModifierID="MOD_PANTHEON_SACRED_GROVE_COLD_REEF_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_9" ModifierID="MOD_PANTHEON_SACRED_GROVE_COAST_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_9" ModifierID="MOD_PANTHEON_SACRED_GROVE_NAVIGABLE_RIVER_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_10" ModifierID="MOD_PANTHEON_SACRED_GROVE_YIELD"/>
+		<Row BeliefType="PANTHEON_BONUS_11" ModifierID="MOD_PANTHEON_SACRED_GROVE_UNIT_PRODUCTION"/> 
+		<Row BeliefType="PANTHEON_BONUS_12" ModifierID="MOD_PANTHEON_SACRED_GROVE_URBAN_SCIENCE"/>
+		<Row BeliefType="PANTHEON_BONUS_13" ModifierID="MOD_PANTHEON_SACRED_GROVE_WONDER_PRODUCTION"/>
+		<Row BeliefType="PANTHEON_BONUS_14" ModifierID="MOD_PANTHEON_SACRED_GROVE_SETTLER_PRODUCTION"/>
+		<Row BeliefType="PANTHEON_BONUS_15" ModifierID="MOD_PANTHEON_SACRED_GROVE_COAST_ADJACENCY"/>
+		<Row BeliefType="PANTHEON_BONUS_15" ModifierID="MOD_PANTHEON_SACRED_GROVE_LAKE_ADJACENCY"/>
+		<Row BeliefType="PANTHEON_BONUS_15" ModifierID="MOD_PANTHEON_SACRED_GROVE_RIVER_ADJACENCY"/>
+		<Row BeliefType="PANTHEON_BONUS_16" ModifierID="MOD_PANTHEON_SACRED_GROVE_MINE_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_16" ModifierID="MOD_PANTHEON_SACRED_GROVE_QUARRY_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_16" ModifierID="MOD_PANTHEON_SACRED_GROVE_ROUGH_WAREHOUSE"/>
+		<Row BeliefType="PANTHEON_BONUS_16" ModifierID="MOD_PANTHEON_SACRED_GROVE_WET_WAREHOUSE"/>
+	</BeliefModifiers>
+	<Constructible_Adjacencies>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveUrbanHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveQuarterHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveWonderHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveMountainHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveNaturalWonderHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveVegetatedHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveCoastHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveLakeHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveResourceHappiness" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveRiverHappiness" RequiresActivation="true"/>
+	</Constructible_Adjacencies>
+	<Adjacency_YieldChanges>
+		<Row ID="SacredGroveUrbanHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentQuarter="true"/>
+		<Row ID="SacredGroveQuarterHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentUniqueQuarter="true"/>
+		<Row ID="SacredGroveWonderHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentDistrict="DISTRICT_WONDER"/>
+		<Row ID="SacredGroveMountainHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentTerrain="TERRAIN_MOUNTAIN"/>
+		<Row ID="SacredGroveNaturalWonderHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentNaturalWonder="true"/>
+		<Row ID="SacredGroveVegetatedHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentFeatureClass="FEATURE_CLASS_VEGETATED"/>
+		<Row ID="SacredGroveCoastHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentTerrain="TERRAIN_COAST"/>
+		<Row ID="SacredGroveLakeHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentLake="true"/>
+		<Row ID="SacredGroveResourceHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentResource="true"/>
+		<Row ID="SacredGroveRiverHappiness" Age="AGE_ANTIQUITY" YieldType="YIELD_HAPPINESS" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentTerrain="TERRAIN_NAVIGABLE_RIVER"/>
+	</Adjacency_YieldChanges>
+	<Constructible_WarehouseYields>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveCampGold" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveWoodcutterResourceGold" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveVegetatedFeatureGold" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGrovePastureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGrovePlantationFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveDesertFloodplainFeatureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveGrasslandFloodplainFeatureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGrovePlainsFloodplainFeatureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveTropicalFloodplainFeatureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveTundraFloodplainFeatureFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveFlatTerrainFood" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveFishingBoatResourceProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveReefFeatureProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveColdReefFeatureProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveCoastTerrainProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveNavigableRiverProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveMineResourceProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveQuarryProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveRoughTerrainProduction" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="PantheonSacredGroveWetFeatureProduction" RequiresActivation="true"/>
+	</Constructible_WarehouseYields>
+	<Warehouse_YieldChanges>
+		<Row ID="PantheonSacredGroveCampGold" Age="AGE_ANTIQUITY" YieldType="YIELD_GOLD" YieldChange="1" ConstructibleInCity="IMPROVEMENT_CAMP"/>
+		<Row ID="PantheonSacredGroveWoodcutterResourceGold" Age="AGE_ANTIQUITY" YieldType="YIELD_GOLD" YieldChange="1" ConstructibleInCity="IMPROVEMENT_WOODCUTTER_RESOURCE"/>
+		<Row ID="PantheonSacredGroveVegetatedFeatureGold" Age="AGE_ANTIQUITY" YieldType="YIELD_GOLD" YieldChange="1" FeatureClassInCity="FEATURE_CLASS_VEGETATED"/>
+		<Row ID="PantheonSacredGrovePastureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" ConstructibleInCity="IMPROVEMENT_PASTURE"/>
+		<Row ID="PantheonSacredGrovePlantationFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" ConstructibleInCity="IMPROVEMENT_PLANTATION"/>
+		<Row ID="PantheonSacredGroveFloodplainFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureClassInCity="FEATURE_CLASS_FLOODPLAIN"/>
+		<Row ID="PantheonSacredGroveDesertFloodplainFeatureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureInCity="FEATURE_DESERT_FLOODPLAIN_MINOR"/>
+		<Row ID="PantheonSacredGroveGrasslandFloodplainFeatureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureInCity="FEATURE_GRASSLAND_FLOODPLAIN_MINOR"/>
+		<Row ID="PantheonSacredGrovePlainsFloodplainFeatureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureInCity="FEATURE_PLAINS_FLOODPLAIN_MINOR"/>
+		<Row ID="PantheonSacredGroveTropicalFloodplainFeatureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureInCity="FEATURE_TROPICAL_FLOODPLAIN_MINOR"/>
+		<Row ID="PantheonSacredGroveTundraFloodplainFeatureFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" FeatureInCity="FEATURE_TUNDRA_FLOODPLAIN_MINOR"/>
+		<Row ID="PantheonSacredGroveFlatTerrainFood" Age="AGE_ANTIQUITY" YieldType="YIELD_FOOD" YieldChange="1" TerrainInCity="TERRAIN_FLAT"/>
+		<Row ID="PantheonSacredGroveFishingBoatResourceProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" ConstructibleInCity="IMPROVEMENT_FISHING_BOAT_RESOURCE"/>
+		<Row ID="PantheonSacredGroveReefFeatureProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" FeatureInCity="FEATURE_REEF"/>
+		<Row ID="PantheonSacredGroveColdReefFeatureProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" FeatureInCity="FEATURE_COLD_REEF"/>
+		<Row ID="PantheonSacredGroveCoastTerrainProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" TerrainInCity="TERRAIN_COAST"/>
+		<Row ID="PantheonSacredGroveNavigableRiverProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" NavigableRiverInCity="true"/>
+		<Row ID="PantheonSacredGroveMineResourceProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" ConstructibleInCity="IMPROVEMENT_MINE_RESOURCE"/>
+		<Row ID="PantheonSacredGroveQuarryProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" ConstructibleInCity="IMPROVEMENT_QUARRY"/>
+		<Row ID="PantheonSacredGroveRoughTerrainProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" TerrainInCity="TERRAIN_HILL"/>
+		<Row ID="PantheonSacredGroveWetFeatureProduction" Age="AGE_ANTIQUITY" YieldType="YIELD_PRODUCTION" YieldChange="1" FeatureClassInCity="FEATURE_CLASS_WET"/>
+	</Warehouse_YieldChanges>
+</Database>-->

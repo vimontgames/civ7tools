@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>																																											   
+		<!--<Row Tag="LOC_IMPROVEMENT_SACRED_GROVE_NAME">																																	   -->
+		<!--	<Text>Sacred Grove</Text>																																					   -->
+		<!--</Row>																																											   -->
+		<!--<Row Tag="LOC_IMPROVEMENT_SACRED_GROVE_DESCRIPTION">																															   -->
+		<!--	<Text>Saxon Unique Improvement. Grants +2 [icon:YIELD_FOOD] Food. Acts as an additional Altar. Must be built in Vegetated terrain, not adjacent to another Sacred Grove.</Text>-->
+		<!--</Row>																																											   -->
+		<!--<Row Tag="LOC_IMPROVEMENT_SACRED_GROVE_TOOLTIP">																																   -->
+		<!--	<Text>Acts as additional copies of an Altar.</Text>																															   -->
+		<!--</Row>																																											   -->
+		<!--																																												   -->
+		<!--<Row Tag="LOC_BUILDING_MOOT_HALL_NAME">																																			   -->
+		<!--	<Text>Moot Hall</Text>																																						   -->
+		<!--</Row>																																											   -->
+		<!--<Row Tag="LOC_BUILDING_MOOT_HALL_DESCRIPTION">																																	   -->
+		<!--	<Text>Saxon Unique Building. Grants +3 [icon:YIELD_CULTURE] Culture and +3 [icon:YIELD_HAPPINESS] Happiness. Must be built in the City Center.</Text>						   -->
+		<!--</Row>																																											   -->
+		<!--<Row Tag="LOC_BUILDING_MOOT_HALL_TOOLTIP">																																		   -->
+		<!--	<Text>Must be built in the City Center.</Text																																   -->
+		<!--</Row>																																											   -->
+	</EnglishText>
+</Database>

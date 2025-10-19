@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<!-- GAULS -->
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_1">
+			<Text>Asterix</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_2">
+			<Text>Obelix</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_3">
+			<Text>Brennus</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_4">
+			<Text>Dumnorix</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_5">
+			<Text>Litaviccos</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_6">
+			<Text>Diviciacos</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_7">
+			<Text>Orgetorix</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_8">
+			<Text>Catamantaloedis</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_9">
+			<Text>Eporedorix</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_MALE_10">
+			<Text>Vergasillaunus</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_1">
+			<Text>Camulogena</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_2">
+			<Text>Boudica</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_3">
+			<Text>Cartimandua</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_4">
+			<Text>Aneunia</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_5">
+			<Text>Litavica</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_6">
+			<Text>Epona</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_7">
+			<Text>Severa</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_8">
+			<Text>Bricta</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_9">
+			<Text>Rosmerta</Text>
+		</Row>
+		<Row Tag="LOC_CITIZEN_GAULS_FEMALE_10">
+			<Text>Ambigatona</Text>
+		</Row>
+	</EnglishText>
+</Database>

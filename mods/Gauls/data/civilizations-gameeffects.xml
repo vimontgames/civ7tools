@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+	<!-- ==================================================	-->
+	<!--				Civ-Specific Traits					-->
+	<!-- ==================================================	-->
+	<Modifier id="MOD_CIV_DOUBLE_GALLIC_WARRIORS" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_ADJUST_UNIT_EXTRA_COPY">
+		<Argument name="Tag">UNIT_CLASS_GALLIC_WARRIOR</Argument>
+		<Argument name="Amount">1</Argument>
+		<Argument name="PurchaseValid">true</Argument>
+	</Modifier>
+	<!-- ==================================================	-->
+	<!--				Civ-Specific Trees					-->
+	<!-- ==================================================	-->
+
+	<Modifier id="MOD_REVEAL_CIV_CULTURE_TREE_GAULS" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_REVEAL_CULTURE_TREE">
+		<SubjectRequirements>
+			<Requirement type="REQUIREMENT_PLAYER_HAS_CIVILIZATION_OR_LEADER_TRAIT">
+				<Argument name="TraitType">TRAIT_GAULS</Argument>
+			</Requirement>
+		</SubjectRequirements>
+		<Argument name="ProgressionTreeType">TREE_CIVICS_AQ_GAULS</Argument>
+	</Modifier>
+	<!-- ==================================================	-->
+	<!--				Wonder Bonuses						-->
+	<!-- ==================================================	-->
+	<Modifier id="MOD_CIV_WONDER_PRODUCTION_GAULS" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_FAVORED_WONDER_PRODUCTION">
+		<SubjectRequirements>
+			<Requirement type="REQUIREMENT_PLAYER_HAS_CIVILIZATION_OR_LEADER_TRAIT">
+				<Argument name="TraitType">TRAIT_GAULS</Argument>
+			</Requirement>
+		</SubjectRequirements>
+		<Argument name="Percent">30</Argument>
+		<String context="Preview">LOC_MOD_CIV_WONDER_PRODUCTION_GAULS_DESCRIPTION</String>
+	</Modifier>
+</GameEffects>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Row Tag="LOC_UNLOCK_PLAY_AS_NAPOLEON_GAULS_TOOLTIP">
+			<Text>The [B]Gauls[/B] were early inhabitants of France.</Text>
+		</Row>
+		<Row Tag="LOC_UNLOCK_PLAY_AS_AUGUSTUS_GAULS_TOOLTIP">
+            <Text>[B]Augustus[/B] ruled over [B]Gauls[/B].</Text>
+		</Row>
+		<Row Tag="LOC_UNLOCK_PLAY_AS_GAULS_DESCRIPTION">
+			<Text>Play as the [B]Gauls[/B].</Text>
+		</Row>
+	</EnglishText>
+</Database>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<AiComponents>
+	</AiComponents>
+	<AiDefinitions>
+	</AiDefinitions>
+	<OpTeamRequirements>
+	</OpTeamRequirements>
+	<PseudoYields>
+	</PseudoYields>
+	<AiListTypes>
+		<Row ListType="Gaul Unit Biases"/>
+		<Row ListType="Gaul Government Bias"/>
+		<Row ListType="Gaul Constructibles Biases" />
+		<Row ListType="Gaul Budget Biases" />
+		<Row ListType="Gaul PseudoYield Biases" />
+		<Row ListType="Gaul Tag Biases"/>
+	</AiListTypes>
+	<AiLists>
+		<Row ListType="Gaul Unit Biases" LeaderType="TRAIT_GAULS" System="UnitBiases"/>
+		<Row ListType="Gaul Government Bias" LeaderType="TRAIT_GAULS" System="GovernmentBiases"/>
+		<Row ListType="Gaul Constructibles Biases" LeaderType="TRAIT_GAULS" System="ConstructibleBiases" />	
+		<Row ListType="Gaul Budget Biases" LeaderType="TRAIT_GAULS" System="AiBudgetBiases"/>	
+		<Row ListType="Gaul PseudoYield Biases" LeaderType="TRAIT_GAULS" System="PseudoYieldBiases"/>	
+		<Row ListType="Gaul Tag Biases" LeaderType="TRAIT_GAULS" System="TagBiases"/>
+	</AiLists>
+	<AiFavoredItems>
+		<!--<Row ListType="Gaul Constructibles Biases" Item="IMPROVEMENT_SACRED_GROVE" Value="200" /> -->
+		<!--<Row ListType="Gaul Constructibles Biases" Item="BUILDING_MOOT_HALL" Value="200" />		  -->
+		<Row ListType="Gaul Constructibles Biases" Item="WONDER_SANCTUARY_OF_CORENT" Value="100"/>			 
+		<Row ListType="Gaul Unit Biases" Item="UNIT_GALLIC_WARRIOR" Value="70"/>
+		<Row ListType="Gaul Unit Biases" Item="UNIT_GALLIC_WARRIOR_2" Value="60"/>
+		<Row ListType="Gaul Unit Biases" Item="UNIT_GALLIC_WARRIOR_3" Value="50"/>
+	</AiFavoredItems>
+	<Strategies>
+	</Strategies>
+	<StrategyConditions>
+	</StrategyConditions>
+	<Strategy_Priorities>
+	</Strategy_Priorities>
+	<AiListTypes>
+	</AiListTypes>
+	<AiLists>
+	</AiLists>
+	<AiFavoredItems>
+	</AiFavoredItems>
+</Database>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<!-- Major Civs -->
+		<Row Type="TRAIT_GAULS" Kind="KIND_TRAIT"/>
+		<Row Type="CIVILIZATION_GAULS" Kind="KIND_CIVILIZATION"/>
+	</Types>
+	<LegacyCivilizations>
+		<!-- Full Civs -->
+		<Row CivilizationType="CIVILIZATION_GAULS" Name="LOC_CIVILIZATION_GAULS_NAME" FullName="LOC_CIVILIZATION_GAULS_FULLNAME" Adjective="LOC_CIVILIZATION_GAULS_ADJECTIVE" Age="AGE_ANTIQUITY"/>
+	</LegacyCivilizations>
+	<LegacyCivilizationTraits>
+		<Row CivilizationType="CIVILIZATION_GAULS" TraitType="TRAIT_GAULS"/>
+	</LegacyCivilizationTraits>
+	<Traits>
+		<Row TraitType="TRAIT_GAULS" InternalOnly="true"/>
+	</Traits>
+	<LegacyLeaderCivPriorities>
+		<Row Leader="LEADER_NAPOLEON" CivilizationType="CIVILIZATION_GAULS"/>
+	</LegacyLeaderCivPriorities>
+</Database>

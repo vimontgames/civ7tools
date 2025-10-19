@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Database>
+	<IconDefinitions>
+		<Row>
+			<ID>ICON_CIVILIZATION_GAULS</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/civ_sym_gauls.png</Path>
+		</Row>
+		<Row>
+			<ID>CIVILIZATION_GAULS</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/civ_sym_gauls.png</Path>
+		</Row>
+		<Row>
+			<ID>CIVILIZATION_GAULS</ID>
+			<Context>BACKGROUND</Context>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/lsbg_gauls_1080.png</Path>
+			<IconSize>1080</IconSize>
+		</Row>
+		<Row>
+			<ID>CIVILIZATION_GAULS</ID>
+			<Context>BACKGROUND</Context>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/lsbg_gauls_720.png</Path>
+			<IconSize>720</IconSize>
+		</Row>
+		<Row>
+			<ID>UNIT_GALLIC_WARRIOR</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/unitflag_gallic_warrior.png</Path>
+		</Row>
+		<Row>
+			<ID>UNIT_GALLIC_WARRIOR_2</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/unitflag_gallic_warrior.png</Path>
+		</Row>
+		<Row>
+			<ID>UNIT_GALLIC_WARRIOR_3</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/unitflag_gallic_warrior.png</Path>
+		</Row>
+		<Row>
+			<ID>WONDER_SANCTUARY_OF_CORENT</ID>
+			<Path>fs://game/benualdo-civ-gauls/assets/icon/wondericon_sanctuary_of_Corent.png</Path>
+		</Row>
+		<!--<Row>																			  -->
+		<!--	<ID>IMPROVEMENT_SACRED_GROVE</ID>											  -->
+		<!--	<Path>fs://game/benualdo-civ-gauls/assets/icon/impicon_sacred_grove.png</Path>-->
+		<!--</Row>																			  -->
+		<!--<Row>																			  -->
+		<!--	<ID>BUILDING_MOOT_HALL</ID>													  -->
+		<!--	<Path>fs://game/benualdo-civ-gauls/assets/icon/buildicon_moot_hall.png</Path> -->
+		<!--</Row>																			  -->
+	</IconDefinitions>
+	<IconAliases>
+	</IconAliases>
+</Database>

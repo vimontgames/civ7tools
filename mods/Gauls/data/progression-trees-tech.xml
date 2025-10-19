@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<ProgressionTreeNodeUnlocks>
+		<Row ProgressionTreeNodeType="NODE_TECH_AQ_BRONZE_WORKING" TargetKind="KIND_UNIT" TargetType="UNIT_GALLIC_WARRIOR_2" UnlockDepth="1" RequiredTraitType="TRAIT_GAULS"/>
+		<Row ProgressionTreeNodeType="NODE_TECH_AQ_IRON_WORKING" TargetKind="KIND_UNIT" TargetType="UNIT_GALLIC_WARRIOR_3" UnlockDepth="1" RequiredTraitType="TRAIT_GAULS"/>
+	</ProgressionTreeNodeUnlocks>
+</Database>

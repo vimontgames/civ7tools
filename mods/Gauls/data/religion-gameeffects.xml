@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+																																								
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_YIELD_INFLUENCE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_YIELD_INFLUENCE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_YIELD_INFLUENCE" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_ADJUST_CONSTRUCTIBLE_YIELD">										-->
+	<!--	<Argument name="YieldType">YIELD_DIPLOMACY</Argument>																															-->
+	<!--	<Argument name="Amount">2</Argument>																																			-->
+	<!--	<Argument name="ConstructibleType">IMPROVEMENT_SACRED_GROVE</Argument>																											-->
+	<!--	<Argument name="Tooltip">LOC_PANTHEON_BONUS_1_NAME</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_MOUNTAIN_ADJACENCY" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_MOUNTAIN_ADJACENCY</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_MOUNTAIN_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">							-->
+	<!--	<Argument name="ConstructibleAdjacency">SacredGroveMountainHappiness</Argument>																									-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_NATURAL_WONDER_ADJACENCY" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">											-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_NATURAL_WONDER_ADJACENCY</Argument>																					-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_NATURAL_WONDER_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">					-->
+	<!--	<Argument name="ConstructibleAdjacency">SacredGroveNaturalWonderHappiness</Argument>																							-->
+	<!--</Modifier>																																											-->
+																																								
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_CITY_GROWTH_RATE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_CITY_GROWTH_RATE</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_CITY_GROWTH_RATE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_GROWTH">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_CITY_IS_CITY"/>																																-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="Amount">10</Argument>																																			-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_URBAN_CULTURE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_URBAN_CULTURE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_URBAN_CULTURE" collection="COLLECTION_PLAYER_PLOT_YIELDS" effect="EFFECT_PLOT_ADJUST_YIELD">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLOT_IS_QUARTER">																															-->
+	<!--		</Requirement>																																								-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="YieldType">YIELD_CULTURE</Argument>																																-->
+	<!--	<Argument name="Amount">1</Argument>																																			-->
+	<!--	<Argument name="Tooltip">LOC_PANTHEON_BONUS_4_NAME</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_UNIT_HEALING" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_UNIT_HEALING</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_UNIT_HEALING" collection="COLLECTION_PLAYER_UNITS" effect="EFFECT_UNIT_ADJUST_HEAL_PER_TURN">											-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_UNIT_IS_STATIONED_ON_DISTRICT">																												-->
+	<!--			<Argument name="DistrictType">DISTRICT_RURAL</Argument>																													-->
+	<!--			<Argument name="Owned">false</Argument>																																	-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="Amount">5</Argument>																																			-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_PASTURE_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_PASTURE_WAREHOUSE</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_PASTURE_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">					-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGrovePastureFood</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_PLANTATION_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_PLANTATION_WAREHOUSE</Argument>																						-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_PLANTATION_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">					-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGrovePlantationFood</Argument>																						-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_DESERT_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_DESERT_FLOODPLAIN_WAREHOUSE</Argument>																					-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_DESERT_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">			-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveDesertFloodplainFeatureFood</Argument>																			-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_GRASSLAND_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_GRASSLAND_FLOODPLAIN_WAREHOUSE</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_GRASSLAND_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">		-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveGrasslandFloodplainFeatureFood</Argument>																		-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_PLAINS_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_PLAINS_FLOODPLAIN_WAREHOUSE</Argument>																					-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_PLAINS_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">			-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGrovePlainsFloodplainFeatureFood</Argument>																			-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_TROPICAL_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_TROPICAL_FLOODPLAIN_WAREHOUSE</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_TROPICAL_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">		-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveTropicalFloodplainFeatureFood</Argument>																		-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_TUNDRA_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_TUNDRA_FLOODPLAIN_WAREHOUSE</Argument>																					-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_TUNDRA_FLOODPLAIN_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">			-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveTundraFloodplainFeatureFood</Argument>																			-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_FLAT_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_FLAT_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_FLAT_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveFlatTerrainFood</Argument>																						-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_CAMP_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_CAMP_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_CAMP_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveCampGold</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_WOODCUTTER_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_WOODCUTTER_WAREHOUSE</Argument>																						-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_WOODCUTTER_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">					-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveWoodcutterResourceGold</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_VEGETATED_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_VEGETATED_WAREHOUSE</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_VEGETATED_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">					-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveVegetatedFeatureGold</Argument>																					-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_BUILDING_PRODUCTION" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_BUILDING_PRODUCTION</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_BUILDING_PRODUCTION" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_CONSTRUCTIBLE_PRODUCTION">							-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ConstructibleClass">BUILDING</Argument>																															-->
+	<!--	<Argument name="Apply">Rate</Argument>																																			-->
+	<!--	<Argument name="Percent">10</Argument>																																			-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_FISHING_BOAT_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_FISHING_BOAT_WAREHOUSE</Argument>																						-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_FISHING_BOAT_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">				-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveFishingBoatResourceProduction</Argument>																		-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_REEF_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_REEF_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_REEF_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveReefFeatureProduction</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_COLD_REEF_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_COLD_REEF_WAREHOUSE</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_COLD_REEF_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">					-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveColdReefFeatureProduction</Argument>																			-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_COAST_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_COAST_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_COAST_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveCoastTerrainProduction</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_NAVIGABLE_RIVER_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">											-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_NAVIGABLE_RIVER_WAREHOUSE</Argument>																					-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_NAVIGABLE_RIVER_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">			-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveNavigableRiverProduction</Argument>																				-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_YIELD" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">																-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_YIELD</Argument>																										-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_YIELD" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_ADJUST_CONSTRUCTIBLE_YIELD">													-->
+	<!--	<Argument name="YieldType">YIELD_CULTURE,YIELD_FOOD,YIELD_GOLD,YIELD_HAPPINESS,YIELD_PRODUCTION,YIELD_SCIENCE</Argument>														-->
+	<!--	<Argument name="Amount">1,1,1,1,1,1</Argument>																																	-->
+	<!--	<Argument name="ConstructibleType">IMPROVEMENT_SACRED_GROVE</Argument>																											-->
+	<!--	<Argument name="Tooltip">LOC_PANTHEON_BONUS_10_NAME</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_UNIT_PRODUCTION" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_UNIT_PRODUCTION</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_UNIT_PRODUCTION" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_UNIT_PRODUCTION">										-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="UnitClass">UNIT_CLASS_COMBAT</Argument>																															-->
+	<!--	<Argument name="Percent">15</Argument>																																			-->
+	<!--	<Argument name="Tooltip">LOC_PANTHEON_BONUS_11_NAME</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_URBAN_SCIENCE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_URBAN_SCIENCE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_URBAN_SCIENCE" collection="COLLECTION_PLAYER_PLOT_YIELDS" effect="EFFECT_PLOT_ADJUST_YIELD">												-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLOT_IS_QUARTER">																															-->
+	<!--		</Requirement>																																								-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="YieldType">YIELD_SCIENCE</Argument>																																-->
+	<!--	<Argument name="Amount">1</Argument>																																			-->
+	<!--	<Argument name="Tooltip">LOC_PANTHEON_BONUS_12_NAME</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																								
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_WONDER_PRODUCTION" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_WONDER_PRODUCTION</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_WONDER_PRODUCTION" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_WONDER_PRODUCTION">									-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="Percent">10</Argument>																																			-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_SETTLER_PRODUCTION" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_SETTLER_PRODUCTION</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_SETTLER_PRODUCTION" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_UNIT_PRODUCTION">									-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_CITY_HAS_BUILDING">																															-->
+	<!--			<Argument name="BuildingType">IMPROVEMENT_SACRED_GROVE</Argument>																										-->
+	<!--		</Requirement>																																								-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="Percent">10</Argument>																																			-->
+	<!--	<Argument name="UnitClass">UNIT_CLASS_CREATE_TOWN</Argument>																													-->
+	<!--</Modifier>																																											-->
+																																								
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_COAST_ADJACENCY" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_COAST_ADJACENCY</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_COAST_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">SacredGroveCoastHappiness</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_LAKE_ADJACENCY" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_LAKE_ADJACENCY</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_LAKE_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">SacredGroveLakeHappiness</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_RIVER_ADJACENCY" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_RIVER_ADJACENCY</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_RIVER_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">							-->
+	<!--	<Argument name="ConstructibleAdjacency">SacredGroveRiverHappiness</Argument>																									-->
+	<!--</Modifier>																																											-->
+																																							
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_MINE_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_MINE_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_MINE_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveMineResourceProduction</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_QUARRY_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_QUARRY_WAREHOUSE</Argument>																							-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_QUARRY_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveQuarryProduction</Argument>																						-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_ROUGH_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">													-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_ROUGH_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_ROUGH_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveRoughTerrainProduction</Argument>																				-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="MOD_PANTHEON_SACRED_GROVE_WET_WAREHOUSE" collection="COLLECTION_MAJOR_PLAYERS" effect="EFFECT_ATTACH_MODIFIERS">														-->
+	<!--	<SubjectRequirements>																																							-->
+	<!--		<Requirement type="REQUIREMENT_PLAYER_HAS_PANTHEON"/>																														-->
+	<!--	</SubjectRequirements>																																							-->
+	<!--	<Argument name="ModifierId">ATTACH_PANTHEON_SACRED_GROVE_WET_WAREHOUSE</Argument>																								-->
+	<!--</Modifier>																																											-->
+	<!--<Modifier id="ATTACH_PANTHEON_SACRED_GROVE_WET_WAREHOUSE" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_WAREHOUSE_YIELD">						-->
+	<!--	<Argument name="ConstructibleWarehouseYield">PantheonSacredGroveWetFeatureProduction</Argument>																					-->
+	<!--</Modifier>																																											-->
+</GameEffects>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+	<!--<Modifier id="MOD_SCIRGEMOT_MOOT_HALL_URBAN_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">			-->
+	<!--	<Argument name="ConstructibleAdjacency">MootHallDiplomacy</Argument>																					-->
+	<!--	<String context="Description">LOC_MOD_SCIRGEMOT_MOOT_HAL_URBAN_ADJACENCY_DESCRIPTION</String>															-->
+	<!--</Modifier>																																					-->
+	<!--<Modifier id="MOD_HEARTHWISU_SACRED_GROVE_VEGETATED_ADJACENCY" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ACTIVATE_CONSTRUCTIBLE_ADJACENCY">	-->
+	<!--	<Argument name="ConstructibleAdjacency">SacredGroveCult</Argument>																						-->
+	<!--	<String context="Description">LOC_MOD_HEARTHWISU_SACRED_GROVE_VEGETATED_ADJACENCY_DESCRIPTION</String>													-->
+	<!--</Modifier>																																					-->
+	<!--<Modifier id="MOD_HEARTHWISU_SACRED_GROVE_STEALTH" collection="COLLECTION_PLAYER_UNITS" effect="EFFECT_UNIT_ADJUST_ABILITY">								-->
+	<!--	<Argument name="AbilityType">ABILITY_VEGETATED_STEALTH_ESE</Argument>																					-->
+	<!--	<String context="Description">LOC_MOD_HEARTHWISU_SACRED_GROVE_PROTECTION_OF_THE_ESE_DESCRIPTION</String>												-->
+	<!--</Modifier>																																					-->
+	<!--<Modifier id="MOD_AETHLINGRAEDEN_POLICY_SLOT" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_GRANT_TRADITION_SLOTS">									-->
+	<!--	<Argument name="Amount">1</Argument>																													-->
+	<!--	<String context="Description">LOC_MOD_AETHLINGRAEDEN_POLICY_SLOT_DESCRIPTION</String>																	-->
+	<!--</Modifier>																																					-->
+</GameEffects>

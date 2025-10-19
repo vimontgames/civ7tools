@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<Database>
+
+	<Kinds>
+		<InsertOrIgnore Kind="KIND_CONSTRUCTIBLE"/>
+	</Kinds>
+    
+	<Types>
+		<Row Type="BUILDING_MOOT_HALL" Kind="KIND_CONSTRUCTIBLE"/>
+		<Row Type="IMPROVEMENT_SACRED_GROVE" Kind="KIND_CONSTRUCTIBLE"/>
+	</Types>
+    
+	<Constructibles>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" Name="LOC_IMPROVEMENT_SACRED_GROVE_NAME" Description="LOC_IMPROVEMENT_SACRED_GROVE_DESCRIPTION" Tooltip="LOC_IMPROVEMENT_SACRED_GROVE_TOOLTIP" ConstructibleClass="IMPROVEMENT" Cost="100" Population="1" Age="AGE_ANTIQUITY" RequiresUnlock="true"/>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" Name="LOC_BUILDING_MOOT_HALL_NAME" Description="LOC_BUILDING_MOOT_HALL_DESCRIPTION" Tooltip="LOC_BUILDING_MOOT_HALL_TOOLTIP" ConstructibleClass="BUILDING" Cost="65" Population="1" Age="AGE_ANTIQUITY" RequiresUnlock="true"/>
+	</Constructibles>
+    
+	<Improvements>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" ResourceTier="0" CityBuildable="true" TraitType="TRAIT_GAULS" SameAdjacentValid="false"/>
+	</Improvements>
+
+	<Buildings>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" Movable="false" TraitType="TRAIT_GAULS"/>
+	</Buildings>
+
+	<Constructible_YieldChanges>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldType="YIELD_FOOD" YieldChange="2"/>
+	</Constructible_YieldChanges>
+	<TypeTags>
+		<Row Type="IMPROVEMENT_SACRED_GROVE" Tag="UNIQUE_IMPROVEMENT"/>
+		<Row Type="IMPROVEMENT_SACRED_GROVE" Tag="AGELESS"/>
+		<Row Type="BUILDING_MOOT_HALL" Tag="AGELESS"/>
+		<Row Type="BUILDING_MOOT_HALL" Tag="UNIQUE"/>
+		<Row Type="BUILDING_MOOT_HALL" Tag="CULTURE"/>
+		<Row Type="BUILDING_MOOT_HALL" Tag="DIPLOMACY"/>
+	</TypeTags>
+    
+	<Constructible_ValidDistricts>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" DistrictType="DISTRICT_RURAL"/>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" DistrictType="DISTRICT_CITY_CENTER"/>
+	</Constructible_ValidDistricts>
+    
+	<Constructible_YieldChanges>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" YieldType="YIELD_CULTURE" YieldChange="3"/>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" YieldType="YIELD_HAPPINESS" YieldChange="3"/>
+	</Constructible_YieldChanges>
+    
+	<Constructible_Adjacencies>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" YieldChangeId="MootHallDiplomacy" RequiresActivation="true"/>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" YieldChangeId="SacredGroveCult" RequiresActivation="true"/>
+	</Constructible_Adjacencies>
+    
+	<Adjacency_YieldChanges>
+		<Row ID="MootHallDiplomacy" YieldType="YIELD_DIPLOMACY" YieldChange="1" TilesRequired="1" ProjectMaxYield="true" AdjacentDistrict="DISTRICT_URBAN"/>
+		<Row ID="SacredGroveCult" YieldType="YIELD_CULTURE" YieldChange="1" TilesRequired="2" ProjectMaxYield="true" AdjacentFeatureClass="FEATURE_CLASS_VEGETATED"/>
+	</Adjacency_YieldChanges>
+    
+	<Constructible_ValidFeatures>
+	</Constructible_ValidFeatures>
+    
+	<Constructible_ValidTerrains>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" TerrainType="TERRAIN_FLAT"/>
+	</Constructible_ValidTerrains>
+    
+	<Constructible_Advisories>
+		<Row ConstructibleType="IMPROVEMENT_SACRED_GROVE" AdvisoryClassType="ADVISORY_CLASS_CULTURE"/>
+		<Row ConstructibleType="BUILDING_MOOT_HALL" AdvisoryClassType="ADVISORY_CLASS_CULTURE"/>
+	</Constructible_Advisories>
+    
+</Database>-->

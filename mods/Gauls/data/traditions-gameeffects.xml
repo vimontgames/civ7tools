@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameEffects xmlns="GameEffects">
+	<!--<Modifier id="WITENGAMOT_MOD_CITY_YIELDS" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_CONSTRUCTIBLE_YIELD">			   -->
+	<!--	<Argument name="YieldType">YIELD_FOOD</Argument>																						   -->
+	<!--	<Argument name="ConstructibleType">BUILDING_PALACE, BUILDING_MOOT_HALL, BUILDING_CITY_HALL</Argument>									   -->
+	<!--	<Argument name="Amount" type="ScaleByGameAge" extra="100">1</Argument>																	   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_WITENGAMOT_DESCRIPTION</Argument>																   -->
+	<!--</Modifier>																																	   -->
+	<!--<Modifier id="RUNWITA_MOD_PLOT_YIELDS" collection="COLLECTION_PLAYER_CITIES" effect="EFFECT_CITY_ADJUST_CONSTRUCTIBLE_YIELD">				   -->
+	<!--	<Argument name="Tag">UNIQUE_IMPROVEMENT</Argument>																						   -->
+	<!--	<Argument name="YieldType">YIELD_CULTURE</Argument>																						   -->
+	<!--	<Argument name="Amount" type="ScaleByGameAge" extra="100">2</Argument>																	   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_RUNWITA_DESCRIPTION</Argument>																	   -->
+	<!--	<String context="Description">LOC_TRAIT_LEADER_BENJAMIN_FRANKLIN_ABILITY_NAME</String>													   -->
+	<!--</Modifier>																																	   -->
+	<!--<Modifier id="FYRD_MOD_UNIQUE_UNIT_PRODUCTION" collection="COLLECTION_PLAYER_CAPITAL_CITY" effect="EFFECT_CITY_ADJUST_UNIT_PRODUCTION">		   -->
+	<!--	<Argument name="UnitTag">UNIT_CLASS_MELEE</Argument>																					   -->
+	<!--	<Argument name="Apply">Rate</Argument>																									   -->
+	<!--	<Argument name="Percent">25</Argument>																									   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_FYRD_DESCRIPTION</Argument>																		   -->
+	<!--</Modifier>																																	   -->
+	<!--<Modifier id="BEADURAEDEN_MOD_UNIQUE_UNIT_MAINTENANCE" collection="COLLECTION_OWNER" effect="EFFECT_PLAYER_ADJUST_UNIT_MAINTENANCE_EFFICIENCY">-->
+	<!--	<Argument name="UnitTag">UNIT_CLASS_MELEE</Argument>																					   -->
+	<!--	<Argument name="Amount">1</Argument>																									   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_BEADURAEDEN_DESCRIPTION</Argument>																   -->
+	<!--</Modifier>																																	   -->
+	<!--<Modifier id="BEOHRTTALU_MOD_GREAT_WORK_CULTURE" collection="COLLECTION_OWNER" effect="EFFECT_CITY_ADJUST_YIELD_PER_GREAT_WORK">			   -->
+	<!--	<Argument name="YieldType">YIELD_CULTURE</Argument>																						   -->
+	<!--	<Argument name="Amount" type="ScaleByGameAge" extra="100">1</Argument>																	   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_BEOHRTTALU_DESCRIPTION</Argument>																   -->
+	<!--</Modifier>																																	   -->
+	<!--<Modifier id="BEOHRTTALU_MOD_GREAT_WORK_HAPPINESS" collection="COLLECTION_OWNER" effect="EFFECT_CITY_ADJUST_YIELD_PER_GREAT_WORK">			   -->
+	<!--	<Argument name="YieldType">YIELD_HAPPINESS</Argument>																					   -->
+	<!--	<Argument name="Amount" type="ScaleByGameAge" extra="100">1</Argument>																	   -->
+	<!--	<Argument name="Tooltip">LOC_TRADITION_BEOHRTTALU_DESCRIPTION</Argument>																   -->
+	<!--</Modifier>																																	   -->
+</GameEffects>

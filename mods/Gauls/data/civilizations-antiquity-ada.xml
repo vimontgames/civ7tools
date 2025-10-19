@@ -1,0 +1,5 @@
+<Database>
+	<LeaderCivPriorities>
+		<Row Leader="LEADER_NAPOLEON" Civilization="CIVILIZATION_GAULS" Priority="1"/>
+	</LeaderCivPriorities>
+</Database>

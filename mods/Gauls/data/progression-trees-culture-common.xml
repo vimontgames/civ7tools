@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<!-- Civ Unique Trees -->
+		<!-- Civ Unique Tree Nodes -->
+	</Types>
+    
+	<TypeQuotes>
+	</TypeQuotes>
+    
+	<ProgressionTrees>
+	</ProgressionTrees>
+    
+	<ProgressionTreeNodes>
+	</ProgressionTreeNodes>
+    
+	<ProgressionTreeNodeUnlocks>
+		<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_MAIN_CHIEFDOM" TargetKind="KIND_MODIFIER" TargetType="MOD_REVEAL_CIV_CULTURE_TREE_GAULS" UnlockDepth="1" Hidden="true"/>
+		<Row ProgressionTreeNodeType="NODE_CIVIC_AQ_MAIN_MYSTICISM" TargetKind="KIND_CONSTRUCTIBLE" TargetType="WONDER_SANCTUARY_OF_CORENT" UnlockDepth="1"/>
+	</ProgressionTreeNodeUnlocks>
+    
+	<ProgressionTreePrereqs>
+	</ProgressionTreePrereqs>
+    
+	<ProgressionTree_Advisories>
+	</ProgressionTree_Advisories>
+    
+</Database>

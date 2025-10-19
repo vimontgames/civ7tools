@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Kinds>
+		<InsertOrIgnore Kind="KIND_TRADITION"/>
+	</Kinds>
+	<Types>
+		<!--<Row Type="TRADITION_WITENGAMOT" Kind="KIND_TRADITION"/> -->
+		<!--<Row Type="TRADITION_RUNWITA" Kind="KIND_TRADITION"/>	 -->
+		<!--<Row Type="TRADITION_FYRD" Kind="KIND_TRADITION"/>		 -->
+		<!--<Row Type="TRADITION_BEADURAEDEN" Kind="KIND_TRADITION"/>-->
+		<!--<Row Type="TRADITION_BEOHRTTALU" Kind="KIND_TRADITION"/> -->
+	</Types>
+	<Traditions>
+		<!--<Row TraditionType="TRADITION_WITENGAMOT" Name="LOC_TRADITION_WITENGAMOT_NAME" Description="LOC_TRADITION_WITENGAMOT_DESCRIPTION" TraitType="TRAIT_GAULS" AgeType="AGE_ANTIQUITY"/>	  -->
+		<!--<Row TraditionType="TRADITION_RUNWITA" Name="LOC_TRADITION_RUNWITA_NAME" Description="LOC_TRADITION_RUNWITA_DESCRIPTION" TraitType="TRAIT_GAULS" AgeType="AGE_ANTIQUITY"/>			  -->
+		<!--<Row TraditionType="TRADITION_FYRD" Name="LOC_TRADITION_FYRD_NAME" Description="LOC_TRADITION_FYRD_DESCRIPTION" TraitType="TRAIT_GAULS" AgeType="AGE_ANTIQUITY"/>					  -->
+		<!--<Row TraditionType="TRADITION_BEADURAEDEN" Name="LOC_TRADITION_BEADURAEDEN_NAME" Description="LOC_TRADITION_BEADURAEDEN_DESCRIPTION" TraitType="TRAIT_GAULS" AgeType="AGE_ANTIQUITY"/>-->
+		<!--<Row TraditionType="TRADITION_BEOHRTTALU" Name="LOC_TRADITION_BEOHRTTALU_NAME" Description="LOC_TRADITION_BEOHRTTALU_DESCRIPTION" TraitType="TRAIT_GAULS" AgeType="AGE_ANTIQUITY"/>	  -->
+	</Traditions>
+	 <TraditionModifiers>
+		<!--<Row TraditionType="TRADITION_WITENGAMOT" ModifierId="WITENGAMOT_MOD_CITY_YIELDS"/>				 -->
+		<!--<Row TraditionType="TRADITION_RUNWITA" ModifierId="RUNWITA_MOD_PLOT_YIELDS"/>					 -->
+		<!--<Row TraditionType="TRADITION_FYRD" ModifierId="FYRD_MOD_UNIQUE_UNIT_PRODUCTION"/>				 -->
+		<!--<Row TraditionType="TRADITION_BEADURAEDEN" ModifierId="BEADURAEDEN_MOD_UNIQUE_UNIT_MAINTENANCE"/>-->
+		<!--<Row TraditionType="TRADITION_BEOHRTTALU" ModifierId="BEOHRTTALU_MOD_GREAT_WORK_CULTURE"/>		 -->
+		<!--<Row TraditionType="TRADITION_BEOHRTTALU" ModifierId="BEOHRTTALU_MOD_GREAT_WORK_HAPPINESS"/>	 -->
+	</TraditionModifiers>
+</Database>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Kinds>
+		<InsertOrIgnore Kind="KIND_UNLOCK"/>
+	</Kinds>
+	<Types>
+		<InsertOrIgnore Type="UNLOCK_CIVILIZATION_GAULS" Kind="KIND_UNLOCK"/>
+	</Types>
+	<Unlocks>
+		<InsertOrIgnore UnlockType="UNLOCK_CIVILIZATION_GAULS"/>
+	</Unlocks>
+	<UnlockRewards>
+	</UnlockRewards>
+	<UnlockRequirements>
+	</UnlockRequirements>
+	<UnlockConfigurationValues>
+		<InsertOrIgnore UnlockType="UNLOCK_CIVILIZATION_GAULS" ConfigurationValue="CIVILIZATION_GAULS"/>
+	</UnlockConfigurationValues>
+</Database>
