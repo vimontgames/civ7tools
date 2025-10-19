@@ -62,4 +62,7 @@
       <Filter>maps</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="steam.txt" />
+  </ItemGroup>
 </Project>

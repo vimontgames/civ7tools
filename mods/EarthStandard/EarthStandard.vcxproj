@@ -35,6 +35,9 @@
     <None Include="maps\ynamp-resource-generator.js" />
     <None Include="maps\ynamp-utilities.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="steam.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
