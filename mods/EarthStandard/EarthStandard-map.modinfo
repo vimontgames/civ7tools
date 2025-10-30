@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="Benualdo-EarthStandard" version="14"
+<Mod id="Benualdo-EarthStandard" version="16"
     xmlns="ModInfo">
     <Properties>
         <Name>LOC_MODULE_MAPNAME_NAME</Name>
