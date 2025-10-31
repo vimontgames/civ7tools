@@ -21,6 +21,13 @@
             <Kind>UNIT</Kind>
             <From>UNIT_GALLIC_WARRIOR_3</From>
             <To>UNIT_PHALANX</To>
-        </Row>               
+        </Row>                                                                
+        <!--<Row>                                                              -->
+        <!--    <ID>REMAP_SANCTUARY_OF_CORENT</ID>                             -->
+        <!--    <DisplayName>LOC_WONDER_SANCTUARY_OF_CORENT_NAME</DisplayName> -->
+        <!--    <Kind>WONDER</Kind>                                            -->
+        <!--    <From>WONDER_SANCTUARY_OF_CORENT</From>                        -->
+        <!--    <To>WONDER_DUR_SHARRUKIN</To>                                  -->
+        <!--</Row>                                                             -->
     </VisualRemaps>
 </Database>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database>
 	<EnglishText>
-		<!-- GAULS -->
 		<Row Tag="LOC_CITIZEN_GAULS_MALE_1">
 			<Text>Asterix</Text>
 		</Row>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <!-- Civilization -->
+        <Row Tag="LOC_CIVILIZATION_GAULS_NAME" Language="fr_FR">
+            <Text>Gaulois</Text>
+        </Row>
+        <Row Tag="LOC_CIVILIZATION_GAULS_FULLNAME" Language="fr_FR">
+            <Text>Les Gaulois</Text>
+        </Row>
+        <Row Tag="LOC_CIVILIZATION_GAULS_ADJECTIVE" Language="fr_FR">
+            <Text>Gaulois</Text>
+        </Row>
+                
+        <!-- CivilizationText-->
+        <Row Tag="LOC_TRAIT_GAULS_NAME" Language="fr_FR">
+            <Text>Potion magique</Text>
+        </Row>
+        <Row Tag="LOC_CIVILIZATION_GAULS_DESCRIPTION" Language="fr_FR">
+            <Text>Le [B]guerrier gaulois[/B] est plus fort qu’un guerrier ordinaire.</Text>
+        </Row>
+        <Row Tag="LOC_TRAIT_GAULS_DESCRIPTION" Language="fr_FR">
+            <Text>[LIST][LI]Le guerrier gaulois coûte plus de [B][icon:YIELD_GOLD]or[/B], mais il est plus puissant et ignore les pénalités de mouvement sur les terrains végétalisés.[/LI][LI]Les Gaulois peuvent construire le [B]Sanctuaire de Corent[/B], une merveille unique qui procure de la [B][icon:YIELD_CULTURE]culture[/B] et du [B][icon:YIELD_HAPPINESS]bonheur[/B].[/LI][/LIST]</Text>
+        </Row>
+
+        <!-- LoadingText -->
+        <Row Tag="LOC_LOADING_VO_GAULS" Language="fr_FR">
+            <Text>Courageux chef des Gaulois, vos clans s’unissent sous votre bannière, leurs esprits sont indomptables. Conduisez-les à la gloire !</Text>
+        </Row>
+        <Row Tag="LOC_LOADING_CIV_INTRO_TEXT_GAULS" Language="fr_FR">
+            <Text>Salue, illustre chef des Gaulois ! Ton peuple, une mosaïque de tribus farouches, reste résilient face à toutes les adversités. Avec la sagesse des druides et la bravoure de tes guerriers gaulois, tu as préservé tes anciennes traditions. Seras-tu maintenant celui qui inaugurera une ère où tes terres prospèrent, tes clans s’épanouissent et ton nom s’inscrit dans les annales de la légende ? Le monde regarde, attendant tes ordres.</Text>
+        </Row>
+        <Row Tag="LOC_LOADING_CIV_TIPS_TEXT_GAULS" Language="fr_FR">
+            <Text>Les guerriers gaulois sont coûteux mais plus puissants que les guerriers ordinaires.</Text>
+        </Row>
+        
+        <!-- UnitText -->
+        <Row Tag="LOC_UNIT_GALLIC_WARRIOR_NAME" Language="fr_FR">
+            <Text>Guerrier gaulois</Text>
+        </Row>
+        <Row Tag="LOC_UNIT_GALLIC_WARRIOR_DESCRIPTION" Language="fr_FR">
+            <Text>Unité de mêlée unique des Gaulois. Plus coûteuse mais plus puissante qu’un guerrier ordinaire, et ignore les pénalités de mouvement sur les terrains végétalisés.</Text>
+        </Row>
+        <Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_NAME" Language="fr_FR">
+            <Text>Drustagos</Text>
+        </Row>
+        <Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_DESCRIPTION" Language="fr_FR">
+            <Text>Ignore les pénalités de mouvement sur les terrains végétalisés.</Text>
+        </Row>
+
+        <Row Tag="LOC_UNLOCK_PLAY_AS_NAPOLEON_GAULS_TOOLTIP" Language="fr_FR">
+            <Text>Les [B]Gaulois[/B] étaient parmi les premiers habitants de la France.</Text>
+        </Row>
+        <Row Tag="LOC_UNLOCK_PLAY_AS_AUGUSTUS_GAULS_TOOLTIP" Language="fr_FR">
+            <Text>[B]Auguste[/B] régna sur les [B]Gaulois[/B].</Text>
+        </Row>
+        <Row Tag="LOC_UNLOCK_PLAY_AS_GAULS_DESCRIPTION" Language="fr_FR">
+            <Text>Jouez en tant que [B]Gaulois[/B].</Text>
+        </Row>
+        
+        <!-- WonderText -->
+        <Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_NAME" Language="fr_FR">
+            <Text>Sanctuaire de Corent</Text>
+        </Row>
+        <Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_DESCRIPTION" Language="fr_FR">
+            <Text>{LOC_WONDER_SANCTUARY_OF_CORENT_TOOLTIP}</Text>
+        </Row>
+        <Row Tag="LOC_WONDER_SANCTUARY_OF_CORENT_TOOLTIP" Language="fr_FR">
+            <Text>Les bâtiments produisant du bonheur bénéficient d’une proximité culturelle avec le Sanctuaire de Corent.</Text>
+        </Row>
+        <Row Tag="LOC_QUOTE_WONDER_SANCTUARY_OF_CORENT" Language="fr_FR">
+            <Text>Le Sanctuaire de Corent était un important centre religieux gaulois où se tenaient des rituels et des festins en l’honneur des divinités celtes.</Text>
+        </Row>
+        <Row Tag="LOC_QUOTE_AUTHOR_WONDER_SANCTUARY_OF_CORENT" Language="fr_FR">
+            <Text>Arvernes</Text>
+        </Row>
+
+        <!-- Cities -->
+        <Row Tag="LOC_CITY_NAME_GAULS1" Language="fr_FR">
+            <Text>Lutèce</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS2" Language="fr_FR">
+            <Text>Bibracte</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS3" Language="fr_FR">
+            <Text>Alésia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS4" Language="fr_FR">
+            <Text>Massalia</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS5" Language="fr_FR">
+            <Text>Gergovie</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS6" Language="fr_FR">
+            <Text>Lugdunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS7" Language="fr_FR">
+            <Text>Tolosa</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS8" Language="fr_FR">
+            <Text>Narbo Martius</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS9" Language="fr_FR">
+            <Text>Trèves</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS10" Language="fr_FR">
+            <Text>Avaricum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS11" Language="fr_FR">
+            <Text>Nemausus</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS12" Language="fr_FR">
+            <Text>Rotomagus</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS13" Language="fr_FR">
+            <Text>Augustodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS14" Language="fr_FR">
+            <Text>Burdigala</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS15" Language="fr_FR">
+            <Text>Andematunnum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS16" Language="fr_FR">
+            <Text>Divio</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS17" Language="fr_FR">
+            <Text>Agedincum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS18" Language="fr_FR">
+            <Text>Camulodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS19" Language="fr_FR">
+            <Text>Vindomora</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS20" Language="fr_FR">
+            <Text>Limonum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS21" Language="fr_FR">
+            <Text>Vesontio</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS22" Language="fr_FR">
+            <Text>Vesunna</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS23" Language="fr_FR">
+            <Text>Caesarodunum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS24" Language="fr_FR">
+            <Text>Mediolanum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS25" Language="fr_FR">
+            <Text>Barrois</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS26" Language="fr_FR">
+            <Text>Cabillonum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS27" Language="fr_FR">
+            <Text>Aventicum</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS28" Language="fr_FR">
+            <Text>Tricasses</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS29" Language="fr_FR">
+            <Text>Cadurci</Text>
+        </Row>
+        <Row Tag="LOC_CITY_NAME_GAULS30" Language="fr_FR">
+            <Text>Genabum</Text>
+        </Row>
+
+    </LocalizedText>
+</Database>

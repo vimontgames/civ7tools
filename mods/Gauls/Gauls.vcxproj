@@ -79,6 +79,7 @@
     <Xml Include="text\en_us\UnitText.xml" />
     <Xml Include="text\en_us\UnlockText.xml" />
     <Xml Include="text\en_us\WonderText.xml" />
+    <Xml Include="text\fr_FR_Text.xml" />
     <Xml Include="ynamp\data\greatest-earth.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

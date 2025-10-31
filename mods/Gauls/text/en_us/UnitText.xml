@@ -8,7 +8,7 @@
 			<Text>Gallic unique melee unit. More expensive but stronger than regular warrior, and ignores movement penalties on Vegetated terrain.</Text>
 		</Row>
 		<Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_NAME">
-			<Text>Wealdgenga</Text>
+			<Text>Drustagos</Text>
 		</Row>
 		<Row Tag="LOC_ABILITY_GALLIC_WARRIOR_IGNORE_VEGETATION_DESCRIPTION">
 			<Text>Ignores movement penalties on vegetated terrain.</Text>

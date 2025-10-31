@@ -1,5 +1,81 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <Database>
-	<EnglishText>
-	</EnglishText>
+    <LocalizedText>
+        <!-- Module Name -->
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="en_US">
+            <Text>Gauls (Antiquity) by Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="zh_Hans_CN">
+            <Text>Benualdo的高卢人（古代）</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="zh_Hant_HK">
+            <Text>Benualdo的高盧人（古代）</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="ja_JP">
+            <Text>ベヌアルドのガリア人（古代）</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="ko_KR">
+            <Text>베누알도의 갈리아인 (고대)</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="ru_RU">
+            <Text>Галлы (Античность) от Бенуальдо</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="de_DE">
+            <Text>Gallier (Antike) von Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="es_ES">
+            <Text>Galos (Antigüedad) por Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="fr_FR">
+            <Text>Gaulois (Antiquité) par Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="it_IT">
+            <Text>Galli (Antichità) di Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="pl_PL">
+            <Text>Galowie (Starożytność) według Benualdo</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_NAME" Language="pt_BR">
+            <Text>Gauleses (Antiguidade) por Benualdo</Text>
+        </Row>
+
+        <!-- Module Description -->
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="en_US">
+            <Text>Adds the Gauls as a playable civilization in the Antiquity Age.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="zh_Hans_CN">
+            <Text>在古代时期添加高卢人为可玩文明。</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="zh_Hant_HK">
+            <Text>在古代時期新增高盧人作為可玩文明。</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="ja_JP">
+            <Text>古代時代にガリア人をプレイ可能な文明として追加します。</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="ko_KR">
+            <Text>고대 시대에 갈리아인을 플레이 가능한 문명으로 추가합니다.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="ru_RU">
+            <Text>Добавляет галлов как играбельную цивилизацию в эпоху Античности.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="de_DE">
+            <Text>Fügt die Gallier als spielbare Zivilisation im Zeitalter der Antike hinzu.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="es_ES">
+            <Text>Añade a los galos como civilización jugable en la Edad de la Antigüedad.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="fr_FR">
+            <Text>Ajoute les Gaulois comme civilisation jouable à l’époque de l’Antiquité.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="it_IT">
+            <Text>Aggiunge i Galli come civiltà giocabile nell’Età dell’Antichità.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="pl_PL">
+            <Text>Dodaje Galów jako grywalną cywilizację w epoce starożytnej.</Text>
+        </Row>
+        <Row Tag="LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION" Language="pt_BR">
+            <Text>Adiciona os Gauleses como uma civilização jogável na Idade da Antiguidade.</Text>
+        </Row>
+    </LocalizedText>
 </Database>

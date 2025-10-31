@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Mod id="benualdo-civ-gauls" version="1" xmlns="ModInfo">
 	<Properties>
-		<Name>Benualdo's Civs - Gauls (Antiquity)</Name>
-        <Description>Adds the Gauls as a playable civilization in the Antiquity Age.</Description>
+		<Name>LOC_MODULE_BENUALDOSTANDARDEARTH_NAME</Name>
+        <Description>LOC_MODULE_BENUALDOSTANDARDEARTH_DESCRIPTION</Description>
         <Authors>Benualdo</Authors>
-        <Version>1</Version>
+        <Version>3</Version>
         <AffectsSavedGames>1</AffectsSavedGames>
 	</Properties>
 	<Dependencies>
@@ -94,6 +94,7 @@
 					<Item>text/en_us/CivilizationLegacyText.xml</Item>
 					<Item>text/en_us/AttributesText.xml</Item>
 					<Item>text/en_us/WonderText.xml</Item>
+                    <Item locale="fr_FR">text/fr_FR_Text.xml</Item>
 				</UpdateText>
 			</Actions>
 		</ActionGroup>
@@ -169,8 +170,13 @@
 					<Item>text/en_us/CivilizationText.xml</Item>
 					<Item>text/en_us/UnitText.xml</Item>
 					<Item>text/en_us/WonderText.xml</Item>
+                    <Item locale="fr_FR">text/fr_FR_Text.xml</Item>
 				</UpdateText>
 			</Actions>
 		</ActionGroup>
 	</ActionGroups>
+    <LocalizedText>
+        <File>text/en_us/ModuleText.xml</File>
+        <!--<Item locale="fr_FR">text/ModuleText_fr_FR.xml</Item>-->
+    </LocalizedText>
 </Mod>

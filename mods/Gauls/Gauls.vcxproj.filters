@@ -207,5 +207,8 @@
     <Xml Include="ynamp\data\greatest-earth.xml">
       <Filter>ynamp\data</Filter>
     </Xml>
+    <Xml Include="text\fr_FR_Text.xml">
+      <Filter>text</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
