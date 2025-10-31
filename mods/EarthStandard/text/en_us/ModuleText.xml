@@ -1,11 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>           
-<Database>                                              
-	<EnglishText>                                        
-		<Replace Tag="LOC_MODULE_MAPNAME_NAME">
-            <Text>Benualdo's Standard Earth</Text>             
-		</Replace>                                       
-		<Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION">
-            <Text>Benualdo's Standard Earth map (84x54)[n]Requires YnAMP mod[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>
-        </Replace>                                       
-	</EnglishText>                                       
-</Database>                                             
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <!-- Map Name -->
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="en_US">
+            <Text>Standard Earth by Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="zh_Hans_CN">
+            <Text>Benualdo的标准地球</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="zh_Hant_HK">
+            <Text>Benualdo的標準地球</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="ja_JP">
+            <Text>ベヌアルドの標準地球</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="ko_KR">
+            <Text>베누알도의 스탠다드 어스</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="ru_RU">
+            <Text>Стандартная Земля Бенуальдо</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="de_DE">
+            <Text>Standard-Earth von Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="es_ES">
+            <Text>Tierra Estándar de Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="fr_FR">
+            <Text>Terre standard par Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="it_IT">
+            <Text>Terra Standard di Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="pl_PL">
+            <Text>Standardowa Ziemia Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_NAME" Language="pt_BR">
+            <Text>Terra Padrão de Benualdo</Text>
+        </Replace>
+
+        <!-- Map Description -->
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="en_US">
+            <Text>Benualdo's Standard Earth map (84x54)[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="zh_Hans_CN">
+            <Text>Benualdo的标准地球地图 (84x54)[n]使用Civ7Map制作 https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="zh_Hant_HK">
+            <Text>Benualdo的標準地球地圖 (84x54)[n]使用Civ7Map製作 https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="ja_JP">
+            <Text>ベヌアルドの標準地球マップ (84x54)[n]Civ7Mapで作成 https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="ko_KR">
+            <Text>베누알도의 스탠다드 어스 지도 (84x54)[n]Civ7Map 사용 https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="ru_RU">
+            <Text>Карта «Стандартная Земля» Бенуальдо (84x54)[n]Создано с помощью Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="de_DE">
+            <Text>Standard-Earth Karte von Benualdo (84x54)[n]Erstellt mit Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="es_ES">
+            <Text>Mapa Tierra Estándar de Benualdo (84x54)[n]Creado con Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="fr_FR">
+            <Text>Carte de la Terre taille standard par Benualdo (84x54)[n]Créée avec Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="it_IT">
+            <Text>Mappa Terra Standard di Benualdo (84x54)[n]Realizzata con Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="pl_PL">
+            <Text>Karta Standardowa Ziemia Benualdo (84x54)[n]Stworzona za pomocą Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MODULE_MAPNAME_DESCRIPTION" Language="pt_BR">
+            <Text>Mapa Terra Padrão de Benualdo (84x54)[n]Criado com Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+    </LocalizedText>
+</Database>

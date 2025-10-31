@@ -6,6 +6,7 @@
         <Description>LOC_MODULE_MAPNAME_DESCRIPTION</Description>
         <Authors>Benualdo</Authors>
         <Package>Mod</Package>
+        <Version>17</Version>
     </Properties>
     <Dependencies>
         <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
@@ -34,6 +35,7 @@
                 </UpdateDatabase>
                 <UpdateText>
                     <Item>text/en_us/MapText.xml</Item>
+                    <Item locale="fr_FR">text/fr_FR_Text.xml</Item>
                 </UpdateText>
 		         <UpdateIcons>
 		             <Item>icons/icons.xml</Item>
@@ -47,11 +49,13 @@
                 </UpdateDatabase>
                 <UpdateText>
                     <Item>text/en_us/MapText.xml</Item>
+                    <Item locale="fr_FR">text/fr_FR_Text.xml</Item>
                 </UpdateText>
             </Actions>
         </ActionGroup>
     </ActionGroups>
     <LocalizedText>
         <File>text/en_us/ModuleText.xml</File>
+        <!--<Item locale="fr_FR">text/ModuleText_fr_FR.xml</Item>-->
     </LocalizedText>
 </Mod>

@@ -1,14 +1,14 @@
-    <?xml version="1.0" encoding="utf-8"?>   
+<?xml version="1.0" encoding="utf-8"?>   
 <Database>                                      
 	<EnglishText>                                
 		<Replace Tag="LOC_EARTHSTANDARD_NAME">       
 			<Text>Benualdo's Standard Earth</Text>
 		</Replace>                               
 		<Replace Tag="LOC_EARTHSTANDARD_DESCRIPTION">
-            <Text>Benualdo's Standard Earth map (84x54)[n]Requires YnAMP mod[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>       
+            <Text>Standard Earth map (84x54)[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>       
 		</Replace>
         <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME">
-            <Text>Benualdo Standard Earth (84x54)</Text>
+            <Text>Standard Earth (84x54)</Text>
         </Replace>
         <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION">
             <Text>11 players on a 84x54 map</Text>

@@ -40,6 +40,9 @@
     <Xml Include="maps\EarthStandard.xml">
       <Filter>maps</Filter>
     </Xml>
+    <Xml Include="text\fr_FR_Text.xml">
+      <Filter>Texts</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\tables.sql">

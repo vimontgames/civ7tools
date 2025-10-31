@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_EARTHSTANDARD_NAME" Language="fr_FR">
+            <Text>Terre taille standard par Benualdo</Text>
+        </Replace>
+        <Replace Tag="LOC_EARTHSTANDARD_DESCRIPTION" Language="fr_FR">
+            <Text>Terre taille standard (84x54)[n]Made with Civ7Map https://github.com/vimontgames/civ7tools.</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Language="fr_FR">
+            <Text>Terre standard (84x54)</Text>
+        </Replace>
+        <Replace Tag="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" Language="fr_FR">
+            <Text>11 joueurs sur une carte de 84x54 tuiles</Text>
+        </Replace>
+    </LocalizedText>
+</Database>

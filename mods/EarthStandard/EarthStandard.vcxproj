@@ -25,6 +25,7 @@
     <Xml Include="maps\EarthStandard.xml" />
     <Xml Include="text\en_us\MapText.xml" />
     <Xml Include="text\en_us\ModuleText.xml" />
+    <Xml Include="text\fr_FR_Text.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\tables.sql" />
