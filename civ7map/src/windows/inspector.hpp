@@ -198,7 +198,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                                     DrawColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
 
-                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.name.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLargest))
+                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.userFriendlyName.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLargest))
                                     {
                                         // Sort by era then alphabetical order
                                         vector<Civilization *> sortedCivs(map->m_civilizations.size());
@@ -207,7 +207,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                                         sort(sortedCivs.begin(), sortedCivs.end(), [](const Civilization * a, const Civilization * b) {
                                             if (a->era == b->era)
-                                                return a->name < b->name;  // Sort by name if categories are the same
+                                                return a->userFriendlyName < b->userFriendlyName;  // Sort by name if categories are the same
                                             return (int)a->era < (int)b->era;  // Otherwise, sort by category
                                             });
 
@@ -238,7 +238,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                 ImGui::TextDisabled(fmt::sprintf("%s (%u/%u)", asString(era), eraCivsCountWithTSL, eraCivsCount).c_str());
                                             }
 
-                                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv->name, dstCiv->tsl.size()).c_str(), isSelected))
+                                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv->userFriendlyName, dstCiv->tsl.size()).c_str(), isSelected))
                                             {
                                                 civ.tsl.erase(civ.tsl.begin() + t);
                                                 TSL newTSL;
@@ -246,6 +246,11 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                 newTSL.pos.y = y;
                                                 dstCiv->tsl.push_back(newTSL);
                                                 map->refresh();
+                                            }
+
+                                            if (ImGui::IsItemHovered() && !dstCiv->civilizationName.empty())
+                                            {
+                                                ImGui::SetTooltip(dstCiv->civilizationName.c_str());
                                             }
 
                                             prevEra = era;

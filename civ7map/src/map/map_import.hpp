@@ -1203,8 +1203,8 @@ bool Map::importTSL()
                         {
                             for (uint i = 0; i < m_civilizations.size(); ++i)
                             {
-                                const string civName = m_civilizations[i].name;
-                                if (getExportCivName(civName) == attribute.value)
+                                const string civName = m_civilizations[i].civilizationName;
+                                if (civName == attribute.value)
                                 {
                                     civIndex = i;
                                 }
@@ -1225,19 +1225,25 @@ bool Map::importTSL()
                         }
                     }
 
-                    if (xStart >= 0 && xStart < (int)m_width && yStart >= 0 && yStart <= (int)m_height)
+                    auto & civ = m_civilizations[civIndex];
+                    if (civ.civilizationName.empty())
                     {
-                        tsl.pos.x = xStart;
-                        tsl.pos.y = yStart;
 
-                        auto & civ = m_civilizations[civIndex];
-                        LOG_INFO("Add TSL for civilization \"%s\" at (%i, %i)", civ.name.c_str(), tsl.pos.x, tsl.pos.y);
-                        civ.tsl.push_back(tsl);
                     }
                     else
                     {
-                        const auto & civ = m_civilizations[civIndex];
-                        LOG_ERROR("Civilization \"%s\" has invalid TSL at (%i,%i) ", civ.name.c_str(), xStart, yStart);
+                        if (xStart >= 0 && xStart < (int)m_width && yStart >= 0 && yStart <= (int)m_height)
+                        {
+                            tsl.pos.x = xStart;
+                            tsl.pos.y = yStart;
+
+                            LOG_INFO("Add TSL for civilization \"%s\" (%s) at (%i, %i)", civ.userFriendlyName.c_str(), civ.civilizationName.c_str(), tsl.pos.x, tsl.pos.y);
+                            civ.tsl.push_back(tsl);
+                        }
+                        else
+                        {
+                            LOG_ERROR("Civilization \"%s\" (%s) has invalid TSL at (%i,%i) ", civ.userFriendlyName.c_str(), civ.civilizationName.c_str(), xStart, yStart);
+                        }
                     }
                 }
             }

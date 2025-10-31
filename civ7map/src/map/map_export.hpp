@@ -452,7 +452,7 @@ void Map::exportTSL()
         for (uint t = 0; t < civ.tsl.size(); ++t)
         {
             const auto & tsl = civ.tsl[t];
-            data += fmt::sprintf("		<Replace MapName=\"%s\" Civilization=\"%s\" X=\"%i\" Y=\"%i\" />\n", getPrettyName(), getExportCivName(civ.name), tsl.pos.x, tsl.pos.y);
+            data += fmt::sprintf("		<Replace MapName=\"%s\" Civilization=\"%s\" X=\"%i\" Y=\"%i\" />\n", getPrettyName(), civ.civilizationName, tsl.pos.x, tsl.pos.y);
         }
     }
   

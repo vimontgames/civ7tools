@@ -88,7 +88,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 45;
+const int g_version_minor = 46;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
@@ -591,10 +591,10 @@ int main()
                                                 if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
                                                 {
                                                     float f3Color[] = { pow(civ.color.r, 1.0f/2.2f), pow(civ.color.g, 1.0f / 2.2f) , pow(civ.color.b, 1.0f / 2.2f) };
-                                                    ImGui::ColorEdit3(fmt::sprintf("###%s", civ.name).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+                                                    ImGui::ColorEdit3(fmt::sprintf("###%s", civ.civilizationName).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
                                                     ImGui::SameLine();
                                                     ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                                    ImGui::Text("%s (#%u)", civ.name.c_str(), t);
+                                                    ImGui::Text("%s (#%u)", civ.userFriendlyName.c_str(), t);
                                                     anyTSL = true;
                                                 }
                                             }

@@ -156,15 +156,17 @@ struct TSL
 //--------------------------------------------------------------------------------------
 struct Civilization
 {
-    Civilization(const string & _name="", Era _era = (Era)-1, const float4 _color = float4(1,1,1,1)) :
-        name(_name),
+    Civilization(const string & _userFriendlyName ="", const string & _civilizationName = "", Era _era = (Era)-1, const float4 _color = float4(1,1,1,1)) :
+        userFriendlyName(_userFriendlyName),
+        civilizationName(_civilizationName),
         era(_era),
         color(_color)
     {
 
     }
 
-    string name;
+    string userFriendlyName;
+    string civilizationName;
     Era era;
     float4 color;
     vector<TSL> tsl;
