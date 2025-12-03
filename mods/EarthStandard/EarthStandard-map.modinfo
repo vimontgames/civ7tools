@@ -1,4 +1,4 @@
-<?xml version="1.3" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Mod id="Benualdo-EarthStandard" version="16"
     xmlns="ModInfo">
     <Properties>
@@ -6,7 +6,7 @@
         <Description>LOC_MODULE_MAPNAME_DESCRIPTION</Description>
         <Authors>Benualdo</Authors>
         <Package>Mod</Package>
-        <Version>17</Version>
+        <Version>18</Version>
     </Properties>
     <Dependencies>
         <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
