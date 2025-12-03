@@ -88,7 +88,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 46;
+const int g_version_minor = 47;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------

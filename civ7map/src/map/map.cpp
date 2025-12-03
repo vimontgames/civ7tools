@@ -103,7 +103,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Gauls", "CIVILIZATION_GAULS", Era::Antiquity, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Huns", "CIVILIZATION_HUNS_ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Yamatai", "CIVILIZATION_PB_YAMATAI", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    
+    m_civilizations.push_back(Civilization("Tonga", "CIVILIZATION_TONGA", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));    
 
     // Exploration
     m_civilizations.push_back(Civilization("England", "CIVILIZATION_ENGLAND", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
@@ -111,6 +111,7 @@ Map::Map()
     m_civilizations.push_back(Civilization("Venice", "CIVILIZATION_VENICE", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Portugal", "CIVILIZATION_DOURADOS_PORTUGAL", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
     m_civilizations.push_back(Civilization("Japan", "CIVILIZATION_EDO", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("Pirates", "CIVILIZATION_PIRATE_REPUBLIC", Era::Exploration, float4(55.0f / 255.0f, 55.0f / 255.0f, 55.0f / 255.0f, 1.0f)));
 
     // Modern
     m_civilizations.push_back(Civilization("Philippines", "CIVILIZATION_SANSEB_PHILIPPINES", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));

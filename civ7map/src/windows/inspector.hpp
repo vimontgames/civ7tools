@@ -198,7 +198,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                                     DrawColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
 
-                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.userFriendlyName.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLargest))
+                                    if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.userFriendlyName.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLarge))
                                     {
                                         // Sort by era then alphabetical order
                                         vector<Civilization *> sortedCivs(map->m_civilizations.size());
