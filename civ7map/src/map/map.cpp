@@ -290,8 +290,8 @@ void Map::crop(const sf::Vector2i & _newSize)
 //--------------------------------------------------------------------------------------
 sf::Vector2i ResizeCoords(int x, int y, const sf::Vector2i& _oldSize, const sf::Vector2i& _newSize)
 {
-    int newX = x * _newSize.x / _oldSize.x;
-    int newY = y * _newSize.y / _oldSize.y;
+    int newX = (int)round(float(x) * float(_newSize.x) / float(_oldSize.x));
+    int newY = (int)round(float(y) * float(_newSize.y) / float(_oldSize.y));
     return sf::Vector2i(newX, newY);
 }
 

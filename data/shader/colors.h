@@ -350,7 +350,16 @@ float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
     if (terrainType == TerrainType_Ocean || terrainType == TerrainType_Coast)
         isWater = true;
 
-    if (!isWater)
+    if (isWater)
+    {
+        if (biomeType != BiomeType_Marine)
+        {
+            color.r = 1;
+            color.g = 0;
+            color.b = 1;
+        }
+    }
+    else
     {
         color.r = terrainColor.r * 0.6f + biomeColor.r * 0.4f;
         color.g = terrainColor.g * 0.6f + biomeColor.g * 0.4f;
