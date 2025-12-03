@@ -209,8 +209,8 @@ export function generateYnAMP(mapName, importedMap, genParameters) {
         ynamp.placeFeatures(iWidth, iHeight, importedMap, mapType);
     }
     TerrainBuilder.validateAndFixTerrain();
-    console.log("adjustOceanPlotTags...");
-    utilities.adjustOceanPlotTags(iNumPlayers1 > iNumPlayers2);
+    //console.log("adjustOceanPlotTags...");
+    //utilities.adjustOceanPlotTags(iNumPlayers1 > iNumPlayers2);
     for (let iY = 0; iY < iHeight; iY++) {
         for (let iX = 0; iX < iWidth; iX++) {
             let terrain = GameplayMap.getTerrainType(iX, iY);

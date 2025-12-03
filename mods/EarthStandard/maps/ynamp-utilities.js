@@ -388,10 +388,10 @@ export function createMapTerrains(iWidth, iHeight, continent1, continent2, impor
 
             // Add plot tag if applicable
             if (terrain != globals.g_OceanTerrain && terrain != globals.g_CoastTerrain) {
-                utilities.addLandmassPlotTags(iX, iY, continent2.west);
+                //utilities.addLandmassPlotTags(iX, iY, continent2.west);
             }
             else {
-                utilities.addWaterPlotTags(iX, iY, continent2.west);
+                //utilities.addWaterPlotTags(iX, iY, continent2.west);
             }
             TerrainBuilder.setTerrainType(iX, iY, terrain);
             //console.log("createLandmasses (" + iX + "," + iY +") = " + importedMap[iX][iY][0] + " = " + terrain + " / " + GameplayMap.getTerrainType(iX, iY));

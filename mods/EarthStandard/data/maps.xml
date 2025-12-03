@@ -9,6 +9,7 @@
         <Replace MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Name="LOC_MAP_EARTHSTANDARD_11P_SIZE_NAME" Description="LOC_MAP_EARTHSTANDARD_11P_SIZE_DESCRIPTION" DefaultPlayers="11" PlayersLandmass1="8" PlayersLandmass2="3" GridWidth="84" GridHeight="54" NumNaturalWonders="10" OceanWidth="4" LakeSizeCutoff="8" LakeGenerationFrequency="20" Continents="2" StartSectorRows="4" StartSectorCols="3"/>
     </Maps>	
     
+    <!--
 	<AgeProgressionEvents>
 		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_ANTIQUITY" MapSizeType="MAPSIZE_EARTHSTANDARD_11P"/>
 		<Replace AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED"	Points="10"	AgeType="AGE_ANTIQUITY" MapSizeType="MAPSIZE_EARTHSTANDARD_11P"/>
@@ -19,5 +20,10 @@
 		<Replace AgeProgressionEventType="AGE_PROGRESSION_TURN_COUNTER" 		Points="1"	AgeType="AGE_MODERN" MapSizeType="MAPSIZE_EARTHSTANDARD_11P"/>
 		<Replace AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED"	Points="10"	AgeType="AGE_MODERN" MapSizeType="MAPSIZE_EARTHSTANDARD_11P"/>
 	</AgeProgressionEvents>
+    -->
+
+    <AgeProgressionEventMapSizeOverrides>
+        <Row AgeProgressionEventType="AGE_PROGRESSION_PLAYER_ELIMINATED" MapSizeType="MAPSIZE_EARTHSTANDARD_11P" Points="0"/>
+    </AgeProgressionEventMapSizeOverrides>
     
 </Database>
