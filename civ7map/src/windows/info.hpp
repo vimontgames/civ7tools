@@ -30,9 +30,13 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
         sprintf_s(temp, "%s", g_map->getPrettyName().c_str());
         ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
+        sprintf_s(temp, "%s", g_map->getAuthor().c_str());
+        if (ImGui::InputText("Author", temp, sizeof(temp)))
+            g_map->m_author = temp;
         
-        sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
-        ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        //sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
+        //ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
         if (ImGui::CollapsingHeader("Map size", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {

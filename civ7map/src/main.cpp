@@ -37,8 +37,12 @@ bool g_saveFileDialog = false;
 const char * g_saveImGuiIniPath = nullptr;
 bool g_importFile = false;
 bool g_createMap = false;
+MapVersion g_mapVersion = MapVersion::Invalid;
 
-string g_newMapName = "";
+string g_newMapName = "Empty";
+string g_newMapAuthor = "User";
+string g_newMapDescription = "A beautiful map made with Civ7Map";
+
 int g_newMapSize[2] = { 84, 54 };
 MapSize g_newMapSizeType = MapSize::Standard;
 
@@ -67,9 +71,9 @@ ImFont * font = nullptr;
 
 static vector<BaseWindow *> g_windows;
 
-static const char * newMap = ICON_FA_FOLDER_PLUS" Create Map";
-static const char * importMap = ICON_FA_FOLDER_OPEN" Import Map";
-static const char * exportMap = ICON_FA_FLOPPY_DISK" Export Map";
+static const char * newMap = ICON_FA_FOLDER_PLUS" New";
+static const char * importMap = ICON_FA_FOLDER_OPEN" Import";
+static const char * exportMap = ICON_FA_FLOPPY_DISK" Export";
 
 //--------------------------------------------------------------------------------------
 class dbg_stream_for_cout : public stringbuf
@@ -88,7 +92,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 47;
+const int g_version_minor = 48;
 const char * g_appName = "Civ7Map";
 
 //--------------------------------------------------------------------------------------
@@ -246,17 +250,59 @@ int main()
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem(newMap))
-                    g_createMap = true;
- 
-                if (ImGui::MenuItem(importMap))
-                    g_importFile = true;
+                if (ImGui::BeginMenu(newMap))
+                {
+                    if (ImGui::MenuItem("New YnAMP map"))
+                    {
+                        g_createMap = true;
+                        g_mapVersion = MapVersion::YnAMP;
+                    }
+
+                    if (ImGui::MenuItem("New Civ7Map map"))
+                    {
+                        g_createMap = true;
+                        g_mapVersion = MapVersion::Civ7Map;
+                    }
+
+                    ImGui::EndMenu();
+                }
+
+                if (ImGui::BeginMenu(importMap))
+                {
+                    if (ImGui::MenuItem("Import YnAMP map"))
+                    {
+                        g_importFile = true;
+                        g_mapVersion = MapVersion::YnAMP;
+                    }
+
+                    if (ImGui::MenuItem("Import Civ7Map map"))
+                    {
+                        g_importFile = true;
+                        g_mapVersion = MapVersion::Civ7Map;
+                    }
+
+                    ImGui::EndMenu();
+                }
 
                 if (!g_map)
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
-                if (ImGui::MenuItem(exportMap))
-                    g_saveFileDialog = true;
+                if (ImGui::BeginMenu(exportMap))
+                {
+                    if (ImGui::MenuItem("Export YnAMP map"))
+                    {
+                        g_saveFileDialog = true;
+                        g_mapVersion = MapVersion::YnAMP;
+                    }
+
+                    if (ImGui::MenuItem("Export Civ7Map map"))
+                    {
+                        g_saveFileDialog = true;
+                        g_mapVersion = MapVersion::Civ7Map;
+                    }
+
+                    ImGui::EndMenu();
+                }
 
                 if (!g_map)
                     ImGui::PopItemFlag();
@@ -373,11 +419,6 @@ int main()
 
                         if (relativeMousePos.x > 0 && relativeMousePos.y > 0 && relativeMousePos.x  < size.x && relativeMousePos.y < (size.y- ImGui::GetFrameHeight()))
                         {
-                            //if (ImGui::IsMouseDown(0))
-                            //{
-                            //    int i = 42;
-                            //}
-
                             float2 renderTargetSize = float2((float)map->m_renderTexture.getSize().x, (float)map->m_renderTexture.getSize().y);
                             Vector2f size = Vector2f(renderTargetSize.x, renderTargetSize.y);
 
@@ -671,16 +712,49 @@ int main()
             ImGui::GetIO().IniFilename = nullptr; // Prevents imgui.ini file being save during dialogs
         }
 
+        const char * ext;
+        switch (g_mapVersion)
+        {
+            case MapVersion::Civ7Map:
+                ext = ".Civ7Map";
+                break;
+
+            case MapVersion::YnAMP:
+                ext = ".js";
+                break;
+
+            default:
+                ext = ".*";
+                break;
+        }
+
         if (g_createMap)
         {
+            float windowWidth = 768.0f;
+            float textWidth = windowWidth - 128.0f;
+
+            ImGui::SetNextWindowSize(ImVec2(windowWidth, 0.0f), ImGuiCond_Always);
+
             if (ImGui::BeginPopupModal(newMap, nullptr, ImGuiWindowFlags_AlwaysAutoResize))
             {
                 char temp[1024];
-                sprintf(temp, "%s", g_newMapName.c_str());
 
-                if (ImGui::InputText("Name", temp, sizeof(g_newMapName)))
+                sprintf(temp, "%s", g_newMapName.c_str());
+                ImGui::SetNextItemWidth(textWidth);
+                if (ImGui::InputText("Name", temp, sizeof(temp)))
                     g_newMapName = fmt::sprintf("%s", temp);
 
+                sprintf(temp, "%s", g_newMapAuthor.c_str());
+                ImGui::SetNextItemWidth(textWidth);
+                if(ImGui::InputText("Author", temp, sizeof(temp)))
+                    g_newMapAuthor = fmt::sprintf("%s", temp);
+                
+                sprintf(temp, "%s", g_newMapDescription.c_str());
+                ImGui::SetNextItemWidth(textWidth);
+                if(ImGui::InputText("Description", temp, sizeof(temp)))
+                    g_newMapDescription = fmt::sprintf("%s", temp);
+
+                ImGui::SetNextItemWidth(textWidth);
                 if (ImGui::BeginCombo("###Size", asString(g_newMapSizeType).c_str()))
                 {
                     for (auto val : enumValues<MapSize>())
@@ -690,7 +764,7 @@ int main()
                         {
                             g_newMapSizeType = val.first;
 
-                            if ((int)val.first > 0)
+                            if ((int)val.first >= 0)
                             {
                                 g_newMapSize[0] = g_mapSizes[(int)val.first][0];
                                 g_newMapSize[1] = g_mapSizes[(int)val.first][1];
@@ -703,6 +777,7 @@ int main()
                 if (g_newMapSizeType != MapSize::Custom)
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
+                ImGui::SetNextItemWidth(textWidth);
                 ImGui::InputInt2("Size", g_newMapSize);
 
                 if (g_newMapSizeType != MapSize::Custom)
@@ -748,7 +823,7 @@ int main()
                     SetCurrentDirectory(g_currentWorkingDirectory.c_str());
                     ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
 
-                    if (newMap->create(g_currentWorkingDirectory, g_newMapName, g_newMapSize[0], g_newMapSize[1]))
+                    if (newMap->create(g_mapVersion, g_currentWorkingDirectory, g_newMapName, g_newMapAuthor, g_newMapDescription, g_newMapSize[0], g_newMapSize[1]))
                     {
                         g_maps.push_back(newMap);
                         g_map = newMap;
@@ -773,11 +848,11 @@ int main()
             }
            
         }
-        else if (g_fileDialog.showFileDialog(importMap, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ".js"))
+        else if (g_fileDialog.showFileDialog(importMap, ImGuiFileBrowser::DialogMode::OPEN, ImVec2(float(g_screenWidth)/2.0f, float(g_screenHeight)/2.0f), ext))
         {
             const string newFilePath = g_fileDialog.selected_path;
 
-            if (EndsWith(newFilePath, "-map.js"))
+            if ( (EndsWith(newFilePath, "-map.js") && g_mapVersion == MapVersion::YnAMP)  || (EndsWith(newFilePath, ".Civ7Map") && g_mapVersion == MapVersion::Civ7Map))
             {
                 // Create new map
                 Map * newMap = new Map();
@@ -821,7 +896,7 @@ int main()
                 LOG_ERROR("\"%s\" is not a valid map filename to import. Map filenames should end with \"-map.js\"", GetFilename(newFilePath).c_str());
             }
         }
-        else if (g_fileDialog.showFileDialog(exportMap, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ".js"))
+        else if (g_fileDialog.showFileDialog(exportMap, ImGuiFileBrowser::DialogMode::SAVE, ImVec2(float(g_screenWidth) / 2.0f, float(g_screenHeight) / 2.0f), ext))
         {
             if (g_map)
             {

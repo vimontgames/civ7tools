@@ -5,6 +5,7 @@ string GetParentFolder(const string & path);
 string GetFolder(const string & _fullpath);
 string GetFilename(const string & _fullpath);
 string GetFilenameWithoutExtension(const string & _fullpath);
+string GetExtension(const string & _fullpath);
 
 bool FileExists(const string & path);
 bool ReadFile(const string & path, string & _data);

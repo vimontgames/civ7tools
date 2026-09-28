@@ -49,8 +49,10 @@ bool Map::createFolders()
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::create(const string & _cwd, const string & _name, int _width, int _height)
+bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height)
 {
+    m_mapVersion = _mapVersion;
+
     LOG_WARNING("Create map \"%s\" (%ux%u)", _name.c_str(), _width, _height);
 
     m_mapPath = fmt::sprintf("%s\\mods\\%s\\maps\\%s-map.js", _cwd,_name, _name);
@@ -59,6 +61,8 @@ bool Map::create(const string & _cwd, const string & _name, int _width, int _hei
 
     // TODO: let user specify pretty name? Default to base file name for now.
     m_prettyName = getBaseName();
+    m_author = _author;
+    m_description = _description;
 
     createFolders();
 

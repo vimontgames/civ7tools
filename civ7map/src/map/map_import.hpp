@@ -1263,6 +1263,12 @@ bool Map::importFiles(const string & _cwd)
     if (ReadFile(m_mapPath, data))
     {
         string name = getBaseName();
+
+        if (EndsWith(m_mapPath, ".Civ7Map"))
+        {
+            return importSQLiteMap(m_mapPath);
+        }
+
         m_modFolder = fmt::sprintf("%s\\mods\\%s", _cwd, name);
 
         // We're looking for a map script with a "generate format" function
@@ -1293,3 +1299,4 @@ bool Map::importFiles(const string & _cwd)
 
     return false; 
 }
+

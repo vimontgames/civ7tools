@@ -6,6 +6,7 @@
 #include "base64.hpp"
 #include "undoredo/UndoRedoTile.h"
 #include "shader/common.h"
+#include "winsqlite/winsqlite3.h"
 
 #define STBI_ONLY_PNG
 
@@ -19,8 +20,11 @@ using namespace std;
 using namespace sf;
 using namespace tinyxml2;
 
+#include "map_types.hpp"
 #include "map_import.hpp"
+#include "map_import_sql.hpp"
 #include "map_export.hpp"
+#include "map_export_sql.hpp"
 #include "map_refresh.hpp"
 #include "map_create.hpp"
 #include "map_actions.hpp"
@@ -257,7 +261,7 @@ void Map::crop(const sf::Vector2i & _newSize)
     {
         for (int x = 0; x < _newSize.x; ++x)
         {
-            if (x < oldMapData.Width() && y < oldMapData.Height())
+            if (x < (int)oldMapData.Width() && y < (int)oldMapData.Height())
             {
                 m_civ7TerrainType.get(x, y) = oldMapData.get(x, y);
             }

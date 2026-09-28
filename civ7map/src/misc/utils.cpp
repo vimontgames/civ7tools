@@ -128,3 +128,14 @@ string ToUpperLabel(const string & str)
     });
     return result;
 }
+
+//--------------------------------------------------------------------------------------
+string GetExtension(const string & _fullpath)
+{
+    string filename = GetFilename(_fullpath);
+    size_t pos = filename.find_last_of('.');
+    if (pos != string::npos && pos > 0) {
+        return filename.substr(pos);
+    }
+    return "";
+}

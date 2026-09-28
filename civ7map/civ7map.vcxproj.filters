@@ -151,6 +151,15 @@
     <ClInclude Include="src\windows\paint.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\map\map_import_sql.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_export_sql.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map\map_types.hpp">
+      <Filter>map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

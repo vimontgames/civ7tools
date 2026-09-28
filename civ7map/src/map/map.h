@@ -24,6 +24,15 @@ enum class MapSize : int
 };
 
 //--------------------------------------------------------------------------------------
+enum class MapVersion
+{
+    Invalid = 0,
+
+    YnAMP,          // A map created using the legacy YnAMP framework with tile data saved as script
+    Civ7Map         // A map using a .Civ7Map file like the official Earth map, with tile data saved as a SQLite database
+};
+
+//--------------------------------------------------------------------------------------
 static const int g_mapSizes[enumCount<MapSize>()][2] =
 {
     {60,38},    // MAPSIZE_TINY
@@ -190,7 +199,7 @@ public:
     bool setContinent(int _x, int _y, ContinentType _value);
     bool setResource(int _x, int _y, ResourceType _value);
 
-    bool create(const string & _cwd, const string & _name, int _width, int _height);
+    bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height);
     bool createFolders();
 
     // map_import.hpp
@@ -199,7 +208,11 @@ public:
 
     // map_export.hpp
     void exportFiles(const string & _cwd, bool _useModTemplate);
+    void exportFilesYnAMP(const string & _cwd, bool _useModTemplate);
     void saveBitmap(const Array2D<u32> _bitmap, tinyxml2::XMLElement * _xmlTerrainSave, const string & _field);
+
+    // map_exports_sql.hpp
+    void exportFilesCiv7Map(const string & _cwd, bool _useModTemplate);
 
     // map_actions.hpp
 
@@ -234,13 +247,21 @@ public:
     string getContinentShortName(ContinentType continent) const;
     uint getContinentCount() const;
 
+    // map_types
     static string getTerrainTypeAsString(TerrainType _type);
+    static TerrainType getTerrainTypeFromString(const string& _terrainTypeS, uint x, uint y);
+    static BiomeType getBiomeTypeFromString(const string & _biomeTypeS, uint x, uint y);
+    static FeatureType getFeatureFromString(const string & _biomeTypeS, uint x, uint y);
+    static ResourceType getResourceFromString(const string & _biomeTypeS, uint x, uint y);
+
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
 
     static string GetMapDataPathFromMapPath(const string & _mapPath);
 
+    string getAuthor() const;
+    string getDescription() const;
     string getBaseName() const;
     string getPrettyName() const;
     string getLocMapName() const;
@@ -284,6 +305,7 @@ private:
     bool importPrettyName(const string & data);
     bool importHemispheres(const string & data);
     bool importTSL();
+    bool importSQLiteMap(const string & _cwd);
 
     void exportModInfo();
     void exportSQLTables();
@@ -293,6 +315,8 @@ private:
     void exportMapText();
     void exportModuleText();
     void exportTSL();
+
+    void exportModInfoCiv7Map();
 
     string getModID() const;
 
@@ -304,6 +328,8 @@ public:
     static SharedIcon   s_featureIcons[enumCount<FeatureType>()];
     static SharedIcon   s_defaultFlag;
 
+    MapVersion          m_mapVersion = MapVersion::Invalid;
+
     // file(s)
     string              m_modFolder;
     string              m_prettyName;
@@ -311,7 +337,8 @@ public:
     string              m_mapDataPath;
 
     // map data
-    string              m_author = "Civ7MapUser";
+    string              m_author;
+    string              m_description;
     u32                 m_width = 0;
     u32                 m_height = 0;
     u32                 m_westStart = -1;
