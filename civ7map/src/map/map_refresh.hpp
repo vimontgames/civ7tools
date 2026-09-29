@@ -5,11 +5,9 @@ void Map::initTerrainInfos(bool _reload)
     for (auto val : enumValues<TerrainType>())
     {
         int index = (int)val.first;
-        if (index > 0)
-        {
-            TerrainInfo & info = m_terrainInfos[index];
-            info.count = 0;
-        }
+        assert(index >= 0);
+        TerrainInfo & info = m_terrainInfos[index];
+        info.count = 0;
     }
 }
 
@@ -19,11 +17,9 @@ void Map::initBiomeInfos(bool _reload)
     for (auto val : enumValues<BiomeType>())
     {
         int index = (int)val.first;
-        if (index > 0)
-        {
-            BiomeInfo & info = m_biomeInfos[index];
-            info.count = 0;
-        }
+        assert(index >= 0);
+        BiomeInfo & info = m_biomeInfos[index];
+        info.count = 0;
     }
 }
 
@@ -33,12 +29,12 @@ void Map::initBiomeTerrainInfos(bool _reload)
     for (auto val : enumValues<BiomeType>())
     {
         int biomeIndex = (int)val.first;
-        if (biomeIndex > 0)
+        if (biomeIndex >= 0)
         {
             for (auto val2 : enumValues<TerrainType>())
             {
                 int terrainIndex = (int)val2.first;
-                if (terrainIndex > 0)
+                if (terrainIndex >= 0)
                 {
                     BiomeTerrainInfo & info = m_biomeTerrainInfos[biomeIndex][terrainIndex];
                     info.count = 0;
@@ -56,7 +52,7 @@ void Map::initResourceInfos(bool _reload)
     for (auto val : enumValues<ResourceType>())
     {
         int index = (int)val.first;
-        if (index > 0)
+        if (index >= 0)
         {
             ResourceInfo & info = m_resourceInfos[index];
             info.count = 0;
@@ -70,11 +66,29 @@ void Map::initFeatureInfos(bool _reload)
     for (auto val : enumValues<FeatureType>())
     {
         int index = (int)val.first;
-        if (index > 0)
+        if (index >= 0)
         {
             FeatureInfo & info = m_featureInfos[index];
             info.count = 0;
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::initContinentInfos(bool _reload)
+{
+    for (uint i = 0; i < m_continents.size(); ++i)
+    {
+        m_continents[i].count = 0;
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::initLandmassInfos(bool _reload)
+{
+    for (uint i = 0; i < m_landmasses.size(); ++i)
+    {
+        m_landmasses[i].count = 0;
     }
 }
 
@@ -89,6 +103,8 @@ void Map::refresh(bool _reload)
     initBiomeTerrainInfos(m_firstRefresh);
     initResourceInfos(m_firstRefresh);
     initFeatureInfos(m_firstRefresh);
+    initContinentInfos(m_firstRefresh);
+    initLandmassInfos(m_firstRefresh);
 
     if (m_firstRefresh)
         m_firstRefresh = true;
@@ -124,21 +140,27 @@ void Map::refresh(bool _reload)
 
             Color color0 = Color(0, 0, 0, 0);
 
-            // Red is terrain type
+            // Color0.r is terrain type
             color0.r = (u8)tile.terrain;
 
             getTerrainInfo(tile.terrain).count++;
 
-            // Green is biome
+            // Color0.g is biome
             color0.g = (u8)tile.biome;
             getBiomeInfo(tile.biome).count++;
 
             // stats
             getBiomeTerrainInfo(tile.biome, tile.terrain).count++;
 
-            // Blue is feature
+            // Color0.b is feature
             color0.b = (u8)tile.feature;
             getFeatureInfo(tile.feature).count++;
+
+            // Count continents and landmasses
+            if (tile.continent != ContinentType::None)
+                getContinentInfo(tile.continent).count++;
+
+            getLandmassInfo(tile.landmass).count++;
 
             if (m_showFeatures)
             {
@@ -157,15 +179,21 @@ void Map::refresh(bool _reload)
                 }
             }
 
-            // Alpha is continent
+            // Color0.a is continent
             color0.a = (u8)tile.continent;
 
             terrain.image.setPixel(w, h, color0);
 
             Color color1 = Color(0, 0, 0, 0);
 
-            // Red is resource
+            // Color1.r is resource
             color1.r = (u8)tile.resource;
+
+            // Color1.g is landmass
+            color1.g = (u8)tile.landmass;
+
+            // Color1.b is elevation
+            color1.b = (u8)tile.elevation / 4; // 0..1024 values
             
             terrain.image.setPixel(w, h + m_height, color1);
 

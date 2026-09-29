@@ -69,9 +69,10 @@ enum class MapFilter
     TerrainType,
     Biome,
     Feature,
+    Resource,
     Continent,
-
-    Resource
+    Landmass,
+    Elevation
 };
 
 //--------------------------------------------------------------------------------------
@@ -198,6 +199,7 @@ public:
     bool setFeature(int _x, int _y, FeatureType _value);
     bool setContinent(int _x, int _y, ContinentType _value);
     bool setResource(int _x, int _y, ResourceType _value);
+    bool setLandmass(int _x, int _y, LandmassType _value);
 
     bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height);
     bool createFolders();
@@ -232,6 +234,8 @@ public:
     void initBiomeTerrainInfos(bool _reload);
     void initResourceInfos(bool _reload);
     void initFeatureInfos(bool _reload);
+    void initContinentInfos(bool _reload);
+    void initLandmassInfos(bool _reload);
 
     string getShortName() const;
 
@@ -246,6 +250,12 @@ public:
     string getContinentName(ContinentType continent) const;
     string getContinentShortName(ContinentType continent) const;
     uint getContinentCount() const;
+    ContinentType getOrCreateContinentType(const string& continentS);
+
+    string getLandmassName(LandmassType landmass) const;
+    string getLandmassShortName(LandmassType landmass) const;
+    uint getLandmassCount() const;
+    LandmassType getOrCreateLandmassType(const uint landmassIndex);
 
     // map_types
     static string getTerrainTypeAsString(TerrainType _type);
@@ -272,7 +282,7 @@ public:
 
     static Era getEra(Civilization _civ);
 
-    static const string s_noContinentName;
+ 
     bool fixHemispheres();
 
     TerrainInfo & getTerrainInfo(TerrainType _terrain) { return m_terrainInfos[(int)_terrain]; }
@@ -289,6 +299,15 @@ public:
 
     FeatureInfo & getFeatureInfo(FeatureType _feature) { return m_featureInfos[(int)_feature + 1]; }
     const FeatureInfo & getFeatureInfo(FeatureType _feature) const { return m_featureInfos[(int)_feature + 1]; }
+
+    ContinentInfo & getContinentInfo(ContinentType _continent) { return m_continents[(int)_continent]; }
+    const ContinentInfo & getContinentInfo(ContinentType _continent) const { return m_continents[(int)_continent]; }
+
+    LandmassInfo & getLandmassInfo(LandmassType _landmass) { return m_landmasses[(int)_landmass]; }
+    const LandmassInfo & getLandmassInfo(LandmassType _landmass) const { return m_landmasses[(int)_landmass]; }
+
+    vector<Civilization> & getCivilizations() { return m_civilizations; }
+    const vector<Civilization> & getCivilizations() const { return m_civilizations; }
 
     void clearResources();
     void clearFeatures();
@@ -317,6 +336,7 @@ private:
     void exportTSL();
 
     void exportModInfoCiv7Map();
+    void exportTextCiv7Map();
 
     string getModID() const;
 
@@ -324,67 +344,69 @@ private:
         
 public:
     // shared
-    static SharedIcon   s_resourceIcons[enumCount<ResourceType>()];
-    static SharedIcon   s_featureIcons[enumCount<FeatureType>()];
-    static SharedIcon   s_defaultFlag;
+    static SharedIcon       s_resourceIcons[enumCount<ResourceType>()];
+    static SharedIcon       s_featureIcons[enumCount<FeatureType>()];
+    static SharedIcon       s_defaultFlag;
 
-    MapVersion          m_mapVersion = MapVersion::Invalid;
+    MapVersion              m_mapVersion = MapVersion::Invalid;
 
     // file(s)
-    string              m_modFolder;
-    string              m_prettyName;
-    string              m_mapPath;
-    string              m_mapDataPath;
+    string                  m_modFolder;
+    string                  m_prettyName;
+    string                  m_mapPath;
+    string                  m_mapDataPath;
 
     // map data
-    string              m_author;
-    string              m_description;
-    u32                 m_width = 0;
-    u32                 m_height = 0;
-    u32                 m_westStart = -1;
-    u32                 m_westEnd = -1;
-    u32                 m_eastStart = -1;
-    u32                 m_eastEnd = -1;
-    MapSize             m_mapSize = (MapSize)-1;
-    Array2D<Civ7Tile>   m_civ7TerrainType;
-    Bitmap              m_bitmaps[enumCount<MapBitmap>()];
+    string                  m_author;
+    string                  m_description;
+    u32                     m_width = 0;
+    u32                     m_height = 0;
+    u32                     m_westStart = -1;
+    u32                     m_westEnd = -1;
+    u32                     m_eastStart = -1;
+    u32                     m_eastEnd = -1;
+    MapSize                 m_mapSize = (MapSize)-1;
+    Array2D<Civ7Tile>       m_civ7TerrainType;
+    Bitmap                  m_bitmaps[enumCount<MapBitmap>()];
 
-    int                 m_editMapOffset[2] = { 0,0 };
-    int                 m_editMapSize[2] = { 0,0 };
-
-    vector<string>      m_continents;
-    vector<Civilization> m_civilizations; 
+    int                     m_editMapOffset[2] = { 0,0 };
+    int                     m_editMapSize[2] = { 0,0 };
 
     //map view
-    bool                m_isLoaded = false;
-    bool                m_isOpen = true;
-    MapFilter           m_mapFilter = MapFilter::All;
-    GridType            m_gridType = GridType::Hexagon;
-    bool                m_showBorders = true;
-    bool                m_showResources = true;
-    bool                m_showFeatures = true;
-    bool                m_showTSL = true;
-    bool                m_showHemispheres = true;
-    bool                m_showOverlayImage = false;
-    float               m_overlayOpacity = 0.5f;
-    sf::Texture         m_overlayTex;
-    sf::RenderTexture   m_renderTexture;
-    bool                m_isHovered = false;
-    bool                m_isDocked = false;
-    bool                m_cameraPan = false;
-    sf::Vector2f        m_cameraPanOrigin;
-    sf::Vector2f        m_cameraOffset = sf::Vector2f(0, 0);
-    sf::Vector2f        m_cameraPreviousOffset = sf::Vector2f(0, 0);
-    float               m_cameraZoom = 1.0f;
-    float               m_mouseWheelDelta = 0;
-    ShaderID            m_copyRGBshader = invalidShaderID;
-    sf::Vector2i        m_mapOffset[2] = { sf::Vector2i(0,0), sf::Vector2i(0,0) };
+    bool                    m_isLoaded = false;
+    bool                    m_isOpen = true;
+    MapFilter               m_mapFilter = MapFilter::All;
+    GridType                m_gridType = GridType::Hexagon;
+    bool                    m_showBorders = true;
+    bool                    m_showResources = true;
+    bool                    m_showFeatures = true;
+    bool                    m_showTSL = true;
+    bool                    m_showHemispheres = true;
+    bool                    m_showOverlayImage = false;
+    float                   m_overlayOpacity = 0.5f;
+    sf::Texture             m_overlayTex;
+    sf::RenderTexture       m_renderTexture;
+    bool                    m_isHovered = false;
+    bool                    m_isDocked = false;
+    bool                    m_cameraPan = false;
+    sf::Vector2f            m_cameraPanOrigin;
+    sf::Vector2f            m_cameraOffset = sf::Vector2f(0, 0);
+    sf::Vector2f            m_cameraPreviousOffset = sf::Vector2f(0, 0);
+    float                   m_cameraZoom = 1.0f;
+    float                   m_mouseWheelDelta = 0;
+    ShaderID                m_copyRGBshader = invalidShaderID;
+    sf::Vector2i            m_mapOffset[2] = { sf::Vector2i(0,0), sf::Vector2i(0,0) };
 
 private:
-    TerrainInfo         m_terrainInfos[enumCount<TerrainType>()];
-    BiomeInfo           m_biomeInfos[enumCount<BiomeType>()];
-    BiomeTerrainInfo    m_biomeTerrainInfos[enumCount<BiomeType>()][enumCount<TerrainType>()];
-    ResourceInfo        m_resourceInfos[enumCount<ResourceType>()];
-    FeatureInfo         m_featureInfos[enumCount<FeatureType>()];
-    bool                m_firstRefresh = true;
+    TerrainInfo             m_terrainInfos[enumCount<TerrainType>()];
+    BiomeInfo               m_biomeInfos[enumCount<BiomeType>()];
+    BiomeTerrainInfo        m_biomeTerrainInfos[enumCount<BiomeType>()][enumCount<TerrainType>()];
+    ResourceInfo            m_resourceInfos[enumCount<ResourceType>()];
+    FeatureInfo             m_featureInfos[enumCount<FeatureType>()];
+
+    vector<ContinentInfo>   m_continents;
+    vector<LandmassInfo>    m_landmasses;
+    vector<Civilization>    m_civilizations;
+
+    bool                    m_firstRefresh = true;
 };

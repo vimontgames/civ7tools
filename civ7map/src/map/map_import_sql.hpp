@@ -76,7 +76,12 @@ bool Map::importSQLiteMap(const string & _cwd)
             string biomeTypeS = (const char *)sqlite3_column_text(stmt, 2);
             tile.biome = getBiomeTypeFromString(biomeTypeS, x, y);
 
-            tile.continent = (ContinentType)sqlite3_column_int(stmt, 7);
+            string continentS = (const char *)sqlite3_column_text(stmt, 3);
+            tile.continent = getOrCreateContinentType(continentS);
+
+            tile.elevation = sqlite3_column_int(stmt, 4);
+
+            tile.landmass = getOrCreateLandmassType(sqlite3_column_int(stmt, 7));
 
             m_civ7TerrainType.set(x, y, tile);
         }

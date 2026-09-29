@@ -56,34 +56,55 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             //ImGui::PopItemFlag();
 
             // Continent
-            //{
-            //    DrawColoredSquare(getContinentColor(tile->continent));
-            //
-            //    string continentName = map->getContinentShortName(tile->continent);
-            //
-            //    if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
-            //    {
-            //        // None
-            //        {
-            //            bool isSelected = ((int)tile->continent == -1);
-            //            if (ImGui::Selectable(fmt::sprintf("%s (-1)", map->getContinentShortName((ContinentType)-1)).c_str(), isSelected))
-            //            {
-            //                if (map->setContinent(x, y, (ContinentType)-1))
-            //                    dirty = true;
-            //            }
-            //        }
-            //        for (uint i = 0; i < map->getContinentCount(); ++i)
-            //        {
-            //            bool isSelected = ((int)tile->continent == i);
-            //            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
-            //            {
-            //                if (map->setContinent(x, y, (ContinentType)i))
-            //                    dirty = true;
-            //            }
-            //        }
-            //        ImGui::EndCombo();
-            //    }
-            //}
+            {
+                DrawColoredSquare(getContinentColor(tile->continent));
+            
+                string continentName = map->getContinentShortName(tile->continent);
+            
+                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
+                {
+                    // None
+                    {
+                        bool isSelected = (tile->continent == ContinentType::None);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName(ContinentType::None), (int)ContinentType::None).c_str(), isSelected))
+                        {
+                            if (map->setContinent(x, y, ContinentType::None))
+                                dirty = true;
+                        }
+                    }
+                    for (uint i = 0; i < map->getContinentCount(); ++i)
+                    {
+                        bool isSelected = ((int)tile->continent == i);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+                        {
+                            if (map->setContinent(x, y, (ContinentType)i))
+                                dirty = true;
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+            }
+
+            // Landmass
+            {
+                DrawColoredSquare(getLandmassColor(tile->landmass));
+
+                string landmassName = map->getLandmassShortName(tile->landmass);
+
+                if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str()))
+                {
+                    for (uint i = 0; i < map->getLandmassCount(); ++i)
+                    {
+                        bool isSelected = ((int)tile->landmass == i);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassShortName((LandmassType)i), i).c_str(), isSelected))
+                        {
+                            if (map->setLandmass(x, y, (LandmassType)i))
+                                dirty = true;
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+            }
 
             // TerrainType
             {
@@ -167,10 +188,11 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             // TSL
             {
+                auto & civilizations = map->getCivilizations();
                 bool anyTSL = false;
-                for (int c = 0; c < map->m_civilizations.size(); ++c)
+                for (int c = 0; c < civilizations.size(); ++c)
                 {
-                    const auto & civ = map->m_civilizations[c];
+                    const auto & civ = civilizations[c];
                     for (int t = 0; t < civ.tsl.size(); ++t)
                     {
                         const auto & tsl = civ.tsl[t];
@@ -186,9 +208,9 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 {
                     if (ImGui::CollapsingHeader("TSL", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
                     {
-                        for (int c = 0; c < map->m_civilizations.size(); ++c)
+                        for (int c = 0; c < civilizations.size(); ++c)
                         {
-                            auto & civ = map->m_civilizations[c];
+                            auto & civ = civilizations[c];
                             for (int t = 0; t < civ.tsl.size(); ++t)
                             {
                                 auto & tsl = civ.tsl[t];
@@ -201,9 +223,9 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                     if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.userFriendlyName.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLarge))
                                     {
                                         // Sort by era then alphabetical order
-                                        vector<Civilization *> sortedCivs(map->m_civilizations.size());
-                                        for (int p = 0; p < map->m_civilizations.size(); ++p)
-                                            sortedCivs[p] = &map->m_civilizations[p];
+                                        vector<Civilization *> sortedCivs(civilizations.size());
+                                        for (int p = 0; p < civilizations.size(); ++p)
+                                            sortedCivs[p] = &civilizations[p];
 
                                         sort(sortedCivs.begin(), sortedCivs.end(), [](const Civilization * a, const Civilization * b) {
                                             if (a->era == b->era)
@@ -224,9 +246,9 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                 int eraCivsCount = 0;
                                                 int eraCivsCountWithTSL = 0;
 
-                                                for (int cc = 0; cc < map->m_civilizations.size(); ++cc)
+                                                for (int cc = 0; cc < civilizations.size(); ++cc)
                                                 {
-                                                    auto & cciv = map->m_civilizations[cc];
+                                                    auto & cciv = civilizations[cc];
                                                     if (cciv.era == era)
                                                     {
                                                         eraCivsCount++;
@@ -275,7 +297,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                             TSL newTSL;
                             newTSL.pos.x = x;
                             newTSL.pos.y = y;
-                            map->m_civilizations[0].tsl.push_back(newTSL);
+                            civilizations[0].tsl.push_back(newTSL);
                             map->refresh();
                         }
                     }

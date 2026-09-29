@@ -3,6 +3,7 @@
 void Map::exportFilesCiv7Map(const string & _cwd, bool _useModTemplate)
 {
     exportModInfoCiv7Map();
+    exportTextCiv7Map();
 
     //exportModInfo();
     //exportSQLTables();
@@ -45,7 +46,7 @@ void Map::exportModInfoCiv7Map()
     data +=              "                  <Item>config/config.xml</Item>\n";
     data +=              "              </UpdateDatabase>\n";
     data +=              "              <UpdateText>\n";
-    data +=              "                  <Item>text/zh_Hans_CN_Text.xml</Item>\n";
+    data += fmt::sprintf("                  <Item>text/en_us/%s_Text.xml</Item>\n",                          getBaseName());
     data +=              "              </UpdateText>\n";
     data +=              "          </Actions>\n";
     data +=              "      </ActionGroup>\n";
@@ -55,13 +56,13 @@ void Map::exportModInfoCiv7Map()
     data +=              "                  <Item>data/maps.xml</Item>\n";
     data +=              "              </UpdateDatabase>\n";
     data +=              "              <UpdateText>\n";
-    data +=              "                  <Item>text/zh_Hans_CN_Text.xml</Item>\n";
+    data += fmt::sprintf("                  <Item>text/en_us/%s_Text.xml</Item>\n",                         getBaseName());
     data +=              "              </UpdateText>\n";
     data +=              "          </Actions>\n";
     data +=              "      </ActionGroup>\n";
     data +=              "  </ActionGroups>\n";
     data +=              "  <LocalizedText>\n";
-    data +=              "      <File>text/zh_Hans_CN_Text.xml</File>\n";
+    data += fmt::sprintf("      <File>text/en_us/%s_Text.xml</File>\n",                                     getBaseName());
     data +=              "  </LocalizedText>\n";
     data +=              "</Mod>\n";
 
@@ -73,4 +74,28 @@ void Map::exportModInfoCiv7Map()
         fwrite(data.c_str(), sizeof(char), data.size(), fp);
         fclose(fp);
     }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::exportTextCiv7Map()
+{
+    std::string data;
+    
+    data += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    data += "<Database>\n";
+    data += "    <EnglishText>\n";
+    data += "    </EnglishText>\n";
+    data += "    <LocalizedText>\n";
+    data += "    </LocalizedText>\n";
+    data += "</Database>\n";
+
+    string modInfoPath = fmt::sprintf("%s\\text\\en_us\\%s_Text.xml", m_modFolder, getBaseName());
+    FILE * fp = fopen(modInfoPath.c_str(), "wb");
+
+    if (fp)
+    {
+        fwrite(data.c_str(), sizeof(char), data.size(), fp);
+        fclose(fp);
+    }
+
 }

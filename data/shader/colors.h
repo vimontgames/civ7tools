@@ -147,20 +147,21 @@ float4 getContinentColor(uint index)
     index &= 0xFF;
 
     if (index == 0xFF)
-        return float4(0.1f, 0.1f, 0.1f, (1.0f));
+        return float4(0.5f, 0.5f, 0.5f, (1));
     
-    const float4 continentColors[6] =
+    const float4 continentColors[7] =
     {
         float4(1,0,0,(1)),
         float4(0,1,0,(1)),
-        float4(0,0,1,(1)),
         float4(1,1,0,(1)),
-        float4(0,1,1,(1)),
+        float4(0,0,1,(1)),
         float4(1,0,1,(1)),
+        float4(0,1,1,(1)),
+        float4(1,1,1,(1)),
     };
 
-    float4 color = continentColors[index % 6];
-    float greyscale = 1.0f - (float(index / 6)) / 16.0f; // max 16 * 6 = 96 continents seems reasonable?
+    float4 color = continentColors[index % 7];
+    float greyscale = 1.0f - (float(index / 7)) / 8.0f; // max 8 * 7 = 42 continents max
     color.r *= greyscale;
     color.g *= greyscale;
     color.b *= greyscale;
@@ -171,6 +172,42 @@ float4 getContinentColor(uint index)
 float4 getContinentColor(ContinentType continent)
 {
     return getContinentColor((uint)continent);
+}
+#endif
+
+//--------------------------------------------------------------------------------------
+// Landmass
+//--------------------------------------------------------------------------------------
+float4 getLandmassColor(uint index)
+{
+    index &= 0xFF;
+
+    if (index == 0)
+        return float4(0.5f, 0.5f, 0.5f, (1));
+
+    const float4 landmassColors[7] =
+    {
+        float4(1,0,0,(1)),
+        float4(0,1,0,(1)),
+        float4(1,1,0,(1)),
+        float4(0,0,1,(1)),
+        float4(1,0,1,(1)),
+        float4(0,1,1,(1)),
+        float4(1,1,1,(1)),
+    };
+
+    float4 color = landmassColors[index % 7];
+    float greyscale = 1.0f - (float(index / 7)) / 4.0f; // max 4 * 7 = 28 landmasses max 
+    color.r *= greyscale;
+    color.g *= greyscale;
+    color.b *= greyscale;
+    return color;
+}
+
+#ifdef __cplusplus
+float4 getLandmassColor(LandmassType landmass)
+{
+    return getLandmassColor((uint)landmass);
 }
 #endif
 
@@ -374,5 +411,20 @@ float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
 float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
 {
     return getBiomeTerrainColor((uint)biomeType, (uint)terrainType);
+}
+#endif
+
+//--------------------------------------------------------------------------------------
+// Landmass
+//--------------------------------------------------------------------------------------
+float4 getElevationColor(uint index)
+{
+    return float4( index / 1024.0f, index / 1024.0f, index / 1024.0f, 1);
+}
+
+#ifdef __cplusplus
+float4 getElevationColor(Elevation elevation)
+{
+    return getElevationColor((uint)elevation);
 }
 #endif

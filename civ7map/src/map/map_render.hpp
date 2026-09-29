@@ -117,6 +117,14 @@ void Map::render(RenderWindow & _window)
                         case MapFilter::Resource:
                             passFlags = PASS_TYPE_RESOURCE;
                             break;
+
+                        case MapFilter::Landmass:
+                            passFlags = PASS_TYPE_LANDMASS;
+                            break;
+
+                        case MapFilter::Elevation:
+                            passFlags = PASS_TYPE_ELEVATION;
+                            break;
                     }
 
                     switch (m_gridType)

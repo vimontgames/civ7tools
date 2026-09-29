@@ -412,6 +412,11 @@ int main()
 
                     if (g_map == map)
                     {
+                        if (ImGui::GetIO().KeysDown[sf::Keyboard::R])
+                        {
+                            g_map->refresh();
+                        }
+
                         ImVec2 topLeft = ImGui::GetWindowPos();
                         ImVec2 size = ImGui::GetWindowSize();
                         const auto mousePos = Mouse::getPosition(mainWindow);
@@ -595,10 +600,10 @@ int main()
                                         ImGui::Text("%i,%i", cell.x, cell.y);
                                         ImGui::Separator();
 
-                                        //DrawColor(g_map, tile.continent);
-                                        //ImGui::SameLine();
-                                        //ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                        //ImGui::Text("(%i)", (int)tile.continent);
+                                        DrawColor(g_map, tile.continent);
+                                        ImGui::SameLine();
+                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
+                                        ImGui::Text("(%i)", (int)tile.continent);
 
                                         DrawColor(g_map, tile.terrain);
                                         ImGui::SameLine();
@@ -623,9 +628,10 @@ int main()
                                         ImGui::Separator();
 
                                         bool anyTSL = false;
-                                        for (int c = 0; c < g_map->m_civilizations.size(); ++c)
+                                        auto & civilizations = g_map->getCivilizations();
+                                        for (int c = 0; c < civilizations.size(); ++c)
                                         {
-                                            const auto & civ = g_map->m_civilizations[c];
+                                            const auto & civ = civilizations[c];
                                             for (int t = 0; t < civ.tsl.size(); ++t)
                                             {
                                                 const auto & tsl = civ.tsl[t];

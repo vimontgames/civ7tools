@@ -30,11 +30,16 @@
 // Find icon using https://fontawesome.com/search?ic=free
 #include "IconFont/IconsFontAwesome6.h"
 
-using i32 = int;
-using i8 = signed char;
-using u32 = unsigned int;
 using ubyte = unsigned char;
+using i8 = signed char;
 using u8 = ubyte;
+
+using i16 = short;
+using u16 = unsigned short;
+
+using i32 = int;
+using u32 = unsigned int;
+
 using uint = unsigned int;
 
 using namespace std;

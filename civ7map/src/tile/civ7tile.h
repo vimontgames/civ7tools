@@ -91,6 +91,20 @@ struct FeatureInfo
 };
 
 //--------------------------------------------------------------------------------------
+struct ContinentInfo
+{
+    string name;
+    u32 count = 0;
+};
+
+//--------------------------------------------------------------------------------------
+struct LandmassInfo
+{
+    u8 index;
+    u32 count = 0;
+};
+
+//--------------------------------------------------------------------------------------
 enum class ResourceType
 {
     Random              = -1,
@@ -153,6 +167,9 @@ enum class ContinentType : i8
     None = -1
 };
 
+using LandmassType = u8;
+using Elevation = u16;
+
 //--------------------------------------------------------------------------------------
 struct Civ7Tile
 {
@@ -161,14 +178,18 @@ struct Civ7Tile
     FeatureType   feature   = FeatureType::Random;
     ContinentType continent = ContinentType::None;              
     ResourceType  resource  = ResourceType::Random;
+    LandmassType  landmass  = 0;
+    Elevation     elevation = 0;
 
     inline bool operator==(const Civ7Tile & _other) const
     {
-        return terrain == _other.terrain
-            && biome == _other.biome
-            && feature == _other.feature
+        return terrain   == _other.terrain
+            && biome     == _other.biome
+            && feature   == _other.feature
             && continent == _other.continent
-            && resource == _other.resource;
+            && resource  == _other.resource
+            && landmass  == _other.landmass
+            && elevation == _other.elevation;
     }
 
     inline bool operator!=(const Civ7Tile & _other) const

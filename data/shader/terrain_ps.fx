@@ -132,12 +132,32 @@ float4 getTileColor(Tile tile)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
         break;
-        
+                
         case PASS_TYPE_RESOURCE:
         {
             uint res = uint(tile.color1.r * 255.0f);
             color = getResourceColor(res);
             
+            if (isWater)
+                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
+        }
+        break;
+        
+        case PASS_TYPE_LANDMASS:
+        {
+            uint landmass = uint(tile.color1.g * 255.0f);
+            color = getLandmassColor(landmass);
+
+            if (isWater)
+                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
+        }
+        break;
+        
+         case PASS_TYPE_ELEVATION:
+        {
+            uint elevation = uint(tile.color1.b * 1024.0f);
+            color = getElevationColor(elevation);
+
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
         }
@@ -151,6 +171,8 @@ bool EdgeDetect(float center, float left, float right, float bottom, float up, f
 {
     return (left != center) || (right != center) || (bottom != center) || (up != center) || (topLeft != center) || (topRight != center) || (bottomLeft != center) || (bottomRight != center);       
 }
+
+#define EDGE_DETECT(COLORCOMPONENT) EdgeDetect(center.COLORCOMPONENT, left.COLORCOMPONENT, right.COLORCOMPONENT, bottom.COLORCOMPONENT, up.COLORCOMPONENT, topLeft.COLORCOMPONENT, topRight.COLORCOMPONENT, bottomLeft.COLORCOMPONENT, bottomRight.COLORCOMPONENT);
 
 void main()
 {
@@ -200,7 +222,13 @@ void main()
         //    break;
         
         case PASS_TYPE_CONTINENT:
-            edge = EdgeDetect(center.color0.a, left.color0.a, right.color0.a, bottom.color0.a, up.color0.a, topLeft.color0.a, topRight.color0.a, bottomLeft.color0.a, bottomRight.color0.a);
+            edge = EDGE_DETECT(color0.a);
+            edgeMul = 1.0f;
+            edgeAdd = -0.25f;
+            break;
+        
+        case PASS_TYPE_LANDMASS:
+            edge = EDGE_DETECT(color1.g);
             edgeMul = 1.0f;
             edgeAdd = -0.25f;
             break;

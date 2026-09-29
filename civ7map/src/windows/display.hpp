@@ -22,7 +22,29 @@ void DrawColor(const Map * _map, ContinentType _continent, bool _count = false)
     float4 color = getContinentColor(_continent);
     float f3Color[] = { color.r, color.g,  color.b };
     string continentName = _map->getContinentShortName(_continent);
-    ImGui::ColorEdit3(continentName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+
+    if (_count)
+        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", continentName.c_str(), _map->getContinentInfo(_continent).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+    else
+        ImGui::ColorEdit3(continentName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, LandmassType _landmass, bool _count = false)
+{
+    float4 color = getLandmassColor(_landmass);
+    float f3Color[] = { color.r, color.g,  color.b };
+    string landmassName = _map->getLandmassShortName(_landmass);
+    ImGui::ColorEdit3(landmassName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, Elevation _elevation, bool _count = false)
+{
+    float4 color = getElevationColor(_elevation);
+    float f3Color[] = { color.r, color.g,  color.b };
+    string landmassName = fmt::sprintf("%u", _elevation);
+    ImGui::ColorEdit3(landmassName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
 }
 
 //--------------------------------------------------------------------------------------
@@ -141,7 +163,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Colors", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "All\0Terrain\0Biome\0Feature\0Continents\0Resource\0\0");
+            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "All\0TerrainType\0Biome\0Feature\0Resource\0Continent\0Landmass\0Elevation\0\0");
 
             ImGui::Spacing();
 
@@ -201,17 +223,32 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 }
                 break;
 
-                case MapFilter::Continent:
-                {
-                    for (uint i = 0; i < g_map->getContinentCount(); ++i)
-                        DrawColor(g_map, (ContinentType)i, true);
-                }
-                break;
-
                 case MapFilter::Resource:
                 {
                     for (auto val : enumValues<ResourceType>())
                         DrawColor(g_map, val.first, true);
+                }
+                break;
+
+                case MapFilter::Continent:
+                {
+                    for (uint i = 0; i < g_map->getContinentCount(); ++i)
+                        DrawColor(g_map, (ContinentType)i);
+                }
+                break;
+
+                case MapFilter::Landmass:
+                {
+                    for (uint i = 0; i < g_map->getLandmassCount(); ++i)
+                        DrawColor(g_map, (LandmassType)i);
+                }
+                break;
+
+                case MapFilter::Elevation:
+                {
+                    DrawColor(g_map, (Elevation)0);
+                    DrawColor(g_map, (Elevation)512);
+                    DrawColor(g_map, (Elevation)1024);
                 }
                 break;
             }

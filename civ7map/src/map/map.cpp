@@ -33,7 +33,6 @@ using namespace tinyxml2;
 SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];
 SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
 SharedIcon Map::s_defaultFlag;
-const string Map::s_noContinentName = "No continent";
 
 //--------------------------------------------------------------------------------------
 string Map::GetMapDataPathFromMapPath(const string & _mapPath)
@@ -363,7 +362,7 @@ void Map::translate(const sf::Vector2i & _offset)
 string Map::getContinentName(ContinentType continent) const
 {
     if ((int)continent < m_continents.size())
-        return m_continents[(int)continent];
+        return m_continents[(int)continent].name;
     else
         return "";
 }
@@ -371,7 +370,7 @@ string Map::getContinentName(ContinentType continent) const
 //--------------------------------------------------------------------------------------
 string Map::getContinentShortName(ContinentType continent) const
 {
-    if (-1 != (int)continent)
+    if (ContinentType::None!= continent)
     {
         string name = getContinentName(continent);
         const string continentPrefix = "CONTINENT_";
@@ -384,7 +383,7 @@ string Map::getContinentShortName(ContinentType continent) const
     }
     else
     {
-        return s_noContinentName;
+        return "None";
     }
 }
 
@@ -392,6 +391,60 @@ string Map::getContinentShortName(ContinentType continent) const
 uint Map::getContinentCount() const
 {
     return (uint)m_continents.size();
+}
+
+//--------------------------------------------------------------------------------------
+ContinentType Map::getOrCreateContinentType(const string & continentS)
+{
+    if (continentS.length() > 0)
+    {
+        bool found = false;
+        for (uint c = 0; c < m_continents.size(); ++c)
+        {
+            if (m_continents[c].name == continentS)
+            {
+                return (ContinentType)c;
+            }
+        }
+        if (!found)
+        {
+            m_continents.push_back({ continentS, 0 });
+            return (ContinentType)(m_continents.size() - 1);
+        }
+    }
+    return ContinentType::None;
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getLandmassName(LandmassType landmass) const
+{
+    return fmt::sprintf("Landmass %u", m_landmasses[(int)landmass].index);
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getLandmassShortName(LandmassType landmass) const
+{
+    return getLandmassName(landmass);
+}
+
+//--------------------------------------------------------------------------------------
+uint Map::getLandmassCount() const
+{
+    return (uint)m_landmasses.size();
+}
+
+//--------------------------------------------------------------------------------------
+ LandmassType Map::getOrCreateLandmassType(const uint landmassIndex)
+{
+    if (landmassIndex >= m_landmasses.size())
+    {
+        m_landmasses.resize((int)landmassIndex + 1);
+        for (int i = 0; i < m_landmasses.size(); ++i)
+        {
+            m_landmasses[i].index = i;
+        }
+    }
+    return (LandmassType)m_landmasses[(int)landmassIndex].index;
 }
 
 //--------------------------------------------------------------------------------------
@@ -487,6 +540,23 @@ bool Map::setContinent(int _x, int _y, ContinentType _value)
     if (tile.continent != _value)
     {
         tile.continent = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setLandmass(int _x, int _y, LandmassType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.landmass != _value)
+    {
+        tile.landmass = _value;
         auto event = new UndoRedoTile(this);
         event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
         UndoRedoStack::add(event);

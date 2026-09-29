@@ -294,7 +294,7 @@ bool Map::importYnAMP(const string & data)
         }
     }
 
-    vector<string> continentNames;
+    vector<ContinentInfo> continentNames;
 
     MapFormat mapFmt = MapFormat::Unknown;
     
@@ -453,7 +453,7 @@ bool Map::importYnAMP(const string & data)
                             bool found = false;
                             for (uint c = 0; c < continentNames.size(); c++)
                             {
-                                if (continentNames[c] == continentS)
+                                if (continentNames[c].name == continentS)
                                 {
                                     civ6Tile.continent = (ContinentType)c;
                                     found = true;
@@ -462,7 +462,7 @@ bool Map::importYnAMP(const string & data)
                             }
                             if (!found)
                             {
-                                continentNames.push_back(continentS);
+                                continentNames.push_back({continentS, 0});
                                 civ6Tile.continent = (ContinentType)(continentNames.size() - 1);
 
                                 LOG_INFO("Add continent \"%s\" at index %u", continentS.c_str(), (int)civ6Tile.continent);
