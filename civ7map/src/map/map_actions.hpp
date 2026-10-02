@@ -78,6 +78,9 @@ void Map::Paint(int _x, int _y)
                 if (paintWindow->m_paintContinentType)
                     tileCopy.continent = paintWindow->m_continentType;
 
+                if (paintWindow->m_paintLandmassType)
+                    tileCopy.landmass = paintWindow->m_landmassType;
+
                 if (paintWindow->m_paintTerrainType)
                     tileCopy.terrain = paintWindow->m_terrainType;            
 
@@ -89,6 +92,9 @@ void Map::Paint(int _x, int _y)
 
                 if (paintWindow->m_paintResource)
                     tileCopy.resource = paintWindow->m_resourceType;
+
+                if (paintWindow->m_paintElevation)
+                    tileCopy.elevation = paintWindow->m_elevation;
 
                 if (tileCopy != tileRef)
                 {

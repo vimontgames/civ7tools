@@ -268,8 +268,9 @@ public:
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
 
-    static string GetMapDataPathFromMapPath(const string & _mapPath);
+    string GetMapDataPathFromMapPath(const string & _mapPath) const;
 
+    string getModID() const;
     string getAuthor() const;
     string getDescription() const;
     string getBaseName() const;
@@ -337,8 +338,10 @@ private:
 
     void exportModInfoCiv7Map();
     void exportTextCiv7Map();
-
-    string getModID() const;
+    void exportSQLiteMap();
+    void exportConfigCiv7Map();
+    void exportMapsCiv7Map();
+    void exportMapDataCiv7Map();
 
     Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
         

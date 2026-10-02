@@ -863,6 +863,7 @@ int main()
                 // Create new map
                 Map * newMap = new Map();
                 newMap->m_mapPath = newFilePath;
+                newMap->m_mapVersion = g_mapVersion;
 
                 // Import it
                 if (newMap->importFiles(g_currentWorkingDirectory))
@@ -914,19 +915,28 @@ int main()
 
                 bool canExport = false;
 
-                if (EndsWith(newFilePath, "-map.js"))
+                if ((EndsWith(newFilePath, "-map.js") && g_mapVersion == MapVersion::YnAMP) || (EndsWith(newFilePath, ".Civ7Map") && g_mapVersion == MapVersion::Civ7Map))
                 {
                     map->m_mapPath = newFilePath;
-                    map->m_mapDataPath = Map::GetMapDataPathFromMapPath(map->m_mapPath);
+                    map->m_mapVersion = g_mapVersion;
+                    map->m_mapDataPath = map->GetMapDataPathFromMapPath(map->m_mapPath);
 
                     // Dirty check to detect if we're using mod template (TODO: export options panel?)
                     bool useModTemplate = false;
-                    const string mapTextPath = fmt::sprintf("%s\\text\\en_us\\MapText.xml", map->m_modFolder);
-                    string data;
-                    if (FileExists(mapTextPath) && ReadFile(mapTextPath, data))
+
+                    if (g_mapVersion == MapVersion::YnAMP)
                     {
-                        if (-1 != data.find("(Civ7Map)"))
-                            useModTemplate = true;
+                        const string mapTextPath = fmt::sprintf("%s\\text\\en_us\\MapText.xml", map->m_modFolder);
+                        string data;
+                        if (FileExists(mapTextPath) && ReadFile(mapTextPath, data))
+                        {
+                            if (-1 != data.find("(Civ7Map)"))
+                                useModTemplate = true;
+                        }
+                    }
+                    else if (g_mapVersion == MapVersion::Civ7Map)
+                    {
+                        useModTemplate = true;
                     }
 
                     if (useModTemplate)
@@ -1016,6 +1026,8 @@ int main()
         {
             SetCurrentDirectory(g_currentWorkingDirectory.c_str());
             ShaderManager::update();
+            if (g_map)
+                g_map->refresh(true);
         }
 
         // Clear backbuffer

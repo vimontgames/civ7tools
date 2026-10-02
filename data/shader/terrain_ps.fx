@@ -57,6 +57,18 @@ bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder, out bool 
     return false;
 }
 
+float4 ColorToLum(float4 color)
+{
+    float gray = color.r * 0.2 + color.g * 0.7 + color.b * 0.1;
+    return float4(gray,gray,gray,1);
+}
+
+float4 ColorToHue(float4 color)
+{
+    float3 hue = color.rgb / max(max(color.r, color.g), color.b);
+    return float4(hue, 1);
+}
+
 Tile getTile(float2 uv)
 {    
     float offsetY = 0.0f;
@@ -125,11 +137,16 @@ float4 getTileColor(Tile tile)
         
         case PASS_TYPE_CONTINENT:
         {
-            uint continent = uint(tile.color0.a * 255.0f);
-            color = getContinentColor(continent);
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            uint terrainType = uint(tile.color0.r * 255.0f);
             
+            color = getBiomeTerrainColor(biomeType, terrainType);
+                        
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
+            
+            uint continent = uint(tile.color0.a * 255.0f);
+            color = lerp(color, getContinentColor(continent), 0.5);
         }
         break;
                 
@@ -145,21 +162,32 @@ float4 getTileColor(Tile tile)
         
         case PASS_TYPE_LANDMASS:
         {
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            uint terrainType = uint(tile.color0.r * 255.0f);
+            
+            color = getBiomeTerrainColor(biomeType, terrainType);
+            
             uint landmass = uint(tile.color1.g * 255.0f);
-            color = getLandmassColor(landmass);
 
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
+            
+            color = lerp(color, getLandmassColor(landmass), 0.5f);
         }
         break;
         
-         case PASS_TYPE_ELEVATION:
+        case PASS_TYPE_ELEVATION:
         {
-            uint elevation = uint(tile.color1.b * 1024.0f);
-            color = getElevationColor(elevation);
-
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            uint terrainType = uint(tile.color0.r * 255.0f);
+            
+            color = getBiomeTerrainColor(biomeType, terrainType);
+            
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
+            
+            uint elevation = uint(tile.color1.b * 1023.0f);
+            color = lerp(ColorToHue(color), getElevationColor(elevation), 0.9);
         }
         break;
     }

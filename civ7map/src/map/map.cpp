@@ -35,11 +35,25 @@ SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
 SharedIcon Map::s_defaultFlag;
 
 //--------------------------------------------------------------------------------------
-string Map::GetMapDataPathFromMapPath(const string & _mapPath)
+string Map::GetMapDataPathFromMapPath(const string & _mapPath) const
 {
     string mapDataPath = GetFilenameWithoutExtension(_mapPath);
-    mapDataPath = mapDataPath.substr(0, mapDataPath.length() - 4); // remove "-map"
-    mapDataPath = fmt::sprintf("%s\\%s-data.js", GetFolder(_mapPath), mapDataPath);
+
+    switch (m_mapVersion)
+    {
+        case MapVersion::YnAMP:
+            mapDataPath = mapDataPath.substr(0, mapDataPath.length() - 4); // remove "-map"
+            mapDataPath = fmt::sprintf("%s\\%s-data.js", GetFolder(_mapPath), mapDataPath);
+            break;
+
+        case MapVersion::Civ7Map:
+            mapDataPath = fmt::sprintf("%s\\%s.js", GetFolder(_mapPath), mapDataPath);
+            break;
+
+        default:
+            assert(false);
+            break;
+    }
     return mapDataPath;
 }
 
@@ -147,7 +161,7 @@ void Map::loadIcons(bool _reload)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
-            if (resIcon.dirty || _reload)
+            if (resIcon.dirty && _reload)
             {
                 bool dirty = false;
 
@@ -178,7 +192,7 @@ void Map::loadIcons(bool _reload)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_featureIcons[index];
-            if (resIcon.dirty || _reload)
+            if (resIcon.dirty && _reload)
             {
                 bool dirty = false;
 

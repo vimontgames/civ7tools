@@ -16,12 +16,14 @@ void Map::exportFiles(const string & _cwd, bool _useModTemplate)
     {
         case MapVersion::YnAMP:
         {
+            createFolders();
             exportFilesYnAMP(_cwd, _useModTemplate);
         }
         break;
 
         case MapVersion::Civ7Map:
         {
+            createFolders();
             exportFilesCiv7Map(_cwd, _useModTemplate);
         }
         break;
@@ -305,7 +307,18 @@ string Map::getDescription() const
 string Map::getBaseName() const
 {
     string name = GetFilename(m_mapPath);
-    name = name.substr(0, name.length() - 7); // remove "-map.js"
+
+    switch (m_mapVersion)
+    {
+        case MapVersion::YnAMP:
+            name = name.substr(0, name.length() - 7); // remove "-map.js"
+            break;
+
+        case MapVersion::Civ7Map:
+            name = name.substr(0, name.length() - 8); // remove ".Civ7Map"
+            break;
+    }
+    
     return name;
 }
 

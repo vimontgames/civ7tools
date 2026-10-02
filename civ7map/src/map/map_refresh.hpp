@@ -160,7 +160,8 @@ void Map::refresh(bool _reload)
             if (tile.continent != ContinentType::None)
                 getContinentInfo(tile.continent).count++;
 
-            getLandmassInfo(tile.landmass).count++;
+            if (tile.landmass < m_landmasses.size())
+                getLandmassInfo(tile.landmass).count++;
 
             if (m_showFeatures)
             {
@@ -193,7 +194,7 @@ void Map::refresh(bool _reload)
             color1.g = (u8)tile.landmass;
 
             // Color1.b is elevation
-            color1.b = (u8)tile.elevation / 4; // 0..1024 values
+            color1.b = (u8)((uint)tile.elevation / 4); // 0..1023 values
             
             terrain.image.setPixel(w, h + m_height, color1);
 

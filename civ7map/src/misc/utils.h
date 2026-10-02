@@ -9,6 +9,8 @@ string GetExtension(const string & _fullpath);
 
 bool FileExists(const string & path);
 bool ReadFile(const string & path, string & _data);
+bool DeleteFile(const string & path);
+bool CopyFile(const string & path, const string & newPath);
 
 string CapitalizeWords(const string & input);
 bool isDigits(const string & str);

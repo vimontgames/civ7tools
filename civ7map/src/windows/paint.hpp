@@ -23,181 +23,246 @@ bool PaintWindow::Draw(const RenderWindow & window)
     {
         Map * map = g_map;
 
-        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-        ImGui::InputInt2("Plot", (int *)&g_hoveredCell, ImGuiInputTextFlags_EnterReturnsTrue);
-        ImGui::PopItemFlag();
-
-        ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
-
-        // Continent
-        if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        if (ImGui::CollapsingHeader("Options", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            ImGui::Checkbox("Enable###PaintContinent", &m_paintContinentType);
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::InputInt2("Plot", (int *)&g_hoveredCell, ImGuiInputTextFlags_EnterReturnsTrue);
+            ImGui::PopItemFlag();
 
-            PushDisabled(!m_paintContinentType);
+            ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
+
+            ImGui::Checkbox("Auto Coasts###AutoCoast", &m_autoCoast);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Add coasts around continents when painting ocean or continents");    
+
+            //ImGui::Checkbox("Force compatible Terrain###FeatureAutoTerrain", &m_featureAutoTerrain);
+            //if (ImGui::IsItemHovered())
+            //    ImGui::SetTooltip("Force compatible terrain when placing feature");
+            //
+            //ImGui::Checkbox("Force compatible Biome###FeatureAutoBiome", &m_featureAutoBiome);
+            //if (ImGui::IsItemHovered())
+            //    ImGui::SetTooltip("Force compatible biome when placing feature");
+        }
+
+        if (ImGui::CollapsingHeader("Values", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        {
+            const float comboX = ImGui::GetCursorPosX() + 128;
+
+            // Continent
+            //if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
-                DrawColoredSquare(getContinentColor(m_continentType));
+                ImGui::Checkbox("Continent###PaintContinent", &m_paintContinentType);
+                ImGui::SameLine(comboX);
 
-                string continentName = map ? map->getContinentShortName(m_continentType) : "";
-
-                if (ImGui::BeginCombo("Continent###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str()))
+                PushDisabled(!m_paintContinentType);
                 {
-                    // None
-                    {
-                        bool isSelected = ((int)m_continentType == -1);
-                        if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName((ContinentType)-1) : "").c_str(), isSelected))
-                        {
-                            m_continentType = (ContinentType)-1;
-                        }
-                    }
+                    DrawColoredSquare(getContinentColor(m_continentType));
 
-                    if (map)
+                    string continentName = map ? map->getContinentShortName(m_continentType) : "None";
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str(), ImGuiComboFlags_HeightLargest))
                     {
-                        for (uint i = 0; i < map->getContinentCount(); ++i)
+                        // None
                         {
-                            bool isSelected = ((int)m_continentType == i);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+                            bool isSelected = (m_continentType == ContinentType::None);
+                            if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName(ContinentType::None) : "").c_str(), isSelected))
                             {
-                                m_continentType = (ContinentType)i;
+                                m_continentType = ContinentType::None;
                             }
                         }
+
+                        if (map)
+                        {
+                            for (uint i = 0; i < map->getContinentCount(); ++i)
+                            {
+                                bool isSelected = ((int)m_continentType == i);
+                                if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
+                                {
+                                    m_continentType = (ContinentType)i;
+                                }
+                            }
+                        }
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+                PopDisabled();
             }
-            PopDisabled();
-        }
-        ImGui::Spacing();
-
-        // TerrainType
-        if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-        {
-            ImGui::Checkbox("Enable###PaintTerrain", &m_paintTerrainType);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Enable painting terrain type");
-
-            PushDisabled(!m_paintTerrainType);
+   
+            // Landmass
+            //if (ImGui::CollapsingHeader("Landmass", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
-                ImGui::Checkbox("Automatic Coasts###AutoCoast", &m_autoCoast);
+                ImGui::Checkbox("Landmass###PaintLandmass", &m_paintLandmassType);
+                ImGui::SameLine(comboX);
+
+                PushDisabled(!m_paintLandmassType);
+                {
+                    DrawColoredSquare(getLandmassColor(m_landmassType));
+
+                    string landmassName = map ? map->getLandmassShortName(m_landmassType) : "Landmass 0";
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintLandmassCombo", fmt::sprintf("%s (%i)", landmassName, (int)m_landmassType).c_str(), ImGuiComboFlags_HeightLargest))
+                    {
+                        if (map)
+                        {
+                            for (uint i = 0; i < map->getLandmassCount(); ++i)
+                            {
+                                bool isSelected = ((int)m_landmassType == i);
+                                if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassName((LandmassType)i), i).c_str(), isSelected))
+                                {
+                                    m_landmassType = (LandmassType)i;
+                                }
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
+                }
+                PopDisabled();
+            }
+ 
+            // TerrainType
+            //if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                ImGui::Checkbox("Terrain###PaintTerrain", &m_paintTerrainType);
+                ImGui::SameLine(comboX);
+
                 if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("Add coasts around continents when painting ocean or continents");
+                    ImGui::SetTooltip("Enable painting terrain type");
 
-                DrawColoredSquare(getTerrainColor(m_terrainType));
-
-                if (ImGui::BeginCombo("Terrain###SelectPaintTerrainCombo", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str()))
+                PushDisabled(!m_paintTerrainType);
                 {
-                    for (auto val : enumValues<TerrainType>())
+                    DrawColoredSquare(getTerrainColor(m_terrainType));
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintTerrainCombo", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str(), ImGuiComboFlags_HeightLargest))
                     {
-                        bool isSelected = (val.first == m_terrainType);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                            m_terrainType = val.first;
+                        for (auto val : enumValues<TerrainType>())
+                        {
+                            bool isSelected = (val.first == m_terrainType);
+                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                                m_terrainType = val.first;
+                        }
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+
+                PopDisabled();
             }
 
-            PopDisabled();
-        }
-        ImGui::Spacing();
-
-        // BiomeType
-        if (ImGui::CollapsingHeader("Biome", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-        {
-            ImGui::Checkbox("Enable###PaintBiome", &m_paintBiomeType);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Enable painting biome type");
-
-            PushDisabled(!m_paintBiomeType);
+            // BiomeType
+            //if (ImGui::CollapsingHeader("Biome", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
-                DrawColoredSquare(getBiomeColor(m_biomeType));
+                ImGui::Checkbox("Biome###PaintBiome", &m_paintBiomeType);
+                ImGui::SameLine(comboX);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Enable painting biome type");
 
-                if (ImGui::BeginCombo("Biome###SelectPaintBiomeCombo", fmt::sprintf("%s (%i)", asString(m_biomeType), (int)m_biomeType).c_str()))
+                PushDisabled(!m_paintBiomeType);
                 {
-                    for (auto val : enumValues<BiomeType>())
+                    DrawColoredSquare(getBiomeColor(m_biomeType));
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintBiomeCombo", fmt::sprintf("%s (%i)", asString(m_biomeType), (int)m_biomeType).c_str(), ImGuiComboFlags_HeightLargest))
                     {
-                        bool isSelected = (val.first == m_biomeType);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                            m_biomeType = val.first;
+                        for (auto val : enumValues<BiomeType>())
+                        {
+                            bool isSelected = (val.first == m_biomeType);
+                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                                m_biomeType = val.first;
+                        }
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+                PopDisabled();
             }
-            PopDisabled();
-        }
 
-        // FeatureType
-        if (ImGui::CollapsingHeader("Feature", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-        {
-            ImGui::Checkbox("Enable###PaintFeature", &m_paintFeature);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Enable painting feature type");
-
-            PushDisabled(!map);
+            // FeatureType
+            //if (ImGui::CollapsingHeader("Feature", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
-                float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
-                ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
-                if (ImGui::Button("Clear###ClearFeatures"))
-                    map->clearFeatures();
-            }
-            PopDisabled();
+                ImGui::Checkbox("Feature###PaintFeature", &m_paintFeature);
+                ImGui::SameLine(comboX);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Enable painting feature type");
 
-            PushDisabled(!m_paintFeature);
-            {
-                //ImGui::Checkbox("Force compatible Terrain###FeatureAutoTerrain", &m_featureAutoTerrain);
-                //if (ImGui::IsItemHovered())
-                //    ImGui::SetTooltip("Force compatible terrain when placing feature");
-                //
-                //ImGui::Checkbox("Force compatible Biome###FeatureAutoBiome", &m_featureAutoBiome);
-                //if (ImGui::IsItemHovered())
-                //    ImGui::SetTooltip("Force compatible biome when placing feature");
-
-                DrawColoredSquare(getFeatureColor(m_featureType));
-
-                if (ImGui::BeginCombo("Feature###SelectPaintFeatureCombo", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str()))
+                PushDisabled(!m_paintFeature);
                 {
-                    for (auto val : enumValues<FeatureType>())
+                    DrawColoredSquare(getFeatureColor(m_featureType));
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintFeatureCombo", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str(), ImGuiComboFlags_HeightLargest))
                     {
-                        bool isSelected = (val.first == m_featureType);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                            m_featureType = val.first;
+                        for (auto val : enumValues<FeatureType>())
+                        {
+                            bool isSelected = (val.first == m_featureType);
+                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                                m_featureType = val.first;
+                        }
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+
+                PopDisabled();
             }
 
-            PopDisabled();
-        }
-
-        // ResourceType
-        if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-        {
-            ImGui::Checkbox("Enable###PaintResource", &m_paintResource);
-
-            PushDisabled(!map);
+            // ResourceType
+            //if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
-                float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
-                ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
-                if (ImGui::Button("Clear###ClearResources"))
-                    map->clearResources();
-            }
-            PopDisabled();
+                ImGui::Checkbox("Resource###PaintResource", &m_paintResource);
+                ImGui::SameLine(comboX);
 
-            PushDisabled(!m_paintResource);
-            {
-                DrawColoredSquare(getResourceColor(m_resourceType));
-
-                if (ImGui::BeginCombo("Resource###SelectPaintResourceCombo", fmt::sprintf("%s (%i)", asString(m_resourceType), (int)m_resourceType).c_str()))
+                PushDisabled(!m_paintResource);
                 {
-                    for (auto val : enumValues<ResourceType>())
+                    DrawColoredSquare(getResourceColor(m_resourceType));
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    if (ImGui::BeginCombo("###SelectPaintResourceCombo", fmt::sprintf("%s (%i)", asString(m_resourceType), (int)m_resourceType).c_str(), ImGuiComboFlags_HeightLargest))
                     {
-                        bool isSelected = (val.first == m_resourceType);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                            m_resourceType = val.first;
+                        for (auto val : enumValues<ResourceType>())
+                        {
+                            bool isSelected = (val.first == m_resourceType);
+                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                                m_resourceType = val.first;
+                        }
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+                PopDisabled();
             }
-            PopDisabled();
+
+            // Elevation
+            //if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                ImGui::Checkbox("Elevation###PaintElevation", &m_paintElevation);
+                ImGui::SameLine(comboX);
+
+                PushDisabled(!m_paintElevation);
+                {
+                    DrawColoredSquare(getElevationColor(m_elevation));
+
+                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+                    ImGui::SetNextItemWidth(comboWidth);
+
+                    int temp = m_elevation;
+                    if (ImGui::SliderInt("###Elevation", &temp, 0, 1023))
+                    {
+                        m_elevation = temp;
+                    }
+                }
+                PopDisabled();
+            }
         }
 
         
@@ -233,6 +298,22 @@ bool PaintWindow::Draw(const RenderWindow & window)
 
                 UndoRedoStack::add(undoRedoPaintTile);
             }
+
+            PushDisabled(!map);
+            {
+                //float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
+                //ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
+                ImGui::SameLine();
+                if (ImGui::Button("Clear Features###ClearFeatures"))
+                    map->clearFeatures();
+
+                //float buttonWidth = ImGui::CalcTextSize("Clear").x + ImGui::GetStyle().FramePadding.x * 2; // Including padding
+                //ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - buttonWidth);
+                ImGui::SameLine();
+                if (ImGui::Button("Clear Resources###ClearResources"))
+                    map->clearResources();
+            }
+            PopDisabled();
         }
     }
 

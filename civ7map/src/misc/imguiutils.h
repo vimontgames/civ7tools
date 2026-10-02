@@ -6,3 +6,5 @@ bool DrawColoredCheckbox(const float4 & _color, bool * _checked);
 
 void PushDisabled(bool _disabled);
 void PopDisabled();
+
+void ApplyDisabledStyle(bool _disabled);

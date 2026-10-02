@@ -61,7 +61,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             
                 string continentName = map->getContinentShortName(tile->continent);
             
-                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str()))
+                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     // None
                     {
@@ -91,7 +91,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                 string landmassName = map->getLandmassShortName(tile->landmass);
 
-                if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str()))
+                if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (uint i = 0; i < map->getLandmassCount(); ++i)
                     {
@@ -110,7 +110,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             {
                 DrawColoredSquare(getTerrainColor(tile->terrain));
 
-                if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(tile->terrain), (int)tile->terrain).c_str()))
+                if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(tile->terrain), (int)tile->terrain).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (auto val : enumValues<TerrainType>())
                     {
@@ -130,7 +130,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             {
                 DrawColoredSquare(getBiomeColor(tile->biome));
 
-                if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(tile->biome), (int)tile->biome).c_str()))
+                if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(tile->biome), (int)tile->biome).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (auto val : enumValues<BiomeType>())
                     {
@@ -150,7 +150,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             {
                 DrawColoredSquare(getFeatureColor(tile->feature));
 
-                if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(tile->feature), (int)tile->feature).c_str()))
+                if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(tile->feature), (int)tile->feature).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (auto val : enumValues<FeatureType>())
                     {
@@ -170,7 +170,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             {
                 DrawColoredSquare(getResourceColor(tile->resource));
 
-                if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(tile->resource), (int)tile->resource).c_str()))
+                if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(tile->resource), (int)tile->resource).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (auto val : enumValues<ResourceType>())
                     {
@@ -184,6 +184,31 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                     }
                     ImGui::EndCombo();
                 }
+            }
+
+            // Elevation
+            {
+                DrawColoredSquare(getElevationColor(tile->elevation));
+                int temp = tile->elevation;
+                if (ImGui::SliderInt("Elevation", &temp, 0, 1023))
+                {
+                    tile->elevation = temp;
+                }
+
+                //if (ImGui::BeginCombo("Elevation", fmt::sprintf("%i", tile->elevation).c_str(), ImGuiComboFlags_HeightLargest))
+                //{
+                //    for (auto val : enumValues<ResourceType>())
+                //    {
+                //        const int index = (int)val.first;
+                //        bool isSelected = ((int)tile->resource == index);
+                //        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
+                //        {
+                //            if (map->setResource(x, y, val.first))
+                //                dirty = true;
+                //        }
+                //    }
+                //    ImGui::EndCombo();
+                //}
             }
 
             // TSL

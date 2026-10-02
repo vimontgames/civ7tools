@@ -14,7 +14,10 @@ public:
     int m_brushRadius = 1;
 
     bool m_paintContinentType = false;
-    ContinentType m_continentType = (ContinentType)-1;
+    ContinentType m_continentType = ContinentType::None;
+
+    bool m_paintLandmassType = false;
+    LandmassType m_landmassType = (LandmassType)0;
 
     bool m_paintTerrainType = false;
     TerrainType m_terrainType = TerrainType::Flat;
@@ -30,4 +33,7 @@ public:
 
     bool m_paintResource = false;
     ResourceType m_resourceType = ResourceType::Wine;
+
+    bool m_paintElevation = false;
+    Elevation m_elevation = (Elevation)0;
 };

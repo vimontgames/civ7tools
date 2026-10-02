@@ -43,18 +43,19 @@ bool Map::importSQLiteMap(const string & _cwd)
     }
 
     // Get map name from database
-    sql = "SELECT Value FROM MetaData WHERE Name = 'DisplayName' LIMIT 1;";
-    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    if (rc == SQLITE_OK)
-    {
-        rc = sqlite3_step(stmt);
-        if (rc == SQLITE_ROW)
-        {
-            m_prettyName = std::string((const char *)sqlite3_column_text(stmt, 0));
-            LOG_INFO("Map name is \"%s\"", m_prettyName.c_str());
-        }
-        sqlite3_finalize(stmt);
-    }
+    //sql = "SELECT Value FROM MetaData WHERE Name = 'DisplayName' LIMIT 1;";
+    //rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    //if (rc == SQLITE_OK)
+    //{
+    //    rc = sqlite3_step(stmt);
+    //    if (rc == SQLITE_ROW)
+    //    {
+    //        m_prettyName = std::string((const char *)sqlite3_column_text(stmt, 0));
+    //        LOG_INFO("Map name is \"%s\"", m_prettyName.c_str());
+    //    }
+    //    sqlite3_finalize(stmt);
+    //}
+    m_prettyName = getBaseName();
 
     // Read tile data 
     sql = "SELECT ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId FROM Plots";
@@ -79,6 +80,8 @@ bool Map::importSQLiteMap(const string & _cwd)
             string continentS = (const char *)sqlite3_column_text(stmt, 3);
             tile.continent = getOrCreateContinentType(continentS);
 
+            // We can read/write elevation from SQL but the engine seems to only use elevation set from script
+            // c.f.   paintEarthHugeElevation();
             tile.elevation = sqlite3_column_int(stmt, 4);
 
             tile.landmass = getOrCreateLandmassType(sqlite3_column_int(stmt, 7));
@@ -110,6 +113,34 @@ bool Map::importSQLiteMap(const string & _cwd)
 
             string plotFeaturesS = (const char *)sqlite3_column_text(stmt, 1);
             tile.feature = getFeatureFromString(plotFeaturesS, x, y);
+
+            m_civ7TerrainType.set(x, y, tile);
+        }
+        sqlite3_finalize(stmt);
+    }
+    else
+    {
+        LOG_ERROR("Failed to prepare SQL statement for tiles: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return false;
+    }
+
+    // Read plot resources
+    sql = "SELECT ID, ResourceType, ResourceCount FROM PlotResources";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        {
+            int ID = sqlite3_column_int(stmt, 0);
+
+            int x = ID % m_width;
+            int y = ID / m_width;
+
+            Civ7Tile tile = m_civ7TerrainType.get(x, y);
+
+            string plotResourceS = (const char *)sqlite3_column_text(stmt, 1);
+            tile.resource = getResourceFromString(plotResourceS, x, y);
 
             m_civ7TerrainType.set(x, y, tile);
         }

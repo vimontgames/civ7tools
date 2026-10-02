@@ -139,3 +139,63 @@ string GetExtension(const string & _fullpath)
     }
     return "";
 }
+
+//--------------------------------------------------------------------------------------
+bool DeleteFile(const string & path)
+{
+    if (remove(path.c_str()) == 0)
+    {
+        return true;
+    }
+    
+    LOG_WARNING("Could not delete file \"%s\"", path.c_str());
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool CopyFile(const string & path, const string & newPath)
+{
+    FILE * src = fopen(path.c_str(), "rb");
+    if (!src)
+    {
+        LOG_ERROR("Could not open file \"%s\" for copying", path.c_str());
+        return false;
+    }
+
+    FILE * dst = fopen(newPath.c_str(), "wb");
+    if (!dst)
+    {
+        fclose(src);
+        LOG_ERROR("Could not create file \"%s\"", newPath.c_str());
+        return false;
+    }
+
+    char buffer[64 * 1024];
+    size_t bytesRead;
+
+    while ((bytesRead = fread(buffer, 1, sizeof(buffer), src)) > 0)
+    {
+        if (fwrite(buffer, 1, bytesRead, dst) != bytesRead)
+        {
+            fclose(src);
+            fclose(dst);
+
+            LOG_ERROR("Could not write file \"%s\"", newPath.c_str());
+            return false;
+        }
+    }
+
+    const bool success = !ferror(src);
+
+    fclose(src);
+    fclose(dst);
+
+    if (!success)
+    {
+        LOG_ERROR("Could not read file \"%s\"", path.c_str());
+        return false;
+    }
+
+    LOG_INFO("File \"%s\" created from template \"%s\"", newPath.c_str(), path.c_str());
+    return true;
+}
