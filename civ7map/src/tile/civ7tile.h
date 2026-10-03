@@ -80,6 +80,8 @@ enum class FeatureType : i8
     TundraFloodplainMinor           = 22,
     TundraFloodplainNavigable       = 23,
     Volcano                         = 24,
+    Atoll                           = 25,
+    Lotus                           = 26
 };
 
 //--------------------------------------------------------------------------------------

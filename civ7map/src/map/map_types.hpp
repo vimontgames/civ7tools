@@ -189,8 +189,20 @@ FeatureType Map::getFeatureFromString(const string & _featureTypeS, uint x, uint
         return FeatureType::TropicalFloodplainNavigable;
     else if (_featureTypeS == "FEATURE_TAIGA")
         return FeatureType::Taiga;
+    else if (_featureTypeS == "FEATURE_TUNDRA_BOG")
+        return FeatureType::TundraBog;
+    else if (_featureTypeS == "FEATURE_TUNDRA_FLOODPLAIN_MINOR")
+        return FeatureType::TundraFloodplainMinor;
+    else if (_featureTypeS == "FEATURE_TUNDRA_FLOODPLAIN_NAVIGABLE")
+        return FeatureType::TundraFloodplainNavigable;
+    else if (_featureTypeS == "FEATURE_VOLCANO")
+        return FeatureType::Volcano;
+    else if (_featureTypeS == "FEATURE_ATOLL")
+        return FeatureType::Atoll;
+    else if (_featureTypeS == "FEATURE_LOTUS")
+        return FeatureType::Lotus;
 
-    LOG_WARNING("Unknow FeatureType \"%s\" (%u,%u)", _featureTypeS, x, y);
+    LOG_WARNING("Unknow FeatureType \"%s\" (%u,%u)", _featureTypeS.c_str(), x, y);
     return FeatureType::None;
 }
 

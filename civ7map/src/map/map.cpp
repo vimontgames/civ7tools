@@ -432,7 +432,10 @@ ContinentType Map::getOrCreateContinentType(const string & continentS)
 //--------------------------------------------------------------------------------------
 string Map::getLandmassName(LandmassType landmass) const
 {
-    return fmt::sprintf("Landmass %u", m_landmasses[(int)landmass].index);
+    if (landmass < m_landmasses.size())
+        return fmt::sprintf("Landmass %u", m_landmasses[(int)landmass].index);
+    else
+        return "";
 }
 
 //--------------------------------------------------------------------------------------

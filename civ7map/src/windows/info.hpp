@@ -34,6 +34,23 @@ bool InfoWindow::Draw(const RenderWindow & window)
         sprintf_s(temp, "%s", g_map->getAuthor().c_str());
         if (ImGui::InputText("Author", temp, sizeof(temp)))
             g_map->m_author = temp;
+
+        sprintf_s(temp, "%s", g_map->getDescription().c_str());
+        if (ImGui::InputText("Description", temp, sizeof(temp)))
+            g_map->m_description = temp;
+
+        if (ImGui::BeginCombo("Version", asString(g_map->m_mapVersion).c_str(), ImGuiComboFlags_HeightLargest))
+        {
+            for (auto val : enumValues<MapVersion>())
+            {
+                bool isSelected = (g_map->m_mapVersion == val.first);
+                if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                {
+                    g_map->m_mapVersion = val.first;
+                }
+            }
+            ImGui::EndCombo();
+        }
         
         //sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
         //ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
@@ -99,7 +116,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
             }                
         }
 
-        if (ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        if (g_map->m_mapVersion == MapVersion::YnAMP && ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             int editWest[2] =
             {

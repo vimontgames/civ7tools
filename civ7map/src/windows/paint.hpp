@@ -27,6 +27,8 @@ bool PaintWindow::Draw(const RenderWindow & window)
         {
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
             ImGui::InputInt2("Plot", (int *)&g_hoveredCell, ImGuiInputTextFlags_EnterReturnsTrue);
+            Vector2i selectionSize = g_selectedRectMax - g_selectedRectMin + Vector2i(1,1);
+            ImGui::InputInt2("Selected", (int *)&selectionSize, ImGuiInputTextFlags_EnterReturnsTrue);
             ImGui::PopItemFlag();
 
             ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
@@ -101,7 +103,7 @@ bool PaintWindow::Draw(const RenderWindow & window)
                 {
                     DrawColoredSquare(getLandmassColor(m_landmassType));
 
-                    string landmassName = map ? map->getLandmassShortName(m_landmassType) : "Landmass 0";
+                    string landmassName = map && m_landmassType < map->getLandmassCount() ? map->getLandmassShortName(m_landmassType) : "Landmass 0";
 
                     const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
                     ImGui::SetNextItemWidth(comboWidth);

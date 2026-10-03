@@ -146,7 +146,7 @@ float4 getTileColor(Tile tile)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
             
             uint continent = uint(tile.color0.a * 255.0f);
-            color = lerp(color, getContinentColor(continent), 0.5);
+            color = lerp(color, getContinentColor(continent), 0.75);
         }
         break;
                 
@@ -172,7 +172,7 @@ float4 getTileColor(Tile tile)
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
             
-            color = lerp(color, getLandmassColor(landmass), 0.5f);
+            color = lerp(color, getLandmassColor(landmass), 0.75);
         }
         break;
         

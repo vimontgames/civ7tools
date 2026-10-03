@@ -116,7 +116,10 @@ bool DisplayWindow::Draw(const RenderWindow & window)
         if (ImGui::CollapsingHeader("Show", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             needRefresh |= Checkbox("Grid", &g_map->m_showBorders);
-            needRefresh |= Checkbox("Hemispheres", &g_map->m_showHemispheres);
+
+            if (g_map->m_mapVersion == MapVersion::YnAMP)
+                needRefresh |= Checkbox("Hemispheres", &g_map->m_showHemispheres);
+
             needRefresh |= Checkbox("Features", &g_map->m_showFeatures);
             needRefresh |= Checkbox("Resources", &g_map->m_showResources);
             needRefresh |= Checkbox("TSL", &g_map->m_showTSL);   
