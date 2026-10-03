@@ -44,6 +44,9 @@ void Map::exportModInfoCiv7Map()
     data += "  <ActionGroups>\n";
     data += fmt::sprintf("      <ActionGroup id=\"%s-shell\" scope=\"shell\" criteria=\"always\">\n", getModID());
     data += "          <Actions>\n";
+    //data += "              <ImportFiles>\n";
+	//data += "				    <Item>assets/icon.png</Item>\n";
+	//data += "			   </ImportFiles>\n";
     data += "              <UpdateDatabase>\n";
     data += "                  <Item>config/config.xml</Item>\n";
     data += "              </UpdateDatabase>\n";
@@ -128,10 +131,18 @@ void Map::exportConfigCiv7Map()
     data += fmt::sprintf("		<Row AgeType=\"AGE_EXPLORATION\" Domain=\"StandardMaps\" Value=\"{%s}maps/%s.Civ7Map\"/>\n", getModID(), getBaseName());
     data += fmt::sprintf("		<Row AgeType=\"AGE_MODERN\" Domain=\"StandardMaps\" Value=\"{%s}maps/%s.Civ7Map\"/>\n", getModID(), getBaseName());
     data += fmt::sprintf("	</UnsupportedValuesByAge>\n");
-    //data += fmt::sprintf("	<MapSizes>\n");
-    //data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"MAPSIZE_HUGE_24\" Name=\"LOC_MAPSIZE_HUGE24_NAME\" Description=\"LOC_MAPSIZE_HUGE24_DESCRIPTION\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n");
-    //data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"MAPSIZE_HUGE_24\" Name=\"LOC_MAPSIZE_HUGE24_NAME\" Description=\"LOC_MAPSIZE_HUGE24_DESCRIPTION\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n");
-    //data += fmt::sprintf("	</MapSizes>\n");
+
+    if (m_mapSize == MapSize::Custom)
+    {
+        string mapSizePrettyName = getExportMapSizePrettyName(m_mapSize);
+        string mapSizePrettyDescription = getExportMapSizePrettyDescription(m_mapSize);
+
+        data += fmt::sprintf("	<MapSizes>\n");
+        data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"8\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
+        data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"8\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
+        data += fmt::sprintf("	</MapSizes>\n");
+    }
+
     data += fmt::sprintf("	<SupportedValuesByMap>\n");
     //data += fmt::sprintf("		<Row Map=\"{%s}maps/%s.Civ7Map\" Domain=\"StandardMapStartPositions\" Value=\"START_POSITION_TSL_HUGE\"/>\n", getModID(), getBaseName());
     data += fmt::sprintf("		<Row Map=\"{%s}maps/%s.Civ7Map\" Domain=\"StandardMapSizes\" Value=\"%s\"/>\n", getModID(), getBaseName(), mapSize);
@@ -169,12 +180,21 @@ void Map::exportMapsCiv7Map()
 
     data += fmt::sprintf("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     data += fmt::sprintf("<Database>\n");
-    //data += fmt::sprintf("	<Types>\n");
-    //data += fmt::sprintf("		<Replace Type=\"MAPSIZE_HUGE_24\" Kind=\"KIND_MAPSIZE\"/>\n");
-    //data += fmt::sprintf("	</Types>\n");
-    //data += fmt::sprintf("	<Maps>\n");
-    //data += fmt::sprintf("		<Row MapSizeType=\"MAPSIZE_HUGE_24\" Name=\"LOC_MAPSIZE_HUGE24_NAME\" Description=\"LOC_MAPSIZE_HUGE24_DESCRIPTION\" DefaultPlayers=\"24\" PlayersLandmass1=\"6\" PlayersLandmass2=\"6\" GridWidth=\"106\" GridHeight=\"66\" NumNaturalWonders=\"7\" OceanWidth=\"8\" LakeSizeCutoff=\"10\" LakeGenerationFrequency=\"25\" Continents=\"6\" StartSectorRows=\"4\" StartSectorCols=\"3\"/>\n");
-    //data += fmt::sprintf("	</Maps>\n");
+
+    if (m_mapSize == MapSize::Custom)
+    {
+        string mapSizeName = getExportMapSize(m_mapSize);
+        string mapSizePrettyName = getExportMapSizePrettyName(m_mapSize);
+        string mapSizePrettyDescription = getExportMapSizePrettyDescription(m_mapSize);
+
+        data += fmt::sprintf("	<Types>\n");
+        data += fmt::sprintf("		<Replace Type=\"%s\" Kind=\"KIND_MAPSIZE\"/>\n", mapSizeName);
+        data += fmt::sprintf("	</Types>\n");
+        data += fmt::sprintf("	<Maps>\n");
+        data += fmt::sprintf("		<Row MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" DefaultPlayers=\"8\" PlayersLandmass1=\"6\" PlayersLandmass2=\"2\" GridWidth=\"%u\" GridHeight=\"%u\" NumNaturalWonders=\"7\" OceanWidth=\"8\" LakeSizeCutoff=\"10\" LakeGenerationFrequency=\"25\" Continents=\"6\" StartSectorRows=\"4\" StartSectorCols=\"3\"/>\n", mapSizeName, mapSizePrettyName, mapSizePrettyDescription, m_width, m_height);
+        data += fmt::sprintf("	</Maps>\n");
+    }
+
     data += fmt::sprintf("</Database>\n");
 
     string dataFolder = fmt::sprintf("%s\\data", m_modFolder);
@@ -295,6 +315,27 @@ void Map::exportMapDataCiv7Map()
 }
 
 //--------------------------------------------------------------------------------------
+bool ExportMetaData(sqlite3 * db, const string & name, const string & value)
+{
+    sqlite3_stmt * stmt;
+    string sql = fmt::sprintf("INSERT OR REPLACE INTO MetaData (Name, Value) VALUES ('%s', ?);", name);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        sqlite3_bind_text(stmt, 1, value.c_str(), -1, SQLITE_STATIC);
+        sqlite3_step(stmt);
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else
+    {
+        LOG_ERROR("Query \"%s\" failed : %s", sql.c_str(), sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return false;
+    }
+}
+
+//--------------------------------------------------------------------------------------
 void Map::exportSQLiteMap()
 {
     // If the file does not exist, copy from the empty template to make sure we've all the tables correct
@@ -341,21 +382,10 @@ void Map::exportSQLiteMap()
         return;
     }
 
-    // Metadata.DisplayName
-    sql = "INSERT OR REPLACE INTO MetaData (Name, Value) VALUES ('DisplayName', ?);";
-    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    if (rc == SQLITE_OK)
-    {
-        sqlite3_bind_text(stmt, 1, m_prettyName.c_str(), -1, SQLITE_STATIC);
-        sqlite3_step(stmt);
-        sqlite3_finalize(stmt);
-    }
-    else
-    {
-        LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return;
-    }
+    // Metadata
+    ExportMetaData(db, "DisplayName", m_prettyName.c_str());  
+    ExportMetaData(db, "Author", m_author.c_str());
+    ExportMetaData(db, "Description", m_description.c_str());
     
     // Plot data
     sql = "INSERT OR REPLACE INTO Plots (ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";

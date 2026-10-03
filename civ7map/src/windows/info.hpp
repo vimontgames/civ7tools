@@ -55,7 +55,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
         //sprintf_s(temp, "%s-XXX", g_map->getBaseName().c_str());
         //ImGui::InputText("Files", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
 
-        if (ImGui::CollapsingHeader("Map size", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        //if (ImGui::CollapsingHeader("Map size", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             if (ImGui::InputInt2("Offset", g_map->m_editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
             {
@@ -105,14 +105,17 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
             if (ImGui::IsItemHovered())
             {
-                string invalidMapSizeMsg = isValidMapSize ? "Valid map sizes:\n" : "Please use a valid map size!\n";
-                for (auto val : enumValues<MapSize>())
-                {
-                    if (val.first == MapSize::Custom)
-                        continue;
-                    invalidMapSizeMsg += fmt::sprintf("- %s (%ix%i)\n", asString(val.first), g_mapSizes[(int)val.first][0], g_mapSizes[(int)val.first][1]);
-                }
-                ImGui::SetTooltip(invalidMapSizeMsg.c_str());
+                //string invalidMapSizeMsg = isValidMapSize ? "Valid map sizes:\n" : "Please use a valid map size!\n";
+                //for (auto val : enumValues<MapSize>())
+                //{
+                //    if (val.first == MapSize::Custom)
+                //        continue;
+                //    invalidMapSizeMsg += fmt::sprintf("- %s (%ix%i)\n", asString(val.first), g_mapSizes[(int)val.first][0], g_mapSizes[(int)val.first][1]);
+                //}
+                //ImGui::SetTooltip(invalidMapSizeMsg.c_str());
+
+                if (!isValidMapSize)
+                    ImGui::SetTooltip("Map is using a custom map size");
             }                
         }
 

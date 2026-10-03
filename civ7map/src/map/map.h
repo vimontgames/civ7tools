@@ -279,6 +279,9 @@ public:
     string getLocMapDescription() const;
 
     string getExportMapSize(MapSize _mapSize);
+    string getExportMapSizePrettyName(MapSize _mapSize);
+    string getExportMapSizePrettyDescription(MapSize _mapSize);
+
     static MapSize getMapSize(uint _width, uint _height);
 
     static Era getEra(Civilization _civ);

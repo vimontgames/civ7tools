@@ -127,7 +127,28 @@ void Map::exportModInfo()
 //--------------------------------------------------------------------------------------
 string Map::getExportMapSize(MapSize _mapSize)
 {
-    return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(asString(_mapSize)));
+    if (_mapSize == MapSize::Custom)
+    {
+        return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(getBaseName()));
+    }
+    else
+    {
+        return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(asString(_mapSize)));
+    }
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getExportMapSizePrettyName(MapSize _mapSize)
+{
+    assert(_mapSize == MapSize::Custom);
+    return fmt::sprintf("Custom %u x %u", m_width, m_height);
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getExportMapSizePrettyDescription(MapSize _mapSize)
+{
+    assert(_mapSize == MapSize::Custom);
+    return fmt::sprintf("A map with a custom size of %u x %u tiles", m_width, m_height);
 }
 
 //--------------------------------------------------------------------------------------

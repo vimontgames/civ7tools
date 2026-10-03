@@ -1,4 +1,27 @@
 //--------------------------------------------------------------------------------------
+bool ImportMetaData(sqlite3 * db, const string & name, string * value)
+{
+    sqlite3_stmt * stmt;
+    string sql = fmt::sprintf("SELECT Value FROM MetaData WHERE Name = '%s' LIMIT 1;", name);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW)
+        {
+            *value = std::string((const char *)sqlite3_column_text(stmt, 0));
+            LOG_INFO("MetaData \"%s\" = \"%s\"", name.c_str(), value->c_str());
+        }
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::importSQLiteMap(const string & _cwd)
 {
     // Try to open the SQLite database
@@ -42,20 +65,11 @@ bool Map::importSQLiteMap(const string & _cwd)
         return false;
     }
 
-    // Get map name from database
-    //sql = "SELECT Value FROM MetaData WHERE Name = 'DisplayName' LIMIT 1;";
-    //rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    //if (rc == SQLITE_OK)
-    //{
-    //    rc = sqlite3_step(stmt);
-    //    if (rc == SQLITE_ROW)
-    //    {
-    //        m_prettyName = std::string((const char *)sqlite3_column_text(stmt, 0));
-    //        LOG_INFO("Map name is \"%s\"", m_prettyName.c_str());
-    //    }
-    //    sqlite3_finalize(stmt);
-    //}
+    // Do not get map name from database but use folder name instead, as the database name does not always match the folder/mod name
     m_prettyName = getBaseName();
+
+    ImportMetaData(db, "Author", &m_author);
+    ImportMetaData(db, "Description", &m_description);
 
     // Read tile data 
     sql = "SELECT ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId FROM Plots";
