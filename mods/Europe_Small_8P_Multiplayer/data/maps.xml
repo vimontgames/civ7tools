@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<Replace Type="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Kind="KIND_MAPSIZE"/>
+	</Types>
+	<Maps>
+		<Row MapSizeType="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Name="Custom 78 x 46" Description="A map with a custom size of 78 x 46 tiles" DefaultPlayers="8" PlayersLandmass1="6" PlayersLandmass2="2" GridWidth="78" GridHeight="46" NumNaturalWonders="7" OceanWidth="8" LakeSizeCutoff="10" LakeGenerationFrequency="25" Continents="6" StartSectorRows="4" StartSectorCols="3"/>
+	</Maps>
+</Database>
