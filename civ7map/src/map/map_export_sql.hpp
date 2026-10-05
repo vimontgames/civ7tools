@@ -218,6 +218,7 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("import { g_PolarWaterRows } from '/base-standard/maps/map-globals.js';\n");
     data += fmt::sprintf("import { shuffle } from '/base-standard/maps/map-utilities.js';\n");
     data += fmt::sprintf("import { GenerationContext, GenerationPhases, generateMapFeatures } from '/base-standard/scripts/common-generation.js';\n");
+    data += fmt::sprintf("import { assignStartPositionsFromHexMap } from './assign-starting-plots.js';");
     data += fmt::sprintf("import { HexMap } from '/base-standard/scripts/hex-map.js';\n");
     data += fmt::sprintf("import { profileScope } from '/base-standard/scripts/profiling.js';\n");
     data += fmt::sprintf("\n");
@@ -308,7 +309,26 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("  //nameRivers();\n");
     data += fmt::sprintf("  //nameVolcanoes();\n");
     data += fmt::sprintf("  fakeWrapX();\n");
-    data += fmt::sprintf("  const startPositions = assignStartPositions();\n");
+
+    uint tslCount = 0;
+    for (uint i = 0; i < m_civilizations.size(); ++i)
+    {
+        const Civilization & civ = m_civilizations[i];
+        if (civ.tsl.size() > 0)
+        {
+            tslCount++;
+        }
+    }
+
+    if (tslCount > 0)
+    {
+        data += fmt::sprintf("  const startPositions = assignStartPositions();\n");
+    }
+    else
+    {
+        data += fmt::sprintf("const startPositions = assignStartPositionsFromHexMap(voronoiMap.getHexTiles());");
+    }
+
     data += fmt::sprintf("  generateDiscoveries(iWidth, iHeight, startPositions, g_PolarWaterRows);\n");
     data += fmt::sprintf("  civ7MapScope.end();\n");
     data += fmt::sprintf("  console.log(\"End generateMap()\");\n");
@@ -349,16 +369,6 @@ void Map::exportMapDataCiv7Map()
     data += "  return minDistance;\n";
     data += "}\n";
 
-    uint tslCount = 0;
-    for (uint i = 0; i < m_civilizations.size(); ++i)
-    {
-        const Civilization & civ = m_civilizations[i];
-        if (civ.tsl.size() > 0)
-        {
-            tslCount++;
-        }
-    }
-
     data +=  fmt::sprintf("function getRandomCivStartLocation() {\n");
     data +=  fmt::sprintf("  const randomCiv = TerrainBuilder.getRandomNumber(%u, \"CIV TSL RANDOMIZATION\");\n", tslCount);
     data +=  fmt::sprintf("  console.log(randomCiv + \" \");\n");
@@ -390,6 +400,7 @@ void Map::exportMapDataCiv7Map()
     data += "}\n";
 
     data += fmt::sprintf("function assignStartPositions() {\n");
+
     data += fmt::sprintf("  const aliveMajorIds = Players.getAliveMajorIds();\n");
     data += fmt::sprintf("  const startPositions = new Array(aliveMajorIds.length);\n");
     data += fmt::sprintf("  let plotIndex = -1;\n");
