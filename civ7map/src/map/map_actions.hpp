@@ -13,6 +13,34 @@ void Map::BeginPaint()
 }
 
 //--------------------------------------------------------------------------------------
+int Map::getPlotIndex(const int2& coords) const
+{
+    return coords.x + coords.y * m_width;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::getPlotIndex(int x, int y, int * index) const
+{
+    *index = getPlotIndex(int2(x, y));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------
+int2 Map::getPlotCoords(int index) const
+{
+    return int2(index % m_width, index / m_width);
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::getPlotCoords(int index, int * x, int * y) const
+{
+    int2 coords = getPlotCoords(index);
+    *x = coords.x;
+    *y = coords.y;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::getHexSideTile(int _x, int _y, HexTileSide _side, int2 & _result) const
 {
     int offset = (_y & 1) ? 1 : 0;
@@ -66,14 +94,26 @@ void Map::Paint(int _x, int _y)
                     continue;
 
                 if (cellDist(int2(_x,_y), int2(x,y)) >= r)
-                    continue;
-
-                count++;
- 
-                //LOG_WARNING("Paint x = %i to %i (%u tiles)", _x -r + 1, _x + r - 1, count);
+                    continue;   
 
                 Civ7Tile & tileRef = m_civ7TerrainType.get(x, y);
                 Civ7Tile tileCopy = tileRef;
+
+                if (paintWindow->m_protectCoasts)
+                {
+                    if (tileCopy.biome == BiomeType::Marine && tileCopy.terrain == TerrainType::Coast)
+                        continue;
+                }
+
+                if (paintWindow->m_protectOcean)
+                {
+                    if (tileCopy.biome == BiomeType::Marine && tileCopy.terrain == TerrainType::Ocean)
+                        continue;
+                }
+
+                count++;
+
+                //LOG_WARNING("Paint x = %i to %i (%u tiles)", _x -r + 1, _x + r - 1, count);
 
                 if (paintWindow->m_paintContinentType)
                     tileCopy.continent = paintWindow->m_continentType;
@@ -187,6 +227,17 @@ void Map::clearFeatures()
     }
     EndPaint();
     refresh();
+}
+
+//--------------------------------------------------------------------------------------
+int Map::getCivilizationIndexByName(const string & name) const
+{
+    for (uint i = 0; i < m_civilizations.size(); ++i)
+    {
+        if (m_civilizations[i].civilizationName == name)
+            return i;
+    }
+    return -1;
 }
 
 //--------------------------------------------------------------------------------------

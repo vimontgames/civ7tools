@@ -157,7 +157,7 @@ void Map::refresh(bool _reload)
             getFeatureInfo(tile.feature).count++;
 
             // Count continents and landmasses
-            if (tile.continent != ContinentType::None)
+            if (tile.continent != ContinentType::None && (int)tile.continent < m_continents.size())
                 getContinentInfo(tile.continent).count++;
 
             if (tile.landmass < m_landmasses.size())

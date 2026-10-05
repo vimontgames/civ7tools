@@ -22,6 +22,8 @@ public:
     bool m_paintTerrainType = false;
     TerrainType m_terrainType = TerrainType::Flat;
     bool m_autoCoast = true;
+    bool m_protectOcean = false;
+    bool m_protectCoasts = false;
 
     bool m_paintBiomeType = false;
     BiomeType m_biomeType = BiomeType::Tundra;

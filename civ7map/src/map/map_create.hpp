@@ -49,6 +49,74 @@ bool Map::createFolders()
 }
 
 //--------------------------------------------------------------------------------------
+// Create default landmasses
+//--------------------------------------------------------------------------------------
+void Map::CreateDefaultLandmasses()
+{
+    for (uint i = 0; i < 8; ++i)
+        getOrCreateLandmassType(i);
+}
+
+//--------------------------------------------------------------------------------------
+// Create default continents
+// TODO: support creating new continents
+//--------------------------------------------------------------------------------------
+void Map::CreateDefaultContinents()
+{
+    static const char * continentNames[] =
+    {
+        "Africa",
+        "Asia",
+        "Europe",
+        "North_America",
+        "South_America",
+        "Oceania",
+        "Antarctica",
+        "Arctica",
+        //"Amasia",
+        //"America",
+        //"Asiamerica",
+        //"Atlantica",
+        //"Atlantis",
+        //"Australia",
+        //"Avalonia",
+        //"Azania",
+        //"Baltica",
+        //"Cimmeria",
+        //"Columbia",
+        //"Congo_Craton",
+        //"Euramerica",
+        //"Gondwana",
+        //"Kalaharia",
+        //"Kazakhstan",
+        //"Kernorland",
+        //"Kumari_Kandam",
+        //"Laurasia",
+        //"Laurentia",
+        //"Lemuria",
+        //"Mu",
+        //"Nena",
+        //"Novopangaea",
+        //"Nuna",
+        //"Pangaea",
+        //"Pangaea_Ultima",
+        //"Pannotia",
+        //"Rodinia",
+        //"Siberia",
+        //"Terra_Australis",
+        //"Ur",
+        //"Vaalbara",
+        //"Vendian",
+        //"Zealandia"
+    };
+
+    for (const char * name : continentNames)
+    {
+        getOrCreateContinentType(name);
+    }
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height)
 {
     m_mapVersion = _mapVersion;
@@ -66,19 +134,13 @@ bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _na
         break;
     }
 
-    // Create a few landmasses (TODO: create new landmasses while editing)
+    // Get some of them to generate default map
     LandmassType landmass0 = getOrCreateLandmassType(0);
     LandmassType landmass1 = getOrCreateLandmassType(1);
     LandmassType landmass2 = getOrCreateLandmassType(2);
-    LandmassType landmass3 = getOrCreateLandmassType(3);
 
-    // Same for continents
-    ContinentType cont0 = getOrCreateContinentType("CONTINENT_SOUTH_AMERICA");
-    ContinentType cont1 = getOrCreateContinentType("CONTINENT_OCEANIA");
-    ContinentType cont2 = getOrCreateContinentType("CONTINENT_AFRICA");
-    ContinentType cont3 = getOrCreateContinentType("CONTINENT_ASIA");
-    ContinentType cont4 = getOrCreateContinentType("CONTINENT_NORTH_AMERICA");
-    ContinentType cont5 = getOrCreateContinentType("CONTINENT_EUROPE");
+    ContinentType europe = getOrCreateContinentType("Europe");
+    ContinentType northAmerica = getOrCreateContinentType("North_America");
 
     m_mapDataPath = GetMapDataPathFromMapPath(m_mapPath);
     m_modFolder = fmt::sprintf("%s\\mods\\%s", _cwd, _name);
@@ -144,7 +206,7 @@ bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _na
                     tile.biome = BiomeType::Grassland;
                     tile.continent = ContinentType::None;
                     tile.landmass = landmass1;
-                    tile.continent = cont4;
+                    tile.continent = northAmerica;
                 }
             }
         }
@@ -177,7 +239,7 @@ bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _na
                     tile.biome = BiomeType::Grassland;
                     tile.continent = ContinentType::None;
                     tile.landmass = landmass2;
-                    tile.continent = cont5;
+                    tile.continent = europe;
                 }
             }
         }

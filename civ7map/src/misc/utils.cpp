@@ -113,6 +113,12 @@ bool isDigits(const string & str)
 }
 
 //--------------------------------------------------------------------------------------
+bool BeginsWith(const string & _string, const string & _prefix)
+{
+    return _string.size() >= _prefix.size() && _string.compare(0, _prefix.size(), _prefix) == 0;
+}
+
+//--------------------------------------------------------------------------------------
 bool EndsWith(const string & _string, const string & _suffix)
 {
     return _string.size() >= _suffix.size() && _string.compare(_string.size() - _suffix.size(), _suffix.size(), _suffix) == 0;

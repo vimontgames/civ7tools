@@ -194,6 +194,12 @@ public:
 
     bool getHexSideTile(int _x, int _y, HexTileSide _side, int2 & _result) const;
 
+    int getPlotIndex(const int2& coords) const;
+    bool getPlotIndex(int x, int y, int * index) const;
+
+    int2 getPlotCoords(int index) const;
+    bool getPlotCoords(int index, int* x, int* y) const;
+
     bool setTerrain(int _x, int _y, TerrainType _value);
     bool setBiome(int _x, int _y, BiomeType _value);
     bool setFeature(int _x, int _y, FeatureType _value);
@@ -251,11 +257,13 @@ public:
     string getContinentShortName(ContinentType continent) const;
     uint getContinentCount() const;
     ContinentType getOrCreateContinentType(const string& continentS);
+    void CreateDefaultContinents();
 
     string getLandmassName(LandmassType landmass) const;
     string getLandmassShortName(LandmassType landmass) const;
     uint getLandmassCount() const;
     LandmassType getOrCreateLandmassType(const uint landmassIndex);
+    void CreateDefaultLandmasses();
 
     // map_types
     static string getTerrainTypeAsString(TerrainType _type);
@@ -313,6 +321,8 @@ public:
     vector<Civilization> & getCivilizations() { return m_civilizations; }
     const vector<Civilization> & getCivilizations() const { return m_civilizations; }
 
+    int getCivilizationIndexByName(const string & name) const;
+
     void clearResources();
     void clearFeatures();
   
@@ -365,18 +375,44 @@ public:
     // map data
     string                  m_author;
     string                  m_description;
+    bool                    m_useTSL = true;
+
+    bool                    m_randomLakes           = true;
+    bool                    m_randomContinents      = false;
+    bool                    m_randomElevation       = true;
+    bool                    m_randomHills           = true;
+    bool                    m_randomRainfall        = true;
+    bool                    m_randomRivers          = true;
+    bool                    m_randomBiomes          = false;
+    bool                    m_randomNaturalWonders  = true;
+    bool                    m_randomFloodPlains     = false;
+    bool                    m_randomFeatures        = true;
+    bool                    m_randomSnow            = true;
+    bool                    m_randomResources       = true;
+
     u32                     m_width = 0;
     u32                     m_height = 0;
+    i32                     m_topLattitude = 90;
+    i32                     m_bottomLattitude = -90;
     u32                     m_westStart = -1;
     u32                     m_westEnd = -1;
     u32                     m_eastStart = -1;
     u32                     m_eastEnd = -1;
     MapSize                 m_mapSize = (MapSize)-1;
+    bool                    m_wrapX = true;
+    bool                    m_wrapY = false;
     Array2D<Civ7Tile>       m_civ7TerrainType;
     Bitmap                  m_bitmaps[enumCount<MapBitmap>()];
 
     int                     m_editMapOffset[2] = { 0,0 };
     int                     m_editMapSize[2] = { 0,0 };
+
+    bool                    m_useAdvancedSnow = true;
+    int                     m_snowBorderX = 0;
+    int                     m_topSnowRows = 12;
+    int                     m_bottomSnowRows = 0;
+    int                     m_maxSnowWeight = 100;
+    int                     m_snowRandomization = 20;
 
     //map view
     bool                    m_isLoaded = false;

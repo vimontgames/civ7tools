@@ -38,6 +38,24 @@ bool DebugWindow::Draw(const RenderWindow & window)
 
         char temp[4096] = "";
 
+        if (ImGui::BeginCombo("Version", g_map ? asString(g_map->m_mapVersion).c_str() : "", ImGuiComboFlags_HeightLargest))
+        {
+            for (auto val : enumValues<MapVersion>())
+            {
+                bool isSelected = (g_map && g_map->m_mapVersion == val.first);
+                if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
+                {
+                    if (g_map)
+                        g_map->m_mapVersion = val.first;
+                }
+            }
+            ImGui::EndCombo();
+        }
+
+        if (g_map)
+            sprintf_s(temp, "%s", g_map->getModID().c_str());
+        ImGui::InputText("ModID", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+
         if (g_map)
             sprintf_s(temp, "%s", GetFilename(g_map->m_mapPath).c_str());
         ImGui::InputText("Map file", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);

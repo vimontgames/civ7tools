@@ -182,6 +182,7 @@ struct Civ7Tile
     ResourceType  resource  = ResourceType::Random;
     LandmassType  landmass  = 0;
     Elevation     elevation = 0;
+    bool          impassable = false;
 
     inline bool operator==(const Civ7Tile & _other) const
     {
@@ -191,7 +192,8 @@ struct Civ7Tile
             && continent == _other.continent
             && resource  == _other.resource
             && landmass  == _other.landmass
-            && elevation == _other.elevation;
+            && elevation == _other.elevation
+            && impassable == _other.impassable;
     }
 
     inline bool operator!=(const Civ7Tile & _other) const

@@ -147,7 +147,7 @@ float4 getContinentColor(uint index)
     index &= 0xFF;
 
     if (index == 0xFF)
-        return float4(0.0f, 0.0f, 0.5f, (1));
+        return float4(0.05f, 0.05f, 0.15f, (1));
     
     const float4 continentColors[6] =
     {
@@ -156,7 +156,7 @@ float4 getContinentColor(uint index)
         float4(1,1,0,(1)),
         float4(1,0,1,(1)),
         float4(0,1,1,(1)),
-        float4(1,1,1,(1)),
+        float4(0,0,1,(1)),
     };
 
     float4 color = continentColors[index % 6];
@@ -182,21 +182,20 @@ float4 getLandmassColor(uint index)
     index &= 0xFF;
 
     if (index == 0)
-        return float4(0.5f, 0.5f, 0.5f, (1));
+        return float4(0.05f, 0.05f, 0.15f, (1));
 
-    const float4 landmassColors[7] =
+    const float4 continentColors[6] =
     {
-        float4(0,0,1,(1)),
-        float4(0,1,0,(1)),
-        float4(0,1,1,(1)),
         float4(1,0,0,(1)),
-        float4(1,0,1,(1)),
+        float4(0,1,0,(1)),
         float4(1,1,0,(1)),
-        float4(1,1,1,(1))
+        float4(1,0,1,(1)),
+        float4(0,1,1,(1)),
+        float4(0,0,1,(1)),
     };
 
-    float4 color = landmassColors[index % 7];
-    float greyscale = 1.0f - (float(index / 7)) / 4.0f; // max 4 * 7 = 28 landmasses max 
+    float4 color = continentColors[index % 6];
+    float greyscale = 1.0f - (float(index / 6)) / 8.0f; // max 8 * 6 = 48 landmasses max
     color.r *= greyscale;
     color.g *= greyscale;
     color.b *= greyscale;

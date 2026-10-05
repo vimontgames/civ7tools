@@ -129,7 +129,7 @@ string Map::getExportMapSize(MapSize _mapSize)
 {
     if (_mapSize == MapSize::Custom)
     {
-        return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(getBaseName()));
+        return fmt::sprintf("MAPSIZE_%s_%ux%u", ToUpperLabel(getBaseName()), m_width, m_height);
     }
     else
     {

@@ -27,12 +27,18 @@ bool isBorder(float2 uv, out bool isWestBorder, out bool isEastBorder, out bool 
     float2 bottomCell = float2(bottom.x * texSize.x, bottom.y * texSize.y);
     float2 upCell     = float2    (up.x * texSize.x,     up.y * texSize.y);
     
-    if (leftCell.x < west.x && rightCell.x >= west.x || leftCell.x < (west.y + 1) && rightCell.x >= (west.y + 1))
-        isWestBorder = true;
+    if (west.x != -1 && west.y != -1)
+    {
+        if (leftCell.x < west.x && rightCell.x >= west.x || leftCell.x < (west.y + 1) && rightCell.x >= (west.y + 1))
+            isWestBorder = true;
+    }
     
-    if (leftCell.x < east.x && rightCell.x >= east.x || leftCell.x < (east.y + 1) && rightCell.x >= (east.y + 1))
-        isEastBorder = true;
-        
+    if (east.x != -1 && east.y != -1)
+    {
+        if (leftCell.x < east.x && rightCell.x >= east.x || leftCell.x < (east.y + 1) && rightCell.x >= (east.y + 1))
+            isEastBorder = true;
+    }
+    
     ////if ((centerCell.y >= selectedRectBegin.y && centerCell.y <= selectedRectEnd.y + 1))
     //{
     //    if ((leftCell.x < selectedRectBegin.x && rightCell.x > selectedRectBegin.x) || (leftCell.x < selectedRectEnd.x + 1 && rightCell.x > selectedRectEnd.x + 1))

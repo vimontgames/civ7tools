@@ -33,9 +33,17 @@ bool PaintWindow::Draw(const RenderWindow & window)
 
             ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
 
-            ImGui::Checkbox("Auto Coasts###AutoCoast", &m_autoCoast);
+            ImGui::Checkbox("Automatic Coast###AutoCoast", &m_autoCoast);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Add coasts around continents when painting ocean or continents");    
+                ImGui::SetTooltip("Add coasts around continents when painting");   
+
+            ImGui::Checkbox("Protect Coast###mProtectCoast", &m_protectCoasts);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Disable painting on coast tiles (e.g. when painting continent)");
+
+            ImGui::Checkbox("Protect Ocean###mProtectOcean", &m_protectOcean);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Disable painting on ocean tiles (e.g. when painting landmass)");
 
             //ImGui::Checkbox("Force compatible Terrain###FeatureAutoTerrain", &m_featureAutoTerrain);
             //if (ImGui::IsItemHovered())

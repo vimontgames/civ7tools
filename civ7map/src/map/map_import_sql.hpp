@@ -22,6 +22,62 @@ bool ImportMetaData(sqlite3 * db, const string & name, string * value)
 }
 
 //--------------------------------------------------------------------------------------
+bool ImportMetaData(sqlite3 * db, const string & name, bool * value)
+{
+    sqlite3_stmt * stmt;
+    string sql = fmt::sprintf("SELECT Value FROM MetaData WHERE Name = '%s' LIMIT 1;", name);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW)
+        {
+            string s = std::string((const char *)sqlite3_column_text(stmt, 0));
+            
+            if (s == "" || s == "0" || s == "FALSE" || s == "false")
+                *value = false;
+            else
+                *value = true;
+
+            LOG_INFO("MetaData \"%s\" = %s (%s)", name.c_str(), value? "TRUE" : "FALSE", s.c_str());
+        }
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//--------------------------------------------------------------------------------------
+bool ImportMetaData(sqlite3 * db, const string & name, int * value)
+{
+    sqlite3_stmt * stmt;
+    string sql = fmt::sprintf("SELECT Value FROM MetaData WHERE Name = '%s' LIMIT 1;", name);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW)
+        {
+            string s = std::string((const char *)sqlite3_column_text(stmt, 0));
+            if (s.length() > 0)
+            {
+                *value = std::stoi(s);
+                LOG_INFO("MetaData \"%s\" = %d (%s)", name.c_str(), *value, s.c_str());
+            }
+        }
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//--------------------------------------------------------------------------------------
 bool Map::importSQLiteMap(const string & _cwd)
 {
     // Try to open the SQLite database
@@ -66,10 +122,33 @@ bool Map::importSQLiteMap(const string & _cwd)
     }
 
     // Do not get map name from database but use folder name instead, as the database name does not always match the folder/mod name
-    m_prettyName = getBaseName();
+    //m_prettyName = getBaseName();
 
     ImportMetaData(db, "Author", &m_author);
+    ImportMetaData(db, "DisplayName", &m_prettyName);
     ImportMetaData(db, "Description", &m_description);
+    ImportMetaData(db, "RandomLakes", &m_randomLakes);
+    ImportMetaData(db, "RandomFeatures", &m_randomFeatures);
+    ImportMetaData(db, "RandomContinents", &m_randomContinents);
+    ImportMetaData(db, "RandomElevation", &m_randomElevation);
+    ImportMetaData(db, "RandomHills", &m_randomHills);
+    ImportMetaData(db, "RandomRainfall", &m_randomRainfall);
+    ImportMetaData(db, "RandomRivers", &m_randomRivers);
+    ImportMetaData(db, "RandomBiomes", &m_randomBiomes);
+    ImportMetaData(db, "RandomNaturalWonders", &m_randomNaturalWonders);
+    ImportMetaData(db, "RandomFloodPlains", &m_randomFloodPlains);
+    ImportMetaData(db, "RandomSnow", &m_randomSnow);
+    ImportMetaData(db, "RandomFloodPlains", &m_randomResources);
+    ImportMetaData(db, "TopLattitude", &m_topLattitude);
+    ImportMetaData(db, "BottomLattitude", &m_bottomLattitude);
+    ImportMetaData(db, "WrapX", &m_wrapX);
+    ImportMetaData(db, "WrapY", &m_wrapY);
+    ImportMetaData(db, "UseAdvancedSnow", &m_useAdvancedSnow);
+    ImportMetaData(db, "SnowBorderX", &m_snowBorderX);
+    ImportMetaData(db, "TopSnowRows", &m_topSnowRows);
+    ImportMetaData(db, "BottomSnowRows", &m_bottomSnowRows);
+    ImportMetaData(db, "MaxSnowWeight", &m_maxSnowWeight);
+    ImportMetaData(db, "SnowRandomization", &m_snowRandomization);
 
     // Read tile data 
     sql = "SELECT ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId FROM Plots";
@@ -157,6 +236,37 @@ bool Map::importSQLiteMap(const string & _cwd)
             tile.resource = getResourceFromString(plotResourceS, x, y);
 
             m_civ7TerrainType.set(x, y, tile);
+        }
+        sqlite3_finalize(stmt);
+    }
+    else
+    {
+        LOG_ERROR("Failed to prepare SQL statement for tiles: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return false;
+    }
+
+    // Read StartPositions
+    sql = "SELECT Plot, Type, Value FROM StartPositions";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        {
+            int ID = sqlite3_column_int(stmt, 0);
+            int x, y;
+            getPlotCoords(ID, &x, &y);
+
+            string civName = (const char *)sqlite3_column_text(stmt, 2);
+
+            int civIndex = getCivilizationIndexByName(civName);
+            if (-1 != civIndex)
+            {
+                Civilization & civ = m_civilizations[civIndex];
+                civ.tsl.push_back(TSL());
+                TSL & tsl = civ.tsl.back();
+                tsl.pos = int2(x, y);
+            }
         }
         sqlite3_finalize(stmt);
     }

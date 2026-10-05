@@ -75,7 +75,7 @@ void Map::render(RenderWindow & _window)
                     shader->setUniform("overlay", m_overlayTex);
                     shader->setUniform("overlayOpacity", m_showOverlayImage ? m_overlayOpacity : 0.0f);
 
-                    if (m_showHemispheres)
+                    if (m_showHemispheres && m_mapVersion == MapVersion::YnAMP)
                     {
                         shader->setUniform("west", Vector2f((float)m_westStart, (float)m_westEnd));
                         shader->setUniform("east", Vector2f((float)m_eastStart, (float)m_eastEnd));

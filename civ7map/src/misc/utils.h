@@ -15,6 +15,7 @@ bool CopyFile(const string & path, const string & newPath);
 string CapitalizeWords(const string & input);
 bool isDigits(const string & str);
 
+bool BeginsWith(const string & _string, const string & _prefix);
 bool EndsWith(const string & _string, const string & _suffix);
 
 string ToUpperLabel(const string & str);
