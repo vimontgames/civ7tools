@@ -216,8 +216,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
             {
                 if (ImGui::InputInt("Top Rows", &g_map->m_topSnowRows))
                 {
-                    if (g_map->m_topSnowRows > g_map->m_height)
-                        g_map->m_topSnowRows = g_map->m_height;
+                    if (g_map->m_topSnowRows > (int)g_map->m_height)
+                        g_map->m_topSnowRows = (int)g_map->m_height;
                     else if (g_map->m_topSnowRows < 0)
                         g_map->m_topSnowRows = 0;
                 }
@@ -226,8 +226,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
                 if (ImGui::InputInt("Bottom Rows", &g_map->m_bottomSnowRows))
                 {
-                    if (g_map->m_bottomSnowRows > g_map->m_height)
-                        g_map->m_bottomSnowRows = g_map->m_height;
+                    if (g_map->m_bottomSnowRows > (int)g_map->m_height)
+                        g_map->m_bottomSnowRows = (int)g_map->m_height;
                     else if (g_map->m_bottomSnowRows < 0)
                         g_map->m_bottomSnowRows = 0;
                 }
