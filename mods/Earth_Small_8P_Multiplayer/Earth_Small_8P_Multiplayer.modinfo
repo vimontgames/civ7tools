@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="Benualdo-Earth_Small_8P_Multiplayer" version="1" xmlns="ModInfo">
+  <Properties>
+      <Name>Small Earth for 8 players in MP</Name>
+      <Description>A small Earth map for 8 players in MP.</Description>
+      <Authors>Benualdo</Authors>
+      <Package>Mod</Package>
+      <AffectsSavedGames>1</AffectsSavedGames>
+  </Properties>
+  <Dependencies>
+      <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+  </Dependencies>
+  <ActionCriteria>
+      <Criteria id="always">
+          <AlwaysMet></AlwaysMet>
+      </Criteria>
+  </ActionCriteria>
+  <ActionGroups>
+      <ActionGroup id="Benualdo-Earth_Small_8P_Multiplayer-shell" scope="shell" criteria="always">
+          <Actions>
+              <UpdateDatabase>
+                  <Item>config/config.xml</Item>
+              </UpdateDatabase>
+              <UpdateText>
+                  <Item>text/en_us/Earth_Small_8P_Multiplayer_Text.xml</Item>
+              </UpdateText>
+          </Actions>
+      </ActionGroup>
+      <ActionGroup id="Benualdo-Earth_Small_8P_Multiplayer-game" scope="game" criteria="always">
+          <Actions>
+              <UpdateDatabase>
+                  <Item>data/maps.xml</Item>
+              </UpdateDatabase>
+              <UpdateText>
+                  <Item>text/en_us/Earth_Small_8P_Multiplayer_Text.xml</Item>
+              </UpdateText>
+          </Actions>
+      </ActionGroup>
+  </ActionGroups>
+  <LocalizedText>
+      <File>text/en_us/Earth_Small_8P_Multiplayer_Text.xml</File>
+  </LocalizedText>
+</Mod>
