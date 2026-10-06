@@ -271,7 +271,7 @@ bool Map::importYnAMP(const string & data)
         // save map size
         m_width = mapWidth;
         m_height = mapHeight;
-        m_mapSize = getMapSize(mapWidth, mapHeight);
+        m_mapSize = getMapSize(mapWidth, mapHeight, false);
         m_editMapSize[0] = m_width;
         m_editMapSize[1] = m_height;
 

@@ -484,15 +484,18 @@ uint Map::getLandmassCount() const
 }
 
 //--------------------------------------------------------------------------------------
-MapSize Map::getMapSize(uint _width, uint _height)
+MapSize Map::getMapSize(uint _width, uint _height, bool _forceCustomMapSize)
 {
-    for (auto val : enumValues<MapSize>())
+    if (!_forceCustomMapSize)
     {
-        const int index = (int)val.first;
-        if (index >= 0)
+        for (auto val : enumValues<MapSize>())
         {
-            if (g_mapSizes[index][0] == _width && g_mapSizes[index][1] == _height)
-                return val.first;
+            const int index = (int)val.first;
+            if (index >= 0)
+            {
+                if (g_mapSizes[index][0] == _width && g_mapSizes[index][1] == _height)
+                    return val.first;
+            }
         }
     }
     return MapSize::Custom;

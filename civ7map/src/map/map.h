@@ -207,7 +207,7 @@ public:
     bool setResource(int _x, int _y, ResourceType _value);
     bool setLandmass(int _x, int _y, LandmassType _value);
 
-    bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height);
+    bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize);
     bool createFolders();
 
     // map_import.hpp
@@ -286,11 +286,11 @@ public:
     string getLocMapName() const;
     string getLocMapDescription() const;
 
-    string getExportMapSize(MapSize _mapSize);
-    string getExportMapSizePrettyName(MapSize _mapSize);
-    string getExportMapSizePrettyDescription(MapSize _mapSize);
+    string getExportMapSize();
+    string getExportMapSizePrettyName();
+    string getExportMapSizePrettyDescription();
 
-    static MapSize getMapSize(uint _width, uint _height);
+    static MapSize getMapSize(uint _width, uint _height, bool _forceCustomMapSize);
 
     static Era getEra(Civilization _civ);
 
@@ -400,6 +400,7 @@ public:
     u32                     m_eastStart = -1;
     u32                     m_eastEnd = -1;
     MapSize                 m_mapSize = (MapSize)-1;
+    bool                    m_forceCustomMapSize = false;
     bool                    m_wrapX = true;
     bool                    m_wrapY = false;
     Array2D<Civ7Tile>       m_civ7TerrainType;

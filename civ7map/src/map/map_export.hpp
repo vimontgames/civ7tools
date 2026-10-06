@@ -127,29 +127,29 @@ void Map::exportModInfo()
 }
 
 //--------------------------------------------------------------------------------------
-string Map::getExportMapSize(MapSize _mapSize)
+string Map::getExportMapSize()
 {
-    if (_mapSize == MapSize::Custom)
+    if (m_mapSize == MapSize::Custom)
     {
         return fmt::sprintf("MAPSIZE_%s_%ux%u", ToUpperLabel(getBaseName()), m_width, m_height);
     }
     else
     {
-        return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(asString(_mapSize)));
+        return fmt::sprintf("MAPSIZE_%s", ToUpperLabel(asString(m_mapSize)));
     }
 }
 
 //--------------------------------------------------------------------------------------
-string Map::getExportMapSizePrettyName(MapSize _mapSize)
+string Map::getExportMapSizePrettyName()
 {
-    assert(_mapSize == MapSize::Custom);
+    assert(m_mapSize == MapSize::Custom);
     return fmt::sprintf("Custom %u x %u", m_width, m_height);
 }
 
 //--------------------------------------------------------------------------------------
-string Map::getExportMapSizePrettyDescription(MapSize _mapSize)
+string Map::getExportMapSizePrettyDescription()
 {
-    assert(_mapSize == MapSize::Custom);
+    assert(m_mapSize == MapSize::Custom);
     return fmt::sprintf("A map with a custom size of %u x %u tiles", m_width, m_height);
 }
 
@@ -182,8 +182,8 @@ void Map::exportConfig()
     data += fmt::sprintf("        <Row File=\"{%s}maps/%s\" Name=\"%s\" Description=\"%s\" SortIndex=\"100\"/>\n", getModID(), GetFilename(m_mapPath), getLocMapName(), getLocMapDescription());
     data += "    </Maps>\n";
     data += "    <SupportedValuesByMap>\n";
-    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize(m_mapSize));
-    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"DistantLandsMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize(m_mapSize));
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"StandardMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize());
+    data += fmt::sprintf("        <Row Map=\"{%s}maps/%s\" Domain=\"DistantLandsMapSizes\" Value=\"%s\"/>\n", getModID(), GetFilename(m_mapPath), getExportMapSize());
     data += "    </SupportedValuesByMap>\n";
     data += "</Database>\n";
 

@@ -112,7 +112,7 @@ void Map::exportConfigCiv7Map()
     std::string data;
 
     // TODO: custom map size
-    string mapSize = getExportMapSize(m_mapSize);
+    string mapSize = getExportMapSize();
 
     data += fmt::sprintf("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     data += fmt::sprintf("<Database>\n");
@@ -126,12 +126,12 @@ void Map::exportConfigCiv7Map()
 
     if (m_mapSize == MapSize::Custom)
     {
-        string mapSizePrettyName = getExportMapSizePrettyName(m_mapSize);
-        string mapSizePrettyDescription = getExportMapSizePrettyDescription(m_mapSize);
+        string mapSizePrettyName = getExportMapSizePrettyName();
+        string mapSizePrettyDescription = getExportMapSizePrettyDescription();
 
         data += fmt::sprintf("	<MapSizes>\n");
-        data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"8\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
-        data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"8\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
+        data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
+        data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
         data += fmt::sprintf("	</MapSizes>\n");
     }
 
@@ -175,9 +175,9 @@ void Map::exportMapsCiv7Map()
 
     if (m_mapSize == MapSize::Custom)
     {
-        string mapSizeName = getExportMapSize(m_mapSize);
-        string mapSizePrettyName = getExportMapSizePrettyName(m_mapSize);
-        string mapSizePrettyDescription = getExportMapSizePrettyDescription(m_mapSize);
+        string mapSizeName = getExportMapSize();
+        string mapSizePrettyName = getExportMapSizePrettyName();
+        string mapSizePrettyDescription = getExportMapSizePrettyDescription();
 
         data += fmt::sprintf("	<Types>\n");
         data += fmt::sprintf("		<Replace Type=\"%s\" Kind=\"KIND_MAPSIZE\"/>\n", mapSizeName);
@@ -720,7 +720,7 @@ void Map::exportSQLiteMap()
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc == SQLITE_OK)
     {
-        string mapSize = getExportMapSize(m_mapSize).c_str();
+        string mapSize = getExportMapSize().c_str();
 
         sqlite3_bind_text(stmt, 1, "Default", -1, SQLITE_STATIC);   // ID
         sqlite3_bind_int(stmt, 2, m_width);
@@ -763,9 +763,9 @@ void Map::exportSQLiteMap()
     ExportMetaData(db, "RandomFloodPlains", m_randomResources);
     ExportMetaData(db, "TopLattitude", m_topLattitude);
     ExportMetaData(db, "BottomLattitude", m_bottomLattitude);
+    ExportMetaData(db, "ForceCustomMapSize", m_forceCustomMapSize);
     ExportMetaData(db, "WrapX", m_wrapX);
     ExportMetaData(db, "WrapY", m_wrapY);
-
     ExportMetaData(db, "UseAdvancedSnow", m_useAdvancedSnow);
     ExportMetaData(db, "SnowBorderX", m_snowBorderX);
     ExportMetaData(db, "TopSnowRows", m_topSnowRows);

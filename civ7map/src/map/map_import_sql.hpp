@@ -90,39 +90,7 @@ bool Map::importSQLiteMap(const string & _cwd)
         return false;
     }
 
-    // Get map size from the database
-    const char * sql = "SELECT width, height FROM Map LIMIT 1;";
-    sqlite3_stmt * stmt;
-    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    if (rc == SQLITE_OK)
-    {
-        rc = sqlite3_step(stmt);
-        if (rc == SQLITE_ROW)
-        {
-            uint mapWidth = sqlite3_column_int(stmt, 0);
-            uint mapHeight = sqlite3_column_int(stmt, 1);
-
-            // Set up the tile array
-            m_width = mapWidth;
-            m_height = mapHeight;
-            m_mapSize = getMapSize(mapWidth, mapHeight);
-            m_editMapSize[0] = m_width;
-            m_editMapSize[1] = m_height;
-
-            LOG_INFO("Map size is %ux%u", mapWidth, mapHeight);
-            m_civ7TerrainType.SetSize(m_width, m_height);
-        }
-        sqlite3_finalize(stmt);
-    }
-    else
-    {
-        LOG_ERROR("Failed to prepare SQL statement: %s", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return false;
-    }
-
-    // Do not get map name from database but use folder name instead, as the database name does not always match the folder/mod name
-    //m_prettyName = getBaseName();
+    // Start with metadata as it may change the way data are loaded
 
     ImportMetaData(db, "Author", &m_author);
     ImportMetaData(db, "DisplayName", &m_prettyName);
@@ -141,6 +109,7 @@ bool Map::importSQLiteMap(const string & _cwd)
     ImportMetaData(db, "RandomFloodPlains", &m_randomResources);
     ImportMetaData(db, "TopLattitude", &m_topLattitude);
     ImportMetaData(db, "BottomLattitude", &m_bottomLattitude);
+    ImportMetaData(db, "ForceCustomMapSize", &m_forceCustomMapSize);
     ImportMetaData(db, "WrapX", &m_wrapX);
     ImportMetaData(db, "WrapY", &m_wrapY);
     ImportMetaData(db, "UseAdvancedSnow", &m_useAdvancedSnow);
@@ -149,6 +118,37 @@ bool Map::importSQLiteMap(const string & _cwd)
     ImportMetaData(db, "BottomSnowRows", &m_bottomSnowRows);
     ImportMetaData(db, "MaxSnowWeight", &m_maxSnowWeight);
     ImportMetaData(db, "SnowRandomization", &m_snowRandomization);
+
+    // Get map size from the database
+    const char * sql = "SELECT width, height FROM Map LIMIT 1;";
+    sqlite3_stmt * stmt;
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc == SQLITE_OK)
+    {
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW)
+        {
+            uint mapWidth = sqlite3_column_int(stmt, 0);
+            uint mapHeight = sqlite3_column_int(stmt, 1);
+
+            // Set up the tile array
+            m_width = mapWidth;
+            m_height = mapHeight;
+            m_mapSize = getMapSize(mapWidth, mapHeight, m_forceCustomMapSize);
+            m_editMapSize[0] = m_width;
+            m_editMapSize[1] = m_height;
+
+            LOG_INFO("Map size is %ux%u", mapWidth, mapHeight);
+            m_civ7TerrainType.SetSize(m_width, m_height);
+        }
+        sqlite3_finalize(stmt);
+    }
+    else
+    {
+        LOG_ERROR("Failed to prepare SQL statement: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return false;
+    }
 
     // Read tile data 
     sql = "SELECT ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId FROM Plots";

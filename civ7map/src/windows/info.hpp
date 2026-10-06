@@ -28,14 +28,18 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
         char temp[4096];
 
-        //ImGui::PushItemWidth(ImGui::GetFontSize() * 10.0f); 
+        ImGui::PushItemWidth(itemWidth + ImGui::GetFrameHeight());
 
         sprintf_s(temp, "%s", g_map->getBaseName().c_str());
-        ImGui::InputText("Base Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("This is the internal name of the map. It is used for folder and file names and to generate ModID.");
 
         sprintf_s(temp, "%s", g_map->getPrettyName().c_str());
-        if (ImGui::InputText("Pretty Name", temp, sizeof(temp)))
+        if (ImGui::InputText("Display Name", temp, sizeof(temp)))
             g_map->m_prettyName = temp;
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("This is the name of the map displayed in-game.");
 
         sprintf_s(temp, "%s", g_map->getAuthor().c_str());
         if (ImGui::InputText("Author", temp, sizeof(temp)))
@@ -47,11 +51,14 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Randomize", ImGuiTreeNodeFlags_Framed))
         {
+            const auto x = ImGui::GetCursorPosX();
+
             ImGui::SetNextItemWidth(itemWidth);
             ImGui::Checkbox("Resources", &g_map->m_randomResources);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place resources randomly when generating map");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Features", &g_map->m_randomFeatures);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place features randomly when generating map");
@@ -60,7 +67,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("Lakes", &g_map->m_randomLakes);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place lakes randomly when generating map");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Elevation", &g_map->m_randomElevation);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Change elevation when generating map");
@@ -69,7 +77,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("Hills", &g_map->m_randomHills);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place hills randomly when generating map");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Rainfall", &g_map->m_randomRainfall);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place rainfalls randomly when generating map");
@@ -78,7 +87,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("FloodPlains", &g_map->m_randomFloodPlains);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place flood plains randomly when generating map");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Rivers", &g_map->m_randomRivers);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place rivers randomly when generating map");
@@ -87,7 +97,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("Continents", &g_map->m_randomContinents);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Select continents randomly when generating map");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Biomes", &g_map->m_randomBiomes);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Select biomes randomly when generating map");
@@ -104,7 +115,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Size", ImGuiTreeNodeFlags_Framed))
         {
-            bool isValidMapSize = g_map->getMapSize(g_map->m_editMapSize[0], g_map->m_editMapSize[1]) != MapSize::Custom;
+            bool isValidMapSize = g_map->getMapSize(g_map->m_editMapSize[0], g_map->m_editMapSize[1], false) != MapSize::Custom || !g_map->m_forceCustomMapSize;
 
             ImGui::InputInt2("Size", g_map->m_editMapSize, ImGuiInputTextFlags_EnterReturnsTrue);
 
@@ -153,6 +164,20 @@ bool InfoWindow::Draw(const RenderWindow & window)
                     ImGui::SetTooltip("Map is using a custom map size");
             }   
 
+            PushDisabled(true);
+            {
+                if (ImGui::BeginCombo("###Size", asString(g_map->m_mapSize).c_str()))
+                    ImGui::EndCombo();
+            }
+            PopDisabled();
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Custom", &g_map->m_forceCustomMapSize))
+            {
+                g_map->m_mapSize = Map::getMapSize(g_map->m_width, g_map->m_height, g_map->m_forceCustomMapSize);
+            }
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Force export to use custom map size.\nThis is useful to allow up to 8 players in Multi-Players for \"Tiny\" or\n\"Small\" maps or up to 24 players on all map size in Single-Player.");
+
             if (ImGui::InputInt2("Offset", g_map->m_editMapOffset, ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 g_map->m_mapOffset[0].x = g_map->m_editMapOffset[0];
@@ -165,11 +190,13 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 g_map->refresh();
             }
 
+            const auto x = ImGui::GetCursorPosX();
             ImGui::SetNextItemWidth(itemWidth);
             ImGui::Checkbox("Wrap X", &g_map->m_wrapX);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Wrap map horizontally. Beware that disabling horizontal wrap may cause minimap issues, use impassable terrain + snow horizontal borders instead");
-            ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + itemWidth);
             ImGui::Checkbox("Wrap Y", &g_map->m_wrapY);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Wrap map vertically");
@@ -299,7 +326,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("Export TSL", &g_map->m_useTSL);
         }
 
-        //ImGui::PopItemWidth();
+        ImGui::PopItemWidth();
     }
 
     ImGui::End();

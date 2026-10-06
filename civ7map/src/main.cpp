@@ -40,10 +40,12 @@ bool g_createMap = false;
 MapVersion g_mapVersion = MapVersion::Invalid;
 
 string g_newMapName = "Empty";
+string g_newMapPrettyName = "My empty map";
 string g_newMapAuthor = "User";
 string g_newMapDescription = "A beautiful map made with Civ7Map";
 
 int g_newMapSize[2] = { 84, 54 };
+bool g_newMapIsCustomSize = false;
 MapSize g_newMapSizeType = MapSize::Standard;
 
 vector<Map*> g_maps;
@@ -749,6 +751,15 @@ int main()
                 ImGui::SetNextItemWidth(textWidth);
                 if (ImGui::InputText("Name", temp, sizeof(temp)))
                     g_newMapName = fmt::sprintf("%s", temp);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("This is the internal name of the map. It is used for folder and file names and to generate ModID.");
+
+                sprintf(temp, "%s", g_newMapPrettyName.c_str());
+                ImGui::SetNextItemWidth(textWidth);
+                if (ImGui::InputText("Display Name", temp, sizeof(temp)))
+                    g_newMapPrettyName = fmt::sprintf("%s", temp);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("This is the name of the map displayed in-game.");
 
                 sprintf(temp, "%s", g_newMapAuthor.c_str());
                 ImGui::SetNextItemWidth(textWidth);
@@ -770,10 +781,15 @@ int main()
                         {
                             g_newMapSizeType = val.first;
 
-                            if ((int)val.first >= 0)
+                            if (val.first == MapSize::Custom)
+                            {
+                                g_newMapIsCustomSize = true;
+                            }
+                            else
                             {
                                 g_newMapSize[0] = g_mapSizes[(int)val.first][0];
                                 g_newMapSize[1] = g_mapSizes[(int)val.first][1];
+                                g_newMapIsCustomSize = false;
                             }
                         }
                     }
@@ -829,7 +845,7 @@ int main()
                     SetCurrentDirectory(g_currentWorkingDirectory.c_str());
                     ImGui::GetIO().IniFilename = g_saveImGuiIniPath;
 
-                    if (newMap->create(g_mapVersion, g_currentWorkingDirectory, g_newMapName, g_newMapAuthor, g_newMapDescription, g_newMapSize[0], g_newMapSize[1]))
+                    if (newMap->create(g_mapVersion, g_currentWorkingDirectory, g_newMapName, g_newMapAuthor, g_newMapDescription, g_newMapSize[0], g_newMapSize[1], g_newMapIsCustomSize))
                     {
                         g_maps.push_back(newMap);
                         g_map = newMap;

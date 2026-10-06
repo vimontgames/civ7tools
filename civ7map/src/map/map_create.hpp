@@ -117,7 +117,7 @@ void Map::CreateDefaultContinents()
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height)
+bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize)
 {
     m_mapVersion = _mapVersion;
 
@@ -154,7 +154,8 @@ bool Map::create(MapVersion _mapVersion, const string & _cwd, const string & _na
 
     m_width = _width;
     m_height = _height;
-    m_mapSize = getMapSize(_width, _height);
+    m_forceCustomMapSize = _customSize;
+    m_mapSize = getMapSize(_width, _height, m_forceCustomMapSize);
 
     m_editMapSize[0] = m_width;
     m_editMapSize[1] = m_height;
