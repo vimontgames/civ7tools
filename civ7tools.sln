@@ -47,17 +47,61 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{CDE01A10-4
 		mods\Civ7-YnAMP\modules\data\tables.sql = mods\Civ7-YnAMP\modules\data\tables.sql
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Colonization", "mods\Colonization\Colonization.vcxproj", "{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Europe_Small_8P_Multiplayer", "Europe_Small_8P_Multiplayer", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Europe_Small_8P_Multiplayer\Europe_Small_8P_Multiplayer.modinfo = mods\Europe_Small_8P_Multiplayer\Europe_Small_8P_Multiplayer.modinfo
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwiceMoreBeliefs", "mods\TwiceMoreBeliefs\TwiceMoreBeliefs.vcxproj", "{6633F30C-D26B-469D-A8F4-D4BAD01AA505}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{7A762265-D6FE-4F0F-AEF5-BED990F7A3C0}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Europe_Small_8P_Multiplayer\config\config.xml = mods\Europe_Small_8P_Multiplayer\config\config.xml
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Civ7-YnAMP", "mods\Civ7-YnAMP\Civ7-YnAMP.vcxproj", "{5138E0FC-B88D-465E-A5EF-7D2430938F18}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{84048A9D-A975-4470-99D9-F24D7937FEB0}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Europe_Small_8P_Multiplayer\data\maps.xml = mods\Europe_Small_8P_Multiplayer\data\maps.xml
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EarthStandard", "mods\EarthStandard\EarthStandard.vcxproj", "{9683026A-96A1-40E8-B513-9677442C59DB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "text", "text", "{22B34D08-97C2-4BCA-8667-06318B5DDC39}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EarthSmall", "mods\EarthSmall\EarthSmall.vcxproj", "{096CC7D7-7FDD-4F02-A683-418E97FD94B1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en_us", "en_us", "{FC1AB7B6-4277-490F-9C21-B87A3401E9E3}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Europe_Small_8P_Multiplayer\text\en_us\Europe_Small_8P_Multiplayer_Text.xml = mods\Europe_Small_8P_Multiplayer\text\en_us\Europe_Small_8P_Multiplayer_Text.xml
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gauls", "mods\Gauls\Gauls.vcxproj", "{05A527C7-13FF-4AAF-8937-90A21F7F14B4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{750687DE-412B-4D10-9997-68200AC54225}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Europe_Small_8P_Multiplayer\maps\Europe_Small_8P_Multiplayer.Civ7Map = mods\Europe_Small_8P_Multiplayer\maps\Europe_Small_8P_Multiplayer.Civ7Map
+		mods\Europe_Small_8P_Multiplayer\maps\Europe_Small_8P_Multiplayer.js = mods\Europe_Small_8P_Multiplayer\maps\Europe_Small_8P_Multiplayer.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Earth_Small_8P_Multiplayer", "Earth_Small_8P_Multiplayer", "{C3080638-9B9C-406B-BDD5-B5582F5C1D64}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Earth_Small_8P_Multiplayer\Earth_Small_8P_Multiplayer.modinfo = mods\Earth_Small_8P_Multiplayer\Earth_Small_8P_Multiplayer.modinfo
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{44998A72-9800-482F-8636-F63D564195BE}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Earth_Small_8P_Multiplayer\config\config.xml = mods\Earth_Small_8P_Multiplayer\config\config.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maps", "maps", "{C8E95071-D2AB-4C23-8C91-119E47134350}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Earth_Small_8P_Multiplayer\maps\Earth_Small_8P_Multiplayer.Civ7Map = mods\Earth_Small_8P_Multiplayer\maps\Earth_Small_8P_Multiplayer.Civ7Map
+		mods\Earth_Small_8P_Multiplayer\maps\Earth_Small_8P_Multiplayer.js = mods\Earth_Small_8P_Multiplayer\maps\Earth_Small_8P_Multiplayer.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{5FC6AFC5-3994-4C24-B43D-40986D885B15}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Earth_Small_8P_Multiplayer\data\maps.xml = mods\Earth_Small_8P_Multiplayer\data\maps.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "text", "text", "{45122DCC-2209-44BE-8942-DF4904ED0AD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en_us", "en_us", "{36C03F47-9E79-4880-B50B-4DB32D6124C0}"
+	ProjectSection(SolutionItems) = preProject
+		mods\Earth_Small_8P_Multiplayer\text\en_us\Earth_Small_8P_Multiplayer_Text.xml = mods\Earth_Small_8P_Multiplayer\text\en_us\Earth_Small_8P_Multiplayer_Text.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,54 +119,6 @@ Global
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x64.Build.0 = Release|x64
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x86.ActiveCfg = Release|x64
 		{15DA6D26-F905-4922-89CC-A8D6DDDFC591}.Release|x86.Build.0 = Release|x64
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x64.ActiveCfg = Debug|x64
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x64.Build.0 = Debug|x64
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x86.ActiveCfg = Debug|Win32
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Debug|x86.Build.0 = Debug|Win32
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x64.ActiveCfg = Release|x64
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x64.Build.0 = Release|x64
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x86.ActiveCfg = Release|Win32
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3}.Release|x86.Build.0 = Release|Win32
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x64.ActiveCfg = Debug|x64
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x64.Build.0 = Debug|x64
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x86.ActiveCfg = Debug|Win32
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Debug|x86.Build.0 = Debug|Win32
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x64.ActiveCfg = Release|x64
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x64.Build.0 = Release|x64
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x86.ActiveCfg = Release|Win32
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505}.Release|x86.Build.0 = Release|Win32
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x64.ActiveCfg = Debug|x64
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x64.Build.0 = Debug|x64
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x86.ActiveCfg = Debug|Win32
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Debug|x86.Build.0 = Debug|Win32
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x64.ActiveCfg = Release|x64
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x64.Build.0 = Release|x64
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x86.ActiveCfg = Release|Win32
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18}.Release|x86.Build.0 = Release|Win32
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Debug|x64.ActiveCfg = Debug|x64
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Debug|x64.Build.0 = Debug|x64
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Debug|x86.ActiveCfg = Debug|Win32
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Debug|x86.Build.0 = Debug|Win32
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Release|x64.ActiveCfg = Release|x64
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Release|x64.Build.0 = Release|x64
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Release|x86.ActiveCfg = Release|Win32
-		{9683026A-96A1-40E8-B513-9677442C59DB}.Release|x86.Build.0 = Release|Win32
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Debug|x64.ActiveCfg = Debug|x64
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Debug|x64.Build.0 = Debug|x64
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Debug|x86.ActiveCfg = Debug|Win32
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Debug|x86.Build.0 = Debug|Win32
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Release|x64.ActiveCfg = Release|x64
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Release|x64.Build.0 = Release|x64
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Release|x86.ActiveCfg = Release|Win32
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1}.Release|x86.Build.0 = Release|Win32
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Debug|x64.ActiveCfg = Debug|x64
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Debug|x64.Build.0 = Debug|x64
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Debug|x86.ActiveCfg = Debug|Win32
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Debug|x86.Build.0 = Debug|Win32
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Release|x64.ActiveCfg = Release|x64
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Release|x64.Build.0 = Release|x64
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Release|x86.ActiveCfg = Release|Win32
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,12 +132,18 @@ Global
 		{9CC588D8-463E-4105-A897-925874972D64} = {6BB35210-3436-49D1-AAA4-215360FB1270}
 		{4503D203-5166-4D96-A49E-CD6811876A6B} = {9CC588D8-463E-4105-A897-925874972D64}
 		{CDE01A10-4FED-4B6C-BBA2-01C6830778E2} = {6BB35210-3436-49D1-AAA4-215360FB1270}
-		{F6A54AB1-A25A-4A09-BEFB-F07E283B9FB3} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{6633F30C-D26B-469D-A8F4-D4BAD01AA505} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{5138E0FC-B88D-465E-A5EF-7D2430938F18} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{9683026A-96A1-40E8-B513-9677442C59DB} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{096CC7D7-7FDD-4F02-A683-418E97FD94B1} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
-		{05A527C7-13FF-4AAF-8937-90A21F7F14B4} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{7A762265-D6FE-4F0F-AEF5-BED990F7A3C0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{84048A9D-A975-4470-99D9-F24D7937FEB0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{22B34D08-97C2-4BCA-8667-06318B5DDC39} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FC1AB7B6-4277-490F-9C21-B87A3401E9E3} = {22B34D08-97C2-4BCA-8667-06318B5DDC39}
+		{750687DE-412B-4D10-9997-68200AC54225} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C3080638-9B9C-406B-BDD5-B5582F5C1D64} = {1BAF69DA-B88E-40CD-B36D-1432342A3D32}
+		{44998A72-9800-482F-8636-F63D564195BE} = {C3080638-9B9C-406B-BDD5-B5582F5C1D64}
+		{C8E95071-D2AB-4C23-8C91-119E47134350} = {C3080638-9B9C-406B-BDD5-B5582F5C1D64}
+		{5FC6AFC5-3994-4C24-B43D-40986D885B15} = {C3080638-9B9C-406B-BDD5-B5582F5C1D64}
+		{45122DCC-2209-44BE-8942-DF4904ED0AD6} = {C3080638-9B9C-406B-BDD5-B5582F5C1D64}
+		{36C03F47-9E79-4880-B50B-4DB32D6124C0} = {45122DCC-2209-44BE-8942-DF4904ED0AD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B29936D3-D786-4B14-82AD-70BEBC6F7AF9}
