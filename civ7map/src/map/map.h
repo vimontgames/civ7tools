@@ -325,6 +325,7 @@ public:
 
     void clearResources();
     void clearFeatures();
+    void LogMissingAndDuplicateTSLs();
   
     void copyRect(sf::Vector2i _begin, sf::Vector2i _end);
     void pasteRect(sf::Vector2i _origin);

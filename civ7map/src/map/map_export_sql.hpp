@@ -218,7 +218,7 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("import { g_PolarWaterRows } from '/base-standard/maps/map-globals.js';\n");
     data += fmt::sprintf("import { shuffle } from '/base-standard/maps/map-utilities.js';\n");
     data += fmt::sprintf("import { GenerationContext, GenerationPhases, generateMapFeatures } from '/base-standard/scripts/common-generation.js';\n");
-    data += fmt::sprintf("import { assignStartPositionsFromHexMap } from './assign-starting-plots.js';");
+    data += fmt::sprintf("import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';");
     data += fmt::sprintf("import { HexMap } from '/base-standard/scripts/hex-map.js';\n");
     data += fmt::sprintf("import { profileScope } from '/base-standard/scripts/profiling.js';\n");
     data += fmt::sprintf("\n");
@@ -326,7 +326,7 @@ void Map::exportMapDataCiv7Map()
     }
     else
     {
-        data += fmt::sprintf("const startPositions = assignStartPositionsFromHexMap(voronoiMap.getHexTiles());");
+        data += fmt::sprintf("const startPositions = assignStartPositionsFromHexMap(hexMap);");
     }
 
     data += fmt::sprintf("  generateDiscoveries(iWidth, iHeight, startPositions, g_PolarWaterRows);\n");

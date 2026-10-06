@@ -230,6 +230,63 @@ void Map::clearFeatures()
 }
 
 //--------------------------------------------------------------------------------------
+void Map::LogMissingAndDuplicateTSLs()
+{
+    uint noTSLCount = 0;
+    uint dupTSLCount = 0;
+
+    const auto & civilizations = getCivilizations();
+
+    for (uint i = 0; i < civilizations.size(); ++i)
+    {
+        const Civilization & civ = civilizations[i];
+        if (civ.civilizationName.length() == 0)
+            continue;
+
+        if (civ.tsl.size() == 0)
+            noTSLCount++;
+        else if (civ.tsl.size() > 1)
+            dupTSLCount++;
+    }
+
+    if (noTSLCount > 0)
+    {
+        uint index = 0;
+        LOG_WARNING("Found %u Civilizations with no TSL:", noTSLCount);
+        for (uint i = 0; i < civilizations.size(); ++i)
+        {
+            const Civilization & civ = civilizations[i];
+            if (civ.civilizationName.length() == 0)
+                continue;
+
+            if (civ.tsl.size() == 0)
+            {
+                LOG_WARNING("#%2u - \"%s\" (%s)", index, civ.userFriendlyName.c_str(), civ.civilizationName.c_str());
+                index++;
+            }
+        }
+    }
+
+    if (dupTSLCount > 0)
+    {
+        uint index = 0;
+        LOG_ERROR("Found %u Civilizations has more than one TSL:", noTSLCount);
+        for (uint i = 0; i < civilizations.size(); ++i)
+        {
+            const Civilization & civ = civilizations[i];
+            if (civ.civilizationName.length() == 0)
+                continue;
+
+            if (civ.tsl.size() > 1)
+            {
+                LOG_ERROR("#%2u - \"%s\" (%s)", index, civ.userFriendlyName.c_str(), civ.civilizationName.c_str());
+                index++;
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
 int Map::getCivilizationIndexByName(const string & name) const
 {
     for (uint i = 0; i < m_civilizations.size(); ++i)

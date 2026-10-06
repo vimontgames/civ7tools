@@ -16,6 +16,7 @@ void Map::exportFiles(const string & _cwd, bool _useModTemplate)
     {
         case MapVersion::YnAMP:
         {
+            LogMissingAndDuplicateTSLs();
             createFolders();
             exportFilesYnAMP(_cwd, _useModTemplate);
         }
@@ -23,6 +24,7 @@ void Map::exportFiles(const string & _cwd, bool _useModTemplate)
 
         case MapVersion::Civ7Map:
         {
+            LogMissingAndDuplicateTSLs();
             createFolders();
             exportFilesCiv7Map(_cwd, _useModTemplate);
         }

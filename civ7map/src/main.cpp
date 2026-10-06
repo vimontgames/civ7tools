@@ -92,8 +92,8 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 49;
-const char * g_appName = "Civ7Map";
+const int g_version_minor = 51;
+const char * g_appName = "Benualdo's Civ7Map Editor";
 
 //--------------------------------------------------------------------------------------
 int main() 

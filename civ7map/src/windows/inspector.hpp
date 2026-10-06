@@ -325,6 +325,11 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                             civilizations[0].tsl.push_back(newTSL);
                             map->refresh();
                         }
+                        ImGui::SameLine();
+                        if (ImGui::Button("Missing TSLs"))
+                        {
+                            g_map->LogMissingAndDuplicateTSLs();
+                        }
                     }
                 }
             }
