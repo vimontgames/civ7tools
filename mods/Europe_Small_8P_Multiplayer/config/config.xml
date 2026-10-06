@@ -8,8 +8,8 @@
 		<Row AgeType="AGE_MODERN" Domain="StandardMaps" Value="{Benualdo-Europe_Small_8P_Multiplayer}maps/Europe_Small_8P_Multiplayer.Civ7Map"/>
 	</UnsupportedValuesByAge>
 	<MapSizes>
-		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Name="Custom 78 x 46" Description="A map with a custom size of 78 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="8" SortIndex="61"/>
-		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Name="Custom 78 x 46" Description="A map with a custom size of 78 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="8" SortIndex="61"/>
+		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Name="Custom 78 x 46" Description="A map with a custom size of 78 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
+		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46" Name="Custom 78 x 46" Description="A map with a custom size of 78 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
 	</MapSizes>
 	<SupportedValuesByMap>
 		<Row Map="{Benualdo-Europe_Small_8P_Multiplayer}maps/Europe_Small_8P_Multiplayer.Civ7Map" Domain="StandardMapSizes" Value="MAPSIZE_EUROPE_SMALL_8P_MULTIPLAYER_78x46"/>

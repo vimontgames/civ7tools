@@ -2,7 +2,7 @@ import { generateDiscoveries } from '/base-standard/maps/discovery-generator.js'
 import { g_PolarWaterRows } from '/base-standard/maps/map-globals.js';
 import { shuffle } from '/base-standard/maps/map-utilities.js';
 import { GenerationContext, GenerationPhases, generateMapFeatures } from '/base-standard/scripts/common-generation.js';
-import { HexMap } from '/base-standard/scripts/hex-map.js';
+import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';import { HexMap } from '/base-standard/scripts/hex-map.js';
 import { profileScope } from '/base-standard/scripts/profiling.js';
 
 console.log("Generatingmap from Civ7Map script Europe_Small_8P_Multiplayer.js.");
