@@ -1,6 +1,36 @@
 #pragma once
 
 //--------------------------------------------------------------------------------------
+enum class NaturalWonderType : i8
+{
+    Random = -1,
+    None = 0,
+
+    ValleyOfFlowers,
+    BarrierReef,
+    RedwoodForest,
+    GrandCanyon,
+    Gullfoss,
+    Hoerikwaggo,
+    IguazuFalls,
+    Kilimanjaro,
+    Zhangjiajie,
+    Thera,
+    TorresDelPaine,
+    Uluru,
+    MountEverest,
+    BermudaTriangle,
+    Machapuchare,
+    MountFuji,
+    Vihran,
+    Vinicunca,
+    GreatBlueHole,
+    MapuAVaeaBlowholes,
+    NachiFalls,
+    SeongsanIlchulbong,
+};
+
+//--------------------------------------------------------------------------------------
 enum class TerrainType : i8
 {
     Moutain = 0,
@@ -54,8 +84,8 @@ enum class FertilityType : i8
 enum class FeatureType : i8
 {
     Random                          = -1,
-
     None                            = 0,
+
     SagebrushSteppe                 = 1,
     Oasis                           = 2,
     DesertFloodplainMinor           = 3,
@@ -175,25 +205,27 @@ using Elevation = u16;
 //--------------------------------------------------------------------------------------
 struct Civ7Tile
 {
-    TerrainType   terrain   = TerrainType::Flat;
-    BiomeType     biome     = BiomeType::Tundra;
-    FeatureType   feature   = FeatureType::Random;
-    ContinentType continent = ContinentType::None;              
-    ResourceType  resource  = ResourceType::Random;
-    LandmassType  landmass  = 0;
-    Elevation     elevation = 0;
-    bool          impassable = false;
+    ContinentType     continent     = ContinentType::None;
+    LandmassType      landmass      = (LandmassType)0;
+    TerrainType       terrain       = TerrainType::Flat;
+    BiomeType         biome         = BiomeType::Tundra;
+    FeatureType       feature       = FeatureType::Random;
+    ResourceType      resource      = ResourceType::Random;
+    NaturalWonderType naturalWonder = NaturalWonderType::Random;
+    Elevation         elevation     = (Elevation)0;
+    bool              impassable    = false;
 
     inline bool operator==(const Civ7Tile & _other) const
     {
-        return terrain   == _other.terrain
-            && biome     == _other.biome
-            && feature   == _other.feature
-            && continent == _other.continent
-            && resource  == _other.resource
-            && landmass  == _other.landmass
-            && elevation == _other.elevation
-            && impassable == _other.impassable;
+        return continent     == _other.continent
+            && landmass      == _other.landmass
+            && terrain       == _other.terrain
+            && biome         == _other.biome
+            && feature       == _other.feature
+            && resource      == _other.resource
+            && naturalWonder == _other.naturalWonder
+            && elevation     == _other.elevation
+            && impassable    == _other.impassable;
     }
 
     inline bool operator!=(const Civ7Tile & _other) const

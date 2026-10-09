@@ -1,3 +1,6 @@
+#ifndef _SHADER_COLORS__H_
+#define _SHADER_COLORS__H_
+
 //--------------------------------------------------------------------------------------
 // TerrainType
 //--------------------------------------------------------------------------------------
@@ -10,7 +13,7 @@
 #define TerrainType_Ocean           4
 #define TerrainType_NavigableRiver  5
 
-float4 getTerrainColor(uint terrain)
+inline float4 getTerrainColor(uint terrain)
 {
     switch (terrain)
     {
@@ -26,7 +29,7 @@ float4 getTerrainColor(uint terrain)
 }
 
 #ifdef __cplusplus
-float4 getTerrainColor(TerrainType terrain)
+inline float4 getTerrainColor(TerrainType terrain)
 {
     return getTerrainColor((uint)terrain);
 }
@@ -44,7 +47,7 @@ float4 getTerrainColor(TerrainType terrain)
 #define BiomeType_Desert            4
 #define BiomeType_Marine            5
 
-float4 getBiomeColor(uint biome)
+inline float4 getBiomeColor(uint biome)
 {
     switch (biome)
     {
@@ -60,7 +63,7 @@ float4 getBiomeColor(uint biome)
 }
 
 #ifdef __cplusplus
-float4 getBiomeColor(BiomeType biome)
+inline float4 getBiomeColor(BiomeType biome)
 {
     return getBiomeColor((uint)biome);
 }
@@ -98,7 +101,7 @@ float4 getBiomeColor(BiomeType biome)
 #define FeatureType_TundraFloodplainNavigable       23
 #define FeatureType_Volcano                         24 
 
-float4 getFeatureColor(uint feature)
+inline float4 getFeatureColor(uint feature)
 {
     switch (feature & 0xFF)
     {
@@ -133,7 +136,7 @@ float4 getFeatureColor(uint feature)
 }
 
 #ifdef __cplusplus
-float4 getFeatureColor(FeatureType feature)
+inline float4 getFeatureColor(FeatureType feature)
 {
     return getFeatureColor((uint)feature);
 }
@@ -142,7 +145,7 @@ float4 getFeatureColor(FeatureType feature)
 //--------------------------------------------------------------------------------------
 // Continent
 //--------------------------------------------------------------------------------------
-float4 getContinentColor(uint index)
+inline float4 getContinentColor(uint index)
 {
     index &= 0xFF;
 
@@ -168,7 +171,7 @@ float4 getContinentColor(uint index)
 }
 
 #ifdef __cplusplus
-float4 getContinentColor(ContinentType continent)
+inline float4 getContinentColor(ContinentType continent)
 {
     return getContinentColor((uint)continent);
 }
@@ -177,7 +180,7 @@ float4 getContinentColor(ContinentType continent)
 //--------------------------------------------------------------------------------------
 // Landmass
 //--------------------------------------------------------------------------------------
-float4 getLandmassColor(uint index)
+inline float4 getLandmassColor(uint index)
 {
     index &= 0xFF;
 
@@ -203,7 +206,7 @@ float4 getLandmassColor(uint index)
 }
 
 #ifdef __cplusplus
-float4 getLandmassColor(LandmassType landmass)
+inline float4 getLandmassColor(LandmassType landmass)
 {
     return getLandmassColor((uint)landmass);
 }
@@ -257,7 +260,7 @@ float4 getLandmassColor(LandmassType landmass)
 #define ResourceType_Quinine             40
 #define ResourceType_Rubber              41 
 
-float4 getResourceColor(uint index)
+inline float4 getResourceColor(uint index)
 {
     switch (index & 0xFF)
     {
@@ -368,13 +371,45 @@ float4 getResourceColor(uint index)
 }
 
 #ifdef __cplusplus
-float4 getResourceColor(ResourceType res)
+inline float4 getResourceColor(ResourceType res)
 {
     return getResourceColor((uint)res);
 }
 #endif
 
-float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
+inline float4 getNaturalWonderColor(uint index)
+{
+    index &= 0xFF;
+
+    if (index == 0)
+        return float4(0.05f, 0.05f, 0.05f, (1));
+
+    const float4 naturalWonderColor[6] =
+    {
+        float4(1,0,0,(1)),
+        float4(0,1,0,(1)),
+        float4(1,1,0,(1)),
+        float4(1,0,1,(1)),
+        float4(0,1,1,(1)),
+        float4(0,0,1,(1)),
+    };
+
+    float4 color = naturalWonderColor[index % 6];
+    float greyscale = 1.0f - (float(index / 6)) / 8.0f; // max 8 * 6 = 48 wonders max
+    color.r *= greyscale;
+    color.g *= greyscale;
+    color.b *= greyscale;
+    return color;
+}
+
+#ifdef __cplusplus
+inline float4 getNaturalWonderColor(NaturalWonderType wonder)
+{
+    return getNaturalWonderColor((uint)wonder);
+}
+#endif
+
+inline float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
 {
     float4 terrainColor = getTerrainColor(terrainType);
     float4 biomeColor = getBiomeColor(biomeType);
@@ -406,7 +441,7 @@ float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
 }
 
 #ifdef __cplusplus
-float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
+inline float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
 {
     return getBiomeTerrainColor((uint)biomeType, (uint)terrainType);
 }
@@ -415,14 +450,16 @@ float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
 //--------------------------------------------------------------------------------------
 // Landmass
 //--------------------------------------------------------------------------------------
-float4 getElevationColor(uint index)
+inline float4 getElevationColor(uint index)
 {
     return float4( index / 1023.0f, index / 1023.0f, index / 1023.0f, 1);
 }
 
 #ifdef __cplusplus
-float4 getElevationColor(Elevation elevation)
+inline float4 getElevationColor(Elevation elevation)
 {
     return getElevationColor((uint)elevation);
 }
 #endif
+
+#endif // _SHADER_COLORS__H_

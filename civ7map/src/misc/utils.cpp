@@ -107,6 +107,33 @@ string CapitalizeWords(const string & input)
 }
 
 //--------------------------------------------------------------------------------------
+string SeparateCapitalizedWords(const string & input)
+{
+    string result;
+
+    for (size_t i = 0; i < input.size(); ++i)
+    {
+        const char c = input[i];
+
+        if (i > 0 && std::isupper(c))
+        {
+            const char prev = input[i - 1];
+            const char next = (i + 1 < input.size()) ? input[i + 1] : '\0';
+
+            // Start of a new word:
+            // - fooBar
+            // - XMLParser
+            if (std::islower(prev) || (std::isupper(prev) && std::islower(next)))
+                result += ' ';
+        }
+
+        result += c;
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------
 bool isDigits(const string & str)
 {
     return !str.empty() && all_of(str.begin(), str.end(), ::isdigit);

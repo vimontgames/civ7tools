@@ -256,25 +256,42 @@ void main()
         //    break;
         
         case PASS_TYPE_CONTINENT:
+        {
             edge = EDGE_DETECT(color0.a);
-            edgeMul = 1.0f;
-            edgeAdd = -0.25f;
-            break;
+            if (edge)
+                color.rgb = color.rgb * edgeMul - 0.25;
+        }
+        break;
         
         case PASS_TYPE_LANDMASS:
+        {
             edge = EDGE_DETECT(color1.g);
-            edgeMul = 1.0f;
-            edgeAdd = -0.25f;
-            break;
+            if (edge)
+                color.rgb = color.rgb * edgeMul - 0.25;
+        }
+        break;
+        
+        case PASS_TYPE_ALL:
+        {
+            bool landmassEdge = EDGE_DETECT(color1.g);
+            if (landmassEdge)
+            {
+                uint landmass = uint(center.color1.g * 255.0f); 
+                if (landmass > 0)
+                    color.rgb = lerp(color.rgb, getLandmassColor(landmass).rgb, 0.25);    
+            }
+            
+            bool continentEdge = EDGE_DETECT(color0.a);
+            if (continentEdge)
+            {
+                uint continent = uint(center.color0.a * 255.0f); 
+                if (continent != 0xFF)
+                    color.rgb = lerp(color.rgb, getContinentColor(continent).rgb, 0.50);    
+            }
+        }
+        break;
     }
-    
-    if (edge)
-    {
-        color.r = color.r * edgeMul + edgeAdd;
-        color.g = color.g * edgeMul + edgeAdd;
-        color.b = color.b * edgeMul + edgeAdd;
-    }
-    
+        
     bool selected = false, hovered = false;
     
     float2 tileUV = getTileUV(uv.xy * float2(1, 0.5), texSize, passFlags) * texSize;

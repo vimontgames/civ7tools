@@ -46,65 +46,36 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             ImGui::InputInt2("Plot", (int*)&g_selectedCell, ImGuiInputTextFlags_EnterReturnsTrue);
             ImGui::Separator();
 
-            //int engineLoc[2] =
+            // "Continent"
+            ContinentType continent = tile->continent;
+            if (EditContinent(map, continent))
+                map->setContinent(x, y, continent);
+
+            // "Landmass"
+            LandmassType landmass = tile->landmass;
+            if (EditLandmass(map, landmass))
+                map->setLandmass(x, y, landmass);
+
+            //// Landmass
             //{
-            //    x,
-            //    y + 2
-            //};
-            //ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-            //ImGui::InputInt2("Plot (engine)", engineLoc, ImGuiInputTextFlags_EnterReturnsTrue);
-            //ImGui::PopItemFlag();
-
-            // Continent
-            {
-                DrawColoredSquare(getContinentColor(tile->continent));
-            
-                string continentName = map->getContinentShortName(tile->continent);
-            
-                if (ImGui::BeginCombo("Continent", fmt::sprintf("%s (%i)", continentName, (int)tile->continent).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    // None
-                    {
-                        bool isSelected = (tile->continent == ContinentType::None);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName(ContinentType::None), (int)ContinentType::None).c_str(), isSelected))
-                        {
-                            if (map->setContinent(x, y, ContinentType::None))
-                                dirty = true;
-                        }
-                    }
-                    for (uint i = 0; i < map->getContinentCount(); ++i)
-                    {
-                        bool isSelected = ((int)tile->continent == i);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
-                        {
-                            if (map->setContinent(x, y, (ContinentType)i))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-
-            // Landmass
-            {
-                DrawColoredSquare(getLandmassColor(tile->landmass));
-
-                string landmassName = map->getLandmassShortName(tile->landmass);
-
-                if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (uint i = 0; i < map->getLandmassCount(); ++i)
-                    {
-                        bool isSelected = ((int)tile->landmass == i);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassShortName((LandmassType)i), i).c_str(), isSelected))
-                        {
-                            if (map->setLandmass(x, y, (LandmassType)i))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
+            //    DrawColoredSquare(getLandmassColor(tile->landmass));
+            //
+            //    string landmassName = map->getLandmassShortName(tile->landmass);
+            //
+            //    if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str(), ImGuiComboFlags_HeightLargest))
+            //    {
+            //        for (uint i = 0; i < map->getLandmassCount(); ++i)
+            //        {
+            //            bool isSelected = ((int)tile->landmass == i);
+            //            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassShortName((LandmassType)i), i).c_str(), isSelected))
+            //            {
+            //                if (map->setLandmass(x, y, (LandmassType)i))
+            //                    dirty = true;
+            //            }
+            //        }
+            //        ImGui::EndCombo();
+            //    }
+            //}
 
             // TerrainType
             {
@@ -179,6 +150,26 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                         if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
                         {
                             if (map->setResource(x, y, val.first))
+                                dirty = true;
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+            }
+
+            // Natural Wonder
+            {
+                DrawColoredSquare(getNaturalWonderColor(tile->naturalWonder));
+
+                if (ImGui::BeginCombo("Natural", fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(tile->naturalWonder)), (int)tile->naturalWonder).c_str(), ImGuiComboFlags_HeightLargest))
+                {
+                    for (auto val : enumValues<NaturalWonderType>())
+                    {
+                        const int index = (int)val.first;
+                        bool isSelected = ((int)tile->naturalWonder == index);
+                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(val.first)), index).c_str(), isSelected))
+                        {
+                            if (map->setNaturalWonder(x, y, val.first))
                                 dirty = true;
                         }
                     }

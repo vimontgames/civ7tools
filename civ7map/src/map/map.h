@@ -63,15 +63,18 @@ enum class MapBitmap
 };
 
 //--------------------------------------------------------------------------------------
+// Must match #define PASS_TYPE_XXX in Shaders/Common.h
+//--------------------------------------------------------------------------------------
 enum class MapFilter
 {
     All = 0,
-    TerrainType,
+    Continent,
+    Landmass,
+    Terrain,
     Biome,
     Feature,
     Resource,
-    Continent,
-    Landmass,
+    NaturalWonder,  
     Elevation
 };
 
@@ -183,7 +186,7 @@ struct Civilization
 };
 
 //--------------------------------------------------------------------------------------
-struct Map
+class Map
 {
 public:
     Map();
@@ -206,6 +209,7 @@ public:
     bool setContinent(int _x, int _y, ContinentType _value);
     bool setResource(int _x, int _y, ResourceType _value);
     bool setLandmass(int _x, int _y, LandmassType _value);
+    bool setNaturalWonder(int _x, int _y, NaturalWonderType _value);
 
     bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize);
     bool createFolders();

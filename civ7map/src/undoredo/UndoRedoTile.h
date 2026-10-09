@@ -5,7 +5,7 @@
 class UndoRedoTile : public UndoRedoEvent
 {
 public:
-    UndoRedoTile(const struct Map * _map);
+    UndoRedoTile(const class Map * _map);
 
     void add(int _x, int _y, const Civ7Tile & _before, const Civ7Tile & _after);
 

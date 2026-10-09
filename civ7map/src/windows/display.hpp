@@ -1,5 +1,15 @@
 #include "BaseWindow.h"
 #include "shader/colors.h"
+#include "shader/common.h"
+
+static_assert((MapFilter)PASS_TYPE_ALL       == MapFilter::All);
+static_assert((MapFilter)PASS_TYPE_TERRAIN   == MapFilter::Terrain);
+static_assert((MapFilter)PASS_TYPE_BIOME     == MapFilter::Biome);
+static_assert((MapFilter)PASS_TYPE_FEATURE   == MapFilter::Feature);
+static_assert((MapFilter)PASS_TYPE_RESOURCE  == MapFilter::Resource);
+static_assert((MapFilter)PASS_TYPE_CONTINENT == MapFilter::Continent);
+static_assert((MapFilter)PASS_TYPE_LANDMASS  == MapFilter::Landmass);
+static_assert((MapFilter)PASS_TYPE_ELEVATION == MapFilter::Elevation);
 
 //--------------------------------------------------------------------------------------
 class DisplayWindow : public BaseWindow
@@ -20,22 +30,23 @@ DisplayWindow::DisplayWindow() :
 void DrawColor(const Map * _map, ContinentType _continent, bool _count = false)
 {
     float4 color = getContinentColor(_continent);
-    float f3Color[] = { color.r, color.g,  color.b };
     string continentName = _map->getContinentShortName(_continent);
-
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", continentName.c_str(), _map->getContinentInfo(_continent).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s (%u)", continentName.c_str(), _map->getContinentInfo(_continent).count).c_str());
     else
-        ImGui::ColorEdit3(continentName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(continentName.c_str());
 }
 
 //--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, LandmassType _landmass, bool _count = false)
 {
     float4 color = getLandmassColor(_landmass);
-    float f3Color[] = { color.r, color.g,  color.b };
     string landmassName = _map->getLandmassShortName(_landmass);
-    ImGui::ColorEdit3(landmassName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text(landmassName.c_str());
 }
 
 //--------------------------------------------------------------------------------------
@@ -44,19 +55,21 @@ void DrawColor(const Map * _map, Elevation _elevation, bool _count = false)
     float4 color = getElevationColor(_elevation);
     float f3Color[] = { color.r, color.g,  color.b };
     string landmassName = fmt::sprintf("%u", _elevation);
-    ImGui::ColorEdit3(landmassName.c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text("%i", _elevation);
 }
 
 //--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, TerrainType _terrain, bool _count = false)
 {
     float4 color = getTerrainColor(_terrain);
-    float f3Color[] = { color.r, color.g,  color.b };
-
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", asString(_terrain), _map->getTerrainInfo(_terrain).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s (%u)", asString(_terrain), _map->getTerrainInfo(_terrain).count).c_str());
     else
-        ImGui::ColorEdit3(asString(_terrain).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(asString(_terrain).c_str());
 }
 
 //--------------------------------------------------------------------------------------
@@ -64,44 +77,58 @@ void DrawColor(const Map * _map, BiomeType _biome, bool _count = false)
 {
     float4 color = getBiomeColor(_biome);
     float f3Color[] = { color.r, color.g,  color.b };
-
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", asString(_biome), _map->getBiomeInfo(_biome).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s (%u)", asString(_biome), _map->getBiomeInfo(_biome).count).c_str());
     else
-        ImGui::ColorEdit3(asString(_biome).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(asString(_biome).c_str());
 }
 
 //--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, FeatureType _feature, bool _count = false)
 {
     float4 color = getFeatureColor(_feature);
-    float f3Color[] = { color.r, color.g,  color.b };
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", asString(_feature), _map->getFeatureInfo(_feature).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s (%u)", asString(_feature), _map->getFeatureInfo(_feature).count).c_str());
     else
-        ImGui::ColorEdit3(asString(_feature).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(asString(_feature).c_str());
 }
 
 //--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, ResourceType _resource, bool _count = false)
 {
     float4 color = getResourceColor(_resource);
-    float f3Color[] = { color.r, color.g,  color.b };
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3(fmt::sprintf("%s (%u)", asString(_resource), _map->getResourceInfo(_resource).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s (%u)", asString(_resource), _map->getResourceInfo(_resource).count).c_str());
     else
-        ImGui::ColorEdit3(asString(_resource).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(asString(_resource).c_str());
 }
 
 //--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, BiomeType _biome, TerrainType _terrain, bool _count = false)
 {
     float4 color = getBiomeTerrainColor(_biome, _terrain);
-    float f3Color[] = { color.r, color.g,  color.b };
+    
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
     if (_count)
-        ImGui::ColorEdit3( fmt::sprintf("%s %s (%u)", asString(_biome), asString(_terrain), _map->getBiomeTerrainInfo(_biome, _terrain).count).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::Text(fmt::sprintf("%s %s (%u)", asString(_biome), asString(_terrain), _map->getBiomeTerrainInfo(_biome, _terrain).count).c_str());
     else
-        ImGui::ColorEdit3(fmt::sprintf("%s %s", asString(_biome), asString(_terrain)).c_str(), f3Color, ImGuiColorEditFlags_NoInputs); // TODO
+        ImGui::Text(fmt::sprintf("%s %s", asString(_biome), asString(_terrain)).c_str());
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, NaturalWonderType _naturalWonder, bool _count = false)
+{
+    float4 color = getNaturalWonderColor(_naturalWonder);
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text(asString(_naturalWonder).c_str());
 }
 
 bool g_selectOverlayImage = false;
@@ -166,7 +193,16 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Colors", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
-            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, "All\0TerrainType\0Biome\0Feature\0Resource\0Continent\0Landmass\0Elevation\0\0");
+            // e.g."All\0TerrainType\0Biome\0Feature\0Resource\0Continent\0Landmass\0Elevation\0\0"
+            string mapFilters = "";
+            for (uint i = 0; i < enumCount<MapFilter>(); ++i)
+            {
+                mapFilters += asString((MapFilter)i);
+                mapFilters.push_back('\0');
+            }
+            mapFilters.push_back('\0');
+
+            needRefresh |= Combo("###Layer", (int *)&g_map->m_mapFilter, mapFilters.c_str(), ImGuiComboFlags_HeightLargest);
 
             ImGui::Spacing();
 
@@ -205,7 +241,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 }
                 break;
 
-                case MapFilter::TerrainType:
+                case MapFilter::Terrain:
                 {
                     for (uint i = 0; i < enumCount<TerrainType>(); ++i)
                         DrawColor(g_map, (TerrainType)i, true);
@@ -250,7 +286,10 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 case MapFilter::Elevation:
                 {
                     DrawColor(g_map, (Elevation)0);
+                    DrawColor(g_map, (Elevation)128);
+                    DrawColor(g_map, (Elevation)256);
                     DrawColor(g_map, (Elevation)512);
+                    DrawColor(g_map, (Elevation)768);
                     DrawColor(g_map, (Elevation)1024);
                 }
                 break;

@@ -158,7 +158,8 @@ bool ShaderManager::fileToString(sf::String & _string, const char * _filepath)
 		u32 size = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		static char temp[16384];
+		static char temp[32768];
+        assert(sizeof(temp) > size);
 		size_t read = fread_s(&temp[0], sizeof(temp), 1, size, fp);
 		temp[read] = '\0';
 		fclose(fp);

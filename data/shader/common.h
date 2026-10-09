@@ -2,15 +2,16 @@
 #pragma once
 #endif
 
-// Must match enum class MapFilter
-#define PASS_TYPE_ALL           0 // All = 0,
-#define PASS_TYPE_TERRAIN       1 // TerrainType,
-#define PASS_TYPE_BIOME         2 // Biome,
-#define PASS_TYPE_FEATURE       3 // Feature,
-#define PASS_TYPE_RESOURCE      4 // Resource,
-#define PASS_TYPE_CONTINENT     5 // Continent,
-#define PASS_TYPE_LANDMASS      6 // Landmass,
-#define PASS_TYPE_ELEVATION     7 // Elevation
+// Must match enum class MapFilter:
+#define PASS_TYPE_ALL               0 // All = 0,
+#define PASS_TYPE_CONTINENT         1 // Continent,
+#define PASS_TYPE_LANDMASS          2 // Landmass,
+#define PASS_TYPE_TERRAIN           3 // TerrainType,
+#define PASS_TYPE_BIOME             4 // Biome,
+#define PASS_TYPE_FEATURE           5 // Feature,
+#define PASS_TYPE_RESOURCE          6 // Resource,
+#define PASS_TYPE_NATURAL_WONDER    7 // Resource,
+#define PASS_TYPE_ELEVATION         8 // Elevation
 
 #define PASS_TYPE_MASK          0xF
 

@@ -604,3 +604,20 @@ bool Map::setLandmass(int _x, int _y, LandmassType _value)
     }
     return false;
 }
+
+//--------------------------------------------------------------------------------------
+bool Map::setNaturalWonder(int _x, int _y, NaturalWonderType _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.naturalWonder != _value)
+    {
+        tile.naturalWonder = _value;
+        auto event = new UndoRedoTile(this);
+        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
+        UndoRedoStack::add(event);
+        m_civ7TerrainType.get(_x, _y) = tile;
+        return true;
+    }
+    return false;
+}

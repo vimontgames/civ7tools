@@ -604,28 +604,35 @@ int main()
 
                                         DrawColor(g_map, tile.continent);
                                         ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                         ImGui::Text("(%i)", (int)tile.continent);
+
+                                        DrawColor(g_map, tile.landmass);
+                                        ImGui::SameLine();
+                                          ImGui::Text("(%i)", (int)tile.landmass);
 
                                         DrawColor(g_map, tile.terrain);
                                         ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                         ImGui::Text("(%i)", (int)tile.terrain);
                                 
                                         DrawColor(g_map, tile.biome);
                                         ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                         ImGui::Text("(%i)", (int)tile.biome);
 
                                         DrawColor(g_map, tile.feature);
                                         ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                         ImGui::Text("(%i)",(int)tile.feature);
 
                                         DrawColor(g_map, tile.resource);
                                         ImGui::SameLine();
-                                        ImGui::SetCursorPosY(GetCursorPosY() + 4);
                                         ImGui::Text("(%i)", (int)tile.resource);
+
+                                        DrawColor(g_map, tile.naturalWonder);
+                                        ImGui::SameLine();
+                                        ImGui::Text("(%i)", (int)tile.naturalWonder);
+
+                                        DrawColor(g_map, tile.elevation);
+                                        ImGui::SameLine();
+                                        ImGui::Text("(%i)", (int)tile.elevation);
 
                                         ImGui::Separator();
 

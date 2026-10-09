@@ -86,7 +86,7 @@ void Map::render(RenderWindow & _window)
                         shader->setUniform("east", Vector2f(-1,-1));
                     }
 
-                    int passFlags = 0;
+                    int passFlags = 0x0;
 
                     switch (m_mapFilter)
                     {
@@ -95,35 +95,14 @@ void Map::render(RenderWindow & _window)
                             break;
 
                         case MapFilter::All:
-                            passFlags = PASS_TYPE_ALL;
-                            break;
-
-                        case MapFilter::TerrainType:
-                            passFlags = PASS_TYPE_TERRAIN;
-                            break;
-
+                        case MapFilter::Terrain:
                         case MapFilter::Biome:
-                            passFlags = PASS_TYPE_BIOME;
-                            break;
-
                         case MapFilter::Feature:
-                            passFlags = PASS_TYPE_FEATURE;
-                            break;
-
                         case MapFilter::Continent:
-                            passFlags = PASS_TYPE_CONTINENT;
-                            break;
-
                         case MapFilter::Resource:
-                            passFlags = PASS_TYPE_RESOURCE;
-                            break;
-
                         case MapFilter::Landmass:
-                            passFlags = PASS_TYPE_LANDMASS;
-                            break;
-
                         case MapFilter::Elevation:
-                            passFlags = PASS_TYPE_ELEVATION;
+                            passFlags = (int)m_mapFilter;
                             break;
                     }
 

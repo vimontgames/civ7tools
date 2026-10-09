@@ -58,82 +58,15 @@ bool PaintWindow::Draw(const RenderWindow & window)
         {
             const float comboX = ImGui::GetCursorPosX() + 128;
 
-            // Continent
-            //if (ImGui::CollapsingHeader("Continent", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Continent###PaintContinent", &m_paintContinentType);
-                ImGui::SameLine(comboX);
-
-                PushDisabled(!m_paintContinentType);
-                {
-                    DrawColoredSquare(getContinentColor(m_continentType));
-
-                    string continentName = map ? map->getContinentShortName(m_continentType) : "None";
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    if (ImGui::BeginCombo("###SelectPaintContinentCombo", fmt::sprintf("%s (%i)", continentName, (int)m_continentType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        // None
-                        {
-                            bool isSelected = (m_continentType == ContinentType::None);
-                            if (ImGui::Selectable(fmt::sprintf("%s (-1)", map ? map->getContinentShortName(ContinentType::None) : "").c_str(), isSelected))
-                            {
-                                m_continentType = ContinentType::None;
-                            }
-                        }
-
-                        if (map)
-                        {
-                            for (uint i = 0; i < map->getContinentCount(); ++i)
-                            {
-                                bool isSelected = ((int)m_continentType == i);
-                                if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getContinentShortName((ContinentType)i), i).c_str(), isSelected))
-                                {
-                                    m_continentType = (ContinentType)i;
-                                }
-                            }
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
-                PopDisabled();
-            }
+            // "Continent"
+            ContinentType continent = m_continentType;
+            if (EditContinent(map, continent, &m_paintContinentType))
+                m_continentType = continent;
    
-            // Landmass
-            //if (ImGui::CollapsingHeader("Landmass", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Landmass###PaintLandmass", &m_paintLandmassType);
-                ImGui::SameLine(comboX);
-
-                PushDisabled(!m_paintLandmassType);
-                {
-                    DrawColoredSquare(getLandmassColor(m_landmassType));
-
-                    string landmassName = map && m_landmassType < map->getLandmassCount() ? map->getLandmassShortName(m_landmassType) : "Landmass 0";
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    if (ImGui::BeginCombo("###SelectPaintLandmassCombo", fmt::sprintf("%s (%i)", landmassName, (int)m_landmassType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        if (map)
-                        {
-                            for (uint i = 0; i < map->getLandmassCount(); ++i)
-                            {
-                                bool isSelected = ((int)m_landmassType == i);
-                                if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassName((LandmassType)i), i).c_str(), isSelected))
-                                {
-                                    m_landmassType = (LandmassType)i;
-                                }
-                            }
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
-                PopDisabled();
-            }
+            // "Landmass"
+            LandmassType landmass = m_landmassType;
+            if (EditLandmass(map, landmass, &m_paintLandmassType))
+                m_landmassType = landmass;            
  
             // TerrainType
             //if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

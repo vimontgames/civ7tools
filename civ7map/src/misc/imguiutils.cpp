@@ -1,6 +1,9 @@
 #include "imguiutils.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "tile/civ7tile.h"
+#include "shader/colors.h"
+#include "map/map.h"
 
 //--------------------------------------------------------------------------------------
 void DrawColoredSquare(const float4 & _color)
@@ -12,6 +15,19 @@ void DrawColoredSquare(const float4 & _color)
     ImGui::SameLine();
     ImGui::PopItemFlag();
     ImGui::SetNextItemWidth(ImGui::CalcItemWidth() - ImGui::GetFrameHeight() - ImGui::GetStyle().ItemSpacing.x);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawSmallColoredSquare(const float4 & _color)
+{
+    const float size = ImGui::GetTextLineHeight() + ImGui::GetStyle().ItemSpacing.y;
+
+    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImGui::GetWindowDrawList()->AddRectFilled(pos, ImVec2(pos.x + size, pos.y + size), ImGui::ColorConvertFloat4ToU32(ImVec4(_color.r, _color.g, _color.b, _color.a)));
+    ImGui::Dummy(ImVec2(size, size));
+    ImGui::SameLine();
+    ImGui::PopItemFlag();
 }
 
 //--------------------------------------------------------------------------------------
@@ -78,4 +94,124 @@ void PopDisabled()
         ApplyDisabledStyle(disabled);
     }
     ImGui::PopItemFlag();
+}
+
+//--------------------------------------------------------------------------------------
+template<typename E> struct EditEnumTraits;
+
+//--------------------------------------------------------------------------------------
+template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
+{
+    const string label = EditEnumTraits<E>::GetLabel();
+
+    auto drawItem = [&](E itemToSelect)
+    {
+        bool dirty = false;
+        bool isSelected = (value == itemToSelect);
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+        float height = ImGui::GetTextLineHeight();
+
+        if (ImGui::Selectable(fmt::sprintf("##Edit%s%i", EditEnumTraits<E>::GetLabel(), (int)itemToSelect).c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x, height)))
+            dirty = true;
+
+        ImGui::SameLine(0, 0);
+        ImGui::SetCursorScreenPos(ImVec2(pos.x + 4, pos.y));
+        DrawSmallColoredSquare(EditEnumTraits<E>::GetColor(itemToSelect));
+
+        ImGui::SameLine();
+        ImGui::Text("%s (%i)", EditEnumTraits<E>::GetName(map, itemToSelect).c_str(), (int)itemToSelect);
+        return dirty;
+    };
+
+    E previous = value;
+
+    const float comboX = ImGui::GetCursorPosX() + 128;
+
+    if (pBool)
+    {
+        ImGui::Checkbox(fmt::sprintf("%s###Paint%s", label, label).c_str(), pBool);
+        ImGui::SameLine(comboX);
+    }
+
+    PushDisabled(pBool && !(*pBool));
+    {
+        DrawColoredSquare(EditEnumTraits<E>::GetColor(value));
+
+        string name = EditEnumTraits<E>::GetName(map, value);
+
+        if (pBool)
+        {
+            const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
+            ImGui::SetNextItemWidth(comboWidth);
+        }
+
+        if (ImGui::BeginCombo((!pBool ? label : "###" + label).c_str(), fmt::sprintf("%s (%i)", name, (int)value).c_str(), ImGuiComboFlags_HeightLargest))
+        {
+            if constexpr (EditEnumTraits<E>::HasNoneValue)
+            {
+                if (drawItem(E::None))
+                    value = E::None;
+            }
+
+            if (map)
+            {
+                for (uint i = 0; i < EditEnumTraits<E>::GetCount(map); ++i)
+                {
+                    if (drawItem((E)i))
+                        value = (E)i;
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+    }
+    PopDisabled();
+
+    return value != previous;
+}
+
+//--------------------------------------------------------------------------------------
+string GetContinentShortName(const Map * map, ContinentType continent)
+{
+    return map ? map->getContinentShortName(continent).c_str() : "None";
+}
+
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<ContinentType>
+{
+    static constexpr bool HasNoneValue = true;
+
+    static auto GetColor(ContinentType value) { return getContinentColor(value); }
+    static string GetName(const Map * map, ContinentType value) { return GetContinentShortName(map, value); }
+    static uint GetCount(const Map * map) { return map->getContinentCount(); }
+    static const string GetLabel() { return "Continent"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditContinent(const Map * map, ContinentType & continent, bool * pBool)
+{
+    return EditEnum<ContinentType>(map, continent, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+string GetLandmassShortName(const Map * map, LandmassType landmass)
+{
+    return map && landmass < map->getLandmassCount() ? map->getLandmassShortName(landmass) : "Landmass 0";
+}
+
+template<> struct EditEnumTraits<LandmassType>
+{
+    static constexpr bool HasNoneValue = false;
+
+    static auto GetColor(LandmassType value) { return getLandmassColor(value); }
+    static string GetName(const Map * map, LandmassType value) { return GetLandmassShortName(map, value); }
+    static uint GetCount(const Map * map) { return map->getLandmassCount(); }
+    static const string GetLabel() { return "Landmass"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditLandmass(const Map * map, LandmassType & landmass, bool * pBool)
+{
+    return EditEnum<LandmassType>(map, landmass, pBool);
 }

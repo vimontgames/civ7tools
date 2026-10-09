@@ -13,6 +13,7 @@ bool DeleteFile(const string & path);
 bool CopyFile(const string & path, const string & newPath);
 
 string CapitalizeWords(const string & input);
+string SeparateCapitalizedWords(const string & input);
 bool isDigits(const string & str);
 
 bool BeginsWith(const string & _string, const string & _prefix);
