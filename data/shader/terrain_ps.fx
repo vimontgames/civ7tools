@@ -192,8 +192,8 @@ float4 getTileColor(Tile tile)
             if (isWater)
                  color.rgb *= float3(0.9f, 0.9f, 1.0f);
             
-            uint elevation = uint(tile.color1.b * 1023.0f);
-            color = lerp(ColorToHue(color), getElevationColor(elevation), 0.9);
+            uint elevation = uint(tile.color1.b * float(maxElevation));
+            color = lerp(ColorToHue(color), getElevationColor(elevation), 0.925);
         }
         break;
     }

@@ -1,3 +1,4 @@
+#include "shader/colors.h"
 
 //--------------------------------------------------------------------------------------
 void Map::initTerrainInfos(bool _reload)
@@ -194,7 +195,7 @@ void Map::refresh(bool _reload)
             color1.g = (u8)tile.landmass;
 
             // Color1.b is elevation
-            color1.b = (u8)((uint)tile.elevation / 4); // 0..1023 values
+            color1.b = (u8)((uint)tile.elevation * 255.0f / float(maxElevation)); // 0..maxElevation values
             
             terrain.image.setPixel(w, h + m_height, color1);
 

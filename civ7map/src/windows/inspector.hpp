@@ -180,26 +180,15 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             // Elevation
             {
                 DrawColoredSquare(getElevationColor(tile->elevation));
-                int temp = tile->elevation;
-                if (ImGui::SliderInt("Elevation", &temp, 0, 1023))
-                {
-                    tile->elevation = temp;
-                }
 
-                //if (ImGui::BeginCombo("Elevation", fmt::sprintf("%i", tile->elevation).c_str(), ImGuiComboFlags_HeightLargest))
-                //{
-                //    for (auto val : enumValues<ResourceType>())
-                //    {
-                //        const int index = (int)val.first;
-                //        bool isSelected = ((int)tile->resource == index);
-                //        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
-                //        {
-                //            if (map->setResource(x, y, val.first))
-                //                dirty = true;
-                //        }
-                //    }
-                //    ImGui::EndCombo();
-                //}
+                int step = (tile->elevation + elevationStep / 2) / elevationStep;
+                char format[32];
+                sprintf_s(format, "%d", step * elevationStep);
+
+                if (ImGui::SliderInt("Elevation", &step, 0, maxElevation / elevationStep, format))
+                {
+                    tile->elevation = step * elevationStep;
+                }
             }
 
             // TSL

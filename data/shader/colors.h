@@ -448,11 +448,14 @@ inline float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
 #endif
 
 //--------------------------------------------------------------------------------------
-// Landmass
+// Elevation
 //--------------------------------------------------------------------------------------
+const int maxElevation = 2048;
+const int elevationStep = 256;
+
 inline float4 getElevationColor(uint index)
 {
-    return float4( index / 1023.0f, index / 1023.0f, index / 1023.0f, 1);
+    return float4( index / float(maxElevation), index / float(maxElevation), index / float(maxElevation), 1);
 }
 
 #ifdef __cplusplus

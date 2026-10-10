@@ -198,10 +198,13 @@ bool PaintWindow::Draw(const RenderWindow & window)
                     const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
                     ImGui::SetNextItemWidth(comboWidth);
 
-                    int temp = m_elevation;
-                    if (ImGui::SliderInt("###Elevation", &temp, 0, 1023))
+                    int step = (m_elevation + elevationStep / 2) / elevationStep;
+                    char format[32];
+                    sprintf_s(format, "%d", step * elevationStep);
+
+                    if (ImGui::SliderInt("###Elevation", &step, 0, maxElevation / elevationStep, format))
                     {
-                        m_elevation = temp;
+                        m_elevation = step * elevationStep;
                     }
                 }
                 PopDisabled();

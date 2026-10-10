@@ -285,12 +285,10 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
                 case MapFilter::Elevation:
                 {
-                    DrawColor(g_map, (Elevation)0);
-                    DrawColor(g_map, (Elevation)128);
-                    DrawColor(g_map, (Elevation)256);
-                    DrawColor(g_map, (Elevation)512);
-                    DrawColor(g_map, (Elevation)768);
-                    DrawColor(g_map, (Elevation)1024);
+                    for (uint i = 0; i <= maxElevation; i += elevationStep)
+                    {
+                        DrawColor(g_map, (Elevation)i);
+                    }
                 }
                 break;
             }
