@@ -182,7 +182,21 @@ enum class ResourceType
     Nickel              = 38,
     Oil                 = 39,
     Quinine             = 40,
-    Rubber              = 41           
+    Rubber              = 41,
+    Mangos              = 42,
+    Clay                = 43,
+    Flax                = 44,
+    Rubies              = 45,
+    Rice                = 46,
+    Limestone           = 47,
+    Tin                 = 48,
+    Llamas              = 49,
+    Hardwood            = 50,
+    WildGame            = 51,
+    Crabs               = 52,
+    Cowrie              = 53,
+    Turtles             = 54,
+    Pitch               = 55
 };
 
 //--------------------------------------------------------------------------------------

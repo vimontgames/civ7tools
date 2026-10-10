@@ -279,6 +279,7 @@ public:
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
+    static string getNaturalWonderTypeAsString(NaturalWonderType _type);
 
     string GetMapDataPathFromMapPath(const string & _mapPath) const;
 

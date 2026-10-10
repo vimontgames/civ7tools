@@ -207,6 +207,23 @@ FeatureType Map::getFeatureFromString(const string & _featureTypeS, uint x, uint
 }
 
 //--------------------------------------------------------------------------------------
+string Map::getNaturalWonderTypeAsString(NaturalWonderType _type)
+{
+    string result = "FEATURE_";
+    string name = asString(_type);
+
+    for (char c : name)
+    {
+        if (isupper((char)(c)) && result.size() > strlen("FEATURE_"))
+            result += '_';
+
+        result += (char)(toupper((char)(c)));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------
 string Map::getResourceTypeAsString(ResourceType _type)
 {
     switch (_type)
@@ -299,6 +316,34 @@ string Map::getResourceTypeAsString(ResourceType _type)
             return "RESOURCE_QUININE";
         case ResourceType::Rubber:
             return "RESOURCE_RUBBER";
+        case ResourceType::Mangos:
+            return "RESOURCE_MANGOS";
+        case ResourceType::Clay:
+            return "RESOURCE_CLAY";
+        case ResourceType::Flax:
+            return "RESOURCE_FLAX";
+        case ResourceType::Rubies:
+            return "RESOURCE_RUBIES";
+        case ResourceType::Rice:
+            return "RESOURCE_RICE";
+        case ResourceType::Limestone:
+            return "RESOURCE_LIMESTONE";
+        case ResourceType::Tin:
+            return "RESOURCE_TIN";
+        case ResourceType::Llamas:
+            return "RESOURCE_LLAMAS";
+        case ResourceType::Hardwood:
+            return "RESOURCE_HARDWOOD";
+        case ResourceType::WildGame:
+            return "RESOURCE_WILD_GAME";
+        case ResourceType::Crabs:
+            return "RESOURCE_CRABS";
+        case ResourceType::Cowrie:
+            return "RESOURCE_COWRIE";
+        case ResourceType::Turtles:
+            return "RESOURCE_TURTLES";
+        case ResourceType::Pitch:
+            return "RESOURCE_PITCH";
     }
 }
 
@@ -387,6 +432,34 @@ ResourceType Map::getResourceFromString(const string & _resourceTypeS, uint x, u
         return ResourceType::Quinine;
     else if (_resourceTypeS == "RESOURCE_RUBBER")
         return ResourceType::Rubber;
+    else if (_resourceTypeS == "RESOURCE_MANGOS")
+        return ResourceType::Mangos;
+    else if (_resourceTypeS == "RESOURCE_CLAY")
+        return ResourceType::Clay;
+    else if (_resourceTypeS == "RESOURCE_FLAX")
+        return ResourceType::Flax;
+    else if (_resourceTypeS == "RESOURCE_RUBIES")
+        return ResourceType::Rubies;
+    else if (_resourceTypeS == "RESOURCE_RICE")
+        return ResourceType::Rice;
+    else if (_resourceTypeS == "RESOURCE_LIMESTONE")
+        return ResourceType::Limestone;
+    else if (_resourceTypeS == "RESOURCE_TIN")
+        return ResourceType::Tin;
+    else if (_resourceTypeS == "RESOURCE_LLAMAS")
+        return ResourceType::Llamas;
+    else if (_resourceTypeS == "RESOURCE_HARDWOOD")
+        return ResourceType::Hardwood;
+    else if (_resourceTypeS == "RESOURCE_WILD_GAME")
+        return ResourceType::WildGame;
+    else if (_resourceTypeS == "RESOURCE_CRABS")
+        return ResourceType::Crabs;
+    else if (_resourceTypeS == "RESOURCE_COWRIE")
+        return ResourceType::Cowrie;
+    else if (_resourceTypeS == "RESOURCE_TURTLES")
+        return ResourceType::Turtles;
+    else if (_resourceTypeS == "RESOURCE_PITCH")
+        return ResourceType::Pitch;
 
     LOG_WARNING("Unknown ResourceType \"%s\" at (%u, %u)", _resourceTypeS.c_str(), x, y);
     return ResourceType::None;
