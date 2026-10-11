@@ -248,7 +248,7 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("  hexMap.initFromTerrainBuilder();\n");
     data += fmt::sprintf("  paintElevation();\n");
     data += fmt::sprintf("  //paintEarthHugeRivers();\n");
-    data += fmt::sprintf("  //paintEarthHugeNaturalWonders();\n");
+    data += fmt::sprintf("  paintNaturalWonders();\n");
     data += fmt::sprintf("  //paintEarthHugeResourcesAntiquity();\n");
 
     if (m_randomSnow && m_useAdvancedSnow)
@@ -572,6 +572,145 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("    }\n");
         data += fmt::sprintf("}\n");
     }
+
+    // Natural wonders should appear only once
+    int2 naturalWonderCoords[enumCount<NaturalWonderType>()];
+    int naturalWonderCounter[enumCount<NaturalWonderType>()];
+
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        naturalWonderCoords[i] = int2(-1, -1);
+        naturalWonderCounter[i] = 0;
+    }
+
+    for (uint y = 0; y < m_height; ++y)
+    {
+        for (uint x = 0; x < m_width; ++x)
+        {
+            Civ7Tile tile = m_civ7TerrainType.get(x, y);
+            if ((int)tile.naturalWonder > 0)
+            {
+                if (naturalWonderCounter[(int)tile.naturalWonder] == 0)
+                {
+                    naturalWonderCoords[(int)tile.naturalWonder] = int2(x, y);
+                }
+                else
+                {
+                    LOG_WARNING("Natural wonder \"%s\" at coords (%i,%i)is already present at coords (%i,%i)", asString(tile.naturalWonder).c_str(), x, y, naturalWonderCoords[(int)tile.naturalWonder].x, naturalWonderCoords[(int)tile.naturalWonder].y);
+                }
+                naturalWonderCounter[(int)tile.naturalWonder]++;
+            }
+        }
+    }
+
+#if 0
+    // Randomize natural wonders
+    data += fmt::sprintf("async function paintNaturalWonders() {\n");
+    data += fmt::sprintf("    console.log(\"Begin paintNaturalWonders\");\n");
+    data += fmt::sprintf("    const iNumNaturalWonders = 22;\n");
+    data += fmt::sprintf("    let aPossibleWonders = [];\n");
+    data += fmt::sprintf("    let iPlacedWonders = 0;\n");
+    data += fmt::sprintf("    for (const nwDef of GameInfo.Feature_NaturalWonders) {\n");
+    data += fmt::sprintf("        aPossibleWonders.push(nwDef.$hash);\n");
+    data += fmt::sprintf("        console.log(\"Available natural wonder: \" + nwDef.FeatureType);\n");
+    data += fmt::sprintf("    }\n");
+    data += fmt::sprintf("    if (aPossibleWonders.length > 0) {\n");
+    data += fmt::sprintf("        aPossibleWonders = shuffle(aPossibleWonders);\n");
+    data += fmt::sprintf("        for (const eFeature of aPossibleWonders) {\n");
+    data += fmt::sprintf("            if (iPlacedWonders < iNumNaturalWonders) {\n");
+    data += fmt::sprintf("                const nwDef = GameInfo.Feature_NaturalWonders.lookup(eFeature);\n");
+    data += fmt::sprintf("                let placementX = 0;\n");
+    data += fmt::sprintf("                let placementY = 0;\n");
+    data += fmt::sprintf("                if (nwDef != null) {\n");
+    data += fmt::sprintf("                    let iElevation = GameplayMap.getElevation(0, 0);\n");
+    data += fmt::sprintf("                    let featureParam = { Feature: eFeature, Direction : nwDef.Direction, Elevation : iElevation };\n");
+    data += fmt::sprintf("                    switch (nwDef.FeatureType) {\n");
+
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        if (naturalWonderCounter[i] > 0)
+        {
+            data += fmt::sprintf("                case \"%s\":\n", getNaturalWonderTypeAsString((NaturalWonderType)i));
+            data += fmt::sprintf("                    placementX = %i;\n", naturalWonderCoords[i].x);
+            data += fmt::sprintf("                    placementY = %i;\n", naturalWonderCoords[i].y);
+            data += fmt::sprintf("                    iElevation = GameplayMap.getElevation(placementX, placementY);\n");
+            data += fmt::sprintf("                    featureParam = {\n");
+            data += fmt::sprintf("                      Feature: eFeature,\n");
+            data += fmt::sprintf("                      Direction : DirectionTypes.NO_DIRECTION,\n");
+            data += fmt::sprintf("                      Elevation : iElevation\n");
+            data += fmt::sprintf("                    };\n");
+            data += fmt::sprintf("                    if (TerrainBuilder.canHaveFeature(placementX, placementY, nwDef.FeatureType)) {\n");
+            data += fmt::sprintf("                        TerrainBuilder.setFeatureType(placementX, placementY, featureParam);\n");
+            data += fmt::sprintf("                        console.log(\"Placed: \" + nwDef.FeatureType);\n");
+            data += fmt::sprintf("                        iPlacedWonders++;\n");
+            data += fmt::sprintf("                    }\n");
+            data += fmt::sprintf("                    break;\n");
+        }
+    }
+
+    data += fmt::sprintf("                        default:\n");
+    data += fmt::sprintf("                            console.log(\"Did not place: \" + nwDef.FeatureType);\n");
+    data += fmt::sprintf("                            break;\n");
+    data += fmt::sprintf("                    }\n");
+    data += fmt::sprintf("                }\n");
+    data += fmt::sprintf("            }\n");
+    data += fmt::sprintf("        }\n");
+    data += fmt::sprintf("    }\n");
+    data += fmt::sprintf("    console.log(\"End paintNaturalWonders\");\n");
+    data += fmt::sprintf("}\n");
+
+#else
+    // Place all natural wonders
+    data += fmt::sprintf("async function paintNaturalWonders() {\n");
+    data += fmt::sprintf("  console.log(\"Begin paintNaturalWonders\");\n");
+    data += fmt::sprintf("  for (const nwDef of GameInfo.Feature_NaturalWonders)\n");
+    data += fmt::sprintf("  {\n");
+    //data += fmt::sprintf("      console.log(\"Available natural wonder: \" + nwDef.FeatureType);\n");
+    data += fmt::sprintf("      if (nwDef != null)\n");
+    data += fmt::sprintf("      {\n");
+    data += fmt::sprintf("          let eFeature = nwDef.$hash;\n");
+    data += fmt::sprintf("          let iElevation = GameplayMap.getElevation(0, 0);\n");
+    data += fmt::sprintf("          let featureParam = { Feature: eFeature, Direction : nwDef.Direction, Elevation : iElevation };\n");
+    data += fmt::sprintf("          let placementX = 0;\n");
+    data += fmt::sprintf("          let placementY = 0;\n");
+    data += fmt::sprintf("          switch (nwDef.FeatureType)\n");
+    data += fmt::sprintf("          {\n");
+
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        if (naturalWonderCounter[i] > 0)
+        {
+            data += fmt::sprintf("              case \"%s\":\n", getNaturalWonderTypeAsString((NaturalWonderType)i));
+            data += fmt::sprintf("                  placementX = %i;\n", naturalWonderCoords[i].x);
+            data += fmt::sprintf("                  placementY = %i;\n", naturalWonderCoords[i].y);
+            data += fmt::sprintf("                  iElevation = GameplayMap.getElevation(placementX, placementY);\n");
+            data += fmt::sprintf("                  featureParam =\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      Feature: eFeature,\n");
+            data += fmt::sprintf("                      Direction : DirectionTypes.NO_DIRECTION,\n");
+            data += fmt::sprintf("                      Elevation : iElevation\n");
+            data += fmt::sprintf("                  };\n");
+            data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeature(placementX, placementY, nwDef.FeatureType))\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" has been successfully placed at (\" + placementX + \",\" + placementY + \")\");\n");
+            data += fmt::sprintf("                  }\n");
+            data += fmt::sprintf("                  else\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" could not be placed at (\" + placementX + \",\" + placementY + \")\");\n");
+            data += fmt::sprintf("                  }\n");
+            data += fmt::sprintf("                  break;\n");
+        }
+    }
+    data += fmt::sprintf("                      default:\n");
+    data += fmt::sprintf("                          console.log(nwDef.FeatureType + \" has no location defined\"); \n");
+    data += fmt::sprintf("                      break;\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("      }\n");
+    data += fmt::sprintf("  }\n");
+    data += fmt::sprintf("  console.log(\"End paintNaturalWonders\");\n");
+    data += fmt::sprintf("}\n");
+#endif
 
     data += fmt::sprintf("engine.on(\"RequestMapInitData\", requestMapData);\n");
     data += fmt::sprintf("engine.on(\"GenerateMap\", generateMap);\n");
@@ -923,6 +1062,61 @@ void Map::exportSQLiteMap()
 
                 sqlite3_step(stmt);
                 sqlite3_reset(stmt);
+            }
+        }
+
+        // Commit 
+        rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
+        rc = sqlite3_finalize(stmt);
+    }
+    else
+    {
+        LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return;
+    }
+
+    // Natural wonders
+    const char * createTableSQL =
+        "CREATE TABLE IF NOT EXISTS PlotNaturalWonders ("
+        "ID INTEGER PRIMARY KEY,"
+        "Value TEXT"
+        ");";
+
+    rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
+
+    if (rc != SQLITE_OK)
+    {
+        LOG_ERROR("Failed to create natural wonders table: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return;
+    }
+
+    sql = "INSERT OR REPLACE INTO PlotNaturalWonders (ID, Value) VALUES (?, ?);";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+    if (rc == SQLITE_OK)
+    {
+        // Add transaction for massive speed improvement
+        rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
+        rc = sqlite3_exec(db, "DELETE FROM PlotNaturalWonders;", NULL, 0, NULL);
+
+        for (uint y = 0; y < m_height; ++y)
+        {
+            for (uint x = 0; x < m_width; ++x)
+            {
+                Civ7Tile tile = m_civ7TerrainType.get(x, y);
+
+                if ((int)tile.naturalWonder > 0)
+                {
+                    string naturalWonderTypeNameS = getNaturalWonderTypeAsString(tile.naturalWonder);
+
+                    sqlite3_bind_int(stmt, 1, x + y * m_width);                                     // ID
+                    sqlite3_bind_text(stmt, 2, naturalWonderTypeNameS.c_str(), -1, SQLITE_STATIC);  // Value
+
+                    sqlite3_step(stmt);
+                    sqlite3_reset(stmt);
+                }
             }
         }
 

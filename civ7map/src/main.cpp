@@ -124,6 +124,9 @@ int main()
     //        g_myDocumentsPath = ws2s(wstring(userFolder)) + "\\Firaxis Games\\Sid Meier's Civilization VII\\Mods";
     //}
 
+    // Unit test
+    Map::Test();
+
     sf::ContextSettings contextSettings;
                         contextSettings.sRgbCapable = false;
 

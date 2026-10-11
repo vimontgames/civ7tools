@@ -207,6 +207,42 @@ FeatureType Map::getFeatureFromString(const string & _featureTypeS, uint x, uint
 }
 
 //--------------------------------------------------------------------------------------
+template <typename E> E Map::getEnumValueFromString(const string & _prefix, const string & _string, uint _x, uint _y)
+{
+    for (uint i = 0; i < enumCount<E>(); ++i)
+    {
+        E type = (E)i;
+
+        if (getEnumAsExportString(_prefix, type) == _string)
+            return type;
+    }
+
+    if (-1 != _x && -1 != _y)
+        ASSERT(false, "Unknown enum type \"%s\" at (%u, %u)", _string.c_str(), _x, _y);
+    else
+        ASSERT(false, "Unknown enum type \"%s\"", _string.c_str());
+
+    return NaturalWonderType::None;
+}
+
+//--------------------------------------------------------------------------------------
+template <typename E> string Map::getEnumAsExportString(const string & _prefix, E value)
+{
+    string result = _prefix + "_";
+    string name = asString(value);
+
+    for (char c : name)
+    {
+        if (isupper((ubyte)(c)) && result.size() > _prefix.length() + 1)
+            result += '_';
+
+        result += (ubyte)(toupper((ubyte)(c)));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------
 string Map::getNaturalWonderTypeAsString(NaturalWonderType _type)
 {
     string result = "FEATURE_";
@@ -214,13 +250,29 @@ string Map::getNaturalWonderTypeAsString(NaturalWonderType _type)
 
     for (char c : name)
     {
-        if (isupper((char)(c)) && result.size() > strlen("FEATURE_"))
+        if (isupper((ubyte)(c)) && result.size() > strlen("FEATURE_"))
             result += '_';
 
-        result += (char)(toupper((char)(c)));
+        result += (ubyte)(toupper((ubyte)(c)));
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------
+NaturalWonderType Map::getNaturalWonderFromString(const string & _naturalWonderTypeS, uint x, uint y)
+{
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        NaturalWonderType type = (NaturalWonderType)i;
+
+        if (getNaturalWonderTypeAsString(type) == _naturalWonderTypeS)
+            return type;
+    }
+
+    LOG_WARNING("Unknown NaturalWonderType \"%s\" at (%u, %u)", _naturalWonderTypeS.c_str(), x, y);
+
+    return NaturalWonderType::None;
 }
 
 //--------------------------------------------------------------------------------------

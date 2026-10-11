@@ -32,7 +32,31 @@ using namespace tinyxml2;
 
 SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];
 SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
+SharedIcon Map::s_naturalWonderIcons[enumCount<NaturalWonderType>()];
 SharedIcon Map::s_defaultFlag;
+
+//--------------------------------------------------------------------------------------
+// Test conversion funcs
+//--------------------------------------------------------------------------------------
+void Map::Test()
+{
+    // TODO: remove 'Random' enum values
+    // 
+    //for (auto val : enumValues<NaturalWonderType>())
+    //{
+    //    NaturalWonderType value = val.first;
+    //
+    //    string s1 = getNaturalWonderTypeAsString(value);
+    //    string s2 = getEnumAsExportString("FEATURE",  value);
+    //    ASSERT(s1 == s2);
+    //
+    //    NaturalWonderType e1 = getNaturalWonderFromString(s1, -1, -1);
+    //    NaturalWonderType e2 = getEnumValueFromString<NaturalWonderType>("FEATURE", s1);
+    //    ASSERT(e1 == e2);
+    //
+    //    ASSERT(e1 == value, "Count not convert enum \"%s\" to enum type", s1.c_str());
+    //}
+}
 
 //--------------------------------------------------------------------------------------
 string Map::GetMapDataPathFromMapPath(const string & _mapPath) const
@@ -195,7 +219,7 @@ void Map::loadIcons(bool _reload)
                     resIcon.texture.generateMipmap();
                 }
                 else if (!dirty)
-                    LOG_ERROR("Resource texture \"%s\" could not be loaded", (path).c_str());
+                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
             }
         }
     }
@@ -214,7 +238,7 @@ void Map::loadIcons(bool _reload)
                 if (!FileExists(path))
                 {
                     if (FeatureType::None != val.first)
-                        LOG_WARNING("Feature texture \"%s\" not found", (path).c_str());
+                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
                     path = fmt::sprintf("data/img/features/%s.png", "Default");
                     dirty = true;
                 }
@@ -226,7 +250,38 @@ void Map::loadIcons(bool _reload)
                     resIcon.texture.generateMipmap();
                 }
                 else if (!dirty)
-                    LOG_ERROR("Feature texture \"%s\" could not be loaded", (path).c_str());
+                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
+            }
+        }
+    }
+
+    for (auto val : enumValues<NaturalWonderType>())
+    {
+        if (NaturalWonderType::Random != val.first && NaturalWonderType::None != val.first)
+        {
+            int index = (int)val.first;
+            SharedIcon & resIcon = s_naturalWonderIcons[index];
+            if (resIcon.dirty && _reload)
+            {
+                bool dirty = false;
+
+                auto path = fmt::sprintf("data/img/naturalwonders/%s.png", asString((NaturalWonderType)index));
+                if (!FileExists(path))
+                {
+                    if (NaturalWonderType::None != val.first)
+                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
+                    path = fmt::sprintf("data/img/naturalwonders/%s.png", "Default");
+                    dirty = true;
+                }
+
+                if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
+                {
+                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    resIcon.dirty = dirty;
+                    resIcon.texture.generateMipmap();
+                }
+                else if (!dirty)
+                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
             }
         }
     }

@@ -59,7 +59,8 @@ enum class MapBitmap
 {
     TerrainData = 0,       // TerrainType | Biome | Feature | Continent then Resource | ? | ? | ?
     Features,
-    Resources
+    Resources,
+    NaturalWonder
 };
 
 //--------------------------------------------------------------------------------------
@@ -191,6 +192,8 @@ class Map
 public:
     Map();
 
+    static void Test();
+
     void BeginPaint();
     void Paint(int _x, int _y);
     void EndPaint();
@@ -275,7 +278,14 @@ public:
     static BiomeType getBiomeTypeFromString(const string & _biomeTypeS, uint x, uint y);
     static FeatureType getFeatureFromString(const string & _biomeTypeS, uint x, uint y);
     static ResourceType getResourceFromString(const string & _biomeTypeS, uint x, uint y);
+    static NaturalWonderType getNaturalWonderFromString(const string & _naturalWonderTypeS, uint x, uint y);
 
+private:
+    //--------------------------------------------------------------------------------------
+    template <typename E> static E getEnumValueFromString(const string & _prefix, const string & _string, uint _x = -1, uint _y = -1);
+    template <typename E> static string getEnumAsExportString(const string& _prefix, E _value);
+
+public:
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
@@ -368,6 +378,7 @@ public:
     // shared
     static SharedIcon       s_resourceIcons[enumCount<ResourceType>()];
     static SharedIcon       s_featureIcons[enumCount<FeatureType>()];
+    static SharedIcon       s_naturalWonderIcons[enumCount<NaturalWonderType>()];
     static SharedIcon       s_defaultFlag;
 
     MapVersion              m_mapVersion = MapVersion::Invalid;
@@ -429,6 +440,7 @@ public:
     bool                    m_showBorders = true;
     bool                    m_showResources = true;
     bool                    m_showFeatures = true;
+    bool                    m_showNaturalWonders = true;
     bool                    m_showTSL = true;
     bool                    m_showHemispheres = true;
     bool                    m_showOverlayImage = false;

@@ -120,7 +120,7 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
         DrawSmallColoredSquare(EditEnumTraits<E>::GetColor(itemToSelect));
 
         ImGui::SameLine();
-        ImGui::Text("%s (%i)", EditEnumTraits<E>::GetName(map, itemToSelect).c_str(), (int)itemToSelect);
+        ImGui::Text("%s", EditEnumTraits<E>::GetName(map, itemToSelect).c_str());
         return dirty;
     };
 
@@ -146,7 +146,7 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
             ImGui::SetNextItemWidth(comboWidth);
         }
 
-        if (ImGui::BeginCombo((!pBool ? label : "###" + label).c_str(), fmt::sprintf("%s (%i)", name, (int)value).c_str(), ImGuiComboFlags_HeightLargest))
+        if (ImGui::BeginCombo((!pBool ? label : "###" + label).c_str(), fmt::sprintf("%s", name).c_str(), ImGuiComboFlags_HeightLargest))
         {
             if constexpr (EditEnumTraits<E>::HasNoneValue)
             {

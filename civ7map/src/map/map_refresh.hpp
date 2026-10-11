@@ -127,9 +127,10 @@ void Map::refresh(bool _reload)
 
     auto & resources = m_bitmaps[(int)MapBitmap::Resources];
     auto & features = m_bitmaps[(int)MapBitmap::Features];
+    auto & naturalWonders = m_bitmaps[(int)MapBitmap::NaturalWonder];
 
-    resources.sprites.clear();
-    features.sprites.clear();
+    for (auto & bitmap : m_bitmaps)
+        bitmap.sprites.clear();
 
     for (u32 h = 0; h < m_height; ++h)
     {
@@ -214,7 +215,25 @@ void Map::refresh(bool _reload)
                         spriteInfo.sprite.setTexture(icons.texture);
                         spriteInfo.x = w;
                         spriteInfo.y = h;
-                        spriteInfo.scale = 0.75f;
+                        //spriteInfo.scale = 0.75f;
+                    }
+                }
+            }
+
+            if (m_showNaturalWonders)
+            {
+                if (NaturalWonderType::Random != tile.naturalWonder && NaturalWonderType::None != tile.naturalWonder)
+                {
+                    uint resIndex = (int)tile.naturalWonder;
+                    auto & icons = s_naturalWonderIcons[resIndex];
+
+                    if (icons.texture.getSize().x > 0)
+                    {
+                        SpriteInfo & spriteInfo = naturalWonders.sprites.emplace_back();
+                        spriteInfo.sprite.setTexture(icons.texture);
+                        spriteInfo.x = w;
+                        spriteInfo.y = h;
+                        //spriteInfo.scale = 0.75f;
                     }
                 }
             }
@@ -273,18 +292,19 @@ void Map::refresh(bool _reload)
         {
             switch ((MapBitmap)i)
             {
-            default:
-                break;
-                
-            case MapBitmap::Resources:
-                bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
-                bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
-                break;
+                default:
+                    assert(false);
+                    break;
 
-            case MapBitmap::Features:
-                bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
-                bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
-                break;
+                case MapBitmap::TerrainData:
+                    break;
+                
+                case MapBitmap::Resources:
+                case MapBitmap::Features:
+                case MapBitmap::NaturalWonder:
+                    bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
+                    bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
+                    break;
             }
         }
     }

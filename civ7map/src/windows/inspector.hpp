@@ -161,7 +161,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             {
                 DrawColoredSquare(getNaturalWonderColor(tile->naturalWonder));
 
-                if (ImGui::BeginCombo("Natural", fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(tile->naturalWonder)), (int)tile->naturalWonder).c_str(), ImGuiComboFlags_HeightLargest))
+                if (ImGui::BeginCombo("Wonder", fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(tile->naturalWonder)), (int)tile->naturalWonder).c_str(), ImGuiComboFlags_HeightLargest))
                 {
                     for (auto val : enumValues<NaturalWonderType>())
                     {

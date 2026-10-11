@@ -149,7 +149,11 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
             needRefresh |= Checkbox("Features", &g_map->m_showFeatures);
             needRefresh |= Checkbox("Resources", &g_map->m_showResources);
-            needRefresh |= Checkbox("TSL", &g_map->m_showTSL);   
+            needRefresh |= Checkbox("Natural Wonders", &g_map->m_showNaturalWonders);   
+            needRefresh |= Checkbox("True Start Locations", &g_map->m_showTSL);
+
+            ImGui::Separator();
+
             needRefresh |= Checkbox("Overlay", &g_map->m_showOverlayImage);
             
             ImGui::SameLine();

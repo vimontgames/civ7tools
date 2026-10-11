@@ -32,6 +32,10 @@ void Map::render(RenderWindow & _window)
         const auto mapBitmap = (MapBitmap)i;
         switch (mapBitmap)
         {
+            default:
+                assert(false);
+                break;
+
             case MapBitmap::TerrainData:
                 bitmap.drawQuad = true;
                 bitmap.drawSprites = false;
@@ -43,6 +47,11 @@ void Map::render(RenderWindow & _window)
                 break;
 
             case MapBitmap::Features:
+                bitmap.drawQuad = false;
+                bitmap.drawSprites = true;
+                break;
+
+            case MapBitmap::NaturalWonder:
                 bitmap.drawQuad = false;
                 bitmap.drawSprites = true;
                 break;

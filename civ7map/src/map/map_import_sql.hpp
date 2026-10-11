@@ -277,6 +277,47 @@ bool Map::importSQLiteMap(const string & _cwd)
         return false;
     }
 
+    // Natural Wonders (table may not exist)
+    sql = "SELECT ID, Value FROM PlotNaturalWonders";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+    if (rc == SQLITE_OK)
+    {
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        {
+            int ID = sqlite3_column_int(stmt, 0);
+
+            int x, y;
+            getPlotCoords(ID, &x, &y);
+
+            const char * value = (const char *)sqlite3_column_text(stmt, 1);
+
+            if (value)
+                m_civ7TerrainType.get(x, y).naturalWonder = getNaturalWonderFromString(value, x, y);
+        }
+
+        if (rc != SQLITE_DONE)
+        {
+            LOG_ERROR("Failed to read PlotNaturalWonders: %s", sqlite3_errmsg(db));
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return false;
+        }
+
+        sqlite3_finalize(stmt);
+    }
+    else if (string(sqlite3_errmsg(db)).find("no such table") != string::npos)
+    {
+        // Table doesn't exist - this is valid for older maps.
+        LOG_WARNING("Table \"PlotNaturalWonders\" not found.");
+    }
+    else
+    {
+        LOG_ERROR("Failed to prepare SQL statement for PlotNaturalWonders: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return false;
+    }
+
     // Close the database connection
     sqlite3_close(db);
 

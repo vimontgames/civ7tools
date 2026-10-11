@@ -67,6 +67,41 @@ static int   Strnicmp(const char * s1, const char * s2, int n) { int d = 0; whil
 static char * Strdup(const char * s) { size_t len = strlen(s) + 1; void * buf = malloc(len); return (char *)memcpy(buf, (const void *)s, len); }
 static void  Strtrim(char * s) { char * str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
+//--------------------------------------------------------------------------------------
+inline int AssertFailure(const char * condition, const char * format = nullptr, ...)
+{
+    char message[2048];
+    int offset = snprintf(message, sizeof(message), "ASSERT(%s)", condition);
+
+    if (format && offset > 0 && offset < sizeof(message) - 1)
+    {
+        offset += snprintf(message + offset, sizeof(message) - offset, "\n\n");
+
+        if (offset > 0 && offset < sizeof(message))
+        {
+            va_list args;
+            va_start(args, format);
+            vsnprintf(message + offset, sizeof(message) - offset, format, args);
+            va_end(args);
+        }
+    }
+
+    strcat(message, "\n\n'Yes' to break in debugger\n'No' to skip\n'Cancel' to aways ignore this assert.");
+
+    return MessageBoxA(nullptr, message, "ASSERT", MB_YESNOCANCEL | MB_ICONERROR | MB_TASKMODAL);
+}
+
+//--------------------------------------------------------------------------------------
+#define ASSERT(cond, ...) \
+    do { \
+        static bool ignoreAlways = false; \
+        if (!(cond) && !ignoreAlways) { \
+            int result = AssertFailure(#cond __VA_OPT__(,) __VA_ARGS__); \
+            if (result == IDYES && IsDebuggerPresent()) __debugbreak(); \
+            if (result == IDCANCEL) ignoreAlways = true; \
+        } \
+    } while (0)
+
 struct float2
 {
     float2(float _x = 0.0f, float _y = 0.0f) :
