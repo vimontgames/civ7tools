@@ -31,15 +31,10 @@ async function generateMap() {
   hexMap.initFromTerrainBuilder();
   paintElevation();
   //paintEarthHugeRivers();
-  //paintEarthHugeNaturalWonders();
+  paintNaturalWonders(iWidth, iHeight);
   //paintEarthHugeResourcesAntiquity();
-  const topSnowRows = 6;
-  const bottomSnowRows = 5;
-  const maxSnowWeight = 100;
-  const snowRandomization = 20;
-  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization);
   const genCtx = new GenerationContext();
-  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Lakes| GenerationPhases.Elevation| GenerationPhases.Hills| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.NaturalWonders| GenerationPhases.m_randomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
+  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.m_randomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
   genCtx.bRunAestheticRiverValidation = false;
   generateMapFeatures(hexMap, genCtx);
   //nameRivers();
@@ -85,7 +80,7 @@ function getRandomCivStartLocation() {
       plotIndex = GameplayMap.getIndexFromXY(42, 30);
       break;
     case 3:
-      plotIndex = GameplayMap.getIndexFromXY(58, 35);
+      plotIndex = GameplayMap.getIndexFromXY(60, 36);
       break;
     case 4:
       plotIndex = GameplayMap.getIndexFromXY(59, 29);
@@ -109,7 +104,7 @@ function getRandomCivStartLocation() {
       plotIndex = GameplayMap.getIndexFromXY(34, 26);
       break;
     case 11:
-      plotIndex = GameplayMap.getIndexFromXY(45, 28);
+      plotIndex = GameplayMap.getIndexFromXY(46, 28);
       break;
     case 12:
       plotIndex = GameplayMap.getIndexFromXY(64, 39);
@@ -282,7 +277,7 @@ function assignStartPositions() {
           plotIndex = GameplayMap.getIndexFromXY(42, 30);
           break;
         case "LOC_CIVILIZATION_HAN_NAME":
-          plotIndex = GameplayMap.getIndexFromXY(58, 35);
+          plotIndex = GameplayMap.getIndexFromXY(60, 36);
           break;
         case "LOC_CIVILIZATION_KHMER_NAME":
           plotIndex = GameplayMap.getIndexFromXY(59, 29);
@@ -306,7 +301,7 @@ function assignStartPositions() {
           plotIndex = GameplayMap.getIndexFromXY(34, 26);
           break;
         case "LOC_CIVILIZATION_ASSYRIA_NAME":
-          plotIndex = GameplayMap.getIndexFromXY(45, 28);
+          plotIndex = GameplayMap.getIndexFromXY(46, 28);
           break;
         case "LOC_CIVILIZATION_SILLA_NAME":
           plotIndex = GameplayMap.getIndexFromXY(64, 39);
@@ -492,7 +487,7 @@ function assignStartPositions() {
         GameplayMap.getLocationFromIndex(position).y,
         startPositions,
         index
-      ) < 4) {
+      ) < 3) {
         invalidPosition = true;
         console.log("check1");
       } else {
@@ -530,49 +525,413 @@ function assignStartPositions() {
 function fakeWrapX()
 { 
 }
-function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization) {
-    console.log("Generating permanent snow");
-    const aLightSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "LIGHT", "PERMANENT"]);
-    const aMediumSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "MEDIUM", "PERMANENT"]);
-    const aHeavySnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "HEAVY", "PERMANENT"]);
-    const aWeightEffect = [-1, -1, -1];
-    aWeightEffect[0] = aLightSnowEffects ? aLightSnowEffects[0] : -1;
-    aWeightEffect[1] = aMediumSnowEffects ? aMediumSnowEffects[0] : -1;
-    aWeightEffect[2] = aHeavySnowEffects ? aHeavySnowEffects[0] : -1;
-    const aWeightChance = [10, 30, 60];
-    const weightAdjustment = maxWeight / 100;
-    const placeSnow = (x, y, percentChance) => {
-        percentChance *= weightAdjustment;
-        if (!GameplayMap.isWater(x, y)) {
-            const snowRandomization = TerrainBuilder.getRandomNumber(randomization * 2, "Snow weight randomization");
-            const snowWeight = percentChance + snowRandomization - randomization;
-            if (snowWeight > 0) {
-                for (let weight = aWeightChance.length - 1; weight >= 0; --weight) {
-                    if (snowWeight > aWeightChance[weight]) {
-                        MapPlotEffects.addPlotEffect(GameplayMap.getIndexFromXY(x, y), aWeightEffect[weight]);
-                        break;
-                    }
-                }
-            }
-        }
-    };
-    if (topRows > 0) {
-        const endTopRow = height - topRows;
-        for (let row = height; row > endTopRow; --row) {
-            const snowPercent = (1 - (height - row) / topRows) * 100;
-            for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
-            }
-        }
-    }
-    if (bottomRows > 0) {
-        for (let row = 0; row < bottomRows; ++row) {
-            const snowPercent = (1 - row / bottomRows) * 100;
-            for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
-            }
-        }
-    }
+
+async function paintNaturalWonders(width, height) {
+  console.log("Begin paintNaturalWonders");
+  let aPossibleWonders = [];
+  let iElevation
+  let featureParam;
+  let placementX ;
+  let placementY;
+  for (const nwDef of GameInfo.Feature_NaturalWonders) 
+  {
+      aPossibleWonders.push(nwDef.$hash);
+  }
+  for (let iI = 0; iI < aPossibleWonders.length; iI++)
+  {
+      let eFeature = aPossibleWonders[iI];
+      let nwDef = GameInfo.Feature_NaturalWonders.lookup(eFeature);
+      if (nwDef != null)
+      {
+          console.log("Placing natural wonder " + nwDef.FeatureType + " ...");
+          let possibleLocations = ""
+          let possibleLocationCount = 0;
+          for (let iY = height - 1; iY >= 0; iY--)
+          {
+              for (let iX = 0; iX < width; iX++)
+              {
+                  iElevation = GameplayMap.getElevation(iX, iY);
+                  featureParam = 
+                  {
+                      Feature: nwDef.$hash,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(iX, iY, featureParam))
+                  {
+                      if (possibleLocations.length > 0)
+                      {
+                          possibleLocations += ", ";
+                      }
+                      possibleLocations += "(" + String(iX).padStart(2, '0') + ", " + String(iY).padStart(2, '0') + ")";
+                      possibleLocationCount++;
+                  }
+              }
+              if (possibleLocations.length > 0)
+              {
+                  console.log(possibleLocations);
+                  possibleLocations = "";
+              }
+          }
+          if (possibleLocations.length > 0)
+          {
+              console.log(possibleLocations);
+          }
+          console.log(possibleLocationCount + " possible location(s) found.");
+          switch (nwDef.FeatureType)
+          {
+              case "FEATURE_VALLEY_OF_FLOWERS":
+              {
+                  placementX = 55;
+                  placementY = 31;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_BARRIER_REEF":
+              {
+                  placementX = 0;
+                  placementY = 11;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_REDWOOD_FOREST":
+              {
+                  placementX = 2;
+                  placementY = 37;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_GRAND_CANYON":
+              {
+                  placementX = 6;
+                  placementY = 34;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_HOERIKWAGGO":
+              {
+                  placementX = 39;
+                  placementY = 4;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_KILIMANJARO":
+              {
+                  placementX = 44;
+                  placementY = 11;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_ZHANGJIAJIE":
+              {
+                  placementX = 62;
+                  placementY = 32;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_THERA":
+              {
+                  placementX = 43;
+                  placementY = 29;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_TORRES_DEL_PAINE":
+              {
+                  placementX = 18;
+                  placementY = 3;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_ULURU":
+              {
+                  placementX = 69;
+                  placementY = 10;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_BERMUDA_TRIANGLE":
+              {
+                  placementX = 17;
+                  placementY = 30;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_MOUNT_FUJI":
+              {
+                  placementX = 71;
+                  placementY = 38;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_VIHREN":
+              {
+                  placementX = 40;
+                  placementY = 35;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_VINICUNCA":
+              {
+                  placementX = 17;
+                  placementY = 12;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+              case "FEATURE_GREAT_BLUE_HOLE":
+              {
+                  placementX = 15;
+                  placementY = 23;
+                  iElevation = GameplayMap.getElevation(placementX, placementY);
+                  featureParam =
+                  {
+                      Feature: eFeature,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))
+                  {
+                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);
+                      console.log(nwDef.FeatureType + " has been successfully placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+                  else
+                  {
+                      console.log(nwDef.FeatureType + " could not be placed at (" + String(placementX).padStart(2, '0') + ", " + String(placementY).padStart(2, '0') + ").");
+                  }
+              }
+              break;
+
+                      default:
+                          console.log(nwDef.FeatureType + " had no custom location defined."); 
+                      break;
+          }
+      }
+  }
+  console.log("End paintNaturalWonders");
 }
 engine.on("RequestMapInitData", requestMapData);
 engine.on("GenerateMap", generateMap);
