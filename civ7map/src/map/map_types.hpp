@@ -91,8 +91,6 @@ string Map::getFeatureTypeAsString(FeatureType _type)
     {
         default:
             LOG_WARNING("Unknow FeatureType \"%s\" (%i)", asString(_type).c_str(), (int)_type);
-        case FeatureType::Random:
-            return "-1";
         case FeatureType::None:
             return "0";
         case FeatureType::SagebrushSteppe:
@@ -231,6 +229,10 @@ template <typename E> string Map::getEnumAsExportString(const string & _prefix, 
     string result = _prefix + "_";
     string name = asString(value);
 
+    // special case for "None" enum value
+    if (name == "None")
+        return "0";
+
     for (char c : name)
     {
         if (isupper((ubyte)(c)) && result.size() > _prefix.length() + 1)
@@ -245,6 +247,9 @@ template <typename E> string Map::getEnumAsExportString(const string & _prefix, 
 //--------------------------------------------------------------------------------------
 string Map::getNaturalWonderTypeAsString(NaturalWonderType _type)
 {
+    if (_type == NaturalWonderType::None)
+        return "0";
+
     string result = "FEATURE_";
     string name = asString(_type);
 
@@ -282,8 +287,6 @@ string Map::getResourceTypeAsString(ResourceType _type)
     {
         default:
             LOG_WARNING("Unknown ResourceType \"%d\"", static_cast<int>(_type));
-        case ResourceType::Random:
-            return "-1";
         case ResourceType::None:
             return "0";
         case ResourceType::Cotton:

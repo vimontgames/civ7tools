@@ -602,78 +602,91 @@ int main()
                                 {
                                     ImGui::BeginTooltip();
                                     {
-                                        ImGui::Text("%i,%i", cell.x, cell.y);
+                                        ImGui::Text("Tile %i,%i", cell.x, cell.y);
                                         ImGui::Separator();
 
-                                        DrawColor(g_map, tile.continent);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.continent);
-
-                                        DrawColor(g_map, tile.landmass);
-                                        ImGui::SameLine();
-                                          ImGui::Text("(%i)", (int)tile.landmass);
-
-                                        DrawColor(g_map, tile.terrain);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.terrain);
-                                
-                                        DrawColor(g_map, tile.biome);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.biome);
-
-                                        DrawColor(g_map, tile.feature);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)",(int)tile.feature);
-
-                                        DrawColor(g_map, tile.resource);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.resource);
-
-                                        DrawColor(g_map, tile.naturalWonder);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.naturalWonder);
-
-                                        DrawColor(g_map, tile.elevation);
-                                        ImGui::SameLine();
-                                        ImGui::Text("(%i)", (int)tile.elevation);
-
-                                        ImGui::Separator();
-
-                                        bool anyTSL = false;
-                                        auto & civilizations = g_map->getCivilizations();
-                                        for (int c = 0; c < civilizations.size(); ++c)
+                                        if (ImGui::BeginTable("TileProperties", 2, ImGuiTableFlags_SizingFixedFit))
                                         {
-                                            const auto & civ = civilizations[c];
-                                            for (int t = 0; t < civ.tsl.size(); ++t)
+                                            ImGui::TableSetupColumn("Property");
+                                            ImGui::TableSetupColumn("Name");
+
+                                            auto drawProperty = [](const char * name, auto value, bool alwaysShow = false)
                                             {
-                                                const auto & tsl = civ.tsl[t];
-                                                if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                                if ((int)value > 0 || alwaysShow)
                                                 {
-                                                    float f3Color[] = { pow(civ.color.r, 1.0f/2.2f), pow(civ.color.g, 1.0f / 2.2f) , pow(civ.color.b, 1.0f / 2.2f) };
-                                                    ImGui::ColorEdit3(fmt::sprintf("###%s", civ.civilizationName).c_str(), f3Color, ImGuiColorEditFlags_NoInputs);
-                                                    ImGui::SameLine();
-                                                    ImGui::SetCursorPosY(GetCursorPosY() + 4);
-                                                    ImGui::Text("%s (#%u)", civ.userFriendlyName.c_str(), t);
-                                                    anyTSL = true;
+                                                    ImGui::TableNextRow();
+
+                                                    ImGui::TableSetColumnIndex(0);
+                                                    ImGui::TextUnformatted(name);
+
+                                                    ImGui::TableSetColumnIndex(1);
+                                                    DrawColor(g_map, value);
+                                                }
+                                            };
+
+                                            drawProperty("Continent", tile.continent);
+                                            drawProperty("Landmass", tile.landmass);
+                                            drawProperty("Terrain", tile.terrain, true);
+                                            drawProperty("Biome", tile.biome, true);
+                                            drawProperty("Feature", tile.feature);
+                                            drawProperty("Resource", tile.resource);
+                                            drawProperty("Natural Wonder", tile.naturalWonder);
+                                            drawProperty("Elevation", tile.elevation);
+
+                                            bool anyTSL = false;
+                                            auto & civilizations = g_map->getCivilizations();
+
+                                            for (int c = 0; c < civilizations.size(); ++c)
+                                            {
+                                                const auto & civ = civilizations[c];
+
+                                                for (int t = 0; t < civ.tsl.size(); ++t)
+                                                {
+                                                    const auto & tsl = civ.tsl[t];
+
+                                                    if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                                    {
+                                                        anyTSL = true;
+                                                        break;
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        #if _DEBUG0
-                                        {
-                                            //if (anyTSL)
-                                            //    ImGui::Separator();
+                                            if (anyTSL)
+                                            {
+                                                ImGui::TableNextRow();
 
-                                            //ImGui::Text("mouse %.0f,%.0f", relativeMousePos.x, relativeMousePos.y);
-                                            //ImGui::Text("temp %.3f,%.3f", temp.x, temp.y);
-                                            //ImGui::Text("uv %.3f,%.3f", uv.x, uv.y);
-                                            float d = cellDist(int2(g_selectedCell.x, g_selectedCell.y), int2(cell.x, cell.y));
-                                            ImGui::Text("Distance %.1f",d);
+                                                ImGui::TableSetColumnIndex(0);
+                                                ImGui::TextUnformatted("TSL");
 
-                                        }
-                                        #endif
+                                                ImGui::TableSetColumnIndex(1);
+                                               
+                                                for (int c = 0; c < civilizations.size(); ++c)
+                                                {
+                                                    const Civilization & civ = civilizations[c];
+
+                                                    for (int t = 0; t < civ.tsl.size(); ++t)
+                                                    {
+                                                        const TSL & tsl = civ.tsl[t];
+
+                                                        if (tsl.pos.x == cell.x && tsl.pos.y == cell.y)
+                                                        {
+                                                            DrawSmallColoredSquare(float4(pow(civ.color.r, 1.0f / 2.2f), pow(civ.color.g, 1.0f / 2.2f), pow(civ.color.b, 1.0f / 2.2f), 1.0f));
+                                                            ImGui::SameLine();
+                                                            ImGui::Text(civ.userFriendlyName.c_str());
+
+                                                            anyTSL = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+
+                                            ImGui::EndTable();
+                                        }                                        
                                     }
                                     ImGui::EndTooltip();
+
                                 }
                             }
                             else

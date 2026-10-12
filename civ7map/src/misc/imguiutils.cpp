@@ -97,32 +97,25 @@ void PopDisabled()
 }
 
 //--------------------------------------------------------------------------------------
-template<typename E> struct EditEnumTraits;
+template<typename E> struct EditEnumTraitsBase
+{
+    static constexpr bool AddNoneValue = false;
+    static constexpr bool UseIntSlider = false;
+    static constexpr auto Step = 1;
+    static constexpr auto MaxValue = (uint)-1;
+
+    static auto GetColor(E value) { return ImVec4(1, 1, 1, 1); }
+    static string GetName(const Map * map, E value) { return SeparateCapitalizedWords(asString(value)); }
+    static uint GetCount(const Map * map) { return enumCount<E>(); }
+    static const string GetLabel() { return ""; }
+};
+
+template<typename E> struct EditEnumTraits : EditEnumTraitsBase<E> {};
 
 //--------------------------------------------------------------------------------------
 template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
 {
     const string label = EditEnumTraits<E>::GetLabel();
-
-    auto drawItem = [&](E itemToSelect)
-    {
-        bool dirty = false;
-        bool isSelected = (value == itemToSelect);
-
-        ImVec2 pos = ImGui::GetCursorScreenPos();
-        float height = ImGui::GetTextLineHeight();
-
-        if (ImGui::Selectable(fmt::sprintf("##Edit%s%i", EditEnumTraits<E>::GetLabel(), (int)itemToSelect).c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x, height)))
-            dirty = true;
-
-        ImGui::SameLine(0, 0);
-        ImGui::SetCursorScreenPos(ImVec2(pos.x + 4, pos.y));
-        DrawSmallColoredSquare(EditEnumTraits<E>::GetColor(itemToSelect));
-
-        ImGui::SameLine();
-        ImGui::Text("%s", EditEnumTraits<E>::GetName(map, itemToSelect).c_str());
-        return dirty;
-    };
 
     E previous = value;
 
@@ -138,32 +131,66 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
     {
         DrawColoredSquare(EditEnumTraits<E>::GetColor(value));
 
-        string name = EditEnumTraits<E>::GetName(map, value);
-
         if (pBool)
         {
             const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
             ImGui::SetNextItemWidth(comboWidth);
         }
 
-        if (ImGui::BeginCombo((!pBool ? label : "###" + label).c_str(), fmt::sprintf("%s", name).c_str(), ImGuiComboFlags_HeightLargest))
+        if constexpr (EditEnumTraits<E>::UseIntSlider)
         {
-            if constexpr (EditEnumTraits<E>::HasNoneValue)
-            {
-                if (drawItem(E::None))
-                    value = E::None;
-            }
+            const int stepValue = EditEnumTraits<E>::Step;
+            const int maxValue = EditEnumTraits<E>::MaxValue;
 
-            if (map)
+            int step = ((int)value + stepValue / 2) / stepValue;
+            char format[32];
+            sprintf_s(format, "%d", step * stepValue);
+
+            if (ImGui::SliderInt((!pBool ? label : "###" + label).c_str(), &step, 0, maxValue / stepValue, format))
             {
+                value = (E)(step * stepValue);
+            }
+        }
+        else
+        {
+            auto drawItem = [&](E itemToSelect)
+            {
+                bool dirty = false;
+                bool isSelected = (value == itemToSelect);
+
+                ImVec2 pos = ImGui::GetCursorScreenPos();
+                float height = ImGui::GetTextLineHeight();
+
+                if (ImGui::Selectable(fmt::sprintf("##Edit%s%i", EditEnumTraits<E>::GetLabel(), (int)itemToSelect).c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x, height)))
+                    dirty = true;
+
+                ImGui::SameLine(0, 0);
+                ImGui::SetCursorScreenPos(ImVec2(pos.x + 4, pos.y));
+                DrawSmallColoredSquare(EditEnumTraits<E>::GetColor(itemToSelect));
+
+                ImGui::SameLine();
+                ImGui::Text("%s", EditEnumTraits<E>::GetName(map, itemToSelect).c_str());
+                return dirty;
+            };
+
+            string preview = EditEnumTraits<E>::GetName(map, value);
+
+            if (ImGui::BeginCombo((!pBool ? label : "###" + label).c_str(), fmt::sprintf("%s", preview).c_str(), ImGuiComboFlags_HeightLargest))
+            {
+                if constexpr (EditEnumTraits<E>::AddNoneValue)
+                {
+                    if (drawItem(E::None))
+                        value = E::None;
+                }
+
                 for (uint i = 0; i < EditEnumTraits<E>::GetCount(map); ++i)
                 {
                     if (drawItem((E)i))
                         value = (E)i;
                 }
-            }
 
-            ImGui::EndCombo();
+                ImGui::EndCombo();
+            }
         }
     }
     PopDisabled();
@@ -172,19 +199,15 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
 }
 
 //--------------------------------------------------------------------------------------
-string GetContinentShortName(const Map * map, ContinentType continent)
-{
-    return map ? map->getContinentShortName(continent).c_str() : "None";
-}
-
+// ContinentType traits
 //--------------------------------------------------------------------------------------
-template<> struct EditEnumTraits<ContinentType>
+template<> struct EditEnumTraits<ContinentType> : EditEnumTraitsBase<ContinentType>
 {
-    static constexpr bool HasNoneValue = true;
+    static constexpr bool AddNoneValue = true;
 
     static auto GetColor(ContinentType value) { return getContinentColor(value); }
-    static string GetName(const Map * map, ContinentType value) { return GetContinentShortName(map, value); }
-    static uint GetCount(const Map * map) { return map->getContinentCount(); }
+    static string GetName(const Map * map, ContinentType value) { return map ? map->getContinentShortName(value).c_str() : "None"; }
+    static uint GetCount(const Map * map) { return map? map->getContinentCount() : 0; }
     static const string GetLabel() { return "Continent"; }
 };
 
@@ -195,18 +218,13 @@ bool EditContinent(const Map * map, ContinentType & continent, bool * pBool)
 }
 
 //--------------------------------------------------------------------------------------
-string GetLandmassShortName(const Map * map, LandmassType landmass)
+// LandmassType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<LandmassType> : EditEnumTraitsBase<LandmassType>
 {
-    return map && landmass < map->getLandmassCount() ? map->getLandmassShortName(landmass) : "Landmass 0";
-}
-
-template<> struct EditEnumTraits<LandmassType>
-{
-    static constexpr bool HasNoneValue = false;
-
     static auto GetColor(LandmassType value) { return getLandmassColor(value); }
-    static string GetName(const Map * map, LandmassType value) { return GetLandmassShortName(map, value); }
-    static uint GetCount(const Map * map) { return map->getLandmassCount(); }
+    static string GetName(const Map * map, LandmassType value) { return map && (int)value < map->getLandmassCount() ? map->getLandmassShortName(value) : "Landmass 0"; }
+    static uint GetCount(const Map * map) { return map? map->getLandmassCount() : 1; }
     static const string GetLabel() { return "Landmass"; }
 };
 
@@ -214,4 +232,98 @@ template<> struct EditEnumTraits<LandmassType>
 bool EditLandmass(const Map * map, LandmassType & landmass, bool * pBool)
 {
     return EditEnum<LandmassType>(map, landmass, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// TerrainType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<TerrainType> : EditEnumTraitsBase<TerrainType>
+{
+    static auto GetColor(TerrainType value) { return getTerrainColor(value); }
+    static const string GetLabel() { return "Terrain"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditTerrain(const Map * map, TerrainType & terrain, bool * pBool)
+{
+    return EditEnum<TerrainType>(map, terrain, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// BiomeType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<BiomeType> : EditEnumTraitsBase<BiomeType>
+{
+    static auto GetColor(BiomeType value) { return getBiomeColor(value); }
+    static const string GetLabel() { return "Biome"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditBiome(const Map * map, BiomeType & biome, bool * pBool)
+{
+    return EditEnum<BiomeType>(map, biome, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// FeatureType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<FeatureType> : EditEnumTraitsBase<FeatureType>
+{
+    static auto GetColor(FeatureType value) { return getFeatureColor(value); }
+    static const string GetLabel() { return "Feature"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditFeature(const Map * map, FeatureType & feature, bool * pBool)
+{
+    return EditEnum<FeatureType>(map, feature, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// ResourceType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<ResourceType> : EditEnumTraitsBase<ResourceType>
+{
+    static auto GetColor(ResourceType value) { return getResourceColor(value); }
+    static const string GetLabel() { return "Resource"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditResource(const Map * map, ResourceType & resource, bool * pBool)
+{
+    return EditEnum<ResourceType>(map, resource, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// NaturalWonderType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<NaturalWonderType> : EditEnumTraitsBase<NaturalWonderType>
+{
+    static auto GetColor(NaturalWonderType value) { return getNaturalWonderColor(value); }
+    static const string GetLabel() { return "Wonder"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditNaturalWonder(const Map * map, NaturalWonderType & naturalWonder, bool * pBool)
+{
+    return EditEnum<NaturalWonderType>(map, naturalWonder, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// Elevation traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<Elevation> : EditEnumTraitsBase<Elevation>
+{
+    static constexpr bool UseIntSlider = true;
+    static constexpr auto Step = elevationStep;
+    static constexpr auto MaxValue = maxElevation;
+
+    static auto GetColor(Elevation value) { return getElevationColor(value); }
+    static const string GetLabel() { return "Elevation"; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditElevation(const Map * map, Elevation & elevation, bool * pBool)
+{
+    return EditEnum<Elevation>(map, elevation, pBool);
 }

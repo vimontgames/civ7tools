@@ -1,9 +1,8 @@
 #pragma once
 
 //--------------------------------------------------------------------------------------
-enum class NaturalWonderType : i8
+enum class NaturalWonderType : u8
 {
-    Random = -1,
     None = 0,
 
     ValleyOfFlowers,
@@ -22,7 +21,7 @@ enum class NaturalWonderType : i8
     BermudaTriangle,
     Machapuchare,
     MountFuji,
-    Vihran,
+    Vihren,
     Vinicunca,
     GreatBlueHole,
     MapuAVaeaBlowholes,
@@ -31,7 +30,7 @@ enum class NaturalWonderType : i8
 };
 
 //--------------------------------------------------------------------------------------
-enum class TerrainType : i8
+enum class TerrainType : u8
 {
     Moutain = 0,
     Hill,
@@ -48,9 +47,9 @@ struct TerrainInfo
 };
 
 //--------------------------------------------------------------------------------------
-enum class BiomeType : i8
+enum class BiomeType : u8
 {
-    Tundra =0,
+    Tundra = 0,
     Grassland,
     Plains,
     Tropical,
@@ -71,47 +70,44 @@ struct BiomeTerrainInfo
 };
 
 //--------------------------------------------------------------------------------------
-enum class FertilityType : i8
+enum class FertilityType : u8
 {
-    Random = -1,
-
     Dry = 0,
     Standart,
     Fertile
 };
 
 //--------------------------------------------------------------------------------------
-enum class FeatureType : i8
+enum class FeatureType : u8
 {
-    Random                          = -1,
-    None                            = 0,
+    None = 0,
 
-    SagebrushSteppe                 = 1,
-    Oasis                           = 2,
-    DesertFloodplainMinor           = 3,
-    DesertFloodplainNavigable       = 4,
-    Forest                          = 5,
-    Marsh                           = 6,
-    GrasslandFloodplainMinor        = 7,
-    GrasslandFloodplainNavigable    = 8,
-    Reef                            = 9,
-    ColdReef                        = 10,
-    Ice                             = 11,
-    SavannaWoodland                 = 12,
-    WateringHole                    = 13,
-    PlainsFloodplainMinor           = 14,
-    PlainsFloodplainNavigable       = 15,
-    RainForest                      = 16,
-    Mangrove                        = 17,
-    TropicalFloodplainMinor         = 18,
-    TropicalFloodplainNavigable     = 19,
-    Taiga                           = 20,
-    TundraBog                       = 21,
-    TundraFloodplainMinor           = 22,
-    TundraFloodplainNavigable       = 23,
-    Volcano                         = 24,
-    Atoll                           = 25,
-    Lotus                           = 26
+    SagebrushSteppe,
+    Oasis,
+    DesertFloodplainMinor,
+    DesertFloodplainNavigable,
+    Forest,
+    Marsh,
+    GrasslandFloodplainMinor,
+    GrasslandFloodplainNavigable,
+    Reef,
+    ColdReef,
+    Ice,
+    SavannaWoodland,
+    WateringHole,
+    PlainsFloodplainMinor,
+    PlainsFloodplainNavigable,
+    RainForest,
+    Mangrove,
+    TropicalFloodplainMinor,
+    TropicalFloodplainNavigable,
+    Taiga,
+    TundraBog,
+    TundraFloodplainMinor,
+    TundraFloodplainNavigable,
+    Volcano,
+    Atoll,
+    Lotus                           
 };
 
 //--------------------------------------------------------------------------------------
@@ -137,66 +133,64 @@ struct LandmassInfo
 };
 
 //--------------------------------------------------------------------------------------
-enum class ResourceType
+enum class ResourceType : u8
 {
-    Random              = -1,
-
-    None                = 0,
-    Cotton              = 1,
-    Dates               = 2,
-    Dyes                = 3,
-    Fish                = 4,
-    Gold                = 5,
-    GoldDistantLands    = 6,
-    Gypsum              = 7,
-    Incense             = 8,
-    Ivory               = 9,
-    Jade                = 10,
-    Kaolin              = 11,
-    Marble              = 12,
-    Pearls              = 13,
-    Silk                = 14,
-    Silver              = 15,
-    SilverDistantLands  = 16,
-    Wine                = 17,
-    Camels              = 18,
-    Hides               = 19,
-    Horses              = 20,
-    Iron                = 21,
-    Salt                = 22,
-    Wool                = 23,
-    LapisLazuli         = 24,
-    Cocoa               = 25,
-    Furs                = 26,
-    Spices              = 27,
-    Sugar               = 28,
-    Tea                 = 29,
-    Truffles            = 30,
-    Niter               = 31,
-    Cloves              = 32,
-    Whales              = 33,
-    Coffee              = 34,
-    Tobacco             = 35,
-    Citrus              = 36,
-    Coal                = 37,
-    Nickel              = 38,
-    Oil                 = 39,
-    Quinine             = 40,
-    Rubber              = 41,
-    Mangos              = 42,
-    Clay                = 43,
-    Flax                = 44,
-    Rubies              = 45,
-    Rice                = 46,
-    Limestone           = 47,
-    Tin                 = 48,
-    Llamas              = 49,
-    Hardwood            = 50,
-    WildGame            = 51,
-    Crabs               = 52,
-    Cowrie              = 53,
-    Turtles             = 54,
-    Pitch               = 55
+    None = 0,
+    Cotton,
+    Dates,
+    Dyes,
+    Fish,
+    Gold,
+    GoldDistantLands,
+    Gypsum,
+    Incense,
+    Ivory,
+    Jade,
+    Kaolin,
+    Marble,
+    Pearls,
+    Silk,
+    Silver,
+    SilverDistantLands,
+    Wine,
+    Camels,
+    Hides,
+    Horses,
+    Iron,
+    Salt,
+    Wool,
+    LapisLazuli,
+    Cocoa,
+    Furs,
+    Spices,
+    Sugar,
+    Tea,
+    Truffles,
+    Niter,
+    Cloves,
+    Whales,
+    Coffee,
+    Tobacco,
+    Citrus,
+    Coal,
+    Nickel,
+    Oil,
+    Quinine,
+    Rubber,
+    Mangos,
+    Clay,
+    Flax,
+    Rubies,
+    Rice,
+    Limestone,
+    Tin,
+    Llamas,
+    Hardwood,
+    WildGame,
+    Crabs,
+    Cowrie,
+    Turtles,
+    Pitch               
 };
 
 //--------------------------------------------------------------------------------------
@@ -213,8 +207,17 @@ enum class ContinentType : i8
     None = -1
 };
 
-using LandmassType = u8;
-using Elevation = u16;
+//--------------------------------------------------------------------------------------
+enum class LandmassType : u8
+{
+
+};
+
+//--------------------------------------------------------------------------------------
+enum class Elevation : u16
+{
+
+};
 
 //--------------------------------------------------------------------------------------
 struct Civ7Tile
@@ -223,9 +226,9 @@ struct Civ7Tile
     LandmassType      landmass      = (LandmassType)0;
     TerrainType       terrain       = TerrainType::Flat;
     BiomeType         biome         = BiomeType::Tundra;
-    FeatureType       feature       = FeatureType::Random;
-    ResourceType      resource      = ResourceType::Random;
-    NaturalWonderType naturalWonder = NaturalWonderType::Random;
+    FeatureType       feature       = FeatureType::None;
+    ResourceType      resource      = ResourceType::None;
+    NaturalWonderType naturalWonder = NaturalWonderType::None;
     Elevation         elevation     = (Elevation)0;
     bool              impassable    = false;
 

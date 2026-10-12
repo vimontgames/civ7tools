@@ -213,6 +213,7 @@ public:
     bool setResource(int _x, int _y, ResourceType _value);
     bool setLandmass(int _x, int _y, LandmassType _value);
     bool setNaturalWonder(int _x, int _y, NaturalWonderType _value);
+    bool setElevation(int _x, int _y, Elevation _value);
 
     bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize);
     bool createFolders();
@@ -280,12 +281,6 @@ public:
     static ResourceType getResourceFromString(const string & _biomeTypeS, uint x, uint y);
     static NaturalWonderType getNaturalWonderFromString(const string & _naturalWonderTypeS, uint x, uint y);
 
-private:
-    //--------------------------------------------------------------------------------------
-    template <typename E> static E getEnumValueFromString(const string & _prefix, const string & _string, uint _x = -1, uint _y = -1);
-    template <typename E> static string getEnumAsExportString(const string& _prefix, E _value);
-
-public:
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
@@ -347,6 +342,8 @@ public:
     void cutRect(sf::Vector2i _begin, sf::Vector2i _end);
 
 private:
+    bool setTileUndoRedo(int _x, int _y, const Civ7Tile & _value);
+
     template <typename T> void loadBitmap(Array2D<T> & _array, tinyxml2::XMLElement * _xmlTerrainSave, const string & _name, u32 _width, u32 _height);
     u32 * loadTexture(tinyxml2::XMLElement * _xmlTerrainSave, const string & _name);
     
@@ -373,6 +370,9 @@ private:
     void exportMapDataCiv7Map();
 
     Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
+
+    template <typename E> static E getEnumValueFromString(const string & _prefix, const string & _string, uint _x = -1, uint _y = -1);
+    template <typename E> static string getEnumAsExportString(const string & _prefix, E _value);
         
 public:
     // shared

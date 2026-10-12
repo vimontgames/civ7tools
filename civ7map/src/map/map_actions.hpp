@@ -127,11 +127,14 @@ void Map::Paint(int _x, int _y)
                 if (paintWindow->m_paintBiomeType)
                     tileCopy.biome = paintWindow->m_biomeType; 
 
-                if (paintWindow->m_paintFeature)
+                if (paintWindow->m_paintFeatureType)
                     tileCopy.feature = paintWindow->m_featureType;
 
-                if (paintWindow->m_paintResource)
+                if (paintWindow->m_paintResourceType)
                     tileCopy.resource = paintWindow->m_resourceType;
+
+                if (paintWindow->m_paintNaturalWonderType)
+                    tileCopy.naturalWonder = paintWindow->m_naturalWonder;
 
                 if (paintWindow->m_paintElevation)
                     tileCopy.elevation = paintWindow->m_elevation;
@@ -216,9 +219,9 @@ void Map::clearFeatures()
             for (uint x = 0; x < m_width; ++x)
             {
                 Civ7Tile tile = m_civ7TerrainType.get(x, y);
-                if (tile.feature != FeatureType::Random)
+                if (tile.feature != FeatureType::None)
                 {
-                    tile.feature = FeatureType::Random;
+                    tile.feature = FeatureType::None;
                     undoRedoPaintTile->add(x, y, m_civ7TerrainType.get(x, y), tile);
                     m_civ7TerrainType.get(x, y) = tile;
                 }
@@ -307,9 +310,9 @@ void Map::clearResources()
             for (uint x = 0; x < m_width; ++x)
             {
                 Civ7Tile tile = m_civ7TerrainType.get(x, y);
-                if (tile.resource != ResourceType::Random)
+                if (tile.resource != ResourceType::None)
                 {
-                    tile.resource = ResourceType::Random;
+                    tile.resource = ResourceType::None;
                     undoRedoPaintTile->add(x, y, m_civ7TerrainType.get(x, y), tile);
                     m_civ7TerrainType.get(x, y) = tile;
                 }

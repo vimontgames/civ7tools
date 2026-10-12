@@ -66,151 +66,38 @@ bool PaintWindow::Draw(const RenderWindow & window)
             // "Landmass"
             LandmassType landmass = m_landmassType;
             if (EditLandmass(map, landmass, &m_paintLandmassType))
-                m_landmassType = landmass;            
- 
-            // TerrainType
-            //if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Terrain###PaintTerrain", &m_paintTerrainType);
-                ImGui::SameLine(comboX);
+                m_landmassType = landmass;     
 
-                if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("Enable painting terrain type");
+            // "TerrainType"
+            TerrainType terrain = m_terrainType;
+            if (EditTerrain(map, terrain, &m_paintTerrainType))
+                m_terrainType = terrain;
 
-                PushDisabled(!m_paintTerrainType);
-                {
-                    DrawColoredSquare(getTerrainColor(m_terrainType));
+            // "BiomeType"
+            BiomeType biome = m_biomeType;
+            if (EditBiome(map, biome, &m_paintBiomeType))
+                m_biomeType = biome;
 
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
+            // "FeatureType"
+            FeatureType feature = m_featureType;
+            if (EditFeature(map, feature, &m_paintFeatureType))
+                m_featureType = feature;
 
-                    if (ImGui::BeginCombo("###SelectPaintTerrainCombo", fmt::sprintf("%s (%i)", asString(m_terrainType), (int)m_terrainType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        for (auto val : enumValues<TerrainType>())
-                        {
-                            bool isSelected = (val.first == m_terrainType);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                                m_terrainType = val.first;
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
+            // "ResourceType"
+            ResourceType resource = m_resourceType;
+            if (EditResource(map, resource, &m_paintResourceType))
+                m_resourceType = resource;
 
-                PopDisabled();
-            }
+            // "NaturalWonderType"
+            NaturalWonderType naturalWonder = m_naturalWonder;
+            if (EditNaturalWonder(map, naturalWonder, &m_paintNaturalWonderType))
+                m_naturalWonder = naturalWonder;
 
-            // BiomeType
-            //if (ImGui::CollapsingHeader("Biome", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Biome###PaintBiome", &m_paintBiomeType);
-                ImGui::SameLine(comboX);
-                if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("Enable painting biome type");
-
-                PushDisabled(!m_paintBiomeType);
-                {
-                    DrawColoredSquare(getBiomeColor(m_biomeType));
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    if (ImGui::BeginCombo("###SelectPaintBiomeCombo", fmt::sprintf("%s (%i)", asString(m_biomeType), (int)m_biomeType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        for (auto val : enumValues<BiomeType>())
-                        {
-                            bool isSelected = (val.first == m_biomeType);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                                m_biomeType = val.first;
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
-                PopDisabled();
-            }
-
-            // FeatureType
-            //if (ImGui::CollapsingHeader("Feature", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Feature###PaintFeature", &m_paintFeature);
-                ImGui::SameLine(comboX);
-                if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("Enable painting feature type");
-
-                PushDisabled(!m_paintFeature);
-                {
-                    DrawColoredSquare(getFeatureColor(m_featureType));
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    if (ImGui::BeginCombo("###SelectPaintFeatureCombo", fmt::sprintf("%s (%i)", asString(m_featureType), (int)m_featureType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        for (auto val : enumValues<FeatureType>())
-                        {
-                            bool isSelected = (val.first == m_featureType);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                                m_featureType = val.first;
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
-
-                PopDisabled();
-            }
-
-            // ResourceType
-            //if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Resource###PaintResource", &m_paintResource);
-                ImGui::SameLine(comboX);
-
-                PushDisabled(!m_paintResource);
-                {
-                    DrawColoredSquare(getResourceColor(m_resourceType));
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    if (ImGui::BeginCombo("###SelectPaintResourceCombo", fmt::sprintf("%s (%i)", asString(m_resourceType), (int)m_resourceType).c_str(), ImGuiComboFlags_HeightLargest))
-                    {
-                        for (auto val : enumValues<ResourceType>())
-                        {
-                            bool isSelected = (val.first == m_resourceType);
-                            if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), (int)val.first).c_str(), isSelected))
-                                m_resourceType = val.first;
-                        }
-                        ImGui::EndCombo();
-                    }
-                }
-                PopDisabled();
-            }
-
-            // Elevation
-            //if (ImGui::CollapsingHeader("Resource", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
-            {
-                ImGui::Checkbox("Elevation###PaintElevation", &m_paintElevation);
-                ImGui::SameLine(comboX);
-
-                PushDisabled(!m_paintElevation);
-                {
-                    DrawColoredSquare(getElevationColor(m_elevation));
-
-                    const float comboWidth = ImGui::GetWindowContentRegionMax().x - ImGui::GetCursorPosX();
-                    ImGui::SetNextItemWidth(comboWidth);
-
-                    int step = (m_elevation + elevationStep / 2) / elevationStep;
-                    char format[32];
-                    sprintf_s(format, "%d", step * elevationStep);
-
-                    if (ImGui::SliderInt("###Elevation", &step, 0, maxElevation / elevationStep, format))
-                    {
-                        m_elevation = step * elevationStep;
-                    }
-                }
-                PopDisabled();
-            }
+            // "Elevation"
+            Elevation elevation = m_elevation;
+            if (EditElevation(map, elevation, &m_paintElevation))
+                m_elevation = elevation;           
         }
-
         
         if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {

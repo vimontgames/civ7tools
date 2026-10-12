@@ -248,7 +248,7 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("  hexMap.initFromTerrainBuilder();\n");
     data += fmt::sprintf("  paintElevation();\n");
     data += fmt::sprintf("  //paintEarthHugeRivers();\n");
-    data += fmt::sprintf("  paintNaturalWonders();\n");
+    data += fmt::sprintf("  paintNaturalWonders(iWidth, iHeight);\n");
     data += fmt::sprintf("  //paintEarthHugeResourcesAntiquity();\n");
 
     if (m_randomSnow && m_useAdvancedSnow)
@@ -342,9 +342,9 @@ void Map::exportMapDataCiv7Map()
         {
             Civ7Tile tile = m_civ7TerrainType.get(x, y);
             if (x == 0 && y == 0)
-                data += fmt::sprintf("%u", tile.elevation);
+                data += fmt::sprintf("%i", (int)tile.elevation);
             else
-                data += fmt::sprintf(", %u", tile.elevation);
+                data += fmt::sprintf(", %i", (int)tile.elevation);
         }
     }
     data += "];\n";
@@ -463,7 +463,7 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("        GameplayMap.getLocationFromIndex(position).y,\n");
     data += fmt::sprintf("        startPositions,\n");
     data += fmt::sprintf("        index\n");
-    data += fmt::sprintf("      ) < 4) {\n");
+    data += fmt::sprintf("      ) < 3) {\n");
     data += fmt::sprintf("        invalidPosition = true;\n");
     data += fmt::sprintf("        console.log(\"check1\");\n");
     data += fmt::sprintf("      } else {\n");
@@ -523,7 +523,7 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("        } \n");
         data += fmt::sprintf("    } \n");
     }
-    data += fmt::sprintf("}\n");
+    data += fmt::sprintf("}\n\n");
 
     if (m_randomSnow && m_useAdvancedSnow)
     {
@@ -570,7 +570,7 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("            }\n");
         data += fmt::sprintf("        }\n");
         data += fmt::sprintf("    }\n");
-        data += fmt::sprintf("}\n");
+        data += fmt::sprintf("}\n\n");
     }
 
     // Natural wonders should appear only once
@@ -605,7 +605,7 @@ void Map::exportMapDataCiv7Map()
 
 #if 0
     // Randomize natural wonders
-    data += fmt::sprintf("async function paintNaturalWonders() {\n");
+    data += fmt::sprintf("async function paintNaturalWonders(width, height) {\n");
     data += fmt::sprintf("    console.log(\"Begin paintNaturalWonders\");\n");
     data += fmt::sprintf("    const iNumNaturalWonders = 22;\n");
     data += fmt::sprintf("    let aPossibleWonders = [];\n");
@@ -619,8 +619,6 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("        for (const eFeature of aPossibleWonders) {\n");
     data += fmt::sprintf("            if (iPlacedWonders < iNumNaturalWonders) {\n");
     data += fmt::sprintf("                const nwDef = GameInfo.Feature_NaturalWonders.lookup(eFeature);\n");
-    data += fmt::sprintf("                let placementX = 0;\n");
-    data += fmt::sprintf("                let placementY = 0;\n");
     data += fmt::sprintf("                if (nwDef != null) {\n");
     data += fmt::sprintf("                    let iElevation = GameplayMap.getElevation(0, 0);\n");
     data += fmt::sprintf("                    let featureParam = { Feature: eFeature, Direction : nwDef.Direction, Elevation : iElevation };\n");
@@ -659,20 +657,149 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("    console.log(\"End paintNaturalWonders\");\n");
     data += fmt::sprintf("}\n");
 
+#elif 1
+
+    // Inspired by legacy wonder placement code
+    data += fmt::sprintf("async function paintNaturalWonders(width, height) {\n");
+    data += fmt::sprintf("  console.log(\"Begin paintNaturalWonders\");\n");
+    data += fmt::sprintf("  let aPossibleWonders = [];\n");
+    data += fmt::sprintf("  let iElevation\n");
+    data += fmt::sprintf("  let featureParam;\n");
+    data += fmt::sprintf("  let placementX ;\n");
+    data += fmt::sprintf("  let placementY;\n");
+    data += fmt::sprintf("  for (const nwDef of GameInfo.Feature_NaturalWonders) \n");
+    data += fmt::sprintf("  {\n");
+    data += fmt::sprintf("      aPossibleWonders.push(nwDef.$hash);\n");
+    data += fmt::sprintf("  }\n");
+    data += fmt::sprintf("  for (let iI = 0; iI < aPossibleWonders.length; iI++)\n");
+    data += fmt::sprintf("  {\n");
+    data += fmt::sprintf("      let eFeature = aPossibleWonders[iI];\n");
+    data += fmt::sprintf("      let nwDef = GameInfo.Feature_NaturalWonders.lookup(eFeature);\n");
+    data += fmt::sprintf("      if (nwDef != null)\n");
+    data += fmt::sprintf("      {\n");
+    data += fmt::sprintf("          console.log(\"Placing natural wonder \" + nwDef.FeatureType + \" ...\");\n");
+    data += fmt::sprintf("          let possibleLocations = \"\"\n");
+    data += fmt::sprintf("          let possibleLocationCount = 0;\n");
+    data += fmt::sprintf("          for (let iY = height - 1; iY >= 0; iY--)\n");
+    data += fmt::sprintf("          {\n");
+    data += fmt::sprintf("              for (let iX = 0; iX < width; iX++)\n");
+    data += fmt::sprintf("              {\n");
+    data += fmt::sprintf("                  iElevation = GameplayMap.getElevation(iX, iY);\n");
+    data += fmt::sprintf("                  featureParam = \n");
+    data += fmt::sprintf("                  {\n");
+    data += fmt::sprintf("                      Feature: nwDef.$hash,\n");
+    data += fmt::sprintf("                      Direction : nwDef.Direction,\n");
+    data += fmt::sprintf("                      Elevation : iElevation\n");
+    data += fmt::sprintf("                  };\n");
+    data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeatureParam(iX, iY, featureParam))\n");
+    data += fmt::sprintf("                  {\n");
+    data += fmt::sprintf("                      if (possibleLocations.length > 0)\n");
+    data += fmt::sprintf("                      {\n");
+    data += fmt::sprintf("                          possibleLocations += \", \";\n");
+    data += fmt::sprintf("                      }\n");
+    data += fmt::sprintf("                      possibleLocations += \"(\" + String(iX).padStart(2, '0') + \", \" + String(iY).padStart(2, '0') + \")\";\n");
+    data += fmt::sprintf("                      possibleLocationCount++;\n");
+    data += fmt::sprintf("                  }\n");
+    data += fmt::sprintf("              }\n");
+    data += fmt::sprintf("              if (possibleLocations.length > 0)\n");
+    data += fmt::sprintf("              {\n");
+    data += fmt::sprintf("                  console.log(possibleLocations);\n");
+    data += fmt::sprintf("                  possibleLocations = \"\";\n");
+    data += fmt::sprintf("              }\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("          if (possibleLocations.length > 0)\n");
+    data += fmt::sprintf("          {\n");
+    data += fmt::sprintf("              console.log(possibleLocations);\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("          console.log(possibleLocationCount + \" possible location(s) found.\");\n");
+    data += fmt::sprintf("          switch (nwDef.FeatureType)\n");
+    data += fmt::sprintf("          {\n");
+
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        if (naturalWonderCounter[i] > 0)
+        {
+            data += fmt::sprintf("              case \"%s\":\n", getNaturalWonderTypeAsString((NaturalWonderType)i));
+            data += fmt::sprintf("              {\n");
+            data += fmt::sprintf("                  placementX = %i;\n", naturalWonderCoords[i].x);
+            data += fmt::sprintf("                  placementY = %i;\n", naturalWonderCoords[i].y);
+            data += fmt::sprintf("                  iElevation = GameplayMap.getElevation(placementX, placementY);\n");
+            data += fmt::sprintf("                  featureParam =\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      Feature: eFeature,\n");
+            data += fmt::sprintf("                      Direction : nwDef.Direction,\n");
+            data += fmt::sprintf("                      Elevation : iElevation\n");
+            data += fmt::sprintf("                  };\n");
+            data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" has been successfully placed at (\" + String(placementX).padStart(2, '0') + \", \" + String(placementY).padStart(2, '0') + \").\");\n");
+            data += fmt::sprintf("                  }\n");
+            data += fmt::sprintf("                  else\n");
+            data += fmt::sprintf("                  {\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" could not be placed at (\" + String(placementX).padStart(2, '0') + \", \" + String(placementY).padStart(2, '0') + \").\");\n");
+            data += fmt::sprintf("                  }\n");
+            data += fmt::sprintf("              }\n");
+            data += fmt::sprintf("              break;\n\n");
+        }
+    }
+    data += fmt::sprintf("                      default:\n");
+    data += fmt::sprintf("                          console.log(nwDef.FeatureType + \" had no custom location defined.\"); \n");
+    data += fmt::sprintf("                      break;\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("      }\n");
+    data += fmt::sprintf("  }\n");
+    data += fmt::sprintf("  console.log(\"End paintNaturalWonders\");\n");
+    data += fmt::sprintf("}\n");
+
 #else
     // Place all natural wonders
-    data += fmt::sprintf("async function paintNaturalWonders() {\n");
+    data += fmt::sprintf("async function paintNaturalWonders(width, height) {\n");
     data += fmt::sprintf("  console.log(\"Begin paintNaturalWonders\");\n");
     data += fmt::sprintf("  for (const nwDef of GameInfo.Feature_NaturalWonders)\n");
     data += fmt::sprintf("  {\n");
-    //data += fmt::sprintf("      console.log(\"Available natural wonder: \" + nwDef.FeatureType);\n");
     data += fmt::sprintf("      if (nwDef != null)\n");
     data += fmt::sprintf("      {\n");
+    data += fmt::sprintf("          console.log(\"Placing natural wonder: \" + nwDef.FeatureType + \"...\");\n");
     data += fmt::sprintf("          let eFeature = nwDef.$hash;\n");
     data += fmt::sprintf("          let iElevation = GameplayMap.getElevation(0, 0);\n");
     data += fmt::sprintf("          let featureParam = { Feature: eFeature, Direction : nwDef.Direction, Elevation : iElevation };\n");
     data += fmt::sprintf("          let placementX = 0;\n");
     data += fmt::sprintf("          let placementY = 0;\n");
+    data += fmt::sprintf("          let possibleLocations = \"\"\n");
+    data += fmt::sprintf("          let possibleLocationCount = 0;\n");
+    data += fmt::sprintf("          for (let iY = height - 1; iY >= 0; iY--)\n");
+    data += fmt::sprintf("          {\n");
+    data += fmt::sprintf("              for (let iX = 0; iX < width; iX++)\n");
+    data += fmt::sprintf("              {\n");
+    data += fmt::sprintf("                  const iElevation = GameplayMap.getElevation(iX, iY);\n");
+    data += fmt::sprintf("                  const featureParam = \n");
+    data += fmt::sprintf("                  {\n");
+    data += fmt::sprintf("                      Feature: eFeature,\n");
+    data += fmt::sprintf("                      Direction : nwDef.Direction,\n");
+    data += fmt::sprintf("                      Elevation : iElevation\n");
+    data += fmt::sprintf("                  };\n");
+    data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeatureParam(iX, iY, featureParam))\n");
+    data += fmt::sprintf("                  {\n");
+    data += fmt::sprintf("                      if (possibleLocations.length > 0)\n");
+    data += fmt::sprintf("                      {\n");
+    data += fmt::sprintf("                          possibleLocations += \", \";\n");
+    data += fmt::sprintf("                      }\n");
+    data += fmt::sprintf("                      possibleLocations += \"(\" + String(iX).padStart(2, '0') + \", \" + String(iY).padStart(2, '0') + \")\";\n");
+    data += fmt::sprintf("                      possibleLocationCount++;\n");
+    data += fmt::sprintf("                      if (possibleLocationCount %% 16 === 0)\n");
+    data += fmt::sprintf("                      {\n");
+    data += fmt::sprintf("                          console.log(possibleLocations);\n");
+    data += fmt::sprintf("                          possibleLocations = \"\";\n");
+    data += fmt::sprintf("                      }\n");
+    data += fmt::sprintf("                  }\n");
+    data += fmt::sprintf("              }\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("          if (possibleLocationCount > 0)\n");
+    data += fmt::sprintf("          {\n");
+    data += fmt::sprintf("              console.log(possibleLocations);\n");
+    data += fmt::sprintf("          }\n");
+    data += fmt::sprintf("          console.log(possibleLocationCount + \" possible location(s) found.\");\n");
     data += fmt::sprintf("          switch (nwDef.FeatureType)\n");
     data += fmt::sprintf("          {\n");
 
@@ -687,24 +814,24 @@ void Map::exportMapDataCiv7Map()
             data += fmt::sprintf("                  featureParam =\n");
             data += fmt::sprintf("                  {\n");
             data += fmt::sprintf("                      Feature: eFeature,\n");
-            data += fmt::sprintf("                      Direction : DirectionTypes.NO_DIRECTION,\n");
+            data += fmt::sprintf("                      Direction : nwDef.Direction,\n");
             data += fmt::sprintf("                      Elevation : iElevation\n");
             data += fmt::sprintf("                  };\n");
-            data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeature(placementX, placementY, nwDef.FeatureType))\n");
+            data += fmt::sprintf("                  if (TerrainBuilder.canHaveFeatureParam(placementX, placementY, featureParam))\n");
             data += fmt::sprintf("                  {\n");
-            data += fmt::sprintf("                      TerrainBuilder.setFeatureType(placementX, placementY, featureParam);\n");
-            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" has been successfully placed at (\" + placementX + \",\" + placementY + \")\");\n");
+            data += fmt::sprintf("                      //TerrainBuilder.setFeatureType(placementX, placementY, featureParam);\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" has been successfully placed at (\" + String(placementX).padStart(2, '0') + \", \" + String(placementY).padStart(2, '0') + \").\");\n");
             data += fmt::sprintf("                  }\n");
             data += fmt::sprintf("                  else\n");
             data += fmt::sprintf("                  {\n");
-            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" could not be placed at (\" + placementX + \",\" + placementY + \")\");\n");
+            data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" could not be placed at (\" + String(placementX).padStart(2, '0') + \", \" + String(placementY).padStart(2, '0') + \").\");\n");
             data += fmt::sprintf("                  }\n");
             data += fmt::sprintf("                  break;\n");
         }
     }
-    data += fmt::sprintf("                      default:\n");
-    data += fmt::sprintf("                          console.log(nwDef.FeatureType + \" has no location defined\"); \n");
-    data += fmt::sprintf("                      break;\n");
+    data += fmt::sprintf("                  default:\n");
+    data += fmt::sprintf("                      console.log(nwDef.FeatureType + \" had no custom location defined.\"); \n");
+    data += fmt::sprintf("                  break;\n");
     data += fmt::sprintf("          }\n");
     data += fmt::sprintf("      }\n");
     data += fmt::sprintf("  }\n");
@@ -936,10 +1063,10 @@ void Map::exportSQLiteMap()
                 sqlite3_bind_text(stmt, 2, terrainTypeS.c_str(), -1, SQLITE_STATIC);    // TerrainType
                 sqlite3_bind_text(stmt, 3, biomeTypeS.c_str(), -1, SQLITE_STATIC);      // BiomeType
                 sqlite3_bind_text(stmt, 4, continentTypeS.c_str(), -1, SQLITE_STATIC);  // ContinentType
-                sqlite3_bind_int(stmt, 5, tile.elevation);                              // Elevation
-                sqlite3_bind_int(stmt, 6, tile.impassable ? 1 : 0);                 // IsImpassable 
-                sqlite3_bind_text(stmt, 7, "", -1, SQLITE_STATIC);                      // Tag (commented out)
-                sqlite3_bind_int(stmt, 8, tile.landmass);                               // LandmassRegionId
+                sqlite3_bind_int(stmt, 5, (int)tile.elevation);                         // Elevation
+                sqlite3_bind_int(stmt, 6, tile.impassable ? 1 : 0);                     // IsImpassable 
+                sqlite3_bind_text(stmt, 7, "", -1, SQLITE_STATIC);                      // Tag (unused?)
+                sqlite3_bind_int(stmt, 8, (int)tile.landmass);                          // LandmassRegionId
 
                 sqlite3_step(stmt);
                 sqlite3_reset(stmt);

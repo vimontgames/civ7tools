@@ -49,147 +49,42 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             // "Continent"
             ContinentType continent = tile->continent;
             if (EditContinent(map, continent))
-                map->setContinent(x, y, continent);
+                dirty |= map->setContinent(x, y, continent);
 
             // "Landmass"
             LandmassType landmass = tile->landmass;
             if (EditLandmass(map, landmass))
-                map->setLandmass(x, y, landmass);
+                dirty |= map->setLandmass(x, y, landmass);
 
-            //// Landmass
-            //{
-            //    DrawColoredSquare(getLandmassColor(tile->landmass));
-            //
-            //    string landmassName = map->getLandmassShortName(tile->landmass);
-            //
-            //    if (ImGui::BeginCombo("Landmass", fmt::sprintf("%s (%i)", landmassName, (int)tile->landmass).c_str(), ImGuiComboFlags_HeightLargest))
-            //    {
-            //        for (uint i = 0; i < map->getLandmassCount(); ++i)
-            //        {
-            //            bool isSelected = ((int)tile->landmass == i);
-            //            if (ImGui::Selectable(fmt::sprintf("%s (%i)", map->getLandmassShortName((LandmassType)i), i).c_str(), isSelected))
-            //            {
-            //                if (map->setLandmass(x, y, (LandmassType)i))
-            //                    dirty = true;
-            //            }
-            //        }
-            //        ImGui::EndCombo();
-            //    }
-            //}
+            // "TerrainType"
+            TerrainType terrain = tile->terrain;
+            if (EditTerrain(map, terrain))
+                dirty |= map->setTerrain(x, y, terrain);
 
-            // TerrainType
-            {
-                DrawColoredSquare(getTerrainColor(tile->terrain));
+            // "BiomeType"
+            BiomeType biome = tile->biome;
+            if (EditBiome(map, biome))
+                dirty |= map->setBiome(x, y, biome);
 
-                if (ImGui::BeginCombo("Terrain", fmt::sprintf("%s (%i)", asString(tile->terrain), (int)tile->terrain).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (auto val : enumValues<TerrainType>())
-                    {
-                        const int index = (int)val.first;
-                        bool isSelected = ((int)tile->terrain == index);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
-                        {
-                            if (map->setTerrain(x, y, val.first))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
+            // "FeatureType"
+            FeatureType feature = tile->feature;
+            if (EditFeature(map, feature))
+                dirty |= map->setFeature(x, y, feature);
 
-            // Biome
-            {
-                DrawColoredSquare(getBiomeColor(tile->biome));
+            // "ResourceType"
+            ResourceType resource = tile->resource;
+            if (EditResource(map, resource))
+                dirty |= map->setResource(x, y, resource);
 
-                if (ImGui::BeginCombo("Biome", fmt::sprintf("%s (%i)", asString(tile->biome), (int)tile->biome).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (auto val : enumValues<BiomeType>())
-                    {
-                        const int index = (int)val.first;
-                        bool isSelected = ((int)tile->biome == index);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
-                        {
-                            if (map->setBiome(x, y, val.first))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
+            // "NaturalWonderType"
+            NaturalWonderType naturalWonder = tile->naturalWonder;
+            if (EditNaturalWonder(map, naturalWonder))
+                dirty |= map->setNaturalWonder(x, y, naturalWonder);
 
-            // Feature
-            {
-                DrawColoredSquare(getFeatureColor(tile->feature));
-
-                if (ImGui::BeginCombo("Feature", fmt::sprintf("%s (%i)", asString(tile->feature), (int)tile->feature).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (auto val : enumValues<FeatureType>())
-                    {
-                        const int index = (int)val.first;
-                        bool isSelected = ((int)tile->feature == index);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
-                        {
-                             if (map->setFeature(x, y, val.first))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-
-            // Resource
-            {
-                DrawColoredSquare(getResourceColor(tile->resource));
-
-                if (ImGui::BeginCombo("Resource", fmt::sprintf("%s (%i)", asString(tile->resource), (int)tile->resource).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (auto val : enumValues<ResourceType>())
-                    {
-                        const int index = (int)val.first;
-                        bool isSelected = ((int)tile->resource == index);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", asString(val.first), index).c_str(), isSelected))
-                        {
-                            if (map->setResource(x, y, val.first))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-
-            // Natural Wonder
-            {
-                DrawColoredSquare(getNaturalWonderColor(tile->naturalWonder));
-
-                if (ImGui::BeginCombo("Wonder", fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(tile->naturalWonder)), (int)tile->naturalWonder).c_str(), ImGuiComboFlags_HeightLargest))
-                {
-                    for (auto val : enumValues<NaturalWonderType>())
-                    {
-                        const int index = (int)val.first;
-                        bool isSelected = ((int)tile->naturalWonder == index);
-                        if (ImGui::Selectable(fmt::sprintf("%s (%i)", SeparateCapitalizedWords(asString(val.first)), index).c_str(), isSelected))
-                        {
-                            if (map->setNaturalWonder(x, y, val.first))
-                                dirty = true;
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-
-            // Elevation
-            {
-                DrawColoredSquare(getElevationColor(tile->elevation));
-
-                int step = (tile->elevation + elevationStep / 2) / elevationStep;
-                char format[32];
-                sprintf_s(format, "%d", step * elevationStep);
-
-                if (ImGui::SliderInt("Elevation", &step, 0, maxElevation / elevationStep, format))
-                {
-                    tile->elevation = step * elevationStep;
-                }
-            }
+            // "Elevation"
+            Elevation elevation = tile->elevation;
+            if (EditElevation(map, elevation))
+                dirty |= map->setElevation(x, y, elevation);
 
             // TSL
             {
@@ -272,7 +167,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                 newTSL.pos.x = x;
                                                 newTSL.pos.y = y;
                                                 dstCiv->tsl.push_back(newTSL);
-                                                map->refresh();
+                                                dirty = true;
                                             }
 
                                             if (ImGui::IsItemHovered() && !dstCiv->civilizationName.empty())
@@ -291,7 +186,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                     if (ImGui::Button(fmt::sprintf("Remove###Remove%u", id).c_str()))
                                     {
                                         civ.tsl.erase(civ.tsl.begin() + t);
-                                        map->refresh();
+                                        dirty = true;
                                     }
                                 }
                             }
@@ -303,7 +198,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                             newTSL.pos.x = x;
                             newTSL.pos.y = y;
                             civilizations[0].tsl.push_back(newTSL);
-                            map->refresh();
+                            dirty = true;
                         }
                         ImGui::SameLine();
                         if (ImGui::Button("Missing TSLs"))

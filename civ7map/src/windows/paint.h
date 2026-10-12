@@ -26,15 +26,18 @@ public:
     bool m_protectCoasts = false;
 
     bool m_paintBiomeType = false;
-    BiomeType m_biomeType = BiomeType::Tundra;
+    BiomeType m_biomeType = BiomeType::Grassland;
 
-    bool m_paintFeature = false;
-    FeatureType m_featureType = FeatureType::Forest;
+    bool m_paintFeatureType = false;
+    FeatureType m_featureType = FeatureType::None;
     bool m_featureAutoBiome = true;
     bool m_featureAutoTerrain = true;
 
-    bool m_paintResource = false;
-    ResourceType m_resourceType = ResourceType::Wine;
+    bool m_paintResourceType = false;
+    ResourceType m_resourceType = ResourceType::None;
+
+    bool m_paintNaturalWonderType = false;
+    NaturalWonderType m_naturalWonder = NaturalWonderType::None;
 
     bool m_paintElevation = false;
     Elevation m_elevation = (Elevation)0;

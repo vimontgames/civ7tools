@@ -175,7 +175,7 @@ bool Map::importSQLiteMap(const string & _cwd)
 
             // We can read/write elevation from SQL but the engine seems to only use elevation set from script
             // c.f.   paintEarthHugeElevation();
-            tile.elevation = sqlite3_column_int(stmt, 4);
+            tile.elevation = (Elevation)sqlite3_column_int(stmt, 4);
 
             tile.landmass = getOrCreateLandmassType(sqlite3_column_int(stmt, 7));
 

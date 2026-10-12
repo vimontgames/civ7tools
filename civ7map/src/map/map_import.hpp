@@ -721,7 +721,7 @@ bool Map::importYnAMP(const string & data)
                                 if (!found)
                                 {
                                     LOG_WARNING("Unknown ResourceType \"%s\" at (%u,%u)", resourceTypeS.c_str(), i, j);
-                                    civ7Tile.resource = ResourceType::Random;
+                                    civ7Tile.resource = ResourceType::None;
                                 }
                             }
                         }
@@ -837,11 +837,11 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
         {
             default:
                 LOG_WARNING("Unknown _civ6.feature %i at (%u,%u)", (int)_civ6.feature, i, j);
-                civ7.feature = FeatureType::Random;
+                civ7.feature = FeatureType::None;
                 break;
 
             case Civ6Feature::Random:
-                civ7.feature = FeatureType::Random;
+                civ7.feature = FeatureType::None;
                 break;
 
             case Civ6Feature::FloodPlains:
@@ -903,11 +903,11 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
         {
             default:
                 LOG_WARNING("Cannot match _civ6.resource \"%s\" (%i) at (%u,%u)", asString(_civ6.resource).c_str(), (int)_civ6.resource, i, j);
-                civ7.resource = ResourceType::Random; 
+                civ7.resource = ResourceType::None; 
                 break;
 
             case Civ6Resource::Random:
-                civ7.resource = ResourceType::Random;
+                civ7.resource = ResourceType::None;
                 break;
 
             // Replacement

@@ -162,12 +162,12 @@ void Map::refresh(bool _reload)
             if (tile.continent != ContinentType::None && (int)tile.continent < m_continents.size())
                 getContinentInfo(tile.continent).count++;
 
-            if (tile.landmass < m_landmasses.size())
+            if ((int)tile.landmass < m_landmasses.size())
                 getLandmassInfo(tile.landmass).count++;
 
             if (m_showFeatures)
             {
-                if (FeatureType::Random != tile.feature && FeatureType::None != tile.feature)
+                if (FeatureType::None != tile.feature)
                 {
                     uint featIndex = (int)tile.feature;
                     auto & icons = s_featureIcons[featIndex];
@@ -204,7 +204,7 @@ void Map::refresh(bool _reload)
 
             if (m_showResources)
             {
-                if (ResourceType::Random != tile.resource && ResourceType::None != tile.resource)
+                if (ResourceType::None != tile.resource)
                 {
                     uint resIndex = (int)tile.resource;
                     auto & icons = s_resourceIcons[resIndex];
@@ -222,7 +222,7 @@ void Map::refresh(bool _reload)
 
             if (m_showNaturalWonders)
             {
-                if (NaturalWonderType::Random != tile.naturalWonder && NaturalWonderType::None != tile.naturalWonder)
+                if (NaturalWonderType::None != tile.naturalWonder)
                 {
                     uint resIndex = (int)tile.naturalWonder;
                     auto & icons = s_naturalWonderIcons[resIndex];

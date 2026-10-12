@@ -41,21 +41,21 @@ SharedIcon Map::s_defaultFlag;
 void Map::Test()
 {
     // TODO: remove 'Random' enum values
-    // 
-    //for (auto val : enumValues<NaturalWonderType>())
-    //{
-    //    NaturalWonderType value = val.first;
-    //
-    //    string s1 = getNaturalWonderTypeAsString(value);
-    //    string s2 = getEnumAsExportString("FEATURE",  value);
-    //    ASSERT(s1 == s2);
-    //
-    //    NaturalWonderType e1 = getNaturalWonderFromString(s1, -1, -1);
-    //    NaturalWonderType e2 = getEnumValueFromString<NaturalWonderType>("FEATURE", s1);
-    //    ASSERT(e1 == e2);
-    //
-    //    ASSERT(e1 == value, "Count not convert enum \"%s\" to enum type", s1.c_str());
-    //}
+     
+    for (auto val : enumValues<NaturalWonderType>())
+    {
+        NaturalWonderType value = val.first;
+    
+        string s1 = getNaturalWonderTypeAsString(value);
+        string s2 = getEnumAsExportString("FEATURE",  value);
+        ASSERT(s1 == s2, "String \"%s\" and \"%s\" are different", s1.c_str(), s2.c_str());
+    
+        NaturalWonderType e1 = getNaturalWonderFromString(s1, -1, -1);
+        NaturalWonderType e2 = getEnumValueFromString<NaturalWonderType>("FEATURE", s1);
+        ASSERT(e1 == e2);
+    
+        ASSERT(e1 == value, "Count not convert enum \"%s\" to enum type", s1.c_str());
+    }
 }
 
 //--------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ void Map::loadIcons(bool _reload)
 {
     for (auto val : enumValues<ResourceType>())
     {
-        if (ResourceType::Random != val.first && ResourceType::None != val.first)
+        if (ResourceType::None != val.first)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
@@ -226,7 +226,7 @@ void Map::loadIcons(bool _reload)
 
     for (auto val : enumValues<FeatureType>())
     {
-        if (FeatureType::Random != val.first && FeatureType::None != val.first)
+        if (FeatureType::None != val.first)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_featureIcons[index];
@@ -257,7 +257,7 @@ void Map::loadIcons(bool _reload)
 
     for (auto val : enumValues<NaturalWonderType>())
     {
-        if (NaturalWonderType::Random != val.first && NaturalWonderType::None != val.first)
+        if (NaturalWonderType::None != val.first)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_naturalWonderIcons[index];
@@ -506,7 +506,7 @@ ContinentType Map::getOrCreateContinentType(const string & continentS)
 //--------------------------------------------------------------------------------------
 string Map::getLandmassName(LandmassType landmass) const
 {
-    if (landmass < m_landmasses.size())
+    if ((int)landmass < m_landmasses.size())
         return fmt::sprintf("Landmass %u", m_landmasses[(int)landmass].index);
     else
         return "";
@@ -675,4 +675,27 @@ bool Map::setNaturalWonder(int _x, int _y, NaturalWonderType _value)
         return true;
     }
     return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setElevation(int _x, int _y, Elevation _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.elevation != _value)
+    {
+        tile.elevation = _value;
+        return setTileUndoRedo(_x,_y, tile);
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setTileUndoRedo(int _x, int _y, const Civ7Tile & _value)
+{
+    auto event = new UndoRedoTile(this);
+    event->add(_x, _y, m_civ7TerrainType.get(_x, _y), _value);
+    UndoRedoStack::add(event);
+    m_civ7TerrainType.get(_x, _y) = _value;
+    return true;
 }

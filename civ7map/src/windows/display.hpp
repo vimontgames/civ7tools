@@ -54,7 +54,7 @@ void DrawColor(const Map * _map, Elevation _elevation, bool _count = false)
 {
     float4 color = getElevationColor(_elevation);
     float f3Color[] = { color.r, color.g,  color.b };
-    string landmassName = fmt::sprintf("%u", _elevation);
+    string landmassName = fmt::sprintf("%i", (int)_elevation);
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
     ImGui::Text("%i", _elevation);
@@ -92,9 +92,9 @@ void DrawColor(const Map * _map, FeatureType _feature, bool _count = false)
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
     if (_count)
-        ImGui::Text(fmt::sprintf("%s (%u)", asString(_feature), _map->getFeatureInfo(_feature).count).c_str());
+        ImGui::Text(fmt::sprintf("%s (%u)", SeparateCapitalizedWords(asString(_feature)), _map->getFeatureInfo(_feature).count).c_str());
     else
-        ImGui::Text(asString(_feature).c_str());
+        ImGui::Text(SeparateCapitalizedWords(asString(_feature)).c_str());
 }
 
 //--------------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ void DrawColor(const Map * _map, ResourceType _resource, bool _count = false)
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
     if (_count)
-        ImGui::Text(fmt::sprintf("%s (%u)", asString(_resource), _map->getResourceInfo(_resource).count).c_str());
+        ImGui::Text(fmt::sprintf("%s (%u)", SeparateCapitalizedWords(asString(_resource)), _map->getResourceInfo(_resource).count).c_str());
     else
         ImGui::Text(asString(_resource).c_str());
 }
@@ -128,7 +128,7 @@ void DrawColor(const Map * _map, NaturalWonderType _naturalWonder, bool _count =
     float4 color = getNaturalWonderColor(_naturalWonder);
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
-    ImGui::Text(asString(_naturalWonder).c_str());
+    ImGui::Text(SeparateCapitalizedWords(asString(_naturalWonder)).c_str());
 }
 
 bool g_selectOverlayImage = false;
@@ -275,6 +275,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
                 case MapFilter::Continent:
                 {
+                    DrawColor(g_map, ContinentType::None);
                     for (uint i = 0; i < g_map->getContinentCount(); ++i)
                         DrawColor(g_map, (ContinentType)i);
                 }
