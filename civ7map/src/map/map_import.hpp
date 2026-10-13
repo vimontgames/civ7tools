@@ -775,7 +775,7 @@ Civ7Tile Map::ConvertCiv6TileToCiv7(const Civ6Tile & _civ6, u32 i, u32 j)
         case Civ6Terrain::Plains_Moutain:
         case Civ6Terrain::Desert_Moutain:
         case Civ6Terrain::Grass_Moutain:
-            civ7.terrain = TerrainType::Moutain;
+            civ7.terrain = TerrainType::Mountain;
             break;
 
         case Civ6Terrain::Coast:

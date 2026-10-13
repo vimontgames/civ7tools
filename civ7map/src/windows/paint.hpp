@@ -117,7 +117,7 @@ bool PaintWindow::Draw(const RenderWindow & window)
                         const Civ7Tile & before = map->m_civ7TerrainType.get(x, y);
                         Civ7Tile after = before;
                         after.biome = BiomeType::Marine;
-                        after.terrain = TerrainType::Moutain;
+                        after.terrain = TerrainType::Mountain;
                         after.feature = FeatureType::None;
                         after.resource = ResourceType::None;
                         after.continent = (ContinentType::None);

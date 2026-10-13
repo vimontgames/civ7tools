@@ -1,43 +1,25 @@
 #pragma once
 
 //--------------------------------------------------------------------------------------
-enum class NaturalWonderType : u8
-{
-    None = 0,
-
-    ValleyOfFlowers,
-    BarrierReef,
-    RedwoodForest,
-    GrandCanyon,
-    Gullfoss,
-    Hoerikwaggo,
-    IguazuFalls,
-    Kilimanjaro,
-    Zhangjiajie,
-    Thera,
-    TorresDelPaine,
-    Uluru,
-    MountEverest,
-    BermudaTriangle,
-    Machapuchare,
-    MountFuji,
-    Vihren,
-    Vinicunca,
-    GreatBlueHole,
-    MapuAVaeaBlowholes,
-    NachiFalls,
-    SeongsanIlchulbong,
-};
-
-//--------------------------------------------------------------------------------------
 enum class TerrainType : u8
 {
-    Moutain = 0,
+    Mountain = 0,
     Hill,
     Flat,
     Coast,
     Ocean,
     NavigableRiver
+};
+
+//--------------------------------------------------------------------------------------
+enum class TerrainBit : u8
+{
+    Mountain       = (1UL << (uint)TerrainType::Mountain),
+    Hill           = (1UL << (uint)TerrainType::Hill),
+    Flat           = (1UL << (uint)TerrainType::Flat),
+    Coast          = (1UL << (uint)TerrainType::Coast),
+    Ocean          = (1UL << (uint)TerrainType::Ocean),
+    NavigableRiver = (1UL << (uint)TerrainType::NavigableRiver)
 };
 
 //--------------------------------------------------------------------------------------
@@ -55,6 +37,17 @@ enum class BiomeType : u8
     Tropical,
     Desert,
     Marine
+};
+
+//--------------------------------------------------------------------------------------
+enum class BiomeBit : u8
+{
+    Tundra     = (1UL << (uint)BiomeType::Tundra),
+    Grassland  = (1UL << (uint)BiomeType::Grassland),
+    Plains     = (1UL << (uint)BiomeType::Plains),
+    Tropical   = (1UL << (uint)BiomeType::Tropical),
+    Desert     = (1UL << (uint)BiomeType::Desert),
+    Marine     = (1UL << (uint)BiomeType::Marine),
 };
 
 //--------------------------------------------------------------------------------------
@@ -211,6 +204,71 @@ enum class ContinentType : i8
 enum class LandmassType : u8
 {
 
+};
+
+//--------------------------------------------------------------------------------------
+enum class NaturalWonderType : u8
+{
+    None = 0,
+
+    ValleyOfFlowers,
+    BarrierReef,
+    RedwoodForest,
+    GrandCanyon,
+    Gullfoss,
+    Hoerikwaggo,
+    IguazuFalls,
+    Kilimanjaro,
+    Zhangjiajie,
+    Thera,
+    TorresDelPaine,
+    Uluru,
+    MountEverest,
+    BermudaTriangle,
+    Machapuchare,
+    MountFuji,
+    Vihren,
+    Vinicunca,
+    GreatBlueHole,
+    MapuAVaeaBlowholes,
+    NachiFalls,
+    SeongsanIlchulbong,
+};
+
+//--------------------------------------------------------------------------------------
+struct NaturalWonderPlacementInfo
+{
+    BiomeBit biomes;
+    TerrainBit terrains;
+    const char * description;
+};
+
+//--------------------------------------------------------------------------------------
+constexpr NaturalWonderPlacementInfo g_NaturalWonderPlacement[] =
+{
+    { (BiomeBit)0x00,      (TerrainBit)0x00,     ""},
+    { BiomeBit::Plains,    TerrainBit::Flat,     "2 tiles; passable." },                                            // ValleyOfFlowers
+    { BiomeBit::Marine,    TerrainBit::Coast,    "4 tiles (chain); passable; Coastal Reef." },                      // BarrierReef
+    { BiomeBit::Grassland, TerrainBit::Flat,     "3 tiles (triangle); passable; Vegetated terrain." },              // RedwoodForest
+    { BiomeBit::Desert,    TerrainBit::Hill,     "4 tiles (diamond); impassable; Rough Desert." },                  // GrandCanyon
+    { BiomeBit::Tundra,    TerrainBit::Flat,     "1 tile; impassable; Wet Tundra; provides fresh water." },         // Gullfoss
+    { BiomeBit::Grassland, TerrainBit::Mountain, "4 tiles (Y shape); impassable; Mountainous Grassland." },         // Hoerikwaggo
+    { BiomeBit::Tropical,  TerrainBit::Flat,     "1 tile; impassable; Wet Tropical; provides fresh water." },       // IguazuFalls
+    { BiomeBit::Plains,    TerrainBit::Mountain, "3 tiles (triangle); impassable; Mountainous Volcano." },          // Kilimanjaro
+    { BiomeBit::Tropical,  TerrainBit::Mountain, "2 tiles; impassable; Mountainous Tropical." },                    // Zhangjiajie
+    { BiomeBit::Marine,    TerrainBit::Coast,    "4 tiles (diamond); impassable; Coastal Volcano." },               // Thera
+    { BiomeBit::Tundra,    TerrainBit::Mountain, "3 tiles (triangle); impassable; Mountainous Tundra." },           // TorresDelPaine
+    { BiomeBit::Desert,    TerrainBit::Hill,     "1 tile; impassable; Rough Desert." },                             // Uluru
+    { BiomeBit::Tropical,  TerrainBit::Mountain, "4 tiles (diamond); impassable; Mountainous Tropical." },          // MountEverest
+    { BiomeBit::Marine,    TerrainBit::Ocean,    "3 tiles (triangle); passable; Open Ocean." },                     // BermudaTriangle
+    { BiomeBit::Tropical,  TerrainBit::Mountain, "3 tiles (triangle); impassable; Mountainous Tropical." },         // Machapuchare
+    { BiomeBit::Plains,    TerrainBit::Mountain, "3 tiles (triangle); impassable; Mountainous Volcano." },          // MountFuji
+    { BiomeBit::Plains,    TerrainBit::Mountain, "3 tiles (triangle); impassable; Mountainous Plains." },           // Vihren
+    { BiomeBit::Desert,    TerrainBit::Mountain, "4 tiles (diamond); impassable; Mountainous Desert." },            // Vinicunca
+    { BiomeBit::Marine,    TerrainBit::Coast,    "1 tile; passable; placed on Coast adjacent to 6 Coast tiles." },  // GreatBlueHole
+    { BiomeBit::Marine,    TerrainBit::Coast,    "2 tiles; impassable; placed on Coast adjacent to Cliffs." },      // MapuAVaeaBlowholes
+    { BiomeBit::Tropical,  TerrainBit::Flat,     "4 tiles (diamond); impassable; Flat Tropical." },                 // NachiFalls
+    { BiomeBit::Marine,    TerrainBit::Coast,    "2 tiles; passable; Coastal." }                                    // SeongsanIlchulbong
 };
 
 //--------------------------------------------------------------------------------------

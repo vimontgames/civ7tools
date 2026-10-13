@@ -5,7 +5,7 @@ string Map::getTerrainTypeAsString(TerrainType _type)
 {
     switch (_type)
     {
-        case TerrainType::Moutain:
+        case TerrainType::Mountain:
             return "TERRAIN_MOUNTAIN";
         case TerrainType::Hill:
             return "TERRAIN_HILL";
@@ -26,7 +26,7 @@ string Map::getTerrainTypeAsString(TerrainType _type)
 TerrainType Map::getTerrainTypeFromString(const string & _terrainTypeS, uint x, uint y)
 {
     if (_terrainTypeS == "TERRAIN_MOUNTAIN")
-        return TerrainType::Moutain;
+        return TerrainType::Mountain;
     else if (_terrainTypeS == "TERRAIN_HILL")
         return TerrainType::Hill;
     else if (_terrainTypeS == "TERRAIN_FLAT")

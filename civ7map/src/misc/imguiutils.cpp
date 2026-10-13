@@ -108,6 +108,7 @@ template<typename E> struct EditEnumTraitsBase
     static string GetName(const Map * map, E value) { return SeparateCapitalizedWords(asString(value)); }
     static uint GetCount(const Map * map) { return enumCount<E>(); }
     static const string GetLabel() { return ""; }
+    static const string GetToolTip(E value) { return ""; }
 };
 
 template<typename E> struct EditEnumTraits : EditEnumTraitsBase<E> {};
@@ -170,6 +171,14 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
 
                 ImGui::SameLine();
                 ImGui::Text("%s", EditEnumTraits<E>::GetName(map, itemToSelect).c_str());
+
+                if (ImGui::IsItemHovered())
+                {
+                    auto tooltipMsg = EditEnumTraits<E>::GetToolTip(itemToSelect);
+                    if (!tooltipMsg.empty())
+                        ImGui::SetTooltip(tooltipMsg.c_str());
+                }
+
                 return dirty;
             };
 
@@ -301,6 +310,10 @@ template<> struct EditEnumTraits<NaturalWonderType> : EditEnumTraitsBase<Natural
 {
     static auto GetColor(NaturalWonderType value) { return getNaturalWonderColor(value); }
     static const string GetLabel() { return "Wonder"; }
+    static const string GetToolTip(NaturalWonderType value)
+    { 
+        return g_NaturalWonderPlacement[(int)value].description;
+    }
 };
 
 //--------------------------------------------------------------------------------------
