@@ -451,7 +451,6 @@ inline float4 getBiomeTerrainColor(BiomeType biomeType, TerrainType terrainType)
 // Elevation
 //--------------------------------------------------------------------------------------
 const int maxElevation = 2048;
-const int elevationStep = 256;
 
 inline float4 getElevationColor(uint index)
 {

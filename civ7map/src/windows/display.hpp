@@ -290,7 +290,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
 
                 case MapFilter::Elevation:
                 {
-                    for (uint i = 0; i <= maxElevation; i += elevationStep)
+                    for (uint i = 0; i <= maxElevation; i += EditorOptions::Get().m_elevationStep)
                     {
                         DrawColor(g_map, (Elevation)i);
                     }

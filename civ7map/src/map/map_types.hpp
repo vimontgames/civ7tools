@@ -281,6 +281,40 @@ NaturalWonderType Map::getNaturalWonderFromString(const string & _naturalWonderT
 }
 
 //--------------------------------------------------------------------------------------
+string Map::getCivilizationNameFromString(const string & name)
+{
+    string result = name;
+
+    constexpr const char * prefix = "CIVILIZATION_";
+    constexpr size_t prefixLength = 13;
+
+    if (result.compare(0, prefixLength, prefix) == 0)
+        result.erase(0, prefixLength);
+
+    std::replace(result.begin(), result.end(), '_', ' ');
+
+    bool capitalizeNext = true;
+    for (char & c : result)
+    {
+        if (c == ' ')
+        {
+            capitalizeNext = true;
+        }
+        else if (capitalizeNext)
+        {
+            c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+            capitalizeNext = false;
+        }
+        else
+        {
+            c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------
 string Map::getResourceTypeAsString(ResourceType _type)
 {
     switch (_type)

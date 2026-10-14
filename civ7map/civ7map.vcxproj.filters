@@ -48,6 +48,7 @@
     <ClCompile Include="src\undoredo\UndoRedoTile.cpp">
       <Filter>undoredo</Filter>
     </ClCompile>
+    <ClCompile Include="src\EditorOptions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extern\base64\base64.hpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\map\map_types.hpp">
       <Filter>map</Filter>
     </ClInclude>
+    <ClInclude Include="src\EditorOptions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

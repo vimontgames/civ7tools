@@ -1,5 +1,6 @@
 #include "guistyle.h"
 #include "imgui.h" 
+#include "EditorOptions.h"
 
 using namespace ImGui;
 using namespace std;
@@ -12,8 +13,6 @@ string getFixedSizeString(const string & _string, u32 _size)
     result.append(spaces, ' ');
     return result;
 }
-
-float g_globalScale = 1.0f;
 
 //--------------------------------------------------------------------------------------
 void SetGUIThemeVimontGames_Dark()
@@ -130,14 +129,14 @@ void SetupImGuiStyle()
     style.FrameRounding = rounding;
     style.ScrollbarRounding = rounding;
     style.GrabRounding = rounding;
-    style.Alpha = 0.85f;
+    style.Alpha = 0.95f;
 
 #ifdef IMGUI_HAS_DOCK 
     style.TabBorderSize = 0;
     style.TabRounding = rounding;
 #endif
 
-    float scale = g_globalScale;
+    float scale = EditorOptions::Get().m_editorGlobalScale;
 
     //style.WindowBorderSize *= scale;           // Thickness of border around windows. Generally set to 0.0f or 1.0f. (Other values are not well tested and more CPU/GPU costly).
     //style.WindowMinSize.x *= scale;  

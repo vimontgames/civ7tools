@@ -108,6 +108,12 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                 {
                     if (ImGui::CollapsingHeader("TSL", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
                     {
+                        if (ImGui::Checkbox("Include modded civilizations", &EditorOptions::Get().m_useModdedCivsForTSL))
+                            EditorOptions::Get().Save();
+
+                        if (ImGui::IsItemHovered())
+                            ImGui::SetTooltip("Include modded civilizations from popular mods");
+
                         for (int c = 0; c < civilizations.size(); ++c)
                         {
                             auto & civ = civilizations[c];
@@ -123,10 +129,12 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                     if (ImGui::BeginCombo(fmt::sprintf("TSL###TSL%u", id).c_str(), fmt::sprintf("%s (%u)", civ.userFriendlyName.c_str(), civ.tsl.size()).c_str(), ImGuiComboFlags_HeightLarge))
                                     {
                                         // Sort by era then alphabetical order
-                                        vector<Civilization *> sortedCivs(civilizations.size());
+                                        vector<Civilization *> sortedCivs;
                                         for (int p = 0; p < civilizations.size(); ++p)
-                                            sortedCivs[p] = &civilizations[p];
-
+                                        {
+                                            if (EditorOptions::Get().m_useModdedCivsForTSL || civilizations[p].vanilla)
+                                                sortedCivs.push_back(&civilizations[p]);
+                                        }
                                         sort(sortedCivs.begin(), sortedCivs.end(), [](const Civilization * a, const Civilization * b) {
                                             if (a->era == b->era)
                                                 return a->userFriendlyName < b->userFriendlyName;  // Sort by name if categories are the same
@@ -134,6 +142,8 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                             });
 
                                         Era prevEra = (Era)-2;
+
+                                        bool firstEra = true;
 
                                         for (uint i = 0; i < sortedCivs.size(); ++i)
                                         {
@@ -146,7 +156,7 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                 int eraCivsCount = 0;
                                                 int eraCivsCountWithTSL = 0;
 
-                                                for (int cc = 0; cc < civilizations.size(); ++cc)
+                                                for (int cc = 0; cc < sortedCivs.size(); ++cc)
                                                 {
                                                     auto & cciv = civilizations[cc];
                                                     if (cciv.era == era)
@@ -157,7 +167,15 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                                                     }
                                                 }
 
-                                                ImGui::TextDisabled(fmt::sprintf("%s (%u/%u)", asString(era), eraCivsCountWithTSL, eraCivsCount).c_str());
+                                                if (!firstEra)
+                                                {
+                                                    ImGui::Text(" ");
+                                                    ImGui::Separator();
+                                                    ImGui::TextDisabled(fmt::sprintf("%s (%u/%u)", asString(era), eraCivsCountWithTSL, eraCivsCount).c_str());
+                                                    ImGui::Separator();
+                                                }
+              
+                                                firstEra = false;                             
                                             }
 
                                             if (ImGui::Selectable(fmt::sprintf("%s (%i)", dstCiv->userFriendlyName, dstCiv->tsl.size()).c_str(), isSelected))

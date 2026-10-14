@@ -4,6 +4,7 @@
 #include "tile/civ7tile.h"
 #include "shader/colors.h"
 #include "map/map.h"
+#include "EditorOptions.h"
 
 //--------------------------------------------------------------------------------------
 void DrawColoredSquare(const float4 & _color)
@@ -101,7 +102,6 @@ template<typename E> struct EditEnumTraitsBase
 {
     static constexpr bool AddNoneValue = false;
     static constexpr bool UseIntSlider = false;
-    static constexpr auto Step = 1;
     static constexpr auto MaxValue = (uint)-1;
 
     static auto GetColor(E value) { return ImVec4(1, 1, 1, 1); }
@@ -109,6 +109,7 @@ template<typename E> struct EditEnumTraitsBase
     static uint GetCount(const Map * map) { return enumCount<E>(); }
     static const string GetLabel() { return ""; }
     static const string GetToolTip(E value) { return ""; }
+    static const auto GetEditStep() { return 1; }
 };
 
 template<typename E> struct EditEnumTraits : EditEnumTraitsBase<E> {};
@@ -140,7 +141,7 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
 
         if constexpr (EditEnumTraits<E>::UseIntSlider)
         {
-            const int stepValue = EditEnumTraits<E>::Step;
+            const int stepValue = EditEnumTraits<E>::GetEditStep();
             const int maxValue = EditEnumTraits<E>::MaxValue;
 
             int step = ((int)value + stepValue / 2) / stepValue;
@@ -328,11 +329,11 @@ bool EditNaturalWonder(const Map * map, NaturalWonderType & naturalWonder, bool 
 template<> struct EditEnumTraits<Elevation> : EditEnumTraitsBase<Elevation>
 {
     static constexpr bool UseIntSlider = true;
-    static constexpr auto Step = elevationStep;
     static constexpr auto MaxValue = maxElevation;
 
     static auto GetColor(Elevation value) { return getElevationColor(value); }
     static const string GetLabel() { return "Elevation"; }
+    static const auto GetEditStep() { return EditorOptions::Get().m_elevationStep; }
 };
 
 //--------------------------------------------------------------------------------------

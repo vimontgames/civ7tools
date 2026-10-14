@@ -9,6 +9,7 @@
 #include "map/map.h"
 #include "shader/common.h"
 #include "undoredo/UndoRedo.h"
+#include "EditorOptions.h"
 
 using namespace std;
 using namespace sf;
@@ -94,7 +95,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 51;
+const int g_version_minor = 52;
 const char * g_appName = "Benualdo's Civ7Map Editor";
 
 //--------------------------------------------------------------------------------------
@@ -161,6 +162,9 @@ int main()
 
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingTransparentPayload = true;
+
+    // Load options
+    EditorOptions::Get().Load();
 
     SetupImGuiStyle();
 
@@ -354,9 +358,45 @@ int main()
 
             if (ImGui::BeginMenu("Options"))
             {
-                extern float g_globalScale;
-                if (ImGui::DragFloat("UI Scale", &g_globalScale, 0.25f, 1.0f, 2.0f, "%.1f", 1.0f))
-                    SetupImGuiStyle();
+                float scale = EditorOptions::Get().m_editorGlobalScale;
+                if (ImGui::DragFloat("UI Scale", &scale, 0.25f, 1.0f, 2.0f, "%.1f", 1.0f))
+                {
+                    // TODO: SetupImGuiStyle after loading editor options
+                    EditorOptions::Get().m_editorGlobalScale = scale;
+                    ImGuiIO & io = ImGui::GetIO();
+                    io.FontGlobalScale = scale;
+                    EditorOptions::Get().Save();
+                }
+
+                int & elevationStep = EditorOptions::Get().m_elevationStep;
+
+                int exponent = static_cast<int>(std::round(std::log2(std::max(1, elevationStep))));
+                int maxExponent = static_cast<int>(std::floor(std::log2(maxElevation / 4)));
+
+                if (ImGui::SliderInt("##ElevationSteps", &exponent, 0, maxExponent, ""))
+                {
+                    elevationStep = 1 << exponent;
+                    EditorOptions::Get().Save();
+                }
+
+                const ImVec2 min = ImGui::GetItemRectMin();
+                const ImVec2 max = ImGui::GetItemRectMax();
+
+                const std::string value = std::to_string(elevationStep);
+                const ImVec2 textSize = ImGui::CalcTextSize(value.c_str());
+
+                ImGui::GetWindowDrawList()->AddText(
+                    ImVec2(
+                        (min.x + max.x - textSize.x) * 0.5f,
+                        (min.y + max.y - textSize.y) * 0.5f),
+                    ImGui::GetColorU32(ImGuiCol_Text),
+                    value.c_str());
+
+                ImGui::SameLine();
+                ImGui::Text("Elevation Steps");
+
+                if (ImGui::Checkbox("Use modded civs for TSL", &EditorOptions::Get().m_useModdedCivsForTSL))
+                    EditorOptions::Get().Save();
 
                 ImGui::EndMenu();
             }

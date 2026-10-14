@@ -1140,12 +1140,6 @@ vector<Attribute> parseAttributes(const string & line)
 }
 
 //--------------------------------------------------------------------------------------
-string getExportCivName(const string & _civName)
-{
-    return fmt::sprintf("CIVILIZATION_%s", ToUpperLabel(_civName));
-}
-
-//--------------------------------------------------------------------------------------
 bool Map::importTSL()
 {
     const string tslPath = fmt::sprintf("%s\\%s.xml", GetFolder(m_mapPath), getBaseName());

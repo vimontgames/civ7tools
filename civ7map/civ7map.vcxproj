@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\EditorOptions.cpp" />
     <ClCompile Include="src\misc\imguiutils.cpp" />
     <ClCompile Include="src\undoredo\UndoRedo.cpp" />
     <ClCompile Include="src\undoredo\UndoRedoTile.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="..\extern\stb\stb_image_write.h" />
     <ClInclude Include="src\Array2D.h" />
     <ClInclude Include="src\colorfloat4.h" />
+    <ClInclude Include="src\EditorOptions.h" />
     <ClInclude Include="src\guistyle.h" />
     <ClInclude Include="src\map\map.h" />
     <ClInclude Include="src\map\map_actions.hpp" />

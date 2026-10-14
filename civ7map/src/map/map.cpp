@@ -84,95 +84,110 @@ string Map::GetMapDataPathFromMapPath(const string & _mapPath) const
 //--------------------------------------------------------------------------------------
 Map::Map()
 {
-    // init with default civ list (TODO: parse mod files for custom civs?)
+    // Vanilla civs
 
     // Invalid civ
-    m_civilizations.push_back(Civilization("Unknown", "", Era::Invalid, float4(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "", Era::Invalid, float4(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f)));
 
     // Antiquity Age Civilizations
-    m_civilizations.push_back(Civilization("Aksum", "CIVILIZATION_AKSUM", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));         // Amanitore's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Egypt", "CIVILIZATION_EGYPT", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));      // Hatshepsut's color (YELLOW_LT)
-    m_civilizations.push_back(Civilization("Greece", "CIVILIZATION_GREECE", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));     // Pericles's color (YELLOW_LT)
-    m_civilizations.push_back(Civilization("Han", "CIVILIZATION_HAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));              // Ibn Battuta's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Khmer", "CIVILIZATION_KHMER", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));          // Jayavarman VII's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Maurya", "CIVILIZATION_MAURYA", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));        // Ashoka's color (PURPLE_DK)
-    m_civilizations.push_back(Civilization("Maya", "CIVILIZATION_MAYA", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));            // Pacal's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Mississippian", "CIVILIZATION_MISSISSIPPIAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f))); // Pocatello's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Persia", "CIVILIZATION_PERSIA", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));     // Xerxes's color (WHITE_LT)
-    m_civilizations.push_back(Civilization("Rome", "CIVILIZATION_ROME", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));            // Augustus's color (PURPLE_DK)
-    m_civilizations.push_back(Civilization("Carthage", "CIVILIZATION_CARTHAGE", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));  // Assumed color (ORANGE_MD)
-    m_civilizations.push_back(Civilization("Assyria", "CIVILIZATION_ASSYRIA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Silla", "CIVILIZATION_SILLA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    
-    m_civilizations.push_back(Civilization("Babylon", "CIVILIZATION_BABYLON", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Gaul", "CIVILIZATION_GAUL", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Goryeo", "CIVILIZATION_GORYEO", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Heian", "CIVILIZATION_HEIAN", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Sengoku", "CIVILIZATION_SENGOKU", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_AKSUM", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_EGYPT", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GREECE", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_KHMER", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAURYA", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAYA", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MISSISSIPPIAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_PERSIA", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ROME", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_CARTHAGE", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ASSYRIA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SILLA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BABYLON", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GAUL", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GORYEO", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HEIAN", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SENGOKU", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
     // Exploration Age Civilizations
-    m_civilizations.push_back(Civilization("Abbasid", "CIVILIZATION_ABBASID", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Harun al-Rashid's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Chola", "CIVILIZATION_CHOLA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));         // Rajendra Chola I's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Hawaii", "CIVILIZATION_HAWAII", Era::Exploration, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));    // Kamehameha's color (YELLOW_LT)
-    m_civilizations.push_back(Civilization("Inca", "CIVILIZATION_INCA", Era::Exploration, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));         // Pachacuti's color (YELLOW_MD)
-    m_civilizations.push_back(Civilization("Majapahit", "CIVILIZATION_MAJAPAHIT", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f))); // Hayam Wuruk's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Ming", "CIVILIZATION_MING", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));            // Zhu Yuanzhang's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Mongolia", "CIVILIZATION_MONGOLIA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));   // Genghis Khan's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Norman", "CIVILIZATION_NORMAN", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));       // William the Conqueror's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Songhai", "CIVILIZATION_SONGHAI", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));     // Askia Muhammad I's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Spain", "CIVILIZATION_SPAIN", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));       // Isabella's color (ORANGE_MD)
-    m_civilizations.push_back(Civilization("Shawnee", "CIVILIZATION_SHAWNEE", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));     // Tecumseh's color (ORANGE_DK)
-    m_civilizations.push_back(Civilization("Bulgaria", "CIVILIZATION_BULGARIA", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Dai Viet", "CIVILIZATION_DAI_VIET", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Iceland", "CIVILIZATION_ICELAND", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Ottomans", "CIVILIZATION_OTTOMANS", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Joseon", "CIVILIZATION_JOSEON", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ABBASID", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_CHOLA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HAWAII", Era::Exploration, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_INCA", Era::Exploration, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAJAPAHIT", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MING", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MONGOLIA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_NORMAN", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SONGHAI", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SPAIN", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SHAWNEE", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BULGARIA", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_DAI_VIET", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ICELAND", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_OTTOMANS", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_JOSEON", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
     // Modern Age Civilizations
-    m_civilizations.push_back(Civilization("America", "CIVILIZATION_AMERICA", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));          // Benjamin Franklin's color (RED_DK)
-    m_civilizations.push_back(Civilization("France", "CIVILIZATION_FRENCH_EMPIRE", Era::Modern, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f))); // Napoleon's color (BLUE_DK)
-    m_civilizations.push_back(Civilization("Mexico", "CIVILIZATION_MEXICO", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));             // Benito Juarez's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Mughal", "CIVILIZATION_MUGHAL", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));             // Akbar's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Prussia", "CIVILIZATION_PRUSSIA", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));         // Friedrich's color (WHITE_LT)
-    m_civilizations.push_back(Civilization("Qing", "CIVILIZATION_QING", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));                 // Kangxi Emperor's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Russia", "CIVILIZATION_RUSSIA", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));           // Catherine's color (YELLOW_MD)
-    m_civilizations.push_back(Civilization("Siam", "CIVILIZATION_SIAM", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));                 // Ramkhamhaeng's color (GREEN_DK)
-    m_civilizations.push_back(Civilization("Great Britain", "CIVILIZATION_GREAT_BRITAIN", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f))); // Assumed color (WHITE_LT)
-    m_civilizations.push_back(Civilization("Meiji", "CIVILIZATION_MEIJI", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));              // Assumed color (YELLOW_MD)
-    m_civilizations.push_back(Civilization("Buganda", "CIVILIZATION_BUGANDA", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));          // Assumed color (ORANGE_MD)
-    m_civilizations.push_back(Civilization("Nepal", "CIVILIZATION_NEPAL", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Qajar", "CIVILIZATION_QAJAR", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_AMERICA", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_FRENCH_EMPIRE", Era::Modern, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MEXICO", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MUGHAL", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_PRUSSIA", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_QING", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_RUSSIA", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SIAM", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GREAT_BRITAIN", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MEIJI", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BUGANDA", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_NEPAL", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(true, "CIVILIZATION_QAJAR", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
 
-    // Extra civilizations
+    // Extra civilizations from mods (TODO: parse mod files for custom civs ? )
 
     // Antiquity
-    //m_civilizations.push_back(Civilization("Germania", "CIVILIZATION_GERMANIA", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Germania", "CIVILIZATION_GERMANIA_JEC", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Saxon", "CIVILIZATION_SAXON", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Tagalog", "CIVILIZATION_SANSEB_TAGALOG", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
-    //m_civilizations.push_back(Civilization("Gauls", "CIVILIZATION_GAULS", Era::Antiquity, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Huns", "CIVILIZATION_HUNS_ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Yamatai", "CIVILIZATION_PB_YAMATAI", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Tonga", "CIVILIZATION_TONGA", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));    
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_GERMANIA_JEC", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SAXON", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SANSEB_TAGALOG", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_HUNS_ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_PB_YAMATAI", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_TONGA", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
 
     // Exploration
-    m_civilizations.push_back(Civilization("England", "CIVILIZATION_ENGLAND", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Outremer", "CIVILIZATION_TCS_OUTREMER", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Venice", "CIVILIZATION_VENICE", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Portugal", "CIVILIZATION_DOURADOS_PORTUGAL", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Japan", "CIVILIZATION_EDO", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Pirates", "CIVILIZATION_PIRATE_REPUBLIC", Era::Exploration, float4(55.0f / 255.0f, 55.0f / 255.0f, 55.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_ENGLAND", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_TCS_OUTREMER", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_VENICE", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_DOURADOS_PORTUGAL", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_EDO", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_PIRATE_REPUBLIC", Era::Exploration, float4(55.0f / 255.0f, 55.0f / 255.0f, 55.0f / 255.0f, 1.0f)));
 
     // Modern
-    m_civilizations.push_back(Civilization("Philippines", "CIVILIZATION_SANSEB_PHILIPPINES", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Argentina", "CIVILIZATION_NYGUITA_ARGENTINA", Era::Modern, float4(100.0f / 255.0f, 144.0f / 255.0f, 240.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization("Spanish Empire", "CIVILIZATION_ARTHUR_SPANISH_EMPIRE", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f))); // Assumed color (YELLOW_MD)
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SANSEB_PHILIPPINES", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_NYGUITA_ARGENTINA", Era::Modern, float4(100.0f / 255.0f, 144.0f / 255.0f, 240.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization(false, "CIVILIZATION_ARTHUR_SPANISH_EMPIRE", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
 
     // Create a few landmasses
     CreateDefaultLandmasses();
 
     // Same for continents
     CreateDefaultContinents();
+}
+
+//--------------------------------------------------------------------------------------
+Civilization::Civilization(bool _vanilla, const string & _civilizationName, Era _era, const float4 _color) :
+    vanilla(_vanilla),
+    civilizationName(_civilizationName),
+    era(_era),
+    color(_color)
+{
+    if (_civilizationName == "")
+    {
+        userFriendlyName = "Undefined";
+    }
+    else
+    {
+        userFriendlyName = Map::getCivilizationNameFromString(_civilizationName);
+    }
 }
 
 //--------------------------------------------------------------------------------------

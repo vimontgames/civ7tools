@@ -170,15 +170,8 @@ struct TSL
 //--------------------------------------------------------------------------------------
 struct Civilization
 {
-    Civilization(const string & _userFriendlyName ="", const string & _civilizationName = "", Era _era = (Era)-1, const float4 _color = float4(1,1,1,1)) :
-        userFriendlyName(_userFriendlyName),
-        civilizationName(_civilizationName),
-        era(_era),
-        color(_color)
-    {
-
-    }
-
+    Civilization(bool _vanilla, const string & _civilizationName = "", Era _era = (Era)-1, const float4 _color = float4(1, 1, 1, 1));
+    bool vanilla = false;
     string userFriendlyName;
     string civilizationName;
     Era era;
@@ -273,19 +266,20 @@ public:
     LandmassType getOrCreateLandmassType(const uint landmassIndex);
     void CreateDefaultLandmasses();
 
-    // map_types
+    // return types from the game string (e.g. "TERRAIN_GRASS")
     static string getTerrainTypeAsString(TerrainType _type);
     static TerrainType getTerrainTypeFromString(const string& _terrainTypeS, uint x, uint y);
     static BiomeType getBiomeTypeFromString(const string & _biomeTypeS, uint x, uint y);
     static FeatureType getFeatureFromString(const string & _biomeTypeS, uint x, uint y);
     static ResourceType getResourceFromString(const string & _biomeTypeS, uint x, uint y);
     static NaturalWonderType getNaturalWonderFromString(const string & _naturalWonderTypeS, uint x, uint y);
-
+    static string getCivilizationNameFromString(const string & name);
+  
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
     static string getNaturalWonderTypeAsString(NaturalWonderType _type);
-
+ 
     string GetMapDataPathFromMapPath(const string & _mapPath) const;
 
     string getModID() const;
