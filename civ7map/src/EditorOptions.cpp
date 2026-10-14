@@ -9,7 +9,7 @@ EditorOptions & EditorOptions::Get()
     return g_EditorOptions;
 }
 
-string filename = "EditorOptions.sql";
+string filename = "options.sql";
 
 //--------------------------------------------------------------------------------------
 bool EditorOptions::Load()
