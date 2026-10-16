@@ -2,7 +2,8 @@ import { generateDiscoveries } from '/base-standard/maps/discovery-generator.js'
 import { g_PolarWaterRows } from '/base-standard/maps/map-globals.js';
 import { shuffle } from '/base-standard/maps/map-utilities.js';
 import { GenerationContext, GenerationPhases, generateMapFeatures } from '/base-standard/scripts/common-generation.js';
-import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';import { HexMap } from '/base-standard/scripts/hex-map.js';
+import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';
+import { HexMap } from '/base-standard/scripts/hex-map.js';
 import { profileScope } from '/base-standard/scripts/profiling.js';
 
 console.log("Generatingmap from Civ7Map script Earth_Small_8P_Multiplayer.js.");
@@ -33,6 +34,11 @@ async function generateMap() {
   //paintEarthHugeRivers();
   paintNaturalWonders(iWidth, iHeight);
   //paintEarthHugeResourcesAntiquity();
+  const topSnowRows = 4;
+  const bottomSnowRows = 4;
+  const maxSnowWeight = 100;
+  const snowRandomization = 30;
+  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization);
   const genCtx = new GenerationContext();
   genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.m_randomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
   genCtx.bRunAestheticRiverValidation = false;
@@ -245,7 +251,7 @@ function getRandomCivStartLocation() {
       plotIndex = GameplayMap.getIndexFromXY(70, 34);
       break;
     case 58:
-      plotIndex = GameplayMap.getIndexFromXY(17, 24);
+      plotIndex = GameplayMap.getIndexFromXY(17, 27);
       break;
     case 59:
       plotIndex = GameplayMap.getIndexFromXY(65, 24);
@@ -442,7 +448,7 @@ function assignStartPositions() {
           plotIndex = GameplayMap.getIndexFromXY(70, 34);
           break;
         case "LOC_CIVILIZATION_PIRATE_REPUBLIC_NAME":
-          plotIndex = GameplayMap.getIndexFromXY(17, 24);
+          plotIndex = GameplayMap.getIndexFromXY(17, 27);
           break;
         case "LOC_CIVILIZATION_SANSEB_PHILIPPINES_NAME":
           plotIndex = GameplayMap.getIndexFromXY(65, 24);
@@ -524,6 +530,51 @@ function assignStartPositions() {
 }
 function fakeWrapX()
 { 
+}
+
+function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization) {
+    console.log("Generating permanent snow");
+    const aLightSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "LIGHT", "PERMANENT"]);
+    const aMediumSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "MEDIUM", "PERMANENT"]);
+    const aHeavySnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "HEAVY", "PERMANENT"]);
+    const aWeightEffect = [-1, -1, -1];
+    aWeightEffect[0] = aLightSnowEffects ? aLightSnowEffects[0] : -1;
+    aWeightEffect[1] = aMediumSnowEffects ? aMediumSnowEffects[0] : -1;
+    aWeightEffect[2] = aHeavySnowEffects ? aHeavySnowEffects[0] : -1;
+    const aWeightChance = [10, 30, 60];
+    const weightAdjustment = maxWeight / 100;
+    const placeSnow = (x, y, percentChance) => {
+        percentChance *= weightAdjustment;
+        if (!GameplayMap.isWater(x, y)) {
+            const snowRandomization = TerrainBuilder.getRandomNumber(randomization * 2, "Snow weight randomization");
+            const snowWeight = percentChance + snowRandomization - randomization;
+            if (snowWeight > 0) {
+                for (let weight = aWeightChance.length - 1; weight >= 0; --weight) {
+                    if (snowWeight > aWeightChance[weight]) {
+                        MapPlotEffects.addPlotEffect(GameplayMap.getIndexFromXY(x, y), aWeightEffect[weight]);
+                        break;
+                    }
+                }
+            }
+        }
+    };
+    if (topRows > 0) {
+        const endTopRow = height - topRows;
+        for (let row = height; row > endTopRow; --row) {
+            const snowPercent = (1 - (height - row) / topRows) * 100;
+            for (let col = 0; col < width; ++col) {
+                placeSnow(col, row, snowPercent);
+            }
+        }
+    }
+    if (bottomRows > 0) {
+        for (let row = 0; row < bottomRows; ++row) {
+            const snowPercent = (1 - row / bottomRows) * 100;
+            for (let col = 0; col < width; ++col) {
+                placeSnow(col, row, snowPercent);
+            }
+        }
+    }
 }
 
 async function paintNaturalWonders(width, height) {
@@ -789,8 +840,8 @@ async function paintNaturalWonders(width, height) {
 
               case "FEATURE_ULURU":
               {
-                  placementX = 69;
-                  placementY = 10;
+                  placementX = 68;
+                  placementY = 11;
                   iElevation = GameplayMap.getElevation(placementX, placementY);
                   featureParam =
                   {
@@ -905,7 +956,7 @@ async function paintNaturalWonders(width, height) {
               case "FEATURE_GREAT_BLUE_HOLE":
               {
                   placementX = 15;
-                  placementY = 23;
+                  placementY = 22;
                   iElevation = GameplayMap.getElevation(placementX, placementY);
                   featureParam =
                   {
