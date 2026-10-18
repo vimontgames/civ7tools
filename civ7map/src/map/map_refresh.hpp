@@ -107,6 +107,9 @@ void Map::refresh(bool _reload)
     initContinentInfos(m_firstRefresh);
     initLandmassInfos(m_firstRefresh);
 
+    if (m_showRivers)
+        UpdateRivers(false);
+
     if (m_firstRefresh)
         m_firstRefresh = true;
 
@@ -114,7 +117,6 @@ void Map::refresh(bool _reload)
     if (_reload)
     {
         loadIcons(_reload);
-        loadFlags(_reload);
     }
 
     createBitmaps();
@@ -135,6 +137,8 @@ void Map::refresh(bool _reload)
 
     for (auto & bitmap : m_bitmaps)
         bitmap.sprites.clear();
+
+    vector<int2> riverErrors;
 
     for (u32 h = 0; h < m_height; ++h)
     {
@@ -195,6 +199,19 @@ void Map::refresh(bool _reload)
                     if (riverTile.nameIndex != RiverName::None)
                     {
                         uint riverIndex = (int)riverTile.type * enumCount<DirectionType>() + (int)riverTile.direction;
+
+                        bool isDisconnectedRiverTile = false;
+                        const RiverInfo & riverInfo = m_rivers[(int)riverTile.nameIndex];
+                        for (uint d = 0; d < riverInfo.disconnectedTiles.size(); ++d)
+                        {
+                            if (riverInfo.disconnectedTiles[d] == int2(w, h))
+                            {
+                                isDisconnectedRiverTile = true;
+                                riverErrors.push_back(int2(w, h));
+                                break;
+                            }
+                        }
+
                         auto & icons = s_riverIcons[riverIndex];
 
                         if (icons.texture.getSize().x > 0)
@@ -205,8 +222,11 @@ void Map::refresh(bool _reload)
                             spriteInfo.y = h;
                             
                             float4 color = getRiverNameColor(riverTile.nameIndex);
-                            spriteInfo.sprite.setColor(Color((uint)(color.r * 255.0f), (uint)(color.g * 255.0f), (uint)(color.b * 255.0f), (uint)(color.a * 255.0f)));
+                            float alpha = isDisconnectedRiverTile ? 0.25f : 1.0f;
+                            spriteInfo.sprite.setColor(Color((uint)(color.r * 255.0f), (uint)(color.g * 255.0f), (uint)(color.b * 255.0f), (uint)(alpha * color.a * 255.0f)));
                         }
+
+                        
                     }
                 }
             }
@@ -277,7 +297,7 @@ void Map::refresh(bool _reload)
                         const auto & tsl = civ.tsl[t];
                         if (tsl.pos.x == w && tsl.pos.y == h)
                         {
-                            auto & icons = s_defaultFlag;
+                            auto & icons = s_miscIcons[(int)MiscIcons::TSL];
 
                             if (icons.texture.getSize().x > 0)
                             {
@@ -293,6 +313,22 @@ void Map::refresh(bool _reload)
                 }
             }
         }
+    }
+
+    if (m_showRivers)
+    {
+        //auto & icons = s_miscIcons[(int)MiscIcons::RiverError];
+        //if (icons.texture.getSize().x > 0)
+        //{
+        //    for (uint i = 0; i < riverErrors.size(); ++i)
+        //    {
+        //        SpriteInfo & spriteInfo = rivers.sprites.emplace_back();
+        //        spriteInfo.sprite.setTexture(icons.texture);
+        //        spriteInfo.scale = 0.25f;
+        //        spriteInfo.x = riverErrors[i].x;
+        //        spriteInfo.y = riverErrors[i].y;
+        //    }
+        //}
     }
 
     for (u32 i = 0; i < enumCount<MapBitmap>(); ++i)

@@ -42,6 +42,8 @@ using u32 = unsigned int;
 
 using uint = unsigned int;
 
+using u64 = uint64_t;
+
 using namespace std;
 
 #include "misc/logger.h"
@@ -181,6 +183,11 @@ struct int2
         y(_y)
     {
 
+    }
+
+    inline bool operator==(const int2 & _other) const
+    {
+        return x == _other.x && y == _other.y;
     }
 
     union

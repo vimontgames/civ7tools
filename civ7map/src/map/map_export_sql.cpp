@@ -175,18 +175,29 @@ int2 Map::GetTileCoordsInDirection(int x, int y, DirectionType direction) const
     }
 }
 
+
 //--------------------------------------------------------------------------------------
 bool Map::UpdateRivers(bool verbose)
 {
-    // River analysis
+    struct RiverNode
+    {
+        int2 xy;
+        int nextIndex = -1;
+        int incomingCount = 0;
+    };
 
-    // #1 Find river start and end
-    for (int i = 0; i < m_rivers.size(); ++i)
+    // River analysis
+    for (int i = 0; i < (int)m_rivers.size(); ++i)
     {
         RiverInfo & riverInfo = m_rivers[i];
-        riverInfo.sortedRiverTiles.clear();
+        riverInfo.riverPaths.clear();
+        riverInfo.disconnectedTiles.clear();
         riverInfo.tileCount = 0;
 
+        vector<RiverNode> nodes;
+        vector<int> nodeAt(m_width * m_height, -1);
+
+        // #1 Collect all tiles belonging to this river.
         for (uint y = 0; y < m_height; ++y)
         {
             for (uint x = 0; x < m_width; ++x)
@@ -196,171 +207,168 @@ bool Map::UpdateRivers(bool verbose)
                 for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
                 {
                     const RiverTileInfo & riverTile = tile.rivers[r];
+
                     if (riverTile.nameIndex == (RiverName)i)
                     {
-                        riverInfo.tileCount++;
-
-                        // search for parent in all directions
-                        int previous = 0;
-
-                        const int2 nextTileXY = GetTileCoordsInDirection(x, y, riverTile.direction);
-
-                        for (int d = 0; d < 6; ++d)
-                        {
-                            const DirectionType direction = (DirectionType)d;
-                            const int2 parentTileXY = GetTileCoordsInDirection(x, y, direction);
-
-                            // Don't look at our own destination
-                            if (parentTileXY.x == nextTileXY.x && parentTileXY.y == nextTileXY.y)
-                                continue;
-
-                            const Civ7Tile & parentTile = m_civ7TerrainType.get(parentTileXY.x, parentTileXY.y);
-
-                            for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
-                            {
-                                const RiverTileInfo & parentRiverTile = parentTile.rivers[r2];
-
-                                if (parentRiverTile.nameIndex == riverTile.nameIndex)
-                                {
-                                    const int2 parentNextTileXY = GetTileCoordsInDirection(
-                                        parentTileXY.x,
-                                        parentTileXY.y,
-                                        parentRiverTile.direction);
-
-                                    if (parentNextTileXY.x == (int)x && parentNextTileXY.y == (int)y)
-                                    {
-                                        if (verbose)
-                                            LOG_INFO("River \"%s\" tile (%u,%u) has parent at (%d,%d), direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, parentTileXY.x, parentTileXY.y, asString(parentRiverTile.direction).c_str());
-
-                                        previous++;
-                                    }
-                                }
-                            }
-                        }
-
-                        // search for neightbour in the direction
-                        int next = 0;
-
-                        // Is there a river in the direction we're looking?
-                        const Civ7Tile & nextTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
-                        for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
-                        {
-                            const RiverTileInfo & nextRiverTile = nextTile.rivers[r2];
-                            if (nextRiverTile.nameIndex == riverTile.nameIndex)
-                            {
-                                if (verbose)
-                                    LOG_INFO("River \"%s\" tile (%u,%u) is pointing the same river at (%u,%u) in direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, nextTileXY.x, nextTileXY.y, asString(riverTile.direction).c_str());
-                                
-                                next++;
-                            }
-                        }
-
-                        if (previous == 0)
-                        {
-                            if (verbose)
-                                LOG_INFO("River \"%s\" tile (%u,%u) is the start of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
-
-                            riverInfo.sortedRiverTiles.push_back(int2(x, y));
-                        }
-
-                        if (next == 0)
-                        {
-                            if (verbose)
-                                LOG_INFO("River \"%s\" tile (%u,%u) is the end of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
-                        }
+                        const int nodeIndex = (int)nodes.size();
+                        nodes.push_back({ int2(x, y) });
+                        nodeAt[y * m_width + x] = nodeIndex;
+                        break;
                     }
                 }
             }
         }
-    }
 
-    // #2 For each river build the sorted list starting from the start
-    for (int i = 0; i < m_rivers.size(); ++i)
-    {
-        RiverInfo & riverInfo = m_rivers[i];
-        if (riverInfo.sortedRiverTiles.size() > 0)
+        riverInfo.tileCount = (int)nodes.size();
+
+        if (nodes.empty())
         {
-            riverInfo.sortedRiverTiles.resize(1);
+            if (verbose)
+                LOG_INFO("River \"%s\" (%d) has no river tiles", riverInfo.prettyName.c_str(), i);
 
-            int2 firstTileXY = riverInfo.sortedRiverTiles[0];
-            int2 nextTileXY = firstTileXY;
+            continue;
+        }
 
-            bool ended = false;
+        // #2 Build the directed graph.
+        for (int n = 0; n < (int)nodes.size(); ++n)
+        {
+            const int2 xy = nodes[n].xy;
+            const Civ7Tile & tile = m_civ7TerrainType.get(xy.x, xy.y);
 
-            while (!ended)
+            for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
             {
-                const Civ7Tile & currenTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
-                for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                const RiverTileInfo & riverTile = tile.rivers[r];
+
+                if (riverTile.nameIndex != (RiverName)i)
+                    continue;
+
+                const int2 nextXY = GetTileCoordsInDirection(xy.x, xy.y, riverTile.direction);
+
+                if (nextXY.x >= 0 && nextXY.y >= 0 && nextXY.x < (int)m_width && nextXY.y < (int)m_height)
                 {
-                    const RiverTileInfo & riverTile = currenTile.rivers[r];
-                    if (riverTile.nameIndex == (RiverName)i)
+                    const int nextIndex = nodeAt[nextXY.y * m_width + nextXY.x];
+
+                    if (nextIndex >= 0)
                     {
-                        nextTileXY = GetTileCoordsInDirection(nextTileXY.x, nextTileXY.y, riverTile.direction);
-                        const Civ7Tile & nextTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
+                        nodes[n].nextIndex = nextIndex;
+                        nodes[nextIndex].incomingCount++;
 
-                        bool found = false;
-                        for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
-                        {
-                            const RiverTileInfo & nextRiverTile = nextTile.rivers[r2];
-                            if (nextRiverTile.nameIndex == riverTile.nameIndex)
-                            {
-                                bool alreadyExists = false;
-                                for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
-                                {
-                                    if (riverInfo.sortedRiverTiles[j].x == nextTileXY.x && riverInfo.sortedRiverTiles[j].y == nextTileXY.y)
-                                    {
-                                        alreadyExists = true;
-                                    }
-                                }
-
-                                if (!alreadyExists)
-                                {
-                                    riverInfo.sortedRiverTiles.push_back(nextTileXY);
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!found)
-                            ended = true;
+                        if (verbose)
+                            LOG_INFO("River \"%s\" tile (%d,%d) points to (%d,%d)", riverInfo.prettyName.c_str(), xy.x, xy.y, nextXY.x, nextXY.y);
                     }
-                }                
-            }
+                }
 
-            if (riverInfo.sortedRiverTiles.size() < riverInfo.tileCount)
-            {
-                LOG_WARNING(fmt::sprintf("River \"%s\" (%u) has %u/%u disconnected tiles from its start position (%u, %u). ", riverInfo.prettyName.c_str(), i, riverInfo.tileCount - riverInfo.sortedRiverTiles.size(), riverInfo.tileCount, firstTileXY.x, firstTileXY.y).c_str());
-
-                //string msg = fmt::sprintf("River \"%s\" (%u) tiles: ", riverInfo.prettyName.c_str(), i);
-                //for (uint c = 0; c < riverInfo.sortedRiverTiles.size(); ++c)
-                //    msg += fmt::sprintf(" (%u, %u)", riverInfo.sortedRiverTiles[c].x, riverInfo.sortedRiverTiles[c].y);
-                //LOG_WARNING(msg.c_str());
-            }
-            else if (riverInfo.tileCount == 0)
-            {
-                LOG_WARNING("River \"%s\" (%u) has no river tiles", riverInfo.prettyName.c_str(), i);
+                break;
             }
         }
-    }
 
-    for (int i = 0; i < m_rivers.size(); ++i)
-    {
-        const RiverInfo & riverInfo = m_rivers[i];
-        if (riverInfo.sortedRiverTiles.size() > 0)
+        // #3 Find all starts (tiles with no incoming connections).
+        vector<int> starts;
+
+        for (int n = 0; n < (int)nodes.size(); ++n)
         {
-            string msg = fmt::sprintf("River \"%s\" (%u) :", m_rivers[i].prettyName.c_str(), i);
-
-            for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
+            if (nodes[n].incomingCount == 0)
             {
-                msg += fmt::sprintf(" (%u, %u)", riverInfo.sortedRiverTiles[j].x, riverInfo.sortedRiverTiles[j].y);
+                starts.push_back(n);
+
+                if (verbose)
+                    LOG_INFO("River \"%s\" tile (%d,%d) is a start", riverInfo.prettyName.c_str(), nodes[n].xy.x, nodes[n].xy.y);
             }
-            LOG_INFO(msg.c_str());
+
+            if (nodes[n].nextIndex < 0)
+            {
+                if (verbose)
+                    LOG_INFO("River \"%s\" tile (%d,%d) is an end", riverInfo.prettyName.c_str(), nodes[n].xy.x, nodes[n].xy.y);
+            }
+        }
+
+        // #4 Trace a path from a given start.
+        // Shared downstream tiles are allowed in multiple paths.
+        vector<bool> covered(nodes.size(), false);
+
+        auto tracePath = [&](int startIndex)
+        {
+            RiverPath path;
+            vector<bool> visited(nodes.size(), false);
+            int currentIndex = startIndex;
+
+            while (currentIndex >= 0 && !visited[currentIndex])
+            {
+                visited[currentIndex] = true;
+                covered[currentIndex] = true;
+                path.tiles.push_back(nodes[currentIndex].xy);
+                currentIndex = nodes[currentIndex].nextIndex;
+            }
+
+            if (!path.tiles.empty())
+                riverInfo.riverPaths.push_back(path);
+        };
+
+        for (int startIndex : starts)
+            tracePath(startIndex);
+
+        // #5 Mark tiles belonging to paths that don't reach the main river end.
+        int2 mainEnd(-1, -1);
+        size_t longestPathLength = 0;
+
+        for (const RiverPath & path : riverInfo.riverPaths)
+        {
+            if (path.tiles.size() > longestPathLength)
+            {
+                longestPathLength = path.tiles.size();
+                mainEnd = path.tiles.back();
+            }
+        }
+
+        for (const RiverPath & path : riverInfo.riverPaths)
+        {
+            if (path.tiles.empty() || path.tiles.back() == mainEnd)
+                continue;
+
+            for (const int2 & xy : path.tiles)
+            {
+                if (std::find(riverInfo.disconnectedTiles.begin(), riverInfo.disconnectedTiles.end(), xy) == riverInfo.disconnectedTiles.end())
+                    riverInfo.disconnectedTiles.push_back(xy);
+            }
+        }
+
+        // Also detect tiles that were not reached from any start, such as cycles.
+        for (int n = 0; n < (int)nodes.size(); ++n)
+        {
+            if (!covered[n] && std::find(riverInfo.disconnectedTiles.begin(), riverInfo.disconnectedTiles.end(), nodes[n].xy) == riverInfo.disconnectedTiles.end())
+                riverInfo.disconnectedTiles.push_back(nodes[n].xy);
+        }
+
+        if (verbose && !riverInfo.disconnectedTiles.empty())
+        {
+            string msg = fmt::sprintf("River \"%s\" (%d) has %u disconnected tiles:", riverInfo.prettyName.c_str(), i, (uint)riverInfo.disconnectedTiles.size());
+
+            for (const int2 & xy : riverInfo.disconnectedTiles)
+                msg += fmt::sprintf(" (%d,%d)", xy.x, xy.y);
+
+            LOG_ERROR("%s", msg.c_str());
+        }
+
+        // #6 Log the resulting paths.
+        if (verbose)
+        {
+            LOG_INFO("River \"%s\" (%d): %d tiles, %d paths", riverInfo.prettyName.c_str(), i, riverInfo.tileCount, (int)riverInfo.riverPaths.size());
+
+            for (int p = 0; p < (int)riverInfo.riverPaths.size(); ++p)
+            {
+                string msg = fmt::sprintf("River \"%s\" path %d:", riverInfo.prettyName.c_str(), p);
+
+                for (const int2 & xy : riverInfo.riverPaths[p].tiles)
+                    msg += fmt::sprintf(" (%d,%d)", xy.x, xy.y);
+
+                LOG_INFO("%s", msg.c_str());
+            }
         }
     }
 
     return true;
 }
+
 
 //--------------------------------------------------------------------------------------
 void Map::exportFilesCiv7Map(const string & _cwd, bool _useModTemplate)
@@ -731,23 +739,30 @@ void Map::exportMapDataCiv7Map()
     data += "function paintRivers()\n";
     data += "{\n";
     data += "  console.log(\"Begin paintRivers()\");\n";
-   
+
     for (uint i = 0; i < m_rivers.size(); ++i)
     {
         const RiverInfo & riverInfo = m_rivers[i];
-        if (riverInfo.sortedRiverTiles.size() > 0)
+        if (!riverInfo.riverPaths.empty())
         {
             data += fmt::sprintf("  // %s\n", riverInfo.name.c_str());
-            for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
+
+            for (uint p = 0; p < riverInfo.riverPaths.size(); ++p)
             {
-                const int2 & tileXY = riverInfo.sortedRiverTiles[j];
-                const Civ7Tile & tile = m_civ7TerrainType.get(tileXY.x, tileXY.y);
-                for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                const RiverPath & riverPath = riverInfo.riverPaths[p];
+
+                for (uint j = 0; j < riverPath.tiles.size(); ++j)
                 {
-                    const RiverTileInfo & riverTile = tile.rivers[r];
-                    if (riverTile.nameIndex == (RiverName)i)
+                    const int2 & tileXY = riverPath.tiles[j];
+                    const Civ7Tile & tile = m_civ7TerrainType.get(tileXY.x, tileXY.y);
+
+                    for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
                     {
-                        data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
+                        const RiverTileInfo & riverTile = tile.rivers[r];
+                        if (riverTile.nameIndex == (RiverName)i)
+                        {
+                            data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
+                        }
                     }
                 }
             }
@@ -764,9 +779,10 @@ void Map::exportMapDataCiv7Map()
     for (uint i = 0; i < m_rivers.size(); ++i)
     {
         const RiverInfo & riverInfo = m_rivers[i];
-        if (riverInfo.sortedRiverTiles.size() > 0)
+        if (!riverInfo.riverPaths.empty() && !riverInfo.riverPaths[0].tiles.empty())
         {
-            data += fmt::sprintf("   TerrainBuilder.setCustomRiverName(%u, %u, \"%s\");\n", riverInfo.sortedRiverTiles[0].x, riverInfo.sortedRiverTiles[0].y, riverInfo.prettyName);
+            const int2 & startXY = riverInfo.riverPaths[0].tiles[0];
+            data += fmt::sprintf("   TerrainBuilder.setCustomRiverName(%u, %u, \"%s\");\n", startXY.x, startXY.y, riverInfo.prettyName.c_str());
         }
     }
 

@@ -288,11 +288,17 @@ enum class RiverType : u8
 enum class DirectionType : i8
 {
     NorthEast,      // DIRECTION_NORTHEAST,
-    NorthWest,      // DIRECTION_NORTHWEST,
     East,           // DIRECTION_EAST,
-    West,           // DIRECTION_WEST,
     SouthEast,      // DIRECTION_SOUTHEAST,
-    SouthWest       // DIRECTION_SOUTHWEST
+    SouthWest,      // DIRECTION_SOUTHWEST
+    West,           // DIRECTION_WEST,
+    NorthWest       // DIRECTION_NORTHWEST,
+};
+
+//--------------------------------------------------------------------------------------
+struct RiverPath
+{
+    vector<int2> tiles;
 };
 
 //--------------------------------------------------------------------------------------
@@ -304,7 +310,8 @@ struct RiverInfo
     string prettyName;
     bool vanilla;
 
-    vector<int2> sortedRiverTiles;
+    vector<RiverPath> riverPaths;
+    vector<int2> disconnectedTiles;
     int tileCount = 0;
 };
 

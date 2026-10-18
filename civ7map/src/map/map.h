@@ -7,6 +7,12 @@
 #include "tile/civ7tile.h"
 #include "tile/civ6tile.h"
 
+enum class MiscIcons : u8
+{
+    TSL = 0,
+    RiverError
+};
+
 //--------------------------------------------------------------------------------------
 enum class MapSize : int
 {
@@ -237,8 +243,13 @@ public:
 
     // misc
     void createBitmaps();
+
     static void loadIcons(bool _reload);
-    static void loadFlags(bool _reload);
+    static void loadMiscIcons(bool _reload);
+    static void loadResourceIcons(bool _reload);
+    static void loadFeatureIcons(bool _reload);
+    static void loadNaturalWonderIcons(bool _reload);
+    static void loadRiverIcons(bool _reload);
 
     void initTerrainInfos(bool _reload);
     void initBiomeInfos(bool _reload);
@@ -396,7 +407,7 @@ public:
     static SharedIcon       s_featureIcons[enumCount<FeatureType>()];
     static SharedIcon       s_naturalWonderIcons[enumCount<NaturalWonderType>()];
     static SharedIcon       s_riverIcons[enumCount<RiverType>() * enumCount<DirectionType>()];
-    static SharedIcon       s_defaultFlag;
+    static SharedIcon       s_miscIcons[enumCount<MiscIcons>()];
 
     MapVersion              m_mapVersion = MapVersion::Invalid;
 

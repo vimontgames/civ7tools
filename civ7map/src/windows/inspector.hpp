@@ -117,8 +117,8 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                     ImGui::PopID();
                 }
 
-                if (dirtyRiver)
-                    g_map->UpdateRivers(true);
+                //if (dirtyRiver)
+                //    g_map->UpdateRivers(true);
 
                 dirty |= dirtyRiver;                
             }

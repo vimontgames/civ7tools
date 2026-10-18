@@ -416,11 +416,7 @@ inline float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
 
     float4 color = terrainColor;
 
-    bool isWater = false;
     if (terrainType == TerrainType_Ocean || terrainType == TerrainType_Coast)
-        isWater = true;
-
-    if (isWater)
     {
         if (biomeType != BiomeType_Marine)
         {
@@ -431,10 +427,19 @@ inline float4 getBiomeTerrainColor(uint biomeType, uint terrainType)
     }
     else
     {
-        color.r = terrainColor.r * 0.6f + biomeColor.r * 0.4f;
-        color.g = terrainColor.g * 0.6f + biomeColor.g * 0.4f;
-        color.b = terrainColor.b * 0.6f + biomeColor.b * 0.4f;
-        color.a = terrainColor.a * 0.6f + biomeColor.a * 0.4f;
+        if (biomeType == BiomeType_Marine)
+        {
+            color.r = 1;
+            color.g = 0;
+            color.b = 1;
+        }
+        else
+        {
+            color.r = terrainColor.r * 0.6f + biomeColor.r * 0.4f;
+            color.g = terrainColor.g * 0.6f + biomeColor.g * 0.4f;
+            color.b = terrainColor.b * 0.6f + biomeColor.b * 0.4f;
+            color.a = terrainColor.a * 0.6f + biomeColor.a * 0.4f;
+        }
     }
 
     return color;

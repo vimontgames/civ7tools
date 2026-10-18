@@ -82,6 +82,8 @@ bool Map::getHexSideTile(int _x, int _y, HexTileSide _side, int2 & _result) cons
     return false;
 }
 
+sf::Clock g_clickClock;
+
 //--------------------------------------------------------------------------------------
 void Map::Paint(int _x, int _y)
 {
@@ -89,6 +91,8 @@ void Map::Paint(int _x, int _y)
     {
         const int r = paintWindow->m_brushRadius;
         int count = 0;
+
+        sf::Time timeSinceLastClick = g_clickClock.restart();
         
         for (int y = _y -r + 1; y <= _y+r-1; ++y)
         {
@@ -180,6 +184,7 @@ void Map::Paint(int _x, int _y)
                             if (paintWindow->m_autoRiverDirection)
                             {
                                 // Use the direction we're coming from if any
+                                bool directionFound = false;
                                 for (uint d = 0; d < enumCount<DirectionType>(); ++d)
                                 {
                                     DirectionType dir = (DirectionType)d;
@@ -191,6 +196,8 @@ void Map::Paint(int _x, int _y)
                                         RiverTileInfo & nRiverTileRef = nTileRef.rivers[r];
                                         if (nRiverTileRef.nameIndex == riverTile.nameIndex)
                                         {
+                                            directionFound = true;
+
                                             if (AreOpposedDirections(nRiverTileRef.direction, dir))
                                             {
                                                 riverTile.direction = GetOppositeDirection(dir);
@@ -205,7 +212,13 @@ void Map::Paint(int _x, int _y)
                                                 riverTile.direction = dir;
                                             }
                                         }
-                                    }
+                                    }                                    
+                                }
+
+                                if (!directionFound)
+                                {
+                                    if (timeSinceLastClick.asMilliseconds() > 100)
+                                        riverTile.direction = (DirectionType)(((uint)riverTile.direction + 1) % (enumCount<DirectionType>()));
                                 }
                             }
                             else
@@ -249,14 +262,14 @@ void Map::Paint(int _x, int _y)
 
                 if (tileCopy != tileRef)
                 {
-                    for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
-                    {
-                        if (tileCopy.rivers[r] != tileRef.rivers[r])
-                            UpdateRivers(true);
-                    }
-
                     undoRedoPaintTile->add(x, y, tileRef, tileCopy);
                     tileRef = tileCopy;
+
+                    //for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                    //{
+                    //    if (tileCopy.rivers[r] != tileRef.rivers[r])
+                    //        UpdateRivers(true);
+                    //}
 
                     // Fix neightbours
                     if (paintWindow->m_paintTerrainType)

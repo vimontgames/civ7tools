@@ -180,7 +180,6 @@ int main()
 
     // static init
     Map::loadIcons(true);
-    Map::loadFlags(true);
 
     Clock deltaClock;
     while (mainWindow.isOpen()) 

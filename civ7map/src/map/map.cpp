@@ -32,7 +32,7 @@ SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];
 SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
 SharedIcon Map::s_naturalWonderIcons[enumCount<NaturalWonderType>()];
 SharedIcon Map::s_riverIcons[enumCount<RiverType>() * enumCount<DirectionType>()];
-SharedIcon Map::s_defaultFlag;
+SharedIcon Map::s_miscIcons[enumCount<MiscIcons>()];
 
 //--------------------------------------------------------------------------------------
 // Test conversion funcs
@@ -371,6 +371,53 @@ void Map::createBitmaps()
 //--------------------------------------------------------------------------------------
 void Map::loadIcons(bool _reload)
 {
+    loadMiscIcons(_reload);
+    loadResourceIcons(_reload);
+    loadFeatureIcons(_reload);
+    loadNaturalWonderIcons(_reload);    
+    loadRiverIcons(_reload);    
+}
+
+//--------------------------------------------------------------------------------------
+void Map::loadMiscIcons(bool _reload)
+{
+    for (uint i = 0; i < enumCount<MiscIcons>(); ++i)
+    {
+        const MiscIcons miscIcon = (MiscIcons)i;
+        string path = "";
+        switch (miscIcon)
+        {
+            case MiscIcons::TSL:
+                path = "data/img/tsl/white.png";
+                break;
+
+            case MiscIcons::RiverError:
+                path = "data/img/rivers/error.png";
+                break;
+        }
+
+        if (path.length() > 0)
+        {
+            SharedIcon & sharedIcon = s_miscIcons[i];
+            if (sharedIcon.dirty || _reload)
+            {
+                bool dirty = false;
+                if (_reload && sharedIcon.texture.loadFromFile(path))
+                {
+                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    sharedIcon.dirty = dirty;
+                    sharedIcon.texture.generateMipmap();
+                }
+                else
+                    LOG_ERROR("Texture \"%s\" could not be loaded", GetFilename(path).c_str());
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+void Map::loadResourceIcons(bool _reload)
+{
     for (auto val : enumValues<ResourceType>())
     {
         if (ResourceType::None != val.first)
@@ -402,7 +449,11 @@ void Map::loadIcons(bool _reload)
             }
         }
     }
+}
 
+//--------------------------------------------------------------------------------------
+void Map::loadFeatureIcons(bool _reload)
+{
     for (auto val : enumValues<FeatureType>())
     {
         if (FeatureType::None != val.first)
@@ -434,7 +485,11 @@ void Map::loadIcons(bool _reload)
             }
         }
     }
+}
 
+//--------------------------------------------------------------------------------------
+void Map::loadNaturalWonderIcons(bool _reload)
+{
     for (auto val : enumValues<NaturalWonderType>())
     {
         if (NaturalWonderType::None != val.first)
@@ -466,7 +521,11 @@ void Map::loadIcons(bool _reload)
             }
         }
     }
+}
 
+//--------------------------------------------------------------------------------------
+void Map::loadRiverIcons(bool _reload)
+{
     for (auto riverType : enumValues<RiverType>())
     {
         int riverTypeIndex = (int)riverType.first;
@@ -501,25 +560,6 @@ void Map::loadIcons(bool _reload)
                     LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
             }
         }
-    }
-}
-
-//--------------------------------------------------------------------------------------
-void Map::loadFlags(bool _reload)
-{
-    SharedIcon & defaultFlagIcon = s_defaultFlag;
-    if (defaultFlagIcon.dirty || _reload)
-    {
-        bool dirty = false;
-        string path = "data/img/tsl/white.png";
-        if (_reload && defaultFlagIcon.texture.loadFromFile(path))
-        {
-            LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
-            defaultFlagIcon.dirty = dirty;
-            defaultFlagIcon.texture.generateMipmap();
-        }
-        else
-            LOG_ERROR("Texture \"%s\" could not be loaded", GetFilename(path).c_str());
     }
 }
 

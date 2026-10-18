@@ -59,6 +59,48 @@ function paintElevation() {
 function paintRivers()
 {
   console.log("Begin paintRivers()");
+  // RIVER_FOO
+  TerrainBuilder.setRiverInfo(26, 26, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(25, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(24, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(23, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(22, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(21, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(20, 27, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(20, 28, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(19, 29, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(18, 29, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(17, 29, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 29, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 30, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(15, 31, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 32, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 33, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 34, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(15, 35, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(10, 29, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(11, 29, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(12, 29, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(13, 29, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(14, 30, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(14, 31, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(15, 31, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 32, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 33, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 34, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(15, 35, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(24, 31, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(23, 31, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(23, 32, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(22, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(21, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(20, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(19, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(18, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(17, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 33, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(16, 34, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setRiverInfo(15, 35, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
   // RIVER_SIX
   TerrainBuilder.setRiverInfo(12, 23, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
   TerrainBuilder.setRiverInfo(11, 23, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
@@ -91,6 +133,7 @@ function paintRivers()
 function nameRivers()
 {
    console.log("Begin nameRivers()");
+   TerrainBuilder.setCustomRiverName(26, 26, "Foo");
    TerrainBuilder.setCustomRiverName(12, 23, "Six");
    TerrainBuilder.setCustomRiverName(16, 17, "Seven");
    console.log("End nameRivers()");
