@@ -1,4 +1,8 @@
 #include "windows/paint.h"
+#include "map/map.h"
+#include "undoredo/UndoRedoTile.h"
+#include "maths.h"
+#include "shader/common.h"
 
 static UndoRedoTile * undoRedoPaintTile = nullptr;
 
@@ -139,8 +143,118 @@ void Map::Paint(int _x, int _y)
                 if (paintWindow->m_paintElevation)
                     tileCopy.elevation = paintWindow->m_elevation;
 
+                if (paintWindow->m_paintRiverName)
+                {
+                    if (paintWindow->m_riverNameIndex == RiverName::None)
+                    {
+                        // remove last river
+                        for (int r = MAX_RIVER_PER_TILE - 1; r >= 0; --r)
+                        {
+                            RiverTileInfo & riverTile = tileCopy.rivers[r];
+                            if (riverTile.nameIndex != RiverName::None)
+                            {
+                                riverTile.nameIndex = RiverName::None;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Use first available river slot (empty or same slot)     
+                        int paintedRiverIndex = -1;
+                        for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                        {
+                            RiverTileInfo & riverTile = tileCopy.rivers[r];
+                            if (riverTile.nameIndex == RiverName::None || riverTile.nameIndex == paintWindow->m_riverNameIndex)
+                            {
+                                paintedRiverIndex = r;
+                                riverTile.nameIndex = paintWindow->m_riverNameIndex;
+                                break;
+                            }
+                        }
+
+                        if (-1 != paintedRiverIndex)
+                        {
+                            RiverTileInfo & riverTile = tileCopy.rivers[paintedRiverIndex];
+
+                            if (paintWindow->m_autoRiverDirection)
+                            {
+                                // Use the direction we're coming from if any
+                                for (uint d = 0; d < enumCount<DirectionType>(); ++d)
+                                {
+                                    DirectionType dir = (DirectionType)d;
+                                    int2 nCoordsXY = GetTileCoordsInDirection(x, y, dir);
+                                    Civ7Tile & nTileRef = m_civ7TerrainType.get(nCoordsXY.x, nCoordsXY.y);
+
+                                    for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                                    {
+                                        RiverTileInfo & nRiverTileRef = nTileRef.rivers[r];
+                                        if (nRiverTileRef.nameIndex == riverTile.nameIndex)
+                                        {
+                                            if (AreOpposedDirections(nRiverTileRef.direction, dir))
+                                            {
+                                                riverTile.direction = GetOppositeDirection(dir);
+
+                                                Civ7Tile nTileCopy = nTileRef;
+                                                nTileCopy.rivers[r].direction = GetOppositeDirection(dir);
+                                                undoRedoPaintTile->add(nCoordsXY.x, nCoordsXY.y, nTileRef, nTileCopy);
+                                                nTileRef = nTileCopy;
+                                            }
+                                            else
+                                            {
+                                                riverTile.direction = dir;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                riverTile.direction = paintWindow->m_riverDirection;
+                            }
+                        }
+                    }
+                }
+
+                if (paintWindow->m_paintRiverType)
+                {
+                    int paintedRiverIndex = -1;
+                    if ((RiverName)paintWindow->m_riverNameIndex == RiverName::None)
+                    {
+                        for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                        {
+                            RiverTileInfo & riverTile = tileCopy.rivers[r];
+                            if (riverTile.nameIndex != RiverName::None)
+                            {
+                                RiverTileInfo & riverTile = tileCopy.rivers[r];
+                                paintedRiverIndex = r;
+                                riverTile.type = paintWindow->m_riverType;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                        {
+                            RiverTileInfo & riverTile = tileCopy.rivers[r];
+                            if (riverTile.nameIndex == paintWindow->m_riverNameIndex)
+                            {
+                                paintedRiverIndex = r;
+                                riverTile.type = paintWindow->m_riverType;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (tileCopy != tileRef)
                 {
+                    for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                    {
+                        if (tileCopy.rivers[r] != tileRef.rivers[r])
+                            UpdateRivers(true);
+                    }
+
                     undoRedoPaintTile->add(x, y, tileRef, tileCopy);
                     tileRef = tileCopy;
 

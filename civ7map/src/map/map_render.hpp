@@ -3,6 +3,8 @@ extern Vector2i g_selectedCell;
 extern Vector2i g_selectedRectMin;
 extern Vector2i g_selectedRectMax;
 
+#include "windows/paint.h"
+
 void Map::render(RenderWindow & _window)
 {
     extern u32 g_screenWidth;

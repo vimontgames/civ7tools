@@ -4,6 +4,149 @@
 #include "map/map.h"
 
 //--------------------------------------------------------------------------------------
+DirectionType Map::GetOppositeDirection(DirectionType direction)
+{
+    switch (direction)
+    {
+        case DirectionType::East:
+            return DirectionType::West;
+
+        case DirectionType::West:
+            return DirectionType::East;
+
+        case DirectionType::NorthEast:
+            return DirectionType::SouthWest;
+
+        case DirectionType::NorthWest:
+            return DirectionType::SouthEast;
+
+        case DirectionType::SouthEast:
+            return DirectionType::NorthWest;
+
+        case DirectionType::SouthWest:
+            return DirectionType::NorthEast;
+    }
+
+    ASSERT("Invalid direction \"%s\" (%i)", asString(direction).c_str(), (int)direction);
+    return (DirectionType)0;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::AreOpposedDirections(DirectionType dir1, DirectionType dir2)
+{
+    switch (dir1)
+    {
+        case DirectionType::East:
+        {
+            switch (dir2)
+            {
+                case DirectionType::East:
+                case DirectionType::NorthEast:
+                case DirectionType::SouthEast:
+                    return false;
+
+                case DirectionType::West:
+                case DirectionType::NorthWest:
+                case DirectionType::SouthWest:
+                    return true;
+            }
+        }
+        break;
+
+        case DirectionType::West:
+        {
+            switch (dir2)
+            {
+                case DirectionType::West:
+                case DirectionType::NorthWest:
+                case DirectionType::SouthWest:
+                    return false;
+
+                case DirectionType::East:
+                case DirectionType::NorthEast:
+                case DirectionType::SouthEast:
+                    return true;
+            }
+        }
+        break;
+
+        case DirectionType::NorthEast:
+        {
+            switch (dir2)
+            {
+                case DirectionType::NorthEast:
+                case DirectionType::East:
+                case DirectionType::NorthWest:
+                    return false;
+
+                case DirectionType::SouthWest:
+                case DirectionType::West:
+                case DirectionType::SouthEast:
+                    return true;
+            }
+        }
+        break;
+
+        case DirectionType::NorthWest:
+        {
+            switch (dir2)
+            {
+                case DirectionType::NorthWest:
+                case DirectionType::West:
+                case DirectionType::NorthEast:
+                    return false;
+
+                case DirectionType::SouthEast:
+                case DirectionType::East:
+                case DirectionType::SouthWest:
+                    return true;
+            }
+        }
+        break;
+
+        case DirectionType::SouthEast:
+        {
+            switch (dir2)
+            {
+                case DirectionType::SouthEast:
+                case DirectionType::East:
+                case DirectionType::SouthWest:
+                    return false;
+
+                case DirectionType::NorthWest:
+                case DirectionType::West:
+                case DirectionType::NorthEast:
+                    return true;
+            }
+        }
+        break;
+
+        case DirectionType::SouthWest:
+        {
+            switch (dir2)
+            {
+                case DirectionType::SouthWest:
+                case DirectionType::West:
+                case DirectionType::SouthEast:
+                    return false;
+
+                case DirectionType::NorthEast:
+                case DirectionType::East:
+                case DirectionType::NorthWest:
+                    return true;
+            }
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    ASSERT("Invalid direction \"%s\" (%i) and \"%s\" (%i)", asString(dir1).c_str(), (int)dir1, asString(dir2).c_str(), (int)dir2);
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
 int2 Map::GetTileCoordsInDirection(int x, int y, DirectionType direction) const
 {
     switch (direction)
@@ -33,7 +176,7 @@ int2 Map::GetTileCoordsInDirection(int x, int y, DirectionType direction) const
 }
 
 //--------------------------------------------------------------------------------------
-bool Map::CheckRivers()
+bool Map::UpdateRivers(bool verbose)
 {
     // River analysis
 
@@ -86,13 +229,8 @@ bool Map::CheckRivers()
 
                                     if (parentNextTileXY.x == (int)x && parentNextTileXY.y == (int)y)
                                     {
-                                        LOG_INFO("River \"%s\" tile (%u,%u) has parent at (%d,%d), direction %s",
-                                            m_rivers[(int)riverTile.nameIndex].prettyName.c_str(),
-                                            x,
-                                            y,
-                                            parentTileXY.x,
-                                            parentTileXY.y,
-                                            asString(parentRiverTile.direction).c_str());
+                                        if (verbose)
+                                            LOG_INFO("River \"%s\" tile (%u,%u) has parent at (%d,%d), direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, parentTileXY.x, parentTileXY.y, asString(parentRiverTile.direction).c_str());
 
                                         previous++;
                                     }
@@ -110,20 +248,25 @@ bool Map::CheckRivers()
                             const RiverTileInfo & nextRiverTile = nextTile.rivers[r2];
                             if (nextRiverTile.nameIndex == riverTile.nameIndex)
                             {
-                                LOG_INFO("River \"%s\" tile (%u,%u) is pointing the same river at (%u,%u) in direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, nextTileXY.x, nextTileXY.y, asString(riverTile.direction).c_str());
+                                if (verbose)
+                                    LOG_INFO("River \"%s\" tile (%u,%u) is pointing the same river at (%u,%u) in direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, nextTileXY.x, nextTileXY.y, asString(riverTile.direction).c_str());
+                                
                                 next++;
                             }
                         }
 
                         if (previous == 0)
                         {
-                            LOG_INFO("River \"%s\" tile (%u,%u) is the start of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
+                            if (verbose)
+                                LOG_INFO("River \"%s\" tile (%u,%u) is the start of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
+
                             riverInfo.sortedRiverTiles.push_back(int2(x, y));
                         }
 
                         if (next == 0)
                         {
-                            LOG_INFO("River \"%s\" tile (%u,%u) is the end of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
+                            if (verbose)
+                                LOG_INFO("River \"%s\" tile (%u,%u) is the end of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
                         }
                     }
                 }
@@ -187,7 +330,12 @@ bool Map::CheckRivers()
 
             if (riverInfo.sortedRiverTiles.size() < riverInfo.tileCount)
             {
-                LOG_WARNING("River \"%s\" (%u) has %u/%u disconnected tiles from its start position (%u, %u)", riverInfo.prettyName.c_str(), i, riverInfo.tileCount - riverInfo.sortedRiverTiles.size(), riverInfo.tileCount , firstTileXY.x, firstTileXY.y);
+                LOG_WARNING(fmt::sprintf("River \"%s\" (%u) has %u/%u disconnected tiles from its start position (%u, %u). ", riverInfo.prettyName.c_str(), i, riverInfo.tileCount - riverInfo.sortedRiverTiles.size(), riverInfo.tileCount, firstTileXY.x, firstTileXY.y).c_str());
+
+                //string msg = fmt::sprintf("River \"%s\" (%u) tiles: ", riverInfo.prettyName.c_str(), i);
+                //for (uint c = 0; c < riverInfo.sortedRiverTiles.size(); ++c)
+                //    msg += fmt::sprintf(" (%u, %u)", riverInfo.sortedRiverTiles[c].x, riverInfo.sortedRiverTiles[c].y);
+                //LOG_WARNING(msg.c_str());
             }
             else if (riverInfo.tileCount == 0)
             {
@@ -217,7 +365,7 @@ bool Map::CheckRivers()
 //--------------------------------------------------------------------------------------
 void Map::exportFilesCiv7Map(const string & _cwd, bool _useModTemplate)
 {
-    CheckRivers();
+    UpdateRivers(true);
 
     exportModInfoCiv7Map();
     exportTextCiv7Map();

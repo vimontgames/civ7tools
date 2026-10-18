@@ -320,6 +320,11 @@ struct RiverTileInfo
     RiverName nameIndex     = RiverName::None;
     RiverType type          = RiverType::Minor;
     DirectionType direction = DirectionType::West;
+
+    inline bool operator!=(const RiverTileInfo & _other) const
+    {
+        return nameIndex != _other.nameIndex || type != _other.type || direction != _other.direction;
+    }
 };
 
 #define MAX_RIVER_PER_TILE 2

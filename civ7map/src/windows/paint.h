@@ -1,10 +1,11 @@
 #include "BaseWindow.h"
+#include "tile/civ7tile.h"
 
 class PaintWindow : public BaseWindow
 {
 public:
     PaintWindow();
-    bool Draw(const RenderWindow & window) final override;
+    bool Draw(const sf::RenderWindow & window) final override;
 
     static PaintWindow * get();
 
@@ -24,6 +25,7 @@ public:
     bool m_autoCoast = true;
     bool m_protectOcean = false;
     bool m_protectCoasts = false;
+    bool m_autoRiverDirection = true;
 
     bool m_paintBiomeType = false;
     BiomeType m_biomeType = BiomeType::Grassland;
@@ -42,9 +44,12 @@ public:
     bool m_paintElevation = false;
     Elevation m_elevation = (Elevation)0;
 
-    //bool m_paintRiverType = false;
-    //RiverType m_riverType = RiverType::Minor;
-    //
-    //bool m_paintRiverDirection = false;
-    //DirectionType m_riverDirection = DirectionType::West;
+    bool m_paintRiverName = false;
+    RiverName m_riverNameIndex = RiverName::None;
+
+    bool m_paintRiverType = false;
+    RiverType m_riverType = RiverType::Minor;
+    
+    bool m_paintRiverDirection = false;
+    DirectionType m_riverDirection = DirectionType::West;
 };

@@ -88,6 +88,8 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
             if (ImGui::CollapsingHeader("Rivers###RiversInspector", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
+                bool dirtyRiver = false;
+
                 // "RiverName"
                 for (uint i = 0; i < MAX_RIVER_PER_TILE; ++i)
                 {
@@ -98,23 +100,27 @@ bool InspectorWindow::Draw(const RenderWindow & window)
 
                     RiverName riverIndex = riverTileInfo.nameIndex;
                     if (EditRiverName(map, riverIndex))
-                        dirty |= map->setRiverName(x, y, riverIndex, i);
+                        dirtyRiver |= map->setRiverName(x, y, riverIndex, i);
 
                     if (riverIndex != RiverName::None)
                     {
                         // "RiverType"
                         RiverType riverType = riverTileInfo.type;
                         if (EditRiverType(map, riverType))
-                            dirty |= map->setRiverType(x, y, riverType, i);
+                            dirtyRiver |= map->setRiverType(x, y, riverType, i);
                         
                         // "RiverDirection"
                         DirectionType riverDirection = riverTileInfo.direction;
                         if (EditDirectionType(map, riverDirection))
-                            dirty |= map->setRiverDirection(x, y, riverDirection, i);
+                            dirtyRiver |= map->setRiverDirection(x, y, riverDirection, i);
                     }
                     ImGui::PopID();
                 }
-                
+
+                if (dirtyRiver)
+                    g_map->UpdateRivers(true);
+
+                dirty |= dirtyRiver;                
             }
 
             // TSL

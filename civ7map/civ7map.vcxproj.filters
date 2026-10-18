@@ -55,6 +55,9 @@
     <ClCompile Include="src\map\map_export_sql.cpp">
       <Filter>map</Filter>
     </ClCompile>
+    <ClCompile Include="src\map\map_actions.cpp">
+      <Filter>map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extern\base64\base64.hpp" />
@@ -84,9 +87,6 @@
       <Filter>stb</Filter>
     </ClInclude>
     <ClInclude Include="src\map\map.h">
-      <Filter>map</Filter>
-    </ClInclude>
-    <ClInclude Include="src\map\map_actions.hpp">
       <Filter>map</Filter>
     </ClInclude>
     <ClInclude Include="src\map\map_export.hpp">

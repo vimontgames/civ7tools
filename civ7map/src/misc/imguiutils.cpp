@@ -373,7 +373,7 @@ template<> struct EditEnumTraits<RiverName> : EditEnumTraitsBase<RiverName>
 //--------------------------------------------------------------------------------------
 bool EditRiverName(const Map * map, RiverName & riverIndex, bool * pBool)
 {
-    return EditEnum<RiverName>("Name", map, riverIndex, pBool);
+    return EditEnum<RiverName>("River", map, riverIndex, pBool);
 }
 
 //--------------------------------------------------------------------------------------

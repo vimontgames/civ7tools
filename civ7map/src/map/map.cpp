@@ -26,7 +26,6 @@ using namespace tinyxml2;
 #include "map_export.hpp"
 #include "map_refresh.hpp"
 #include "map_create.hpp"
-#include "map_actions.hpp"
 #include "map_render.hpp"
 
 SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];

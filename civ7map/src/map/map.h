@@ -352,7 +352,10 @@ public:
     void cutRect(sf::Vector2i _begin, sf::Vector2i _end);
 
     int2 GetTileCoordsInDirection(int x, int y, DirectionType direction) const;
-    bool CheckRivers();
+    static DirectionType GetOppositeDirection(DirectionType direction);
+    static bool AreOpposedDirections(DirectionType dir1, DirectionType dir2);
+
+    bool UpdateRivers(bool _verbose = false);
 
 private:
     bool setTileUndoRedo(int _x, int _y, const Civ7Tile & _value);

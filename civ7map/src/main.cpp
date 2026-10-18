@@ -175,8 +175,8 @@ int main()
     g_windows.push_back(new HelpWindow());
     g_windows.push_back(new InfoWindow());
     g_windows.push_back(new InspectorWindow());
-    g_windows.push_back(new PaintWindow());
     g_windows.push_back(new RiversWindow());
+    g_windows.push_back(new PaintWindow());
 
     // static init
     Map::loadIcons(true);

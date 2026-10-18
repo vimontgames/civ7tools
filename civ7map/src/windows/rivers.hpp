@@ -34,7 +34,7 @@ bool RiversWindow::Draw(const RenderWindow & window)
         {
             if (ImGui::Button("Check Rivers"))
             {
-                g_map->CheckRivers();
+                g_map->UpdateRivers(true);
             }
         }
         PopDisabled();

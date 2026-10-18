@@ -23,24 +23,36 @@ bool PaintWindow::Draw(const RenderWindow & window)
     {
         Map * map = g_map;
 
-        if (ImGui::CollapsingHeader("Options", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        if (ImGui::CollapsingHeader("Brush", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
         {
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
             ImGui::InputInt2("Plot", (int *)&g_hoveredCell, ImGuiInputTextFlags_EnterReturnsTrue);
-            Vector2i selectionSize = g_selectedRectMax - g_selectedRectMin + Vector2i(1,1);
+            Vector2i selectionSize = g_selectedRectMax - g_selectedRectMin + Vector2i(1, 1);
             ImGui::InputInt2("Selected", (int *)&selectionSize, ImGuiInputTextFlags_EnterReturnsTrue);
             ImGui::PopItemFlag();
-
             ImGui::SliderInt("Radius", &m_brushRadius, 1, 8);
+        }
 
-            ImGui::Checkbox("Automatic Coast###AutoCoast", &m_autoCoast);
+        if (ImGui::CollapsingHeader("Options", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+        {
+            const auto x = ImGui::GetCursorPosX();
+
+            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::Checkbox("Auto Coasts###AutoCoast", &m_autoCoast);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Add coasts around continents when painting");   
-
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
             ImGui::Checkbox("Protect Coast###mProtectCoast", &m_protectCoasts);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Disable painting on coast tiles (e.g. when painting continent)");
 
+            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::Checkbox("Auto Rivers###mAutoRiverDirection", &m_autoRiverDirection);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Select next river direction from previous and click again to change direction.");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
             ImGui::Checkbox("Protect Ocean###mProtectOcean", &m_protectOcean);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Disable painting on ocean tiles (e.g. when painting landmass)");
@@ -96,17 +108,22 @@ bool PaintWindow::Draw(const RenderWindow & window)
             // "Elevation"
             Elevation elevation = m_elevation;
             if (EditElevation(map, elevation, &m_paintElevation))
-                m_elevation = elevation;      
+                m_elevation = elevation;  
 
-            //// "RiverType"
-            //RiverType river = m_riverType;
-            //if (EditRiverType("River #1", map, river, &m_paintRiverType))
-            //    m_riverType = river;
-            //
-            //// "RiverDirection"
-            //DirectionType riverDirection = m_riverDirection;
-            //if (EditDirectionType("River #1 Dir", map, m_riverDirection, &m_paintRiverDirection))
-            //    m_riverDirection = riverDirection;
+            // "RiverName"
+            RiverName riverNameIndex = m_riverNameIndex;
+            if (EditRiverName(map, riverNameIndex, &m_paintRiverName))
+                m_riverNameIndex = riverNameIndex;
+
+            // "RiverType"
+            RiverType river = m_riverType;
+            if (EditRiverType(map, river, &m_paintRiverType))
+                m_riverType = river;
+            
+            // "RiverDirection"
+            DirectionType riverDirection = m_riverDirection;
+            if (EditDirectionType(map, riverDirection, &m_paintRiverDirection))
+                m_riverDirection = riverDirection;
         }
         
         if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

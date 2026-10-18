@@ -59,11 +59,6 @@ function paintElevation() {
 function paintRivers()
 {
   console.log("Begin paintRivers()");
-  // RIVER_FOO
-  TerrainBuilder.setRiverInfo(4, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_NAVIGABLE);
-  TerrainBuilder.setRiverInfo(3, 33, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
-  TerrainBuilder.setRiverInfo(3, 34, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
-  TerrainBuilder.setRiverInfo(2, 35, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_NAVIGABLE);
   // RIVER_SIX
   TerrainBuilder.setRiverInfo(12, 23, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
   TerrainBuilder.setRiverInfo(11, 23, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
@@ -96,7 +91,6 @@ function paintRivers()
 function nameRivers()
 {
    console.log("Begin nameRivers()");
-   TerrainBuilder.setCustomRiverName(4, 33, "Foo");
    TerrainBuilder.setCustomRiverName(12, 23, "Six");
    TerrainBuilder.setCustomRiverName(16, 17, "Seven");
    console.log("End nameRivers()");
