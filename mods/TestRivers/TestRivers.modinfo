@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="Benualdo-TestRivers" version="1" xmlns="ModInfo">
+  <Properties>
+      <Name>TestRivers</Name>
+      <Description>A map to test rivers</Description>
+      <Authors>Benualdo</Authors>
+      <Package>Mod</Package>
+      <AffectsSavedGames>1</AffectsSavedGames>
+  </Properties>
+  <Dependencies>
+      <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+  </Dependencies>
+  <ActionCriteria>
+      <Criteria id="always">
+          <AlwaysMet></AlwaysMet>
+      </Criteria>
+  </ActionCriteria>
+  <ActionGroups>
+      <ActionGroup id="Benualdo-TestRivers-shell" scope="shell" criteria="always">
+          <Actions>
+              <UpdateDatabase>
+                  <Item>config/config.xml</Item>
+              </UpdateDatabase>
+              <UpdateText>
+                  <Item>text/en_us/TestRivers_Text.xml</Item>
+              </UpdateText>
+          </Actions>
+      </ActionGroup>
+      <ActionGroup id="Benualdo-TestRivers-game" scope="game" criteria="always">
+          <Actions>
+              <UpdateDatabase>
+                  <Item>data/maps.xml</Item>
+              </UpdateDatabase>
+              <UpdateText>
+                  <Item>text/en_us/TestRivers_Text.xml</Item>
+              </UpdateText>
+          </Actions>
+      </ActionGroup>
+  </ActionGroups>
+  <LocalizedText>
+      <File>text/en_us/TestRivers_Text.xml</File>
+  </LocalizedText>
+</Mod>

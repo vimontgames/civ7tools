@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Types>
+		<Replace Type="MAPSIZE_HUGE_24" Kind="KIND_MAPSIZE"/>
+	</Types>
+	<Maps>
+		<Row MapSizeType="MAPSIZE_HUGE_24" Name="LOC_MAPSIZE_HUGE24_NAME" Description="LOC_MAPSIZE_HUGE24_DESCRIPTION" DefaultPlayers="24" PlayersLandmass1="6" PlayersLandmass2="6" GridWidth="106" GridHeight="66" NumNaturalWonders="7" OceanWidth="8" LakeSizeCutoff="10" LakeGenerationFrequency="25" Continents="6" StartSectorRows="4" StartSectorCols="3"/>
+	</Maps>
+</Database>

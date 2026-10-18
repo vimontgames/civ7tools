@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<EnglishText>
+		<Replace Tag="LOC_MODULE_TSL24_NAME">
+			<Text>Official TSL Earth Map More Players</Text>
+		</Replace>
+		<Replace Tag="LOC_MODULE_TSL24_DESCRIPTION">
+			<Text>Adds a 24-player True Start Location Earth map (Huge size) for the Antiquity Age.</Text>
+		</Replace>
+		<Replace Tag="LOC_MAP_EARTH24_NAME">
+			<Text>Earth (24 Players)</Text>
+		</Replace>
+		<Replace Tag="LOC_MAP_EARTH24_DESCRIPTION">
+			<Text>True Start Location Earth, 24 players.</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_HUGE24_NAME">
+			<Text>Huge (24 Players)</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_HUGE24_DESCRIPTION">
+			<Text>24-player huge map size.</Text>
+		</Replace>
+	</EnglishText>
+	<LocalizedText>
+		<Replace Tag="LOC_MODULE_TSL24_NAME" Language="zh_Hans_CN">
+			<Text>官方TSL地球地图玩家扩编</Text>
+		</Replace>
+		<Replace Tag="LOC_MODULE_TSL24_DESCRIPTION" Language="zh_Hans_CN">
+			<Text>为TSL真实地球地图（巨大尺寸）新增24玩家版本，远古时代可用。</Text>
+		</Replace>
+		<Replace Tag="LOC_MAP_EARTH24_NAME" Language="zh_Hans_CN">
+			<Text>TSL地球（24人版）</Text>
+		</Replace>
+		<Replace Tag="LOC_MAP_EARTH24_DESCRIPTION" Language="zh_Hans_CN">
+			<Text>真实起始位置地球，24名玩家。</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_HUGE24_NAME" Language="zh_Hans_CN">
+			<Text>巨大（24人）</Text>
+		</Replace>
+		<Replace Tag="LOC_MAPSIZE_HUGE24_DESCRIPTION" Language="zh_Hans_CN">
+			<Text>24名玩家的巨大地图尺寸。</Text>
+		</Replace>
+	</LocalizedText>
+</Database>

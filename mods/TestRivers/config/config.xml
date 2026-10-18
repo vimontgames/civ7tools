@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<Maps>
+		<Row File="{Benualdo-TestRivers}maps/TestRivers.Civ7Map" Name="TestRivers" Description="A map to test rivers" SortIndex="67"/>
+	</Maps>
+	<UnsupportedValuesByAge>
+		<Row AgeType="AGE_EXPLORATION" Domain="StandardMaps" Value="{Benualdo-TestRivers}maps/TestRivers.Civ7Map"/>
+		<Row AgeType="AGE_MODERN" Domain="StandardMaps" Value="{Benualdo-TestRivers}maps/TestRivers.Civ7Map"/>
+	</UnsupportedValuesByAge>
+	<SupportedValuesByMap>
+		<Row Map="{Benualdo-TestRivers}maps/TestRivers.Civ7Map" Domain="StandardMapSizes" Value="MAPSIZE_TINY"/>
+		<Row Map="{Benualdo-TestRivers}maps/TestRivers.Civ7Map" Domain="DistantLandsMapSizes" Value="MAPSIZE_TINY"/>
+	</SupportedValuesByMap>
+	<ParameterDependencies>
+		<Row ParameterID="MapSeaLevel" ConfigurationGroup="Map" ConfigurationKey="MapScript" Operator="NotEquals" ConfigurationValue="{Benualdo-TestRivers}maps/TestRivers.Civ7Map"/>
+	</ParameterDependencies>
+</Database>
