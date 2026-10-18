@@ -24,7 +24,6 @@ using namespace tinyxml2;
 #include "map_import.hpp"
 #include "map_import_sql.hpp"
 #include "map_export.hpp"
-#include "map_export_sql.hpp"
 #include "map_refresh.hpp"
 #include "map_create.hpp"
 #include "map_actions.hpp"
@@ -33,6 +32,7 @@ using namespace tinyxml2;
 SharedIcon Map::s_resourceIcons[enumCount<ResourceType>()];
 SharedIcon Map::s_featureIcons[enumCount<FeatureType>()];
 SharedIcon Map::s_naturalWonderIcons[enumCount<NaturalWonderType>()];
+SharedIcon Map::s_riverIcons[enumCount<RiverType>() * enumCount<DirectionType>()];
 SharedIcon Map::s_defaultFlag;
 
 //--------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ string Map::GetMapDataPathFromMapPath(const string & _mapPath) const
             break;
 
         default:
-            assert(false);
+            ASSERT(false);
             break;
     }
     return mapDataPath;
@@ -84,87 +84,11 @@ string Map::GetMapDataPathFromMapPath(const string & _mapPath) const
 //--------------------------------------------------------------------------------------
 Map::Map()
 {
-    // Vanilla civs
+    // Add vanilla and popular civs
+    CreateDefaultCivilizations();
 
-    // Invalid civ
-    m_civilizations.push_back(Civilization(true, "", Era::Invalid, float4(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f)));
-
-    // Antiquity Age Civilizations
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_AKSUM", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_EGYPT", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GREECE", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_KHMER", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAURYA", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAYA", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MISSISSIPPIAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_PERSIA", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ROME", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_CARTHAGE", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ASSYRIA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SILLA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BABYLON", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GAUL", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GORYEO", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HEIAN", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SENGOKU", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-
-    // Exploration Age Civilizations
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ABBASID", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_CHOLA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_HAWAII", Era::Exploration, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_INCA", Era::Exploration, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MAJAPAHIT", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MING", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MONGOLIA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_NORMAN", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SONGHAI", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SPAIN", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SHAWNEE", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BULGARIA", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_DAI_VIET", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_ICELAND", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_OTTOMANS", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_JOSEON", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-
-    // Modern Age Civilizations
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_AMERICA", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_FRENCH_EMPIRE", Era::Modern, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MEXICO", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MUGHAL", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_PRUSSIA", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_QING", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_RUSSIA", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_SIAM", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_GREAT_BRITAIN", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_MEIJI", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_BUGANDA", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_NEPAL", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(true, "CIVILIZATION_QAJAR", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-
-    // Extra civilizations from mods (TODO: parse mod files for custom civs ? )
-
-    // Antiquity
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_GERMANIA_JEC", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SAXON", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SANSEB_TAGALOG", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_HUNS_ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_PB_YAMATAI", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_TONGA", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-
-    // Exploration
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_ENGLAND", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_TCS_OUTREMER", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_VENICE", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_DOURADOS_PORTUGAL", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_EDO", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_PIRATE_REPUBLIC", Era::Exploration, float4(55.0f / 255.0f, 55.0f / 255.0f, 55.0f / 255.0f, 1.0f)));
-
-    // Modern
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_SANSEB_PHILIPPINES", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_NYGUITA_ARGENTINA", Era::Modern, float4(100.0f / 255.0f, 144.0f / 255.0f, 240.0f / 255.0f, 1.0f)));
-    m_civilizations.push_back(Civilization(false, "CIVILIZATION_ARTHUR_SPANISH_EMPIRE", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    // Add default river names
+    CreateDefaultRivers();
 
     // Create a few landmasses
     CreateDefaultLandmasses();
@@ -174,7 +98,247 @@ Map::Map()
 }
 
 //--------------------------------------------------------------------------------------
-Civilization::Civilization(bool _vanilla, const string & _civilizationName, Era _era, const float4 _color) :
+void Map::CreateDefaultCivilizations()
+{
+    // Invalid civ
+    m_civilizations.push_back(Civilization("", Era::Invalid, float4(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f)));
+
+    // Vanilla civs
+
+    // Antiquity Age Civilizations
+    m_civilizations.push_back(Civilization("CIVILIZATION_AKSUM", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_EGYPT", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_GREECE", Era::Antiquity, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_HAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_KHMER", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MAURYA", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MAYA", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MISSISSIPPIAN", Era::Antiquity, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_PERSIA", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_ROME", Era::Antiquity, float4(44.0f / 255.0f, 48.0f / 255.0f, 44.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_CARTHAGE", Era::Antiquity, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_ASSYRIA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SILLA", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+
+    m_civilizations.push_back(Civilization("CIVILIZATION_BABYLON", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_GAUL", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_GORYEO", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_HEIAN", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SENGOKU", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+
+    // Exploration Age Civilizations
+    m_civilizations.push_back(Civilization("CIVILIZATION_ABBASID", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_CHOLA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_HAWAII", Era::Exploration, float4(255.0f / 255.0f, 244.0f / 255.0f, 129.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_INCA", Era::Exploration, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MAJAPAHIT", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MING", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MONGOLIA", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_NORMAN", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SONGHAI", Era::Exploration, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SPAIN", Era::Exploration, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SHAWNEE", Era::Exploration, float4(95.0f / 255.0f, 86.0f / 255.0f, 10.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_BULGARIA", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_DAI_VIET", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_ICELAND", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_OTTOMANS", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_JOSEON", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+
+    // Modern Age Civilizations
+    m_civilizations.push_back(Civilization("CIVILIZATION_AMERICA", Era::Modern, float4(54.0f / 255.0f, 50.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_FRENCH_EMPIRE", Era::Modern, float4(0.0f / 255.0f, 44.0f / 255.0f, 140.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MEXICO", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MUGHAL", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_PRUSSIA", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_QING", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_RUSSIA", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SIAM", Era::Modern, float4(55.0f / 255.0f, 62.0f / 255.0f, 85.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_GREAT_BRITAIN", Era::Modern, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_MEIJI", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_BUGANDA", Era::Modern, float4(157.0f / 255.0f, 144.0f / 255.0f, 14.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_NEPAL", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+    m_civilizations.push_back(Civilization("CIVILIZATION_QAJAR", Era::Modern, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f)));
+
+    // Extra civilizations from mods (TODO: parse mod files for custom civs ?)
+
+    // Antiquity
+    m_civilizations.push_back(Civilization("CIVILIZATION_GERMANIA_JEC", Era::Antiquity, float4(126.0f / 255.0f, 126.0f / 255.0f, 126.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SAXON", Era::Antiquity, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_SANSEB_TAGALOG", Era::Antiquity, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_HUNS_ROG", Era::Antiquity, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_PB_YAMATAI", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_TONGA", Era::Antiquity, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f), false));
+
+    // Exploration
+    m_civilizations.push_back(Civilization("CIVILIZATION_ENGLAND", Era::Exploration, float4(249.0f / 255.0f, 249.0f / 255.0f, 249.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_TCS_OUTREMER", Era::Exploration, float4(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_VENICE", Era::Exploration, float4(184.0f / 255.0f, 184.0f / 255.0f, 184.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_DOURADOS_PORTUGAL", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_EDO", Era::Exploration, float4(55.0f / 255.0f, 162.0f / 255.0f, 85.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_PIRATE_REPUBLIC", Era::Exploration, float4(55.0f / 255.0f, 55.0f / 255.0f, 55.0f / 255.0f, 1.0f), false));
+
+    // Modern
+    m_civilizations.push_back(Civilization("CIVILIZATION_SANSEB_PHILIPPINES", Era::Modern, float4(19.0f / 255.0f, 126.0f / 255.0f, 247.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_NYGUITA_ARGENTINA", Era::Modern, float4(100.0f / 255.0f, 144.0f / 255.0f, 240.0f / 255.0f, 1.0f), false));
+    m_civilizations.push_back(Civilization("CIVILIZATION_ARTHUR_SPANISH_EMPIRE", Era::Modern, float4(247.0f / 255.0f, 226.0f / 255.0f, 19.0f / 255.0f, 1.0f), false));
+}
+
+//--------------------------------------------------------------------------------------
+void Map::CreateDefaultRivers()
+{
+#if 0
+    m_rivers.push_back(RiverInfo("GUADIANA_RIVER"));
+    m_rivers.push_back(RiverInfo("HADDAS_RIVER"));
+    m_rivers.push_back(RiverInfo("HAI_RIVER"));
+    m_rivers.push_back(RiverInfo("HALIACMON_RIVER"));
+    m_rivers.push_back(RiverInfo("HAN_RIVER"));
+    m_rivers.push_back(RiverInfo("HANALEI_RIVER"));
+    m_rivers.push_back(RiverInfo("HONDO_RIVER"));
+    m_rivers.push_back(RiverInfo("HVITA_RIVER"));
+    m_rivers.push_back(RiverInfo("INDUS_RIVER"));
+    m_rivers.push_back(RiverInfo("IRRAWADDY_RIVER"));
+    m_rivers.push_back(RiverInfo("ISHIKARI_RIVER"));
+    m_rivers.push_back(RiverInfo("JAJRUD_RIVER"));
+    m_rivers.push_back(RiverInfo("JORDAN_RIVER"));
+    m_rivers.push_back(RiverInfo("JUCAR_RIVER"));
+    m_rivers.push_back(RiverInfo("KAPUAS_RIVER"));
+    m_rivers.push_back(RiverInfo("KARKHEH_RIVER"));
+    m_rivers.push_back(RiverInfo("KARUN_RIVER"));
+    m_rivers.push_back(RiverInfo("KASAI_RIVER"));
+    m_rivers.push_back(RiverInfo("KATONGA_RIVER"));
+    m_rivers.push_back(RiverInfo("KAUKONAHUA_STREAM"));
+    m_rivers.push_back(RiverInfo("KAVERI_RIVER"));
+    m_rivers.push_back(RiverInfo("KERULEN_RIVER"));
+    m_rivers.push_back(RiverInfo("KITAKAMI_RIVER"));
+    m_rivers.push_back(RiverInfo("KIZILIRMAK_RIVER"));
+    m_rivers.push_back(RiverInfo("KOLEKOLE_STREAM"));
+    m_rivers.push_back(RiverInfo("KRISHNA_RIVER"));
+    m_rivers.push_back(RiverInfo("KSHIPRA_RIVER"));
+    m_rivers.push_back(RiverInfo("LENA_RIVER"));
+    m_rivers.push_back(RiverInfo("LERMA_RIVER"));
+    m_rivers.push_back(RiverInfo("LIMPOPO_RIVER"));
+    m_rivers.push_back(RiverInfo("LOIRE_RIVER"));
+    m_rivers.push_back(RiverInfo("LUGOGO_RIVER"));
+    m_rivers.push_back(RiverInfo("MACKENZIE_RIVER"));
+    m_rivers.push_back(RiverInfo("MAHAKAM_RIVER"));
+    m_rivers.push_back(RiverInfo("MAIPO_RIVER"));
+    m_rivers.push_back(RiverInfo("MAMBERAMO_RIVER"));
+    m_rivers.push_back(RiverInfo("MARITSA_RIVER"));
+    m_rivers.push_back(RiverInfo("MAULE_RIVER"));
+    m_rivers.push_back(RiverInfo("MAYANJA_RIVER"));
+    m_rivers.push_back(RiverInfo("MEKONG_RIVER"));
+    m_rivers.push_back(RiverInfo("MEUSE_RIVER"));
+    m_rivers.push_back(RiverInfo("MISSISSIPPI_RIVER"));
+    m_rivers.push_back(RiverInfo("MISSOURI_RIVER"));
+    m_rivers.push_back(RiverInfo("MOGAMI_RIVER"));
+    m_rivers.push_back(RiverInfo("MOTAGUA_RIVER"));
+    m_rivers.push_back(RiverInfo("MUN_RIVER"));
+    m_rivers.push_back(RiverInfo("MURRAY_RIVER"));
+    m_rivers.push_back(RiverInfo("MUSI_RIVER"));
+    m_rivers.push_back(RiverInfo("NACHI_RIVER"));
+    m_rivers.push_back(RiverInfo("NAKDONG_RIVER"));
+    m_rivers.push_back(RiverInfo("NAN_RIVER"));
+    m_rivers.push_back(RiverInfo("NARMADA_RIVER"));
+    m_rivers.push_back(RiverInfo("NAZAS_RIVER"));
+    m_rivers.push_back(RiverInfo("NESTOS_RIVER"));
+    m_rivers.push_back(RiverInfo("NIGER_RIVER"));
+    m_rivers.push_back(RiverInfo("NILE_RIVER"));
+    m_rivers.push_back(RiverInfo("NORTHERN_DVINA"));
+    m_rivers.push_back(RiverInfo("OB_RIVER"));
+    m_rivers.push_back(RiverInfo("ODER_RIVER"));
+    m_rivers.push_back(RiverInfo("OFANTO_RIVER"));
+    m_rivers.push_back(RiverInfo("OHIO_RIVER"));
+    m_rivers.push_back(RiverInfo("OKAVANGO_RIVER"));
+    m_rivers.push_back(RiverInfo("ORANGE_RIVER"));
+    m_rivers.push_back(RiverInfo("ORINOCO_RIVER"));
+    m_rivers.push_back(RiverInfo("ORKHON_RIVER"));
+    m_rivers.push_back(RiverInfo("PARAGUAY_RIVER"));
+    m_rivers.push_back(RiverInfo("PARANA_RIVER"));
+    m_rivers.push_back(RiverInfo("PEARL_RIVER"));
+    m_rivers.push_back(RiverInfo("PENNAR_RIVER"));
+    m_rivers.push_back(RiverInfo("PING_RIVER"));
+    m_rivers.push_back(RiverInfo("PO_RIVER"));
+    m_rivers.push_back(RiverInfo("POTOMAC_RIVER"));
+    m_rivers.push_back(RiverInfo("PURUS_RIVER"));
+    m_rivers.push_back(RiverInfo("PUTUMAYU_RIVER"));
+    m_rivers.push_back(RiverInfo("RED_RIVER"));
+    m_rivers.push_back(RiverInfo("RHINE_RIVER"));
+    m_rivers.push_back(RiverInfo("RHONE_RIVER"));
+    m_rivers.push_back(RiverInfo("RIO_GRANDE"));
+    m_rivers.push_back(RiverInfo("RIO_MADEIRA"));
+    m_rivers.push_back(RiverInfo("RIO_NEGRO"));
+    m_rivers.push_back(RiverInfo("RIVER_AVON"));
+    m_rivers.push_back(RiverInfo("RIVER_GREAT_OUSE"));
+    m_rivers.push_back(RiverInfo("RIVER_KAFU"));
+    m_rivers.push_back(RiverInfo("RIVER_SEVERN"));
+    m_rivers.push_back(RiverInfo("RIVER_THAMES"));
+    m_rivers.push_back(RiverInfo("RIVER_TRENT"));
+    m_rivers.push_back(RiverInfo("RIVER_WELLAND"));
+    m_rivers.push_back(RiverInfo("ROSETTA_RIVER"));
+    m_rivers.push_back(RiverInfo("RUBICON_RIVER"));
+    m_rivers.push_back(RiverInfo("SAINT_LAWRENCE_RIVER"));
+    m_rivers.push_back(RiverInfo("SAKARYA_RIVER"));
+    m_rivers.push_back(RiverInfo("SALADO_RIVER"));
+    m_rivers.push_back(RiverInfo("SALWEEN_RIVER"));
+    m_rivers.push_back(RiverInfo("SAMALA_RIVER"));
+    m_rivers.push_back(RiverInfo("SAO_FRANCISCO_RIVER"));
+    m_rivers.push_back(RiverInfo("SARASWATI_RIVER"));
+    m_rivers.push_back(RiverInfo("SEFID_RIVER"));
+    m_rivers.push_back(RiverInfo("SEINE_RIVER"));
+    m_rivers.push_back(RiverInfo("SENEGAL_RIVER"));
+    m_rivers.push_back(RiverInfo("SEPIK_RIVER"));
+    m_rivers.push_back(RiverInfo("SEZIBWA_RIVER"));
+    m_rivers.push_back(RiverInfo("SHINANO_RIVER"));
+    m_rivers.push_back(RiverInfo("SONGHUA_RIVER"));
+    m_rivers.push_back(RiverInfo("SREPOK_RIVER"));
+    m_rivers.push_back(RiverInfo("STRUMA_RIVER"));
+    m_rivers.push_back(RiverInfo("SUSQUEHANNA_RIVER"));
+    m_rivers.push_back(RiverInfo("SYR_DARYA_RIVER"));
+    m_rivers.push_back(RiverInfo("TAGUS_RIVER"));
+    m_rivers.push_back(RiverInfo("TARIM_RIVER"));
+    m_rivers.push_back(RiverInfo("TENRYU_RIVER"));
+    m_rivers.push_back(RiverInfo("TESHIO_RIVER"));
+    m_rivers.push_back(RiverInfo("THA_CHIN_RIVER"));
+    m_rivers.push_back(RiverInfo("TIBER_RIVER"));
+    m_rivers.push_back(RiverInfo("TIGRIS_RIVER"));
+    m_rivers.push_back(RiverInfo("TOCANTINS_RIVER"));
+    m_rivers.push_back(RiverInfo("TONE_RIVER"));
+    m_rivers.push_back(RiverInfo("TONLE_SAN_RIVER"));
+    m_rivers.push_back(RiverInfo("TONLE_SAP_RIVER"));
+    m_rivers.push_back(RiverInfo("TUUL_RIVER"));
+    m_rivers.push_back(RiverInfo("UCAYALI_RIVER"));
+    m_rivers.push_back(RiverInfo("UMFOLOZI_RIVER"));
+    m_rivers.push_back(RiverInfo("URAL_RIVER"));
+    m_rivers.push_back(RiverInfo("USUMACINTA_RIVER"));
+    m_rivers.push_back(RiverInfo("VARDAR_RIVER"));
+    m_rivers.push_back(RiverInfo("VISTULA_RIVER"));
+    m_rivers.push_back(RiverInfo("VOLGA_RIVER"));
+    m_rivers.push_back(RiverInfo("WADI_AL_BATIN"));
+    m_rivers.push_back(RiverInfo("WADI_AL_RUMMAH"));
+    m_rivers.push_back(RiverInfo("WADI_FEIRAN"));
+    m_rivers.push_back(RiverInfo("WADI_HANIFA"));
+    m_rivers.push_back(RiverInfo("WAILUA_RIVER"));
+    m_rivers.push_back(RiverInfo("WAILUKU_RIVER"));
+    m_rivers.push_back(RiverInfo("WAIMEA_RIVER"));
+    m_rivers.push_back(RiverInfo("WALLAQA_MAYU"));
+    m_rivers.push_back(RiverInfo("WEI_RIVER"));
+    m_rivers.push_back(RiverInfo("WESER_RIVER"));
+    m_rivers.push_back(RiverInfo("WHITE_NILE"));
+    m_rivers.push_back(RiverInfo("WHITE_VOLTA"));
+    m_rivers.push_back(RiverInfo("WILLKA_MAYU"));
+    m_rivers.push_back(RiverInfo("YAMUNA_RIVER"));
+    m_rivers.push_back(RiverInfo("YANGTZE_RIVER"));
+    m_rivers.push_back(RiverInfo("YELLOW_RIVER"));
+    m_rivers.push_back(RiverInfo("YENISEI_RIVER"));
+    m_rivers.push_back(RiverInfo("YUKON_RIVER"));
+    m_rivers.push_back(RiverInfo("ZAMBEZI_RIVER"));
+    m_rivers.push_back(RiverInfo("ZAVKHAN_RIVER"));
+    m_rivers.push_back(RiverInfo("ZAYANDE_RIVER"));
+#endif
+}
+
+//--------------------------------------------------------------------------------------
+Civilization::Civilization(const string & _civilizationName, Era _era, const float4 _color, bool _vanilla) :
     vanilla(_vanilla),
     civilizationName(_civilizationName),
     era(_era),
@@ -214,7 +378,7 @@ void Map::loadIcons(bool _reload)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_resourceIcons[index];
-            if (resIcon.dirty && _reload)
+            if (resIcon.dirty || _reload)
             {
                 bool dirty = false;
 
@@ -229,7 +393,8 @@ void Map::loadIcons(bool _reload)
 
                 if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
-                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    if (!EndsWith(path, "Default.png"))
+                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
@@ -245,7 +410,7 @@ void Map::loadIcons(bool _reload)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_featureIcons[index];
-            if (resIcon.dirty && _reload)
+            if (resIcon.dirty || _reload)
             {
                 bool dirty = false;
 
@@ -260,7 +425,8 @@ void Map::loadIcons(bool _reload)
 
                 if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
-                    LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    if (!EndsWith(path, "Default.png"))
+                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
@@ -276,7 +442,7 @@ void Map::loadIcons(bool _reload)
         {
             int index = (int)val.first;
             SharedIcon & resIcon = s_naturalWonderIcons[index];
-            if (resIcon.dirty && _reload)
+            if (resIcon.dirty || _reload)
             {
                 bool dirty = false;
 
@@ -286,6 +452,43 @@ void Map::loadIcons(bool _reload)
                     if (NaturalWonderType::None != val.first)
                         LOG_WARNING("Texture \"%s\" not found", (path).c_str());
                     path = fmt::sprintf("data/img/naturalwonders/%s.png", "Default");
+                    dirty = true;
+                }
+
+                if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
+                {
+                    if (!EndsWith(path, "Default.png"))
+                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                    resIcon.dirty = dirty;
+                    resIcon.texture.generateMipmap();
+                }
+                else if (!dirty)
+                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
+            }
+        }
+    }
+
+    for (auto riverType : enumValues<RiverType>())
+    {
+        int riverTypeIndex = (int)riverType.first;
+
+        for (auto riverDir : enumValues<DirectionType>())
+        {
+            int riverDirIndex = (int)riverDir.first;
+
+            int iconIndex = riverTypeIndex * enumCount<DirectionType>() + riverDirIndex;
+
+            SharedIcon & resIcon = s_riverIcons[iconIndex];
+            if (resIcon.dirty || _reload)
+            {
+                bool dirty = false;
+
+                auto path = fmt::sprintf("data/img/rivers/%s_%s.png", asString((RiverType)riverTypeIndex), asString((DirectionType)riverDirIndex));
+                if (!FileExists(path))
+                {
+                    if (!EndsWith(path, "Default.png"))
+                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
+                    path = fmt::sprintf("data/img/rivers/%s.png", "Default");
                     dirty = true;
                 }
 
@@ -579,11 +782,7 @@ bool Map::setTerrain(int _x, int _y, TerrainType _value)
     if (tile.terrain != _value)
     {
         tile.terrain = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -596,11 +795,7 @@ bool Map::setBiome(int _x, int _y, BiomeType _value)
     if (tile.biome != _value)
     {
         tile.biome = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -613,11 +808,7 @@ bool Map::setFeature(int _x, int _y, FeatureType _value)
     if (tile.feature != _value)
     {
         tile.feature = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -632,11 +823,7 @@ bool Map::setResource(int _x, int _y, ResourceType _value)
     if (tile.resource != _value)
     {
         tile.resource = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -649,11 +836,7 @@ bool Map::setContinent(int _x, int _y, ContinentType _value)
     if (tile.continent != _value)
     {
         tile.continent = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -666,11 +849,7 @@ bool Map::setLandmass(int _x, int _y, LandmassType _value)
     if (tile.landmass != _value)
     {
         tile.landmass = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -683,11 +862,7 @@ bool Map::setNaturalWonder(int _x, int _y, NaturalWonderType _value)
     if (tile.naturalWonder != _value)
     {
         tile.naturalWonder = _value;
-        auto event = new UndoRedoTile(this);
-        event->add(_x, _y, m_civ7TerrainType.get(_x, _y), tile);
-        UndoRedoStack::add(event);
-        m_civ7TerrainType.get(_x, _y) = tile;
-        return true;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }
@@ -701,6 +876,50 @@ bool Map::setElevation(int _x, int _y, Elevation _value)
     {
         tile.elevation = _value;
         return setTileUndoRedo(_x,_y, tile);
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setRiverName(int _x, int _y, RiverName _value, int _index)
+{
+    if (_index < MAX_RIVER_PER_TILE)
+    {
+        Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+        RiverTileInfo & riverTile = tile.rivers[_index];
+        if (riverTile.nameIndex != _value)
+        {
+            riverTile.nameIndex = _value;
+            return setTileUndoRedo(_x, _y, tile);
+        }
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setRiverType(int _x, int _y, RiverType _value, int _index)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    RiverTileInfo & riverTile = tile.rivers[_index];
+    if (riverTile.type != _value)
+    {
+        riverTile.type = _value;
+        return setTileUndoRedo(_x, _y, tile);
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setRiverDirection(int _x, int _y, DirectionType _value, int _index)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+    RiverTileInfo & riverTile = tile.rivers[_index];
+    if (riverTile.direction != _value)
+    {
+        riverTile.direction = _value;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }

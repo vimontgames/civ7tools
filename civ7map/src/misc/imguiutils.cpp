@@ -107,7 +107,6 @@ template<typename E> struct EditEnumTraitsBase
     static auto GetColor(E value) { return ImVec4(1, 1, 1, 1); }
     static string GetName(const Map * map, E value) { return SeparateCapitalizedWords(asString(value)); }
     static uint GetCount(const Map * map) { return enumCount<E>(); }
-    static const string GetLabel() { return ""; }
     static const string GetToolTip(E value) { return ""; }
     static const auto GetEditStep() { return 1; }
 };
@@ -115,17 +114,22 @@ template<typename E> struct EditEnumTraitsBase
 template<typename E> struct EditEnumTraits : EditEnumTraitsBase<E> {};
 
 //--------------------------------------------------------------------------------------
-template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
+template<typename E> bool EditEnum(const string & label, const Map * map, E & value, bool * pBool)
 {
-    const string label = EditEnumTraits<E>::GetLabel();
-
     E previous = value;
 
-    const float comboX = ImGui::GetCursorPosX() + 128;
+    const float comboX = ImGui::GetCursorPosX() + 128 * EditorOptions::Get().m_editorGlobalScale;
 
     if (pBool)
     {
+        bool disabled = !*pBool;
+        if (disabled)
+            ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
         ImGui::Checkbox(fmt::sprintf("%s###Paint%s", label, label).c_str(), pBool);
+
+        if (disabled)
+            ImGui::PopStyleColor();
+
         ImGui::SameLine(comboX);
     }
 
@@ -163,7 +167,7 @@ template<typename E> bool EditEnum(const Map * map, E & value, bool * pBool)
                 ImVec2 pos = ImGui::GetCursorScreenPos();
                 float height = ImGui::GetTextLineHeight();
 
-                if (ImGui::Selectable(fmt::sprintf("##Edit%s%i", EditEnumTraits<E>::GetLabel(), (int)itemToSelect).c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x, height)))
+                if (ImGui::Selectable(fmt::sprintf("##Edit%s%i", label, (int)itemToSelect).c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x, height)))
                     dirty = true;
 
                 ImGui::SameLine(0, 0);
@@ -218,13 +222,12 @@ template<> struct EditEnumTraits<ContinentType> : EditEnumTraitsBase<ContinentTy
     static auto GetColor(ContinentType value) { return getContinentColor(value); }
     static string GetName(const Map * map, ContinentType value) { return map ? map->getContinentShortName(value).c_str() : "None"; }
     static uint GetCount(const Map * map) { return map? map->getContinentCount() : 0; }
-    static const string GetLabel() { return "Continent"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditContinent(const Map * map, ContinentType & continent, bool * pBool)
 {
-    return EditEnum<ContinentType>(map, continent, pBool);
+    return EditEnum<ContinentType>("Continent", map, continent, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -235,13 +238,12 @@ template<> struct EditEnumTraits<LandmassType> : EditEnumTraitsBase<LandmassType
     static auto GetColor(LandmassType value) { return getLandmassColor(value); }
     static string GetName(const Map * map, LandmassType value) { return map && (int)value < map->getLandmassCount() ? map->getLandmassShortName(value) : "Landmass 0"; }
     static uint GetCount(const Map * map) { return map? map->getLandmassCount() : 1; }
-    static const string GetLabel() { return "Landmass"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditLandmass(const Map * map, LandmassType & landmass, bool * pBool)
 {
-    return EditEnum<LandmassType>(map, landmass, pBool);
+    return EditEnum<LandmassType>("Landmass", map, landmass, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -250,13 +252,12 @@ bool EditLandmass(const Map * map, LandmassType & landmass, bool * pBool)
 template<> struct EditEnumTraits<TerrainType> : EditEnumTraitsBase<TerrainType>
 {
     static auto GetColor(TerrainType value) { return getTerrainColor(value); }
-    static const string GetLabel() { return "Terrain"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditTerrain(const Map * map, TerrainType & terrain, bool * pBool)
 {
-    return EditEnum<TerrainType>(map, terrain, pBool);
+    return EditEnum<TerrainType>("Terrain", map, terrain, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -265,13 +266,12 @@ bool EditTerrain(const Map * map, TerrainType & terrain, bool * pBool)
 template<> struct EditEnumTraits<BiomeType> : EditEnumTraitsBase<BiomeType>
 {
     static auto GetColor(BiomeType value) { return getBiomeColor(value); }
-    static const string GetLabel() { return "Biome"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditBiome(const Map * map, BiomeType & biome, bool * pBool)
 {
-    return EditEnum<BiomeType>(map, biome, pBool);
+    return EditEnum<BiomeType>("Biome", map, biome, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -280,13 +280,12 @@ bool EditBiome(const Map * map, BiomeType & biome, bool * pBool)
 template<> struct EditEnumTraits<FeatureType> : EditEnumTraitsBase<FeatureType>
 {
     static auto GetColor(FeatureType value) { return getFeatureColor(value); }
-    static const string GetLabel() { return "Feature"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditFeature(const Map * map, FeatureType & feature, bool * pBool)
 {
-    return EditEnum<FeatureType>(map, feature, pBool);
+    return EditEnum<FeatureType>("Feature", map, feature, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -295,13 +294,12 @@ bool EditFeature(const Map * map, FeatureType & feature, bool * pBool)
 template<> struct EditEnumTraits<ResourceType> : EditEnumTraitsBase<ResourceType>
 {
     static auto GetColor(ResourceType value) { return getResourceColor(value); }
-    static const string GetLabel() { return "Resource"; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditResource(const Map * map, ResourceType & resource, bool * pBool)
 {
-    return EditEnum<ResourceType>(map, resource, pBool);
+    return EditEnum<ResourceType>("Resource", map, resource, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -310,7 +308,6 @@ bool EditResource(const Map * map, ResourceType & resource, bool * pBool)
 template<> struct EditEnumTraits<NaturalWonderType> : EditEnumTraitsBase<NaturalWonderType>
 {
     static auto GetColor(NaturalWonderType value) { return getNaturalWonderColor(value); }
-    static const string GetLabel() { return "Wonder"; }
     static const string GetToolTip(NaturalWonderType value)
     { 
         return g_NaturalWonderPlacement[(int)value].description;
@@ -320,7 +317,7 @@ template<> struct EditEnumTraits<NaturalWonderType> : EditEnumTraitsBase<Natural
 //--------------------------------------------------------------------------------------
 bool EditNaturalWonder(const Map * map, NaturalWonderType & naturalWonder, bool * pBool)
 {
-    return EditEnum<NaturalWonderType>(map, naturalWonder, pBool);
+    return EditEnum<NaturalWonderType>("Wonder", map, naturalWonder, pBool);
 }
 
 //--------------------------------------------------------------------------------------
@@ -332,12 +329,79 @@ template<> struct EditEnumTraits<Elevation> : EditEnumTraitsBase<Elevation>
     static constexpr auto MaxValue = maxElevation;
 
     static auto GetColor(Elevation value) { return getElevationColor(value); }
-    static const string GetLabel() { return "Elevation"; }
     static const auto GetEditStep() { return EditorOptions::Get().m_elevationStep; }
 };
 
 //--------------------------------------------------------------------------------------
 bool EditElevation(const Map * map, Elevation & elevation, bool * pBool)
 {
-    return EditEnum<Elevation>(map, elevation, pBool);
+    return EditEnum<Elevation>("Elevation", map, elevation, pBool);
 }
+
+//--------------------------------------------------------------------------------------
+// RiverName traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<RiverName> : EditEnumTraitsBase<RiverName>
+{
+    static constexpr bool AddNoneValue = true;
+    static auto GetColor(RiverName value) { return getRiverNameColor(value); }
+    static uint GetCount(const Map * map) 
+    { 
+        if (map)
+            return (uint)map->getRivers().size();
+        else
+            return 0;
+    }
+    static string GetName(const Map * map, RiverName value)
+    { 
+        if (value == RiverName::None)
+            return asString(value);
+
+        if (map)
+        {
+            const vector<RiverInfo> & rivers = map->getRivers();
+            if ((int)value < rivers.size())
+            {
+                const RiverInfo & river = rivers[(int)value];
+                return river.prettyName;
+            }
+        }
+        return "Error";
+    }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditRiverName(const Map * map, RiverName & riverIndex, bool * pBool)
+{
+    return EditEnum<RiverName>("Name", map, riverIndex, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// RiverType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<RiverType> : EditEnumTraitsBase<RiverType>
+{
+    static auto GetColor(RiverType value) { return getRiverTypeColor(value); }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditRiverType(const Map * map, RiverType & river, bool * pBool)
+{
+    return EditEnum<RiverType>("Type", map, river, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// RiverType traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<DirectionType> : EditEnumTraitsBase<DirectionType>
+{
+    static auto GetColor(DirectionType value) { return getDirectionTypeColor(value); }
+    static uint GetCount(const Map * map) { return enumCount<DirectionType>(); }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditDirectionType(const Map * map, DirectionType & direction, bool * pBool)
+{
+    return EditEnum<DirectionType>("Direction", map, direction, pBool);
+}
+

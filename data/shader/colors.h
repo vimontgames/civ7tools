@@ -464,4 +464,80 @@ inline float4 getElevationColor(Elevation elevation)
 }
 #endif
 
+//--------------------------------------------------------------------------------------
+// RiverName
+//--------------------------------------------------------------------------------------
+inline float4 getRiverNameColor(uint index)
+{
+    index &= 0xFF;
+
+    const float4 riverIndexColor[6] =
+    {
+        float4(1,0,0,(1)),
+        float4(0,1,0,(1)),
+        float4(1,1,0,(1)),
+        float4(1,0,1,(1)),
+        float4(0,1,1,(1)),
+        float4(0,0,1,(1)),
+    };
+
+    float4 color = riverIndexColor[index % 6];
+    float greyscale = 1.0f - (float(index / 6)) / 8.0f; // max 8 * 6 = 48 named rivers max
+    color.r *= greyscale;
+    color.g *= greyscale;
+    color.b *= greyscale;
+    return color;
+}
+
+#ifdef __cplusplus
+inline float4 getRiverNameColor(RiverName river)
+{
+    return getRiverNameColor((uint)river);
+}
+#endif
+
+//--------------------------------------------------------------------------------------
+// RiverType
+//--------------------------------------------------------------------------------------
+inline float4 getRiverTypeColor(uint index)
+{
+    switch (index)
+    {
+        default: return float4(1, 0, 0, 1);
+        case 0:  return float4(0.5, 0.5, 1, 1);    // RiverType::Minor
+        case 1:  return float4(0, 0, 1, 1);      // RiverType::Major
+    }
+}
+
+#ifdef __cplusplus
+inline float4 getRiverTypeColor(RiverType river)
+{
+    return getRiverTypeColor((uint)river);
+}
+#endif
+
+//--------------------------------------------------------------------------------------
+// DirectionType
+//--------------------------------------------------------------------------------------
+inline float4 getDirectionTypeColor(uint index)
+{
+    switch (index)
+    {
+        default: return float4(0,0,0,1);
+        case 0 : return float4(1,0,0,1); // NorthEast,
+        case 1 : return float4(0,1,0,1); // NorthWest,
+        case 2 : return float4(1,1,0,1); // East,
+        case 3 : return float4(0,0,1,1); // West,
+        case 4 : return float4(1,0,1,1); // SouthEast,
+        case 5 : return float4(0,1,1,1); // SouthWest
+    }
+}
+
+#ifdef __cplusplus
+inline float4 getDirectionTypeColor(DirectionType direction)
+{
+    return getDirectionTypeColor((uint)direction);
+}
+#endif
+
 #endif // _SHADER_COLORS__H_

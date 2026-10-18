@@ -318,6 +318,102 @@ bool Map::importSQLiteMap(const string & _cwd)
         return false;
     }
 
+    // Rivers (table may not exist)
+    {
+        sql = "SELECT ID, Name, PrettyName FROM Rivers";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+            {
+                int ID = sqlite3_column_int(stmt, 0);
+                const char * name = (const char *)sqlite3_column_text(stmt, 1);
+                const char * prettyName = (const char *)sqlite3_column_text(stmt, 2);
+                m_rivers.push_back(RiverInfo(name, false));
+            }
+
+            if (rc != SQLITE_DONE)
+            {
+                LOG_ERROR("Failed to read Rivers: %s", sqlite3_errmsg(db));
+                sqlite3_finalize(stmt);
+                sqlite3_close(db);
+                return false;
+            }
+
+            sqlite3_finalize(stmt);
+        }
+        else if (string(sqlite3_errmsg(db)).find("no such table") != string::npos)
+        {
+            // Table doesn't exist - this is valid for older maps.
+            LOG_WARNING("Table \"Rivers\" not found.");
+        }
+        else
+        {
+            LOG_ERROR("Failed to prepare SQL statement for Rivers: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return false;
+        }
+    }
+
+    // RiverTiles (table may not exist)
+    {
+        sql = "SELECT ID, NameIndex, Type, Direction FROM RiverTiles";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+            {
+                int ID = sqlite3_column_int(stmt, 0);
+
+                int x, y;
+                getPlotCoords(ID, &x, &y);
+
+                Civ7Tile & tile = m_civ7TerrainType.get(x, y);
+
+                // count rivers
+                int riverCount = 0;
+                for (int i = 0; i < MAX_RIVER_PER_TILE; ++i)
+                {
+                    if (tile.rivers[i].nameIndex != RiverName::None && (uint)tile.rivers[i].nameIndex < m_rivers.size())
+                        ++riverCount;
+                }
+
+                int nameIndex = sqlite3_column_int(stmt, 1);
+                if (nameIndex < m_rivers.size())
+                {
+                    if (riverCount < m_rivers.size())
+                    {
+                        RiverTileInfo & riverTile = tile.rivers[riverCount];
+                        riverTile.nameIndex = (RiverName)nameIndex;
+                        riverTile.type = getRiverTypeFromString((const char *)sqlite3_column_text(stmt, 2), x, y);
+                        riverTile.direction = getRiverDirectionFromString((const char *)sqlite3_column_text(stmt, 3), x, y);
+                    }
+                }                
+            }
+
+            if (rc != SQLITE_DONE)
+            {
+                LOG_ERROR("Failed to read RiverTiles: %s", sqlite3_errmsg(db));
+                sqlite3_finalize(stmt);
+                sqlite3_close(db);
+            }
+
+            sqlite3_finalize(stmt);
+        }
+        else if (string(sqlite3_errmsg(db)).find("no such table") != string::npos)
+        {
+            // Table doesn't exist - this is valid for older maps.
+            LOG_WARNING("Table \"RiverTiles\" not found.");
+        }
+        else
+        {
+            LOG_ERROR("Failed to prepare SQL statement for RiverTiles: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+        }
+    }
+
     // Close the database connection
     sqlite3_close(db);
 

@@ -86,6 +86,37 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             if (EditElevation(map, elevation))
                 dirty |= map->setElevation(x, y, elevation);
 
+            if (ImGui::CollapsingHeader("Rivers###RiversInspector", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                // "RiverName"
+                for (uint i = 0; i < MAX_RIVER_PER_TILE; ++i)
+                {
+                    ImGui::PushID(i);
+                    ImGui::Text(fmt::sprintf("River %i", i).c_str() );
+
+                    RiverTileInfo riverTileInfo = tile->rivers[i];
+
+                    RiverName riverIndex = riverTileInfo.nameIndex;
+                    if (EditRiverName(map, riverIndex))
+                        dirty |= map->setRiverName(x, y, riverIndex, i);
+
+                    if (riverIndex != RiverName::None)
+                    {
+                        // "RiverType"
+                        RiverType riverType = riverTileInfo.type;
+                        if (EditRiverType(map, riverType))
+                            dirty |= map->setRiverType(x, y, riverType, i);
+                        
+                        // "RiverDirection"
+                        DirectionType riverDirection = riverTileInfo.direction;
+                        if (EditDirectionType(map, riverDirection))
+                            dirty |= map->setRiverDirection(x, y, riverDirection, i);
+                    }
+                    ImGui::PopID();
+                }
+                
+            }
+
             // TSL
             {
                 auto & civilizations = map->getCivilizations();

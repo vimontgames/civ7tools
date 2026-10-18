@@ -71,6 +71,7 @@ ImFont * font = nullptr;
 #include "windows/console.hpp"
 #include "windows/inspector.hpp"
 #include "windows/paint.hpp"
+#include "windows/rivers.hpp"
 
 static vector<BaseWindow *> g_windows;
 
@@ -175,6 +176,7 @@ int main()
     g_windows.push_back(new InfoWindow());
     g_windows.push_back(new InspectorWindow());
     g_windows.push_back(new PaintWindow());
+    g_windows.push_back(new RiversWindow());
 
     // static init
     Map::loadIcons(true);
@@ -359,7 +361,7 @@ int main()
             if (ImGui::BeginMenu("Options"))
             {
                 float scale = EditorOptions::Get().m_editorGlobalScale;
-                if (ImGui::DragFloat("UI Scale", &scale, 0.25f, 1.0f, 2.0f, "%.1f", 1.0f))
+                if (ImGui::DragFloat("UI Scale", &scale, 0.25f, 1.0f, 2.0f, "%.2f", 1.0f))
                 {
                     // TODO: SetupImGuiStyle after loading editor options
                     EditorOptions::Get().m_editorGlobalScale = scale;
@@ -1039,7 +1041,7 @@ int main()
         }
 
         if (needRefresh)
-            g_map->refresh(true);
+            g_map->refresh();
 
         // update "camera"
         const float panSpeed = 1.0f;

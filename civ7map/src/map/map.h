@@ -60,7 +60,8 @@ enum class MapBitmap
     TerrainData = 0,       // TerrainType | Biome | Feature | Continent then Resource | ? | ? | ?
     Features,
     Resources,
-    NaturalWonder
+    NaturalWonder,
+    Rivers
 };
 
 //--------------------------------------------------------------------------------------
@@ -170,7 +171,7 @@ struct TSL
 //--------------------------------------------------------------------------------------
 struct Civilization
 {
-    Civilization(bool _vanilla, const string & _civilizationName = "", Era _era = (Era)-1, const float4 _color = float4(1, 1, 1, 1));
+    Civilization(const string & _civilizationName = "", Era _era = (Era)-1, const float4 _color = float4(1, 1, 1, 1), bool _vanilla = true);
     bool vanilla = false;
     string userFriendlyName;
     string civilizationName;
@@ -207,6 +208,9 @@ public:
     bool setLandmass(int _x, int _y, LandmassType _value);
     bool setNaturalWonder(int _x, int _y, NaturalWonderType _value);
     bool setElevation(int _x, int _y, Elevation _value);
+    bool setRiverName(int _x, int _y, RiverName _value, int _index);
+    bool setRiverType(int _x, int _y, RiverType _value, int _index);
+    bool setRiverDirection(int _x, int _y, DirectionType _value, int _index);
 
     bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize);
     bool createFolders();
@@ -266,6 +270,9 @@ public:
     LandmassType getOrCreateLandmassType(const uint landmassIndex);
     void CreateDefaultLandmasses();
 
+    void CreateDefaultCivilizations();
+    void CreateDefaultRivers();
+
     // return types from the game string (e.g. "TERRAIN_GRASS")
     static string getTerrainTypeAsString(TerrainType _type);
     static TerrainType getTerrainTypeFromString(const string& _terrainTypeS, uint x, uint y);
@@ -273,13 +280,19 @@ public:
     static FeatureType getFeatureFromString(const string & _biomeTypeS, uint x, uint y);
     static ResourceType getResourceFromString(const string & _biomeTypeS, uint x, uint y);
     static NaturalWonderType getNaturalWonderFromString(const string & _naturalWonderTypeS, uint x, uint y);
-    static string getCivilizationNameFromString(const string & name);
+    static RiverType getRiverTypeFromString(const string & name, uint x, uint y);
+    static DirectionType getRiverDirectionFromString(const string & name, uint x, uint y);
   
     static string getBiomeTypeAsString(BiomeType _type);
     static string getFeatureTypeAsString(FeatureType _type);
     static string getResourceTypeAsString(ResourceType _type);
     static string getNaturalWonderTypeAsString(NaturalWonderType _type);
+    static string getRiverTypeAsString(RiverType _type);
+    static string getDirectionTypeAsString(DirectionType _dir);
  
+    static string getCivilizationNameFromString(const string & name);
+    static string getRiverPrettyNameFromString(const string & name);
+
     string GetMapDataPathFromMapPath(const string & _mapPath) const;
 
     string getModID() const;
@@ -327,6 +340,9 @@ public:
 
     int getCivilizationIndexByName(const string & name) const;
 
+    vector<RiverInfo> & getRivers() { return m_rivers; }
+    const vector<RiverInfo> & getRivers() const { return m_rivers; }
+
     void clearResources();
     void clearFeatures();
     void LogMissingAndDuplicateTSLs();
@@ -334,6 +350,9 @@ public:
     void copyRect(sf::Vector2i _begin, sf::Vector2i _end);
     void pasteRect(sf::Vector2i _origin);
     void cutRect(sf::Vector2i _begin, sf::Vector2i _end);
+
+    int2 GetTileCoordsInDirection(int x, int y, DirectionType direction) const;
+    bool CheckRivers();
 
 private:
     bool setTileUndoRedo(int _x, int _y, const Civ7Tile & _value);
@@ -365,14 +384,15 @@ private:
 
     Civ7Tile ConvertCiv6TileToCiv7(const Civ6Tile & _civ6Tile, u32 i, u32 j);
 
-    template <typename E> static E getEnumValueFromString(const string & _prefix, const string & _string, uint _x = -1, uint _y = -1);
-    template <typename E> static string getEnumAsExportString(const string & _prefix, E _value);
+    template <typename E> static E getEnumValueFromString(const string & _prefix, const string & _string, E defaultValue = E::None, uint _x = -1, uint _y = -1, bool _separateWords = true);
+    template <typename E> static string getEnumAsExportString(const string & _prefix, E _value, bool _separateWords = true);
         
 public:
     // shared
     static SharedIcon       s_resourceIcons[enumCount<ResourceType>()];
     static SharedIcon       s_featureIcons[enumCount<FeatureType>()];
     static SharedIcon       s_naturalWonderIcons[enumCount<NaturalWonderType>()];
+    static SharedIcon       s_riverIcons[enumCount<RiverType>() * enumCount<DirectionType>()];
     static SharedIcon       s_defaultFlag;
 
     MapVersion              m_mapVersion = MapVersion::Invalid;
@@ -435,6 +455,7 @@ public:
     bool                    m_showResources = true;
     bool                    m_showFeatures = true;
     bool                    m_showNaturalWonders = true;
+    bool                    m_showRivers = true;
     bool                    m_showTSL = true;
     bool                    m_showHemispheres = true;
     bool                    m_showOverlayImage = false;
@@ -462,6 +483,7 @@ private:
     vector<ContinentInfo>   m_continents;
     vector<LandmassInfo>    m_landmasses;
     vector<Civilization>    m_civilizations;
+    vector<RiverInfo>       m_rivers;
 
     bool                    m_firstRefresh = true;
 };

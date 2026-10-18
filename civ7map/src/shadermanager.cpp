@@ -26,7 +26,7 @@ void ShaderManager::deinit()
 //--------------------------------------------------------------------------
 u32 ShaderManager::update()
 {
-	assert(invalidShaderID != s_defaultShaderID);
+    ASSERT(invalidShaderID != s_defaultShaderID);
 	auto * defaultShader = get(s_defaultShaderID);
 
 	for (u32 i = 0; i < s_shaders.size(); ++i)
@@ -102,7 +102,7 @@ sf::Shader * ShaderManager::compile(const char * _vs, const char * _ps, bool _de
 		dump("VS", _vs, vs.toAnsiString().c_str());
 		dump("PS", _ps, ps.toAnsiString().c_str());
 
-		assert(s_defaultShaderID != invalidShaderID);
+        ASSERT(s_defaultShaderID != invalidShaderID);
 		return s_shaders[s_defaultShaderID].shader;
 	}
 }
@@ -159,7 +159,7 @@ bool ShaderManager::fileToString(sf::String & _string, const char * _filepath)
 		fseek(fp, 0, SEEK_SET);
 
 		static char temp[32768];
-        assert(sizeof(temp) > size);
+        ASSERT(sizeof(temp) > size);
 		size_t read = fread_s(&temp[0], sizeof(temp), 1, size, fp);
 		temp[read] = '\0';
 		fclose(fp);

@@ -1,8 +1,224 @@
 #define SQL(func) { rc = func; if (rc != SQLITE_OK && rc != SQLITE_DONE  && rc != SQLITE_ROW) { LOG_ERROR("Query \"%s\" failed : %s", sql.c_str(), sqlite3_errmsg(db)); } }
 
+#include "winsqlite/winsqlite3.h"
+#include "map/map.h"
+
+//--------------------------------------------------------------------------------------
+int2 Map::GetTileCoordsInDirection(int x, int y, DirectionType direction) const
+{
+    switch (direction)
+    {
+        case DirectionType::East:
+            return int2((x + 1) % m_width, y);
+
+        case DirectionType::West:
+            return int2((x + m_width - 1) % m_width, y);
+
+        case DirectionType::NorthEast:
+            return (y & 1) ? int2((x + 1) % m_width, y + 1) : int2(x, y + 1);
+
+        case DirectionType::NorthWest:
+            return (y & 1) ? int2(x, y + 1) : int2((x + m_width - 1) % m_width, y + 1);
+
+        case DirectionType::SouthEast:
+            return (y & 1) ? int2((x + 1) % m_width, y - 1) : int2(x, y - 1);
+
+        case DirectionType::SouthWest:
+            return (y & 1) ? int2(x, y - 1) : int2((x + m_width - 1) % m_width, y - 1);
+
+        default:
+            ASSERT("Invalid direction \"%s\" (%i)", asString(direction).c_str(), (int)direction);
+            return int2(x, y);
+    }
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::CheckRivers()
+{
+    // River analysis
+
+    // #1 Find river start and end
+    for (int i = 0; i < m_rivers.size(); ++i)
+    {
+        RiverInfo & riverInfo = m_rivers[i];
+        riverInfo.sortedRiverTiles.clear();
+        riverInfo.tileCount = 0;
+
+        for (uint y = 0; y < m_height; ++y)
+        {
+            for (uint x = 0; x < m_width; ++x)
+            {
+                const Civ7Tile & tile = m_civ7TerrainType.get(x, y);
+
+                for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                {
+                    const RiverTileInfo & riverTile = tile.rivers[r];
+                    if (riverTile.nameIndex == (RiverName)i)
+                    {
+                        riverInfo.tileCount++;
+
+                        // search for parent in all directions
+                        int previous = 0;
+
+                        const int2 nextTileXY = GetTileCoordsInDirection(x, y, riverTile.direction);
+
+                        for (int d = 0; d < 6; ++d)
+                        {
+                            const DirectionType direction = (DirectionType)d;
+                            const int2 parentTileXY = GetTileCoordsInDirection(x, y, direction);
+
+                            // Don't look at our own destination
+                            if (parentTileXY.x == nextTileXY.x && parentTileXY.y == nextTileXY.y)
+                                continue;
+
+                            const Civ7Tile & parentTile = m_civ7TerrainType.get(parentTileXY.x, parentTileXY.y);
+
+                            for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
+                            {
+                                const RiverTileInfo & parentRiverTile = parentTile.rivers[r2];
+
+                                if (parentRiverTile.nameIndex == riverTile.nameIndex)
+                                {
+                                    const int2 parentNextTileXY = GetTileCoordsInDirection(
+                                        parentTileXY.x,
+                                        parentTileXY.y,
+                                        parentRiverTile.direction);
+
+                                    if (parentNextTileXY.x == (int)x && parentNextTileXY.y == (int)y)
+                                    {
+                                        LOG_INFO("River \"%s\" tile (%u,%u) has parent at (%d,%d), direction %s",
+                                            m_rivers[(int)riverTile.nameIndex].prettyName.c_str(),
+                                            x,
+                                            y,
+                                            parentTileXY.x,
+                                            parentTileXY.y,
+                                            asString(parentRiverTile.direction).c_str());
+
+                                        previous++;
+                                    }
+                                }
+                            }
+                        }
+
+                        // search for neightbour in the direction
+                        int next = 0;
+
+                        // Is there a river in the direction we're looking?
+                        const Civ7Tile & nextTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
+                        for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
+                        {
+                            const RiverTileInfo & nextRiverTile = nextTile.rivers[r2];
+                            if (nextRiverTile.nameIndex == riverTile.nameIndex)
+                            {
+                                LOG_INFO("River \"%s\" tile (%u,%u) is pointing the same river at (%u,%u) in direction %s", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y, nextTileXY.x, nextTileXY.y, asString(riverTile.direction).c_str());
+                                next++;
+                            }
+                        }
+
+                        if (previous == 0)
+                        {
+                            LOG_INFO("River \"%s\" tile (%u,%u) is the start of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
+                            riverInfo.sortedRiverTiles.push_back(int2(x, y));
+                        }
+
+                        if (next == 0)
+                        {
+                            LOG_INFO("River \"%s\" tile (%u,%u) is the end of the river", m_rivers[(int)riverTile.nameIndex].prettyName.c_str(), x, y);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // #2 For each river build the sorted list starting from the start
+    for (int i = 0; i < m_rivers.size(); ++i)
+    {
+        RiverInfo & riverInfo = m_rivers[i];
+        if (riverInfo.sortedRiverTiles.size() > 0)
+        {
+            riverInfo.sortedRiverTiles.resize(1);
+
+            int2 firstTileXY = riverInfo.sortedRiverTiles[0];
+            int2 nextTileXY = firstTileXY;
+
+            bool ended = false;
+
+            while (!ended)
+            {
+                const Civ7Tile & currenTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
+                for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                {
+                    const RiverTileInfo & riverTile = currenTile.rivers[r];
+                    if (riverTile.nameIndex == (RiverName)i)
+                    {
+                        nextTileXY = GetTileCoordsInDirection(nextTileXY.x, nextTileXY.y, riverTile.direction);
+                        const Civ7Tile & nextTile = m_civ7TerrainType.get(nextTileXY.x, nextTileXY.y);
+
+                        bool found = false;
+                        for (uint r2 = 0; r2 < MAX_RIVER_PER_TILE; ++r2)
+                        {
+                            const RiverTileInfo & nextRiverTile = nextTile.rivers[r2];
+                            if (nextRiverTile.nameIndex == riverTile.nameIndex)
+                            {
+                                bool alreadyExists = false;
+                                for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
+                                {
+                                    if (riverInfo.sortedRiverTiles[j].x == nextTileXY.x && riverInfo.sortedRiverTiles[j].y == nextTileXY.y)
+                                    {
+                                        alreadyExists = true;
+                                    }
+                                }
+
+                                if (!alreadyExists)
+                                {
+                                    riverInfo.sortedRiverTiles.push_back(nextTileXY);
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                            ended = true;
+                    }
+                }                
+            }
+
+            if (riverInfo.sortedRiverTiles.size() < riverInfo.tileCount)
+            {
+                LOG_WARNING("River \"%s\" (%u) has %u/%u disconnected tiles from its start position (%u, %u)", riverInfo.prettyName.c_str(), i, riverInfo.tileCount - riverInfo.sortedRiverTiles.size(), riverInfo.tileCount , firstTileXY.x, firstTileXY.y);
+            }
+            else if (riverInfo.tileCount == 0)
+            {
+                LOG_WARNING("River \"%s\" (%u) has no river tiles", riverInfo.prettyName.c_str(), i);
+            }
+        }
+    }
+
+    for (int i = 0; i < m_rivers.size(); ++i)
+    {
+        const RiverInfo & riverInfo = m_rivers[i];
+        if (riverInfo.sortedRiverTiles.size() > 0)
+        {
+            string msg = fmt::sprintf("River \"%s\" (%u) :", m_rivers[i].prettyName.c_str(), i);
+
+            for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
+            {
+                msg += fmt::sprintf(" (%u, %u)", riverInfo.sortedRiverTiles[j].x, riverInfo.sortedRiverTiles[j].y);
+            }
+            LOG_INFO(msg.c_str());
+        }
+    }
+
+    return true;
+}
+
 //--------------------------------------------------------------------------------------
 void Map::exportFilesCiv7Map(const string & _cwd, bool _useModTemplate)
 {
+    CheckRivers();
+
     exportModInfoCiv7Map();
     exportTextCiv7Map();
     exportConfigCiv7Map();
@@ -187,6 +403,17 @@ void Map::exportMapsCiv7Map()
         data += fmt::sprintf("	</Maps>\n");
     }
 
+    if (m_rivers.size() > 0)
+    {
+        data += fmt::sprintf("  <NamedRivers>\n");
+        for (uint i = 0; i < m_rivers.size(); ++i)
+        {
+            const RiverInfo & riverInfo = m_rivers[i];
+            data += fmt::sprintf("      <Row NamedRiverType=\"%s\" Name=\"%s\"/>\n", riverInfo.name, riverInfo.prettyName);
+        }
+        data += fmt::sprintf("  </NamedRivers>\n");
+    }
+
     data += fmt::sprintf("</Database>\n");
 
     string dataFolder = fmt::sprintf("%s\\data", m_modFolder);
@@ -247,7 +474,6 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("  const hexMap = new HexMap();\n");
     data += fmt::sprintf("  hexMap.initFromTerrainBuilder();\n");
     data += fmt::sprintf("  paintElevation();\n");
-    data += fmt::sprintf("  //paintEarthHugeRivers();\n");
     data += fmt::sprintf("  paintNaturalWonders(iWidth, iHeight);\n");
     data += fmt::sprintf("  //paintEarthHugeResourcesAntiquity();\n");
 
@@ -291,7 +517,7 @@ void Map::exportMapDataCiv7Map()
         genFlags += "| GenerationPhases.NaturalWonders";
 
     if (m_randomFloodPlains)
-        genFlags += "| GenerationPhases.m_randomFloodPlains";
+        genFlags += "| GenerationPhases.RandomFloodPlains";
 
     if (m_randomFeatures)
         genFlags += "| GenerationPhases.Features";
@@ -306,7 +532,8 @@ void Map::exportMapDataCiv7Map()
 
     data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = false;\n");
     data += fmt::sprintf("  generateMapFeatures(hexMap, genCtx);\n");
-    data += fmt::sprintf("  //nameRivers();\n");
+    data += fmt::sprintf("  paintRivers();\n");
+    data += fmt::sprintf("  nameRivers();\n");
     data += fmt::sprintf("  //nameVolcanoes();\n");
     data += fmt::sprintf("  fakeWrapX();\n");
 
@@ -326,7 +553,7 @@ void Map::exportMapDataCiv7Map()
     }
     else
     {
-        data += fmt::sprintf("const startPositions = assignStartPositionsFromHexMap(hexMap);");
+        data += fmt::sprintf("  const startPositions = assignStartPositionsFromHexMap(hexMap);");
     }
 
     data += fmt::sprintf("  generateDiscoveries(iWidth, iHeight, startPositions, g_PolarWaterRows);\n");
@@ -350,7 +577,53 @@ void Map::exportMapDataCiv7Map()
     data += "];\n";
     data += fmt::sprintf("    TerrainBuilder.setElevation(elevationArray);\n");
     data += fmt::sprintf("    TerrainBuilder.generateCliffsFromElevation();\n");
-    data += fmt::sprintf("}\n");
+    data += fmt::sprintf("}\n\n");
+
+    // Rivers plots
+    data += "function paintRivers()\n";
+    data += "{\n";
+    data += "  console.log(\"Begin paintRivers()\");\n";
+   
+    for (uint i = 0; i < m_rivers.size(); ++i)
+    {
+        const RiverInfo & riverInfo = m_rivers[i];
+        if (riverInfo.sortedRiverTiles.size() > 0)
+        {
+            data += fmt::sprintf("  // %s\n", riverInfo.name.c_str());
+            for (uint j = 0; j < riverInfo.sortedRiverTiles.size(); ++j)
+            {
+                const int2 & tileXY = riverInfo.sortedRiverTiles[j];
+                const Civ7Tile & tile = m_civ7TerrainType.get(tileXY.x, tileXY.y);
+                for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                {
+                    const RiverTileInfo & riverTile = tile.rivers[r];
+                    if (riverTile.nameIndex == (RiverName)i)
+                    {
+                        data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
+                    }
+                }
+            }
+        }
+    }
+
+    data += "  console.log(\"End paintRivers()\");\n";
+    data += "}\n\n";
+
+    data += "function nameRivers()\n";
+    data += "{\n";
+    data += "   console.log(\"Begin nameRivers()\");\n";
+
+    for (uint i = 0; i < m_rivers.size(); ++i)
+    {
+        const RiverInfo & riverInfo = m_rivers[i];
+        if (riverInfo.sortedRiverTiles.size() > 0)
+        {
+            data += fmt::sprintf("   TerrainBuilder.setCustomRiverName(%u, %u, \"%s\");\n", riverInfo.sortedRiverTiles[0].x, riverInfo.sortedRiverTiles[0].y, riverInfo.prettyName);
+        }
+    }
+
+    data += "   console.log(\"End nameRivers()\");\n";
+    data += "}\n\n";
 
     // TSL
     data += "function getDistanceToClosestOtherStart(iX, iY, startPositions, skipIndex) { \n";
@@ -1055,58 +1328,179 @@ void Map::exportSQLiteMap()
     }
 
     // Natural wonders
-    const char * createTableSQL =
-        "CREATE TABLE IF NOT EXISTS PlotNaturalWonders ("
-        "ID INTEGER PRIMARY KEY,"
-        "Value TEXT"
-        ");";
-
-    rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
-
-    if (rc != SQLITE_OK)
     {
-        LOG_ERROR("Failed to create natural wonders table: %s", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return;
-    }
+        const char * createTableSQL =
+            "CREATE TABLE IF NOT EXISTS PlotNaturalWonders ("
+            "ID INTEGER PRIMARY KEY,"
+            "Value TEXT"
+            ");";
 
-    sql = "INSERT OR REPLACE INTO PlotNaturalWonders (ID, Value) VALUES (?, ?);";
-    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+        rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
 
-    if (rc == SQLITE_OK)
-    {
-        // Add transaction for massive speed improvement
-        rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
-        rc = sqlite3_exec(db, "DELETE FROM PlotNaturalWonders;", NULL, 0, NULL);
-
-        for (uint y = 0; y < m_height; ++y)
+        if (rc != SQLITE_OK)
         {
-            for (uint x = 0; x < m_width; ++x)
-            {
-                Civ7Tile tile = m_civ7TerrainType.get(x, y);
-
-                if ((int)tile.naturalWonder > 0)
-                {
-                    string naturalWonderTypeNameS = getNaturalWonderTypeAsString(tile.naturalWonder);
-
-                    sqlite3_bind_int(stmt, 1, x + y * m_width);                                     // ID
-                    sqlite3_bind_text(stmt, 2, naturalWonderTypeNameS.c_str(), -1, SQLITE_STATIC);  // Value
-
-                    sqlite3_step(stmt);
-                    sqlite3_reset(stmt);
-                }
-            }
+            LOG_ERROR("Failed to create natural wonders table: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
         }
 
-        // Commit 
-        rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
-        rc = sqlite3_finalize(stmt);
+        sql = "INSERT OR REPLACE INTO PlotNaturalWonders (ID, Value) VALUES (?, ?);";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            // Add transaction for massive speed improvement
+            rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
+            rc = sqlite3_exec(db, "DELETE FROM PlotNaturalWonders;", NULL, 0, NULL);
+
+            for (uint y = 0; y < m_height; ++y)
+            {
+                for (uint x = 0; x < m_width; ++x)
+                {
+                    Civ7Tile tile = m_civ7TerrainType.get(x, y);
+
+                    if ((int)tile.naturalWonder > 0)
+                    {
+                        string naturalWonderTypeNameS = getNaturalWonderTypeAsString(tile.naturalWonder);
+
+                        sqlite3_bind_int(stmt, 1, x + y * m_width);                                     // ID
+                        sqlite3_bind_text(stmt, 2, naturalWonderTypeNameS.c_str(), -1, SQLITE_STATIC);  // Value
+
+                        sqlite3_step(stmt);
+                        sqlite3_reset(stmt);
+                    }
+                }
+            }
+
+            // Commit 
+            rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
+            rc = sqlite3_finalize(stmt);
+        }
+        else
+        {
+            LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
     }
-    else
+
+    // custom rivers
     {
-        LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return;
+        const char * createTableSQL =
+            "CREATE TABLE IF NOT EXISTS Rivers ("
+            "ID INTEGER PRIMARY KEY,"
+            "Name TEXT,"
+            "PrettyName TEXT"
+            ");";
+
+        rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            LOG_ERROR("Failed to create custom Rivers table: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
+
+        sql = "INSERT OR REPLACE INTO Rivers (ID, Name, PrettyName) VALUES (?, ?, ?);";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            // Add transaction for massive speed improvement
+            rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
+            rc = sqlite3_exec(db, "DELETE FROM Rivers;", NULL, 0, NULL);
+
+            for (uint i = 0; i < m_rivers.size(); ++i)
+            {
+                const RiverInfo & river = m_rivers[i];
+                string riverName = river.name;
+                string riverPrettyName = river.prettyName;
+
+                sqlite3_bind_int(stmt, 1, i);                                           // ID
+                sqlite3_bind_text(stmt, 2, riverName.c_str(), -1, SQLITE_STATIC);       // Name
+                sqlite3_bind_text(stmt, 3, riverPrettyName.c_str(), -1, SQLITE_STATIC); // PrettyName
+
+                sqlite3_step(stmt);
+                sqlite3_reset(stmt);
+            }
+
+            // Commit 
+            rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
+            rc = sqlite3_finalize(stmt);
+        }
+        else
+        {
+            LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
+    }
+
+    // River tiles
+    {
+        const char * createTableSQL =
+            "CREATE TABLE IF NOT EXISTS RiverTiles ("
+            "ID INTEGER KEY,"
+            "NameIndex INTEGER,"
+            "Type TEXT,"
+            "Direction TEXT"
+            ");";
+
+        rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            LOG_ERROR("Failed to create RiverTiles table: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
+
+        sql = "INSERT OR REPLACE INTO RiverTiles (ID, NameIndex, Type, Direction) VALUES (?, ?, ?, ?);";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            // Add transaction for massive speed improvement
+            rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
+            rc = sqlite3_exec(db, "DELETE FROM RiverTiles;", NULL, 0, NULL);
+
+            for (uint y = 0; y < m_height; ++y)
+            {
+                for (uint x = 0; x < m_width; ++x)
+                {
+                    Civ7Tile tile = m_civ7TerrainType.get(x, y);
+
+                    for (uint i = 0; i < MAX_RIVER_PER_TILE; ++i)
+                    {
+                        RiverTileInfo & riverTile = tile.rivers[i];
+
+                        if (riverTile.nameIndex != RiverName::None)
+                        {
+                            string riverTypeString = getRiverTypeAsString(riverTile.type);
+                            string riverDirString = getDirectionTypeAsString(riverTile.direction);
+
+                            sqlite3_bind_int(stmt, 1, x + y * m_width);                 // ID
+                            sqlite3_bind_int(stmt, 2, (int)riverTile.nameIndex);
+                            sqlite3_bind_text(stmt, 3, riverTypeString.c_str(), -1, SQLITE_STATIC); 
+                            sqlite3_bind_text(stmt, 4, riverDirString.c_str(), -1, SQLITE_STATIC); 
+                            sqlite3_step(stmt);
+                            sqlite3_reset(stmt);
+                        }
+                    }
+                }
+            }
+
+            // Commit 
+            rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
+            rc = sqlite3_finalize(stmt);
+        }
+        else
+        {
+            LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
     }
 
     // Close the database connection

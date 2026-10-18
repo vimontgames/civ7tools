@@ -205,13 +205,13 @@ FeatureType Map::getFeatureFromString(const string & _featureTypeS, uint x, uint
 }
 
 //--------------------------------------------------------------------------------------
-template <typename E> E Map::getEnumValueFromString(const string & _prefix, const string & _string, uint _x, uint _y)
+template <typename E> E Map::getEnumValueFromString(const string & _prefix, const string & _string, E defaultValue, uint _x, uint _y, bool _separateWords)
 {
     for (uint i = 0; i < enumCount<E>(); ++i)
     {
         E type = (E)i;
 
-        if (getEnumAsExportString(_prefix, type) == _string)
+        if (getEnumAsExportString(_prefix, type, _separateWords) == _string)
             return type;
     }
 
@@ -220,11 +220,11 @@ template <typename E> E Map::getEnumValueFromString(const string & _prefix, cons
     else
         ASSERT(false, "Unknown enum type \"%s\"", _string.c_str());
 
-    return NaturalWonderType::None;
+    return defaultValue;
 }
 
 //--------------------------------------------------------------------------------------
-template <typename E> string Map::getEnumAsExportString(const string & _prefix, E value)
+template <typename E> string Map::getEnumAsExportString(const string & _prefix, E value, bool _separateWords)
 {
     string result = _prefix + "_";
     string name = asString(value);
@@ -235,7 +235,7 @@ template <typename E> string Map::getEnumAsExportString(const string & _prefix, 
 
     for (char c : name)
     {
-        if (isupper((ubyte)(c)) && result.size() > _prefix.length() + 1)
+        if (_separateWords && isupper((ubyte)(c)) && result.size() > _prefix.length() + 1)
             result += '_';
 
         result += (ubyte)(toupper((ubyte)(c)));
@@ -262,6 +262,30 @@ string Map::getNaturalWonderTypeAsString(NaturalWonderType _type)
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getRiverTypeAsString(RiverType _type)
+{
+    return getEnumAsExportString("RIVER", _type);
+}
+
+//--------------------------------------------------------------------------------------
+string Map::getDirectionTypeAsString(DirectionType _dir)
+{
+    return getEnumAsExportString("DIRECTION", _dir, false); // DIRECTION_SOUTHEAST not DIRECTION_SOUTH_EAST (TODO: Should be type trait instead?)
+}
+
+//--------------------------------------------------------------------------------------
+RiverType Map::getRiverTypeFromString(const string & name, uint x, uint y)
+{
+    return getEnumValueFromString<RiverType>("RIVER", name, RiverType::Minor, x, y);
+}
+
+//--------------------------------------------------------------------------------------
+DirectionType Map::getRiverDirectionFromString(const string & name, uint x, uint y)
+{
+    return getEnumValueFromString<DirectionType>("DIRECTION", name, DirectionType::West, x, y, false);
 }
 
 //--------------------------------------------------------------------------------------
@@ -313,6 +337,65 @@ string Map::getCivilizationNameFromString(const string & name)
 
     return result;
 }
+
+
+//--------------------------------------------------------------------------------------
+string Map::getRiverPrettyNameFromString(const string & name)
+{
+    string input = name;
+
+    // Remove prefixes.
+    constexpr const char * prefixes[] = { "RIVER_", "WADI_" };
+
+    for (const char * prefix : prefixes)
+    {
+        if (BeginsWith(input, prefix))
+        {
+            input.erase(0, strlen(prefix));
+            break;
+        }
+    }
+
+    // Remove suffixes.
+    constexpr const char * suffixes[] = { "_RIVER", "_STREAM" };
+
+    for (const char * suffix : suffixes)
+    {
+        size_t suffixSize = strlen(suffix);
+
+        if (EndsWith(input, suffix))
+        {
+            input.erase(input.size() - suffixSize);
+            break;
+        }
+    }
+
+    // Convert to title case.
+    string result;
+    result.reserve(input.size());
+
+    bool capitalizeNext = true;
+
+    for (char c : input)
+    {
+        if (c == '_')
+        {
+            result += ' ';
+            capitalizeNext = true;
+        }
+        else
+        {
+            result += capitalizeNext
+                ? (ubyte)std::toupper((ubyte)c)
+                : (ubyte)std::tolower((ubyte)c);
+
+            capitalizeNext = false;
+        }
+    }
+
+    return result;
+}
+
 
 //--------------------------------------------------------------------------------------
 string Map::getResourceTypeAsString(ResourceType _type)

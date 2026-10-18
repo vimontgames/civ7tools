@@ -33,7 +33,7 @@ void Map::render(RenderWindow & _window)
         switch (mapBitmap)
         {
             default:
-                assert(false);
+                ASSERT(false);
                 break;
 
             case MapBitmap::TerrainData:
@@ -42,16 +42,9 @@ void Map::render(RenderWindow & _window)
                 break;
 
             case MapBitmap::Resources:
-                bitmap.drawQuad = false;
-                bitmap.drawSprites = true;
-                break;
-
             case MapBitmap::Features:
-                bitmap.drawQuad = false;
-                bitmap.drawSprites = true;
-                break;
-
             case MapBitmap::NaturalWonder:
+            case MapBitmap::Rivers:
                 bitmap.drawQuad = false;
                 bitmap.drawSprites = true;
                 break;

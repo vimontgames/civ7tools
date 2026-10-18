@@ -6,7 +6,7 @@ void Map::initTerrainInfos(bool _reload)
     for (auto val : enumValues<TerrainType>())
     {
         int index = (int)val.first;
-        assert(index >= 0);
+        ASSERT(index >= 0);
         TerrainInfo & info = m_terrainInfos[index];
         info.count = 0;
     }
@@ -18,7 +18,7 @@ void Map::initBiomeInfos(bool _reload)
     for (auto val : enumValues<BiomeType>())
     {
         int index = (int)val.first;
-        assert(index >= 0);
+        ASSERT(index >= 0);
         BiomeInfo & info = m_biomeInfos[index];
         info.count = 0;
     }
@@ -111,8 +111,11 @@ void Map::refresh(bool _reload)
         m_firstRefresh = true;
 
     // Refresh textures
-    loadIcons(_reload);
-    loadFlags(_reload);
+    if (_reload)
+    {
+        loadIcons(_reload);
+        loadFlags(_reload);
+    }
 
     createBitmaps();
 
@@ -128,6 +131,7 @@ void Map::refresh(bool _reload)
     auto & resources = m_bitmaps[(int)MapBitmap::Resources];
     auto & features = m_bitmaps[(int)MapBitmap::Features];
     auto & naturalWonders = m_bitmaps[(int)MapBitmap::NaturalWonder];
+    auto & rivers = m_bitmaps[(int)MapBitmap::Rivers];
 
     for (auto & bitmap : m_bitmaps)
         bitmap.sprites.clear();
@@ -178,6 +182,31 @@ void Map::refresh(bool _reload)
                         spriteInfo.sprite.setTexture(icons.texture);
                         spriteInfo.x = w;
                         spriteInfo.y = h;
+                    }
+                }
+            }
+
+            if (m_showRivers)
+            {
+                for (uint i = 0; i < MAX_RIVER_PER_TILE; ++i)
+                {
+                    const RiverTileInfo & riverTile = tile.rivers[i];
+
+                    if (riverTile.nameIndex != RiverName::None)
+                    {
+                        uint riverIndex = (int)riverTile.type * enumCount<DirectionType>() + (int)riverTile.direction;
+                        auto & icons = s_riverIcons[riverIndex];
+
+                        if (icons.texture.getSize().x > 0)
+                        {
+                            SpriteInfo & spriteInfo = rivers.sprites.emplace_back();
+                            spriteInfo.sprite.setTexture(icons.texture);
+                            spriteInfo.x = w;
+                            spriteInfo.y = h;
+                            
+                            float4 color = getRiverNameColor(riverTile.nameIndex);
+                            spriteInfo.sprite.setColor(Color((uint)(color.r * 255.0f), (uint)(color.g * 255.0f), (uint)(color.b * 255.0f), (uint)(color.a * 255.0f)));
+                        }
                     }
                 }
             }
@@ -293,7 +322,7 @@ void Map::refresh(bool _reload)
             switch ((MapBitmap)i)
             {
                 default:
-                    assert(false);
+                    ASSERT(false);
                     break;
 
                 case MapBitmap::TerrainData:
@@ -302,6 +331,7 @@ void Map::refresh(bool _reload)
                 case MapBitmap::Resources:
                 case MapBitmap::Features:
                 case MapBitmap::NaturalWonder:
+                case MapBitmap::Rivers:
                     bitmap.spriteshader = ShaderManager::add("data/shader/resources_vs.fx", "data/shader/resources_ps.fx");
                     bitmap.spriteblend = sf::BlendMode(BlendMode::Factor::SrcAlpha, sf::BlendMode::Factor::OneMinusSrcAlpha, BlendMode::Equation::Add);
                     break;

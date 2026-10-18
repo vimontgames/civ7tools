@@ -49,6 +49,12 @@
       <Filter>undoredo</Filter>
     </ClCompile>
     <ClCompile Include="src\EditorOptions.cpp" />
+    <ClCompile Include="src\tile\civ7tile.cpp">
+      <Filter>tile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\map\map_export_sql.cpp">
+      <Filter>map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extern\base64\base64.hpp" />
@@ -155,13 +161,13 @@
     <ClInclude Include="src\map\map_import_sql.hpp">
       <Filter>map</Filter>
     </ClInclude>
-    <ClInclude Include="src\map\map_export_sql.hpp">
-      <Filter>map</Filter>
-    </ClInclude>
     <ClInclude Include="src\map\map_types.hpp">
       <Filter>map</Filter>
     </ClInclude>
     <ClInclude Include="src\EditorOptions.h" />
+    <ClInclude Include="src\windows\rivers.hpp">
+      <Filter>windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\copyRGB_ps.fx">

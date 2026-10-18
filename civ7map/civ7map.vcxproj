@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="src\EditorOptions.cpp" />
     <ClCompile Include="src\misc\imguiutils.cpp" />
+    <ClCompile Include="src\tile\civ7tile.cpp" />
     <ClCompile Include="src\undoredo\UndoRedo.cpp" />
     <ClCompile Include="src\undoredo\UndoRedoTile.cpp" />
     <None Include="..\data\shader\copyRGB_ps.fx">
@@ -145,7 +146,7 @@
     <ClInclude Include="src\map\map_actions.hpp" />
     <ClInclude Include="src\map\map_create.hpp" />
     <ClInclude Include="src\map\map_export.hpp" />
-    <ClInclude Include="src\map\map_export_sql.hpp" />
+    <ClCompile Include="src\map\map_export_sql.cpp" />
     <ClInclude Include="src\map\map_import.hpp" />
     <ClInclude Include="src\map\map_import_sql.hpp" />
     <ClInclude Include="src\map\map_refresh.hpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\windows\inspector.hpp" />
     <ClInclude Include="src\windows\paint.h" />
     <ClInclude Include="src\windows\paint.hpp" />
+    <ClInclude Include="src\windows\rivers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\shader\default_ps.fx">

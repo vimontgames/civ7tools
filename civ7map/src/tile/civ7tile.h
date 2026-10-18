@@ -278,29 +278,85 @@ enum class Elevation : u16
 };
 
 //--------------------------------------------------------------------------------------
+enum class RiverType : u8
+{
+    Minor = 0,  // RIVER_MINOR,
+    Navigable   // RIVER_NAVIGABLE
+};
+
+//--------------------------------------------------------------------------------------
+enum class DirectionType : i8
+{
+    NorthEast,      // DIRECTION_NORTHEAST,
+    NorthWest,      // DIRECTION_NORTHWEST,
+    East,           // DIRECTION_EAST,
+    West,           // DIRECTION_WEST,
+    SouthEast,      // DIRECTION_SOUTHEAST,
+    SouthWest       // DIRECTION_SOUTHWEST
+};
+
+//--------------------------------------------------------------------------------------
+struct RiverInfo
+{
+    RiverInfo(const string & _name, bool _vanilla = true);
+
+    string name;
+    string prettyName;
+    bool vanilla;
+
+    vector<int2> sortedRiverTiles;
+    int tileCount = 0;
+};
+
+//--------------------------------------------------------------------------------------
+enum class RiverName : i8
+{
+    None = -1
+};
+
+//--------------------------------------------------------------------------------------
+struct RiverTileInfo
+{
+    RiverName nameIndex     = RiverName::None;
+    RiverType type          = RiverType::Minor;
+    DirectionType direction = DirectionType::West;
+};
+
+#define MAX_RIVER_PER_TILE 2
+
+//--------------------------------------------------------------------------------------
 struct Civ7Tile
 {
-    ContinentType     continent     = ContinentType::None;
-    LandmassType      landmass      = (LandmassType)0;
-    TerrainType       terrain       = TerrainType::Flat;
-    BiomeType         biome         = BiomeType::Tundra;
-    FeatureType       feature       = FeatureType::None;
-    ResourceType      resource      = ResourceType::None;
-    NaturalWonderType naturalWonder = NaturalWonderType::None;
-    Elevation         elevation     = (Elevation)0;
-    bool              impassable    = false;
+    ContinentType     continent      = ContinentType::None;
+    LandmassType      landmass       = (LandmassType)0;
+    TerrainType       terrain        = TerrainType::Flat;
+    BiomeType         biome          = BiomeType::Tundra;
+    FeatureType       feature        = FeatureType::None;
+    ResourceType      resource       = ResourceType::None;
+    NaturalWonderType naturalWonder  = NaturalWonderType::None;
+    Elevation         elevation      = (Elevation)0;
+    RiverTileInfo     rivers[MAX_RIVER_PER_TILE];
+    bool              impassable     = false;
 
     inline bool operator==(const Civ7Tile & _other) const
     {
-        return continent     == _other.continent
-            && landmass      == _other.landmass
-            && terrain       == _other.terrain
-            && biome         == _other.biome
-            && feature       == _other.feature
-            && resource      == _other.resource
-            && naturalWonder == _other.naturalWonder
-            && elevation     == _other.elevation
-            && impassable    == _other.impassable;
+        for (uint i = 0; i < MAX_RIVER_PER_TILE; ++i)
+        {
+            if (rivers[i].nameIndex != _other.rivers[i].nameIndex || rivers[i].type != _other.rivers[i].type || rivers[i].direction != _other.rivers[i].direction)
+            {
+                return false;
+            }
+        }
+
+        return continent      == _other.continent
+            && landmass       == _other.landmass
+            && terrain        == _other.terrain
+            && biome          == _other.biome
+            && feature        == _other.feature
+            && resource       == _other.resource
+            && naturalWonder  == _other.naturalWonder
+            && elevation      == _other.elevation
+            && impassable     == _other.impassable;
     }
 
     inline bool operator!=(const Civ7Tile & _other) const

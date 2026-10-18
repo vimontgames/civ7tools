@@ -41,4 +41,10 @@ public:
 
     bool m_paintElevation = false;
     Elevation m_elevation = (Elevation)0;
+
+    //bool m_paintRiverType = false;
+    //RiverType m_riverType = RiverType::Minor;
+    //
+    //bool m_paintRiverDirection = false;
+    //DirectionType m_riverDirection = DirectionType::West;
 };

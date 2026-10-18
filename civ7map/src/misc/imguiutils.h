@@ -8,6 +8,9 @@ enum class ResourceType : u8;
 enum class NaturalWonderType : u8;
 enum class LandmassType : u8;
 enum class Elevation : u16;
+enum class RiverType : u8;
+enum class DirectionType : i8;
+enum class RiverName : i8;
 
 class Map;
 
@@ -20,6 +23,9 @@ bool EditFeature(const Map * map, FeatureType & feature, bool * pBool = nullptr)
 bool EditResource(const Map * map, ResourceType & resource, bool * pBool = nullptr);
 bool EditNaturalWonder(const Map * map, NaturalWonderType & naturalWonder, bool * pBool = nullptr);
 bool EditElevation(const Map * map, Elevation & elevation, bool * pBool = nullptr);
+bool EditRiverName(const Map * map, RiverName & riverIndex, bool * pBool = nullptr);
+bool EditRiverType(const Map * map, RiverType & river, bool * pBool = nullptr);
+bool EditDirectionType(const Map * map, DirectionType & direction, bool * pBool = nullptr);
 
 void DrawColoredSquare(const float4 & _color);
 void DrawSmallColoredSquare(const float4 & _color);

@@ -96,7 +96,17 @@ bool PaintWindow::Draw(const RenderWindow & window)
             // "Elevation"
             Elevation elevation = m_elevation;
             if (EditElevation(map, elevation, &m_paintElevation))
-                m_elevation = elevation;           
+                m_elevation = elevation;      
+
+            //// "RiverType"
+            //RiverType river = m_riverType;
+            //if (EditRiverType("River #1", map, river, &m_paintRiverType))
+            //    m_riverType = river;
+            //
+            //// "RiverDirection"
+            //DirectionType riverDirection = m_riverDirection;
+            //if (EditDirectionType("River #1 Dir", map, m_riverDirection, &m_paintRiverDirection))
+            //    m_riverDirection = riverDirection;
         }
         
         if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

@@ -142,14 +142,14 @@ string Map::getExportMapSize()
 //--------------------------------------------------------------------------------------
 string Map::getExportMapSizePrettyName()
 {
-    assert(m_mapSize == MapSize::Custom);
+    ASSERT(m_mapSize == MapSize::Custom);
     return fmt::sprintf("Custom %u x %u", m_width, m_height);
 }
 
 //--------------------------------------------------------------------------------------
 string Map::getExportMapSizePrettyDescription()
 {
-    assert(m_mapSize == MapSize::Custom);
+    ASSERT(m_mapSize == MapSize::Custom);
     return fmt::sprintf("A map with a custom size of %u x %u tiles", m_width, m_height);
 }
 
