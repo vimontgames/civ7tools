@@ -183,42 +183,62 @@ void Map::Paint(int _x, int _y)
 
                             if (paintWindow->m_autoRiverDirection)
                             {
-                                // Use the direction we're coming from if any
-                                bool directionFound = false;
-                                for (uint d = 0; d < enumCount<DirectionType>(); ++d)
+                                // Use the direction we're coming from if any, unless we already have a "next"
+                                bool alreadyHasNextTile = false;
+                                if (riverTile.nameIndex != RiverName::None)
                                 {
-                                    DirectionType dir = (DirectionType)d;
-                                    int2 nCoordsXY = GetTileCoordsInDirection(x, y, dir);
-                                    Civ7Tile & nTileRef = m_civ7TerrainType.get(nCoordsXY.x, nCoordsXY.y);
-
+                                    int2 nCoordsXY = GetTileCoordsInDirection(x, y, riverTile.direction);
+                                    const Civ7Tile & nTile = m_civ7TerrainType.get(nCoordsXY.x, nCoordsXY.y);
                                     for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
                                     {
-                                        RiverTileInfo & nRiverTileRef = nTileRef.rivers[r];
-                                        if (nRiverTileRef.nameIndex == riverTile.nameIndex)
+                                        if (nTile.rivers[r].nameIndex == riverTile.nameIndex)
                                         {
-                                            directionFound = true;
-
-                                            if (AreOpposedDirections(nRiverTileRef.direction, dir))
-                                            {
-                                                riverTile.direction = GetOppositeDirection(dir);
-
-                                                Civ7Tile nTileCopy = nTileRef;
-                                                nTileCopy.rivers[r].direction = GetOppositeDirection(dir);
-                                                undoRedoPaintTile->add(nCoordsXY.x, nCoordsXY.y, nTileRef, nTileCopy);
-                                                nTileRef = nTileCopy;
-                                            }
-                                            else
-                                            {
-                                                riverTile.direction = dir;
-                                            }
+                                            alreadyHasNextTile = true;
+                                            break;
                                         }
                                     }                                    
                                 }
 
-                                if (!directionFound)
+                                if (!alreadyHasNextTile)
                                 {
-                                    if (timeSinceLastClick.asMilliseconds() > 100)
-                                        riverTile.direction = (DirectionType)(((uint)riverTile.direction + 1) % (enumCount<DirectionType>()));
+
+                                    bool directionFound = false;
+                                    for (uint d = 0; d < enumCount<DirectionType>() && !directionFound; ++d)
+                                    {
+                                        DirectionType dir = (DirectionType)( (d + (int)riverTile.direction + enumCount<DirectionType>() - 1) % enumCount<DirectionType>());
+                                        int2 nCoordsXY = GetTileCoordsInDirection(x, y, dir);
+                                        Civ7Tile & nTileRef = m_civ7TerrainType.get(nCoordsXY.x, nCoordsXY.y);
+
+                                        for (int r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                                        {
+                                            RiverTileInfo & nRiverTileRef = nTileRef.rivers[r];
+                                            if (nRiverTileRef.nameIndex == riverTile.nameIndex)
+                                            {
+                                                directionFound = true;
+
+                                                if (AreOpposedDirections(nRiverTileRef.direction, dir))
+                                                {
+                                                    riverTile.direction = GetOppositeDirection(dir);
+
+                                                    Civ7Tile nTileCopy = nTileRef;
+                                                    nTileCopy.rivers[r].direction = GetOppositeDirection(dir);
+                                                    undoRedoPaintTile->add(nCoordsXY.x, nCoordsXY.y, nTileRef, nTileCopy);
+                                                    nTileRef = nTileCopy;
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    riverTile.direction = dir;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (!directionFound)
+                                    {
+                                        if (timeSinceLastClick.asMilliseconds() > 100)
+                                            riverTile.direction = (DirectionType)(((uint)riverTile.direction + 1) % (enumCount<DirectionType>()));
+                                    }
                                 }
                             }
                             else

@@ -115,15 +115,22 @@ bool PaintWindow::Draw(const RenderWindow & window)
             if (EditRiverName(map, riverNameIndex, &m_paintRiverName))
                 m_riverNameIndex = riverNameIndex;
 
-            // "RiverType"
-            RiverType river = m_riverType;
-            if (EditRiverType(map, river, &m_paintRiverType))
-                m_riverType = river;
-            
-            // "RiverDirection"
-            DirectionType riverDirection = m_riverDirection;
-            if (EditDirectionType(map, riverDirection, &m_paintRiverDirection))
-                m_riverDirection = riverDirection;
+            if (m_riverNameIndex != RiverName::None)
+            {
+                PushDisabled(m_autoRiverDirection);
+                {
+                    // "RiverDirection"
+                    DirectionType riverDirection = m_riverDirection;
+                    if (EditDirectionType(map, riverDirection, &m_paintRiverDirection))
+                        m_riverDirection = riverDirection;
+                }
+                PopDisabled();
+
+                // "RiverType"
+                RiverType river = m_riverType;
+                if (EditRiverType(map, river, &m_paintRiverType))
+                    m_riverType = river;
+            }
         }
         
         if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

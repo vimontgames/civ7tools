@@ -103,16 +103,16 @@ bool InspectorWindow::Draw(const RenderWindow & window)
                         dirtyRiver |= map->setRiverName(x, y, riverIndex, i);
 
                     if (riverIndex != RiverName::None)
-                    {
-                        // "RiverType"
-                        RiverType riverType = riverTileInfo.type;
-                        if (EditRiverType(map, riverType))
-                            dirtyRiver |= map->setRiverType(x, y, riverType, i);
-                        
+                    {                       
                         // "RiverDirection"
                         DirectionType riverDirection = riverTileInfo.direction;
                         if (EditDirectionType(map, riverDirection))
                             dirtyRiver |= map->setRiverDirection(x, y, riverDirection, i);
+
+                        // "RiverType"
+                        RiverType riverType = riverTileInfo.type;
+                        if (EditRiverType(map, riverType))
+                            dirtyRiver |= map->setRiverType(x, y, riverType, i);
                     }
                     ImGui::PopID();
                 }
