@@ -27,6 +27,34 @@ DisplayWindow::DisplayWindow() :
 }
 
 //--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, RiverName _value)
+{
+    float4 color = getRiverNameColor(_value);
+    string riverName = _map->getRivers()[(int)_value].prettyName;
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text(fmt::sprintf("%s", riverName).c_str());
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, RiverType _value)
+{
+    float4 color = getRiverTypeColor(_value);
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text(fmt::sprintf("%s", asString(_value)).c_str());
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, DirectionType _value)
+{
+    float4 color = getDirectionTypeColor(_value);
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text(fmt::sprintf("%s", asString(_value)).c_str());
+}
+
+//--------------------------------------------------------------------------------------
 void DrawColor(const Map * _map, ContinentType _continent, bool _count = false)
 {
     float4 color = getContinentColor(_continent);

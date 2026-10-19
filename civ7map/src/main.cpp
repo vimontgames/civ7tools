@@ -674,6 +674,17 @@ int main()
                                             drawProperty("Natural Wonder", tile.naturalWonder);
                                             drawProperty("Elevation", tile.elevation);
 
+                                            for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                                            {
+                                                const RiverTileInfo & riverTile = tile.rivers[r];
+                                                if (riverTile.nameIndex != RiverName::None)
+                                                {
+                                                    drawProperty("River", riverTile.nameIndex, true);
+                                                    drawProperty("Direction", riverTile.direction, true);
+                                                    drawProperty("Type", riverTile.type, true);
+                                                }
+                                            }
+
                                             bool anyTSL = false;
                                             auto & civilizations = g_map->getCivilizations();
 
