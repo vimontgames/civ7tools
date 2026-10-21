@@ -246,7 +246,43 @@ void Map::refresh(bool _reload)
 
             // Color1.b is elevation
             color1.b = (u8)((uint)tile.elevation * 255.0f / float(maxElevation)); // 0..maxElevation values
-            
+
+            // Color1.a is snow amount
+            if (m_showSnow || m_mapFilter == MapFilter::Snow)
+            {
+                float snowAmount = 0.0f;
+
+                if (tile.biome != BiomeType::Marine)
+                {
+                    snowAmount = (float)tile.snow / float(maxSnowAmount);
+
+                    if (m_randomSnow)
+                    {
+                        if (m_useAdvancedSnow)
+                        {
+                            if ((int)h < m_bottomSnowRows)
+                            {
+                                snowAmount = (float)(m_bottomSnowRows-h) / (float)m_bottomSnowRows;
+                            }
+                            else if (h > (m_height - 1 - m_topSnowRows))
+                            {
+                                snowAmount = (m_topSnowRows + h - m_height + 1) / (float)m_topSnowRows;
+                            }
+
+                            snowAmount *= ((float)m_maxSnowWeight / float(maxSnowAmount));
+                        }
+                    }
+
+                    if (m_snowBorderX > 0)
+                    {
+                        if ((int)w < m_snowBorderX || (int)w >(m_width - 1 - m_snowBorderX))
+                            snowAmount = 1.0f;
+                    }
+                }
+
+                color1.a = (u8)((uint)(snowAmount* maxSnowAmount) * 255.0f / float(maxSnowAmount));
+            }
+
             terrain.image.setPixel(w, h + m_height, color1);
 
             getResourceInfo(tile.resource).count++;

@@ -278,6 +278,19 @@ enum class Elevation : u16
 };
 
 //--------------------------------------------------------------------------------------
+// ]10..30] = LIGHT
+// ]30..60] = MEDIUM
+// ]60..100] = HEAVY
+//--------------------------------------------------------------------------------------
+enum class SnowAmount : u8
+{
+    None = 0,
+    Light = 20,
+    Medium = 45,
+    Heavy = 80
+};
+
+//--------------------------------------------------------------------------------------
 enum class RiverType : u8
 {
     Minor = 0,  // RIVER_MINOR,
@@ -347,6 +360,7 @@ struct Civ7Tile
     ResourceType      resource       = ResourceType::None;
     NaturalWonderType naturalWonder  = NaturalWonderType::None;
     Elevation         elevation      = (Elevation)0;
+    SnowAmount        snow           = (SnowAmount)0;
     RiverTileInfo     rivers[MAX_RIVER_PER_TILE];
     bool              impassable     = false;
 
@@ -368,7 +382,8 @@ struct Civ7Tile
             && resource       == _other.resource
             && naturalWonder  == _other.naturalWonder
             && elevation      == _other.elevation
-            && impassable     == _other.impassable;
+            && impassable     == _other.impassable
+            && snow           == _other.snow;
     }
 
     inline bool operator!=(const Civ7Tile & _other) const

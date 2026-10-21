@@ -26,7 +26,9 @@ bool InfoWindow::Draw(const RenderWindow & window)
     {
         char temp[4096];
 
-        ImGui::PushItemWidth(s_checkboxColumnWidth + ImGui::GetFrameHeight());
+        float checkbxoWidth = s_checkboxColumnWidth * EditorOptions::Get().m_editorGlobalScale;
+
+        ImGui::PushItemWidth(checkbxoWidth + ImGui::GetFrameHeight());
 
         sprintf_s(temp, "%s", g_map->getBaseName().c_str());
         ImGui::InputText("Name", temp, sizeof(temp), ImGuiInputTextFlags_ReadOnly);
@@ -51,57 +53,57 @@ bool InfoWindow::Draw(const RenderWindow & window)
         {
             const auto x = ImGui::GetCursorPosX();
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Resources", &g_map->m_randomResources);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place resources randomly when generating map");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Features", &g_map->m_randomFeatures);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place features randomly when generating map");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Lakes", &g_map->m_randomLakes);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place lakes randomly when generating map");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Elevation", &g_map->m_randomElevation);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Change elevation when generating map");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Hills", &g_map->m_randomHills);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place hills randomly when generating map");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Rainfall", &g_map->m_randomRainfall);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place rainfalls randomly when generating map");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("FloodPlains", &g_map->m_randomFloodPlains);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place flood plains randomly when generating map");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Rivers", &g_map->m_randomRivers);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place rivers randomly when generating map");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Continents", &g_map->m_randomContinents);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Select continents randomly when generating map");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Biomes", &g_map->m_randomBiomes);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Select biomes randomly when generating map");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Natural Wonders", &g_map->m_randomNaturalWonders);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Place snow randomly when generating map");
@@ -189,12 +191,12 @@ bool InfoWindow::Draw(const RenderWindow & window)
             }
 
             const auto x = ImGui::GetCursorPosX();
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Wrap X", &g_map->m_wrapX);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Wrap map horizontally. Beware that disabling horizontal wrap may cause minimap issues, use impassable terrain + snow horizontal borders instead");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Wrap Y", &g_map->m_wrapY);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Wrap map vertically");
@@ -205,7 +207,10 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
         if (ImGui::CollapsingHeader("Snow###SnowOptions", ImGuiTreeNodeFlags_Framed))
         {
-            ImGui::Checkbox("Generate Snow", &g_map->m_randomSnow);
+            if (ImGui::Checkbox("Generate Snow", &g_map->m_randomSnow))
+            {
+                needRefresh = true;
+            }
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Generate snow from poles");
  
@@ -231,7 +236,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
             PushDisabled(!g_map->m_randomSnow);
             {
-                ImGui::Checkbox("Advanced Snow Parameters", &g_map->m_useAdvancedSnow);
+                if (ImGui::Checkbox("Advanced Snow Parameters", &g_map->m_useAdvancedSnow))
+                    needRefresh = true;
             }
             PopDisabled();
             if (ImGui::IsItemHovered())
@@ -245,6 +251,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
                         g_map->m_topSnowRows = (int)g_map->m_height;
                     else if (g_map->m_topSnowRows < 0)
                         g_map->m_topSnowRows = 0;
+
+                    needRefresh = true;
                 }
                 if (ImGui::IsItemHovered())
                     ImGui::SetTooltip("Add N lines of snow at the top of the map");
@@ -255,6 +263,8 @@ bool InfoWindow::Draw(const RenderWindow & window)
                         g_map->m_bottomSnowRows = (int)g_map->m_height;
                     else if (g_map->m_bottomSnowRows < 0)
                         g_map->m_bottomSnowRows = 0;
+
+                    needRefresh = true;
                 }
                 if (ImGui::IsItemHovered())
                     ImGui::SetTooltip("Add N lines of snow at the bottom of the map");
@@ -265,19 +275,23 @@ bool InfoWindow::Draw(const RenderWindow & window)
                         g_map->m_maxSnowWeight = 100;
                     else if (g_map->m_maxSnowWeight < 0)
                         g_map->m_maxSnowWeight = 0;
+
+                    needRefresh = true;
                 }
                 if (ImGui::IsItemHovered())
                     ImGui::SetTooltip("Maximum amount of snow");
 
-                if (ImGui::InputInt("Randomization", &g_map->m_snowRandomization))
+                if (ImGui::InputInt("Random Advanced Snow", &g_map->m_snowRandomization))
                 {
                     if (g_map->m_snowRandomization > 100)
                         g_map->m_snowRandomization = 1000;
                     else if (g_map->m_snowRandomization < 0)
                         g_map->m_snowRandomization = 0;
+
+                    needRefresh = true;
                 }
                 if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("Randomize snow amount");
+                    ImGui::SetTooltip("Randomize procedural snow amount");
             }
             PopDisabled();
 
@@ -287,9 +301,30 @@ bool InfoWindow::Draw(const RenderWindow & window)
                     g_map->m_snowBorderX = 0;
                 else if (g_map->m_snowBorderX > 16)
                     g_map->m_snowBorderX = 16;
+
+                needRefresh = true;
             }
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Add snow on X tiles on each map sides");
+
+            ImGui::Checkbox("Painted Snow", &g_map->m_usePaintedSnow);
+            if(ImGui::IsItemHovered())
+                ImGui::SetTooltip("Export manually painted snow");
+
+            PushDisabled(!g_map->m_usePaintedSnow);
+            if (ImGui::InputInt("Random Painted Snow", &g_map->m_paintedSnowRandomization))
+            {
+                if (g_map->m_paintedSnowRandomization > 100)
+                    g_map->m_paintedSnowRandomization = 1000;
+                else if (g_map->m_paintedSnowRandomization < 0)
+                    g_map->m_paintedSnowRandomization = 0;
+
+                needRefresh = true;
+            }
+            PopDisabled();
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Randomize painted snow amount");
+            
         }
 
         if (g_map->m_mapVersion == MapVersion::YnAMP && ImGui::CollapsingHeader("Hemispheres", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))

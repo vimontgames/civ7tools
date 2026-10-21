@@ -10,6 +10,7 @@ static_assert((MapFilter)PASS_TYPE_RESOURCE  == MapFilter::Resource);
 static_assert((MapFilter)PASS_TYPE_CONTINENT == MapFilter::Continent);
 static_assert((MapFilter)PASS_TYPE_LANDMASS  == MapFilter::Landmass);
 static_assert((MapFilter)PASS_TYPE_ELEVATION == MapFilter::Elevation);
+static_assert((MapFilter)PASS_TYPE_SNOW      == MapFilter::Snow);
 
 //--------------------------------------------------------------------------------------
 class DisplayWindow : public BaseWindow
@@ -82,10 +83,19 @@ void DrawColor(const Map * _map, Elevation _elevation, bool _count = false)
 {
     float4 color = getElevationColor(_elevation);
     float f3Color[] = { color.r, color.g,  color.b };
-    string landmassName = fmt::sprintf("%i", (int)_elevation);
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
-    ImGui::Text("%i", _elevation);
+    ImGui::Text("%i meter(s)", _elevation);
+}
+
+//--------------------------------------------------------------------------------------
+void DrawColor(const Map * _map, SnowAmount _snow, bool _count = false)
+{
+    float4 color = getSnowAmountColor(_snow);
+    float f3Color[] = { color.r, color.g,  color.b };
+    DrawSmallColoredSquare(color);
+    ImGui::SameLine();
+    ImGui::Text("%i%%", _snow);
 }
 
 //--------------------------------------------------------------------------------------
@@ -179,6 +189,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
             needRefresh |= Checkbox("Resources", &g_map->m_showResources);
             needRefresh |= Checkbox("Natural Wonders", &g_map->m_showNaturalWonders); 
             needRefresh |= Checkbox("Rivers", &g_map->m_showRivers);
+            needRefresh |= Checkbox("Snow", &g_map->m_showSnow);
             needRefresh |= Checkbox("True Start Locations", &g_map->m_showTSL);
 
             ImGui::Separator();
@@ -242,7 +253,7 @@ bool DisplayWindow::Draw(const RenderWindow & window)
             switch (g_map->m_mapFilter)
             {
                 default:
-                    LOG_ERROR("Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
+                    ASSERT(false, "Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
                     break;
 
                 case MapFilter::All:
@@ -322,6 +333,15 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                     for (uint i = 0; i <= maxElevation; i += EditorOptions::Get().m_elevationStep)
                     {
                         DrawColor(g_map, (Elevation)i);
+                    }
+                }
+                break;
+
+                case MapFilter::Snow:
+                {
+                    for (uint i = 0; i <= maxSnowAmount; i += EditorOptions::Get().m_snowStep)
+                    {
+                        DrawColor(g_map, (SnowAmount)i);
                     }
                 }
                 break;

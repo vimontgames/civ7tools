@@ -99,6 +99,8 @@ float4 getTileColor(Tile tile)
     if (terrainType == TerrainType_Ocean || terrainType == TerrainType_Coast)
         isWater = true;
     
+     bool snow = false;
+    
     int passIndex = passFlags & PASS_TYPE_MASK;
     switch (passIndex)
     {
@@ -111,6 +113,7 @@ float4 getTileColor(Tile tile)
             uint terrainType = uint(tile.color0.r * 255.0f);
             
             color = getBiomeTerrainColor(biomeType, terrainType);
+            snow = true;
         }
         break;
 
@@ -125,6 +128,8 @@ float4 getTileColor(Tile tile)
         {
             uint biomeType = uint(tile.color0.g * 255.0f);
             color = getBiomeColor(biomeType);
+            
+            snow = true;
             
             if (isWater)
                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
@@ -196,6 +201,27 @@ float4 getTileColor(Tile tile)
             color = lerp(ColorToHue(color), getElevationColor(elevation), 0.925);
         }
         break;
+        
+        case PASS_TYPE_SNOW:
+        {
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            uint terrainType = uint(tile.color0.r * 255.0f);
+            
+            color = getBiomeTerrainColor(biomeType, terrainType);
+            
+            if (isWater)
+                 color.rgb *= float3(0.9f, 0.9f, 1.0f);
+            
+            uint snowAmount = uint(tile.color1.a * float(maxSnowAmount));
+            color.rgb = lerp(color.rgb*0.25, 1, float(snowAmount)/float(maxSnowAmount));
+        }
+        break;
+    }
+   
+    if (snow)
+    {
+        uint snowAmount = uint(tile.color1.a * float(maxSnowAmount));
+        color.rgb = lerp(color.rgb, 1, getSnowAmountColor(snowAmount).a);
     }
     
     return color;

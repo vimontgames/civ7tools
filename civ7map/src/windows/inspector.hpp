@@ -86,6 +86,11 @@ bool InspectorWindow::Draw(const RenderWindow & window)
             if (EditElevation(map, elevation))
                 dirty |= map->setElevation(x, y, elevation);
 
+            // "Snow"
+            SnowAmount snow = tile->snow;
+            if (EditSnow(map, snow))
+                dirty |= map->setSnow(x, y, snow);
+
             if (ImGui::CollapsingHeader("Rivers###RiversInspector", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
             {
                 bool dirtyRiver = false;

@@ -22,11 +22,7 @@ enum class MapSize : int
     Small,          // MAPSIZE_SMALL
     Standard,       // MAPSIZE_STANDARD
     Large,          // MAPSIZE_LARGE
-    Huge,           // MAPSIZE_HUGE
-    Greatest_Earth, // MAPSIZE_GREATEST_EARTH
-    Massive,        // MAPSIZE_MASSIVE
-    Giant,          // MAPSIZE_GIANT
-    Ludicrous       // MAPSIZE_LUDICROUS
+    Huge            // MAPSIZE_HUGE
 };
 
 //--------------------------------------------------------------------------------------
@@ -45,11 +41,7 @@ static const int g_mapSizes[enumCount<MapSize>()][2] =
     {74,46},    // MAPSIZE_SMALL
     {84,54},    // MAPSIZE_STANDARD
     {96,60},    // MAPSIZE_LARGE
-    {106,66},   // MAPSIZE_HUGE
-    {104,64},   // MAPSIZE_GREATEST_EARTH
-    {128,80},   // MAPSIZE_MASSIVE
-    {180,94},   // MAPSIZE_GIANT
-    {230,116},  // MAPSIZE_LUDICROUS
+    {106,66}    // MAPSIZE_HUGE
 };
 
 //--------------------------------------------------------------------------------------
@@ -83,7 +75,8 @@ enum class MapFilter
     Feature,
     Resource,
     NaturalWonder,  
-    Elevation
+    Elevation,
+    Snow
 };
 
 //--------------------------------------------------------------------------------------
@@ -214,6 +207,7 @@ public:
     bool setLandmass(int _x, int _y, LandmassType _value);
     bool setNaturalWonder(int _x, int _y, NaturalWonderType _value);
     bool setElevation(int _x, int _y, Elevation _value);
+    bool setSnow(int _x, int _y, SnowAmount _value);
     bool setRiverName(int _x, int _y, RiverName _value, int _index);
     bool setRiverType(int _x, int _y, RiverType _value, int _index);
     bool setRiverDirection(int _x, int _y, DirectionType _value, int _index);
@@ -460,19 +454,27 @@ public:
     int                     m_maxSnowWeight = 100;
     int                     m_snowRandomization = 20;
 
+    bool                    m_usePaintedSnow = true;
+    int                     m_paintedSnowRandomization = 0;
+
     //map view
     bool                    m_isLoaded = false;
     bool                    m_isOpen = true;
-    MapFilter               m_mapFilter = MapFilter::All;
     GridType                m_gridType = GridType::Hexagon;
+
+    // TODO: move to editor option, not per-map?
+    MapFilter               m_mapFilter = MapFilter::All;
+
     bool                    m_showBorders = true;
     bool                    m_showResources = true;
     bool                    m_showFeatures = true;
     bool                    m_showNaturalWonders = true;
     bool                    m_showRivers = true;
+    bool                    m_showSnow = true;
     bool                    m_showTSL = true;
     bool                    m_showHemispheres = true;
     bool                    m_showOverlayImage = false;
+
     float                   m_overlayOpacity = 0.5f;
     sf::Texture             m_overlayTex;
     sf::RenderTexture       m_renderTexture;

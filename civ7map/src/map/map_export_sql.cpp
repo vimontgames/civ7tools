@@ -632,15 +632,12 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("  paintElevation();\n");
     data += fmt::sprintf("  paintNaturalWonders(iWidth, iHeight);\n");
     data += fmt::sprintf("  //paintEarthHugeResourcesAntiquity();\n");
-
-    if (m_randomSnow && m_useAdvancedSnow)
-    {
-        data += fmt::sprintf("  const topSnowRows = %u;\n", m_topSnowRows);
-        data += fmt::sprintf("  const bottomSnowRows = %u;\n", m_bottomSnowRows);
-        data += fmt::sprintf("  const maxSnowWeight = %u;\n", m_maxSnowWeight);
-        data += fmt::sprintf("  const snowRandomization = %u;\n", m_snowRandomization);
-        data += fmt::sprintf("  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization);\n");
-    }
+    data += fmt::sprintf("  const topSnowRows = %u;\n", m_topSnowRows);
+    data += fmt::sprintf("  const bottomSnowRows = %u;\n", m_bottomSnowRows);
+    data += fmt::sprintf("  const maxSnowWeight = %u;\n", m_maxSnowWeight);
+    data += fmt::sprintf("  const snowRandomization = %u;\n", m_snowRandomization);
+    data += fmt::sprintf("  const paintedSnowRandomization = %u;\n", m_paintedSnowRandomization);
+    data += fmt::sprintf("  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization, paintedSnowRandomization);\n");
 
     data += fmt::sprintf("  const genCtx = new GenerationContext();\n");
 
@@ -962,9 +959,12 @@ void Map::exportMapDataCiv7Map()
     }
     data += fmt::sprintf("}\n\n");
 
+    data += fmt::sprintf("function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization, paintRandomization)\n");
+    data += fmt::sprintf("{\n");
+    data += fmt::sprintf("  console.log(\"Begin paintSnow\");\n");
+
     if (m_randomSnow && m_useAdvancedSnow)
     {
-        data += fmt::sprintf("function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization) {\n");
         data += fmt::sprintf("    console.log(\"Generating permanent snow\");\n");
         data += fmt::sprintf("    const aLightSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags([\"SNOW\", \"LIGHT\", \"PERMANENT\"]);\n");
         data += fmt::sprintf("    const aMediumSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags([\"SNOW\", \"MEDIUM\", \"PERMANENT\"]);\n");
@@ -975,11 +975,11 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("    aWeightEffect[2] = aHeavySnowEffects ? aHeavySnowEffects[0] : -1;\n");
         data += fmt::sprintf("    const aWeightChance = [10, 30, 60];\n");
         data += fmt::sprintf("    const weightAdjustment = maxWeight / 100;\n");
-        data += fmt::sprintf("    const placeSnow = (x, y, percentChance) => {\n");
+        data += fmt::sprintf("    const placeSnow = (x, y, percentChance, randomScale) => {\n");
         data += fmt::sprintf("        percentChance *= weightAdjustment;\n");
         data += fmt::sprintf("        if (!GameplayMap.isWater(x, y)) {\n");
-        data += fmt::sprintf("            const snowRandomization = TerrainBuilder.getRandomNumber(randomization * 2, \"Snow weight randomization\");\n");
-        data += fmt::sprintf("            const snowWeight = percentChance + snowRandomization - randomization;\n");
+        data += fmt::sprintf("            const snowRandomization = TerrainBuilder.getRandomNumber(randomScale * 2, \"Snow weight randomization\");\n");
+        data += fmt::sprintf("            const snowWeight = percentChance + snowRandomization - randomScale;\n");
         data += fmt::sprintf("            if (snowWeight > 0) {\n");
         data += fmt::sprintf("                for (let weight = aWeightChance.length - 1; weight >= 0; --weight) {\n");
         data += fmt::sprintf("                    if (snowWeight > aWeightChance[weight]) {\n");
@@ -995,7 +995,7 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("        for (let row = height; row > endTopRow; --row) {\n");
         data += fmt::sprintf("            const snowPercent = (1 - (height - row) / topRows) * 100;\n");
         data += fmt::sprintf("            for (let col = 0; col < width; ++col) {\n");
-        data += fmt::sprintf("                placeSnow(col, row, snowPercent);\n");
+        data += fmt::sprintf("                placeSnow(col, row, snowPercent, randomization);\n");
         data += fmt::sprintf("            }\n");
         data += fmt::sprintf("        }\n");
         data += fmt::sprintf("    }\n");
@@ -1003,12 +1003,32 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("        for (let row = 0; row < bottomRows; ++row) {\n");
         data += fmt::sprintf("            const snowPercent = (1 - row / bottomRows) * 100;\n");
         data += fmt::sprintf("            for (let col = 0; col < width; ++col) {\n");
-        data += fmt::sprintf("                placeSnow(col, row, snowPercent);\n");
+        data += fmt::sprintf("                placeSnow(col, row, snowPercent, randomization);\n");
         data += fmt::sprintf("            }\n");
         data += fmt::sprintf("        }\n");
-        data += fmt::sprintf("    }\n");
-        data += fmt::sprintf("}\n\n");
+        data += fmt::sprintf("  }\n");
     }
+
+    // Manually painted snow
+    if (m_usePaintedSnow)
+    {
+        data += fmt::sprintf("  console.log(\"Begin Snow tiles\");\n");
+        for (uint y = 0; y < m_height; ++y)
+        {
+            for (uint x = 0; x < m_width; ++x)
+            {
+                const Civ7Tile tile = m_civ7TerrainType.get(x, y);
+                if ((int)tile.snow > 0 && tile.biome != BiomeType::Marine)
+                {
+                    data += fmt::sprintf("  placeSnow(%u, %u, %u, paintRandomization);\n", x, y, (int)tile.snow);
+                }
+            }
+        }
+        data += fmt::sprintf("  console.log(\"End Snow tiles\");\n");
+    }
+
+    data += fmt::sprintf("    console.log(\"End paintSnow\");\n");
+    data += fmt::sprintf("}\n\n");
 
     // Natural wonders should appear only once
     int2 naturalWonderCoords[enumCount<NaturalWonderType>()];
@@ -1326,6 +1346,8 @@ void Map::exportSQLiteMap()
     ExportMetaData(db, "BottomSnowRows", m_bottomSnowRows);
     ExportMetaData(db, "MaxSnowWeight", m_maxSnowWeight);
     ExportMetaData(db, "SnowRandomization", m_snowRandomization);
+    ExportMetaData(db, "UsePaintedSnow", m_usePaintedSnow);
+    ExportMetaData(db, "PaintedSnowRandomization", m_paintedSnowRandomization);    
 
     // Plot data
     sql = "INSERT OR REPLACE INTO Plots (ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
@@ -1651,6 +1673,63 @@ void Map::exportSQLiteMap()
                             sqlite3_step(stmt);
                             sqlite3_reset(stmt);
                         }
+                    }
+                }
+            }
+
+            // Commit 
+            rc = sqlite3_exec(db, "COMMIT;", NULL, 0, NULL);
+            rc = sqlite3_finalize(stmt);
+        }
+        else
+        {
+            LOG_ERROR("Query \"%s\" failed : %s", sql, sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
+    }
+
+    // SnowAmount
+    {
+        const char * createTableSQL =
+            "CREATE TABLE IF NOT EXISTS PlotSnowAmount ("
+            "ID INTEGER PRIMARY KEY,"
+            "Value INTEGER"
+            ");";
+
+        rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            LOG_ERROR("Failed to create PlotSnowAmount table: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return;
+        }
+
+        sql = "INSERT OR REPLACE INTO PlotSnowAmount (ID, Value) VALUES (?, ?);";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            // Add transaction for massive speed improvement
+            rc = sqlite3_exec(db, "BEGIN IMMEDIATE;", NULL, 0, NULL);
+            rc = sqlite3_exec(db, "DELETE FROM PlotSnowAmount;", NULL, 0, NULL);
+
+            for (uint y = 0; y < m_height; ++y)
+            {
+                for (uint x = 0; x < m_width; ++x)
+                {
+                    Civ7Tile tile = m_civ7TerrainType.get(x, y);
+
+                    if ((int)tile.snow > 0)
+                    {
+                        string naturalWonderTypeNameS = getNaturalWonderTypeAsString(tile.naturalWonder);
+
+                        sqlite3_bind_int(stmt, 1, x + y * m_width); // ID
+                        sqlite3_bind_int(stmt, 2, (int)tile.snow);  // SnowAmount
+
+                        sqlite3_step(stmt);
+                        sqlite3_reset(stmt);
                     }
                 }
             }

@@ -44,6 +44,9 @@ public:
     bool m_paintElevation = false;
     Elevation m_elevation = (Elevation)0;
 
+    bool m_paintSnow = false;
+    SnowAmount m_snow = (SnowAmount)100;
+
     bool m_paintRiverName = false;
     RiverName m_riverNameIndex = RiverName::None;
 

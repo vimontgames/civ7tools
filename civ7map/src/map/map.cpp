@@ -432,7 +432,7 @@ void Map::loadResourceIcons(bool _reload)
                 if (!FileExists(path))
                 {
                     if (ResourceType::None != val.first)
-                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
+                        LOG_WARNING("Texture \"%s\" not found.", (path).c_str());
                     path = fmt::sprintf("data/img/resources/%s.png", "Default");
                     dirty = true;
                 }
@@ -440,12 +440,12 @@ void Map::loadResourceIcons(bool _reload)
                 if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
                     if (!EndsWith(path, "Default.png"))
-                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                        LOG_INFO("Texture \"%s\" loaded.", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
                 else if (!dirty)
-                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
+                    LOG_ERROR("Texture \"%s\" could not be loaded.", (path).c_str());
             }
         }
     }
@@ -468,7 +468,7 @@ void Map::loadFeatureIcons(bool _reload)
                 if (!FileExists(path))
                 {
                     if (FeatureType::None != val.first)
-                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
+                        LOG_WARNING("Texture \"%s\" not found.", (path).c_str());
                     path = fmt::sprintf("data/img/features/%s.png", "Default");
                     dirty = true;
                 }
@@ -476,12 +476,12 @@ void Map::loadFeatureIcons(bool _reload)
                 if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
                     if (!EndsWith(path, "Default.png"))
-                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                        LOG_INFO("Texture \"%s\" loaded.", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
                 else if (!dirty)
-                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
+                    LOG_ERROR("Texture \"%s\" could not be loaded.", (path).c_str());
             }
         }
     }
@@ -504,7 +504,7 @@ void Map::loadNaturalWonderIcons(bool _reload)
                 if (!FileExists(path))
                 {
                     if (NaturalWonderType::None != val.first)
-                        LOG_WARNING("Texture \"%s\" not found", (path).c_str());
+                        LOG_WARNING("Texture \"%s\" not found.", (path).c_str());
                     path = fmt::sprintf("data/img/naturalwonders/%s.png", "Default");
                     dirty = true;
                 }
@@ -512,12 +512,12 @@ void Map::loadNaturalWonderIcons(bool _reload)
                 if (_reload && FileExists(path) && resIcon.texture.loadFromFile(path))
                 {
                     if (!EndsWith(path, "Default.png"))
-                        LOG_INFO("Texture \"%s\" loaded", GetFilename(path).c_str());
+                        LOG_INFO("Texture \"%s\" loaded.", GetFilename(path).c_str());
                     resIcon.dirty = dirty;
                     resIcon.texture.generateMipmap();
                 }
                 else if (!dirty)
-                    LOG_ERROR("Texture \"%s\" could not be loaded", (path).c_str());
+                    LOG_ERROR("Texture \"%s\" could not be loaded.", (path).c_str());
             }
         }
     }
@@ -915,6 +915,19 @@ bool Map::setElevation(int _x, int _y, Elevation _value)
     {
         tile.elevation = _value;
         return setTileUndoRedo(_x,_y, tile);
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------
+bool Map::setSnow(int _x, int _y, SnowAmount _value)
+{
+    Civ7Tile tile = m_civ7TerrainType.get(_x, _y);
+
+    if (tile.snow != _value)
+    {
+        tile.snow = _value;
+        return setTileUndoRedo(_x, _y, tile);
     }
     return false;
 }

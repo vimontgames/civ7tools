@@ -37,22 +37,24 @@ bool PaintWindow::Draw(const RenderWindow & window)
         {
             const auto x = ImGui::GetCursorPosX();
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            float checkbxoWidth = s_checkboxColumnWidth * EditorOptions::Get().m_editorGlobalScale;
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Auto Coasts###AutoCoast", &m_autoCoast);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Add coasts around continents when painting");   
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Protect Coast###mProtectCoast", &m_protectCoasts);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Disable painting on coast tiles (e.g. when painting continent)");
 
-            ImGui::SetNextItemWidth(s_checkboxColumnWidth);
+            ImGui::SetNextItemWidth(checkbxoWidth);
             ImGui::Checkbox("Auto Rivers###mAutoRiverDirection", &m_autoRiverDirection);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Select next river direction from previous and click again to change direction.");
             ImGui::SameLine();
-            ImGui::SetCursorPosX(x + s_checkboxColumnWidth);
+            ImGui::SetCursorPosX(x + checkbxoWidth);
             ImGui::Checkbox("Protect Ocean###mProtectOcean", &m_protectOcean);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Disable painting on ocean tiles (e.g. when painting landmass)");
@@ -109,6 +111,11 @@ bool PaintWindow::Draw(const RenderWindow & window)
             Elevation elevation = m_elevation;
             if (EditElevation(map, elevation, &m_paintElevation))
                 m_elevation = elevation;  
+
+            // "Snow"
+            SnowAmount snow = m_snow;
+            if (EditSnow(map, snow, &m_paintSnow))
+                m_snow = snow;
 
             // "RiverName"
             RiverName riverNameIndex = m_riverNameIndex;

@@ -96,7 +96,7 @@ dbg_stream_for_cout g_DebugStreamFor_cout;
 #include "imgui_internal.h"
 
 const int g_version_major = 0;
-const int g_version_minor = 53;
+const int g_version_minor = 54;
 const char * g_appName = "Benualdo's Civ7Map Editor";
 
 //--------------------------------------------------------------------------------------
@@ -386,15 +386,16 @@ int main()
                 const std::string value = std::to_string(elevationStep);
                 const ImVec2 textSize = ImGui::CalcTextSize(value.c_str());
 
-                ImGui::GetWindowDrawList()->AddText(
-                    ImVec2(
-                        (min.x + max.x - textSize.x) * 0.5f,
-                        (min.y + max.y - textSize.y) * 0.5f),
-                    ImGui::GetColorU32(ImGuiCol_Text),
-                    value.c_str());
+                ImGui::GetWindowDrawList()->AddText(ImVec2((min.x + max.x - textSize.x) * 0.5f,(min.y + max.y - textSize.y) * 0.5f),ImGui::GetColorU32(ImGuiCol_Text),value.c_str());
 
                 ImGui::SameLine();
                 ImGui::Text("Elevation Steps");
+
+                int & snowStep = EditorOptions::Get().m_snowStep;
+                if (ImGui::SliderInt("SnowSteps", &snowStep, 0, maxSnowAmount))
+                {
+                    EditorOptions::Get().Save();
+                }
 
                 if (ImGui::Checkbox("Use modded civs for TSL", &EditorOptions::Get().m_useModdedCivsForTSL))
                     EditorOptions::Get().Save();
@@ -673,6 +674,7 @@ int main()
                                             drawProperty("Resource", tile.resource);
                                             drawProperty("Natural Wonder", tile.naturalWonder);
                                             drawProperty("Elevation", tile.elevation);
+                                            drawProperty("Snow", tile.snow);
 
                                             for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
                                             {
@@ -875,7 +877,14 @@ int main()
                     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 
                 ImGui::SetNextItemWidth(textWidth);
-                ImGui::InputInt2("Size", g_newMapSize);
+                if (ImGui::InputInt2("Size", g_newMapSize))
+                {
+                    if (g_newMapSize[0] > 128)
+                        g_newMapSize[0] = 128;
+
+                    if (g_newMapSize[1] > 128)
+                        g_newMapSize[1] = 128;
+                }
 
                 if (g_newMapSizeType != MapSize::Custom)
                     ImGui::PopItemFlag();
@@ -892,14 +901,7 @@ int main()
                     case MapSize::Standard:
                     case MapSize::Large:
                     case MapSize::Huge:
-                    case MapSize::Greatest_Earth:
-                    case MapSize::Massive:
                         isSizeSupported = true;
-                        break;
-
-                    case MapSize::Giant:
-                    case MapSize::Ludicrous:
-                        isSizeSupported = false;
                         break;
                 }
 

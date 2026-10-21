@@ -12,6 +12,10 @@ bool ImportMetaData(sqlite3 * db, const string & name, string * value)
             *value = std::string((const char *)sqlite3_column_text(stmt, 0));
             LOG_INFO("MetaData \"%s\" = \"%s\"", name.c_str(), value->c_str());
         }
+        else
+        {
+            LOG_WARNING("Metadata \"%s\" not found. Defaulting to \"%s\".", name.c_str(), value->c_str());
+        }
         sqlite3_finalize(stmt);
         return true;
     }
@@ -41,6 +45,10 @@ bool ImportMetaData(sqlite3 * db, const string & name, bool * value)
 
             LOG_INFO("MetaData \"%s\" = %s (%s)", name.c_str(), value? "TRUE" : "FALSE", s.c_str());
         }
+        else
+        {
+            LOG_WARNING("Metadata \"%s\" not found. Defaulting to \"%s\".", name.c_str(), *value ? "true" : "false");
+        }
         sqlite3_finalize(stmt);
         return true;
     }
@@ -67,6 +75,10 @@ bool ImportMetaData(sqlite3 * db, const string & name, int * value)
                 *value = std::stoi(s);
                 LOG_INFO("MetaData \"%s\" = %d (%s)", name.c_str(), *value, s.c_str());
             }
+        }
+        else
+        {
+            LOG_WARNING("Metadata \"%s\" not found. Defaulting to %i.", name.c_str(), *value);
         }
         sqlite3_finalize(stmt);
         return true;
@@ -118,6 +130,8 @@ bool Map::importSQLiteMap(const string & _cwd)
     ImportMetaData(db, "BottomSnowRows", &m_bottomSnowRows);
     ImportMetaData(db, "MaxSnowWeight", &m_maxSnowWeight);
     ImportMetaData(db, "SnowRandomization", &m_snowRandomization);
+    ImportMetaData(db, "UsePaintedSnow", &m_usePaintedSnow);
+    ImportMetaData(db, "PaintedSnowRandomization", &m_paintedSnowRandomization);
 
     // Get map size from the database
     const char * sql = "SELECT width, height FROM Map LIMIT 1;";
@@ -406,6 +420,45 @@ bool Map::importSQLiteMap(const string & _cwd)
         {
             // Table doesn't exist - this is valid for older maps.
             LOG_WARNING("Table \"RiverTiles\" not found.");
+        }
+        else
+        {
+            LOG_ERROR("Failed to prepare SQL statement for RiverTiles: %s", sqlite3_errmsg(db));
+            sqlite3_close(db);
+        }
+    }
+
+    // SnowAmount (table may not exist)
+    {
+        sql = "SELECT ID, Value FROM PlotSnowAmount";
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+
+        if (rc == SQLITE_OK)
+        {
+            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+            {
+                int ID = sqlite3_column_int(stmt, 0);
+
+                int x, y;
+                getPlotCoords(ID, &x, &y);
+
+                Civ7Tile & tile = m_civ7TerrainType.get(x, y);
+                tile.snow = (SnowAmount)sqlite3_column_int(stmt, 1);
+            }
+
+            if (rc != SQLITE_DONE)
+            {
+                LOG_ERROR("Failed to read PlotSnowAmount: %s", sqlite3_errmsg(db));
+                sqlite3_finalize(stmt);
+                sqlite3_close(db);
+            }
+
+            sqlite3_finalize(stmt);
+        }
+        else if (string(sqlite3_errmsg(db)).find("no such table") != string::npos)
+        {
+            // Table doesn't exist - this is valid for older maps.
+            LOG_WARNING("Table \"PlotSnowAmount\" not found.");
         }
         else
         {

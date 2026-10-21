@@ -470,6 +470,34 @@ inline float4 getElevationColor(Elevation elevation)
 #endif
 
 //--------------------------------------------------------------------------------------
+// Snow
+//--------------------------------------------------------------------------------------
+const int maxSnowAmount = 100;
+
+inline float4 getSnowAmountColor(uint index)
+{
+    float alpha;
+
+    if (index > 60)
+        alpha = 1;
+    else if (index > 30)
+        alpha = 0.66f;
+    else if (index > 10)
+        alpha = 0.33f;
+    else
+        alpha = 0;
+
+    return float4(alpha, alpha, alpha, alpha);
+}
+
+#ifdef __cplusplus
+inline float4 getSnowAmountColor(SnowAmount snow)
+{
+    return getSnowAmountColor((uint)snow);
+}
+#endif
+
+//--------------------------------------------------------------------------------------
 // RiverName
 //--------------------------------------------------------------------------------------
 inline float4 getRiverNameColor(uint index)

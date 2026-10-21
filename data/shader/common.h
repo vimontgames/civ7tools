@@ -12,6 +12,7 @@
 #define PASS_TYPE_RESOURCE          6 // Resource,
 #define PASS_TYPE_NATURAL_WONDER    7 // Resource,
 #define PASS_TYPE_ELEVATION         8 // Elevation
+#define PASS_TYPE_SNOW              9 // Snow
 
 #define PASS_TYPE_MASK          0xF
 

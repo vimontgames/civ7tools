@@ -9,10 +9,10 @@
 //--------------------------------------------------------------------------------------
 void DrawColoredSquare(const float4 & _color)
 {
-    float f3Color[] = { _color.r, _color.g,  _color.b };
+    float f4Color[] = { _color.r, _color.g,  _color.b, _color.a };
 
     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-    ImGui::ColorEdit3("", f3Color, ImGuiColorEditFlags_NoInputs);
+    ImGui::ColorEdit4("", f4Color, ImGuiColorEditFlags_NoInputs);
     ImGui::SameLine();
     ImGui::PopItemFlag();
     ImGui::SetNextItemWidth(ImGui::CalcItemWidth() - ImGui::GetFrameHeight() - ImGui::GetStyle().ItemSpacing.x);
@@ -336,6 +336,24 @@ template<> struct EditEnumTraits<Elevation> : EditEnumTraitsBase<Elevation>
 bool EditElevation(const Map * map, Elevation & elevation, bool * pBool)
 {
     return EditEnum<Elevation>("Elevation", map, elevation, pBool);
+}
+
+//--------------------------------------------------------------------------------------
+// SnowAmount traits
+//--------------------------------------------------------------------------------------
+template<> struct EditEnumTraits<SnowAmount> : EditEnumTraitsBase<SnowAmount>
+{
+    static constexpr bool UseIntSlider = true;
+    static constexpr auto MaxValue = maxSnowAmount;
+
+    static auto GetColor(SnowAmount value) { return getSnowAmountColor(value); }
+    static const auto GetEditStep() { return EditorOptions::Get().m_snowStep; }
+};
+
+//--------------------------------------------------------------------------------------
+bool EditSnow(const Map * map, SnowAmount & snow, bool * pBool)
+{
+    return EditEnum<SnowAmount>("Snow", map, snow, pBool);
 }
 
 //--------------------------------------------------------------------------------------

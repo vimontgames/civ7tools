@@ -147,6 +147,9 @@ void Map::Paint(int _x, int _y)
                 if (paintWindow->m_paintElevation)
                     tileCopy.elevation = paintWindow->m_elevation;
 
+                if (paintWindow->m_paintSnow)
+                    tileCopy.snow = paintWindow->m_snow;
+
                 if (paintWindow->m_paintRiverName)
                 {
                     if (paintWindow->m_riverNameIndex == RiverName::None)

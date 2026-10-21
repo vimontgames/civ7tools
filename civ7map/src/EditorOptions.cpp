@@ -19,54 +19,89 @@ bool EditorOptions::Load()
     if (sqlite3_open(filename.c_str(), &db) != SQLITE_OK)
     {
         if (db)
+        {
+            LOG_ERROR(fmt::sprintf("Failed to open '%s': %s", filename.c_str(), sqlite3_errmsg(db)).c_str());
             sqlite3_close(db);
+        }
+        else
+        {
+            LOG_ERROR(fmt::sprintf("Failed to open '%s'.", filename.c_str()).c_str());
+        }
 
         return false;
     }
 
     const char * createTableSQL =
         "CREATE TABLE IF NOT EXISTS EditorOptions ("
-        "EditorGlobalScale REAL NOT NULL,"
-        "ElevationStep INTEGER NOT NULL,"
-        "UseModdedCivsForTSL INTEGER NOT NULL"
+        "Key TEXT PRIMARY KEY,"
+        "Value TEXT NOT NULL"
         ");";
 
-    if (sqlite3_exec(db, createTableSQL, nullptr, nullptr, nullptr) != SQLITE_OK)
+    char * errorMessage = nullptr;
+
+    if (sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errorMessage) != SQLITE_OK)
     {
+        LOG_ERROR(fmt::sprintf("Failed to create EditorOptions table: %s", errorMessage ? errorMessage : sqlite3_errmsg(db)).c_str());
+
+        sqlite3_free(errorMessage);
         sqlite3_close(db);
         return false;
     }
 
     const char * selectSQL =
-        "SELECT EditorGlobalScale, ElevationStep, UseModdedCivsForTSL "
-        "FROM EditorOptions LIMIT 1;";
+        "SELECT Key, Value FROM EditorOptions;";
 
     sqlite3_stmt * statement = nullptr;
 
     if (sqlite3_prepare_v2(db, selectSQL, -1, &statement, nullptr) != SQLITE_OK)
     {
+        LOG_ERROR(fmt::sprintf("Failed to prepare EditorOptions SELECT: %s", sqlite3_errmsg(db)).c_str());
+
         sqlite3_close(db);
         return false;
     }
 
-    const int result = sqlite3_step(statement);
-
-    if (result == SQLITE_ROW)
+    while (true)
     {
-        m_editorGlobalScale = static_cast<float>(sqlite3_column_double(statement, 0));
-        m_elevationStep = sqlite3_column_int(statement, 1);
-        m_useModdedCivsForTSL = sqlite3_column_int(statement, 2) != 0;
+        const int result = sqlite3_step(statement);
 
-        sqlite3_finalize(statement);
-        sqlite3_close(db);
-        return true;
+        if (result == SQLITE_DONE)
+            break;
+
+        if (result != SQLITE_ROW)
+        {
+            LOG_ERROR(fmt::sprintf("Failed to read EditorOptions: %s", sqlite3_errmsg(db)).c_str());
+
+            sqlite3_finalize(statement);
+            sqlite3_close(db);
+            return false;
+        }
+
+        const char * key = reinterpret_cast<const char *>(sqlite3_column_text(statement, 0));
+        const char * value = reinterpret_cast<const char *>(sqlite3_column_text(statement, 1));
+
+        if (!key || !value)
+        {
+            LOG_WARNING("Ignoring EditorOptions entry with missing key or value.");
+            continue;
+        }
+
+        if (strcmp(key, "EditorGlobalScale") == 0)
+            m_editorGlobalScale = static_cast<float>(atof(value));
+        else if (strcmp(key, "ElevationStep") == 0)
+            m_elevationStep = atoi(value);
+        else if (strcmp(key, "SnowStep") == 0)
+            m_snowStep = atoi(value);
+        else if (strcmp(key, "UseModdedCivsForTSL") == 0)
+            m_useModdedCivsForTSL = atoi(value) != 0;
+        else
+            LOG_WARNING(fmt::sprintf("Unknown EditorOption '%s'.", key).c_str());
     }
 
     sqlite3_finalize(statement);
     sqlite3_close(db);
 
-    // No saved options: keep the default values.
-    return result == SQLITE_DONE;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------
@@ -77,55 +112,84 @@ bool EditorOptions::Save()
     if (sqlite3_open(filename.c_str(), &db) != SQLITE_OK)
     {
         if (db)
+        {
+            LOG_ERROR(fmt::sprintf("Failed to open '%s': %s", filename.c_str(), sqlite3_errmsg(db)).c_str());
             sqlite3_close(db);
+        }
+        else
+        {
+            LOG_ERROR(fmt::sprintf("Failed to open '%s'.", filename.c_str()).c_str());
+        }
 
         return false;
     }
 
+    // If an old version of options.sql exists, its EditorOptions table has the old
+    // column-based format. Drop it so it can be recreated using the new Key/Value format.
     const char * createTableSQL =
-        "CREATE TABLE IF NOT EXISTS EditorOptions ("
-        "EditorGlobalScale REAL NOT NULL,"
-        "ElevationStep INTEGER NOT NULL,"
-        "UseModdedCivsForTSL INTEGER NOT NULL"
+        "DROP TABLE IF EXISTS EditorOptions;"
+        "CREATE TABLE EditorOptions ("
+        "Key TEXT PRIMARY KEY,"
+        "Value TEXT NOT NULL"
         ");";
 
     char * errorMessage = nullptr;
 
     if (sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errorMessage) != SQLITE_OK)
     {
-        sqlite3_free(errorMessage);
-        sqlite3_close(db);
-        return false;
-    }
+        LOG_ERROR(fmt::sprintf("Failed to create EditorOptions table: %s", errorMessage ? errorMessage : sqlite3_errmsg(db)).c_str());
 
-    const char * deleteSQL =
-        "DELETE FROM EditorOptions;";
-
-    if (sqlite3_exec(db, deleteSQL, nullptr, nullptr, &errorMessage) != SQLITE_OK)
-    {
         sqlite3_free(errorMessage);
         sqlite3_close(db);
         return false;
     }
 
     const char * insertSQL =
-        "INSERT INTO EditorOptions "
-        "(EditorGlobalScale, ElevationStep, UseModdedCivsForTSL) "
-        "VALUES (?, ?, ?);";
+        "INSERT OR REPLACE INTO EditorOptions (Key, Value) "
+        "VALUES (?, ?);";
 
     sqlite3_stmt * statement = nullptr;
 
     if (sqlite3_prepare_v2(db, insertSQL, -1, &statement, nullptr) != SQLITE_OK)
     {
+        LOG_ERROR(fmt::sprintf("Failed to prepare EditorOptions INSERT: %s", sqlite3_errmsg(db)).c_str());
+
         sqlite3_close(db);
         return false;
     }
 
-    sqlite3_bind_double(statement, 1, m_editorGlobalScale);
-    sqlite3_bind_int(statement, 2, m_elevationStep);
-    sqlite3_bind_int(statement, 3, m_useModdedCivsForTSL ? 1 : 0);
+    auto insertOption = [&](const char * key, const string & value)
+        {
+            sqlite3_reset(statement);
+            sqlite3_clear_bindings(statement);
 
-    const bool success = sqlite3_step(statement) == SQLITE_DONE;
+            if (sqlite3_bind_text(statement, 1, key, -1, SQLITE_STATIC) != SQLITE_OK)
+            {
+                LOG_ERROR(fmt::sprintf("Failed to bind EditorOptions key '%s': %s", key, sqlite3_errmsg(db)).c_str());
+                return false;
+            }
+
+            if (sqlite3_bind_text(statement, 2, value.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
+            {
+                LOG_ERROR(fmt::sprintf("Failed to bind EditorOptions value for '%s': %s", key, sqlite3_errmsg(db)).c_str());
+                return false;
+            }
+
+            if (sqlite3_step(statement) != SQLITE_DONE)
+            {
+                LOG_ERROR(fmt::sprintf("Failed to save EditorOption '%s': %s", key, sqlite3_errmsg(db)).c_str());
+                return false;
+            }
+
+            return true;
+        };
+
+    bool success = true;
+
+    success &= insertOption("EditorGlobalScale", fmt::sprintf("%f", m_editorGlobalScale));
+    success &= insertOption("ElevationStep", fmt::sprintf("%d", m_elevationStep));
+    success &= insertOption("SnowStep", fmt::sprintf("%d", m_snowStep));
+    success &= insertOption("UseModdedCivsForTSL", m_useModdedCivsForTSL ? "1" : "0");
 
     sqlite3_finalize(statement);
     sqlite3_close(db);

@@ -95,7 +95,7 @@ void Map::render(RenderWindow & _window)
                     switch (m_mapFilter)
                     {
                         default:
-                            LOG_ERROR("Missing case \"%s\" (%i)", asString(m_mapFilter).c_str(), (int)m_mapFilter);
+                            ASSERT(false, "Missing case \"%s\" (%i)", asString(m_mapFilter).c_str(), (int)m_mapFilter);
                             break;
 
                         case MapFilter::All:
@@ -106,6 +106,7 @@ void Map::render(RenderWindow & _window)
                         case MapFilter::Resource:
                         case MapFilter::Landmass:
                         case MapFilter::Elevation:
+                        case MapFilter::Snow:
                             passFlags = (int)m_mapFilter;
                             break;
                     }
