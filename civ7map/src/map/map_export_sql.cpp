@@ -961,7 +961,7 @@ void Map::exportMapDataCiv7Map()
 
     data += fmt::sprintf("function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization, paintRandomization)\n");
     data += fmt::sprintf("{\n");
-    data += fmt::sprintf("  console.log(\"Begin paintSnow\");\n");
+    data += fmt::sprintf("    console.log(\"Begin paintSnow\");\n\n");
 
     if (m_randomSnow && m_useAdvancedSnow)
     {
@@ -1012,7 +1012,7 @@ void Map::exportMapDataCiv7Map()
     // Manually painted snow
     if (m_usePaintedSnow)
     {
-        data += fmt::sprintf("  console.log(\"Begin Snow tiles\");\n");
+        data += fmt::sprintf("    console.log(\"Begin Snow tiles\");\n");
         for (uint y = 0; y < m_height; ++y)
         {
             for (uint x = 0; x < m_width; ++x)
