@@ -338,6 +338,26 @@ string Map::getCivilizationNameFromString(const string & name)
     return result;
 }
 
+//--------------------------------------------------------------------------------------
+string Map::fixRiverName(const string & name)
+{
+    if (BeginsWith(name, "RIVER_CIV7MAP_"))
+        return name;
+
+    string fixedName = name;
+
+    if (BeginsWith(name, "RIVER_"))
+    {
+        fixedName.erase(0, strlen("RIVER_"));
+    }
+
+    fixedName = "RIVER_CIV7MAP_" + fixedName;
+    for (uint c = 0; c < fixedName.length(); ++c)
+        fixedName[c] = toupper(fixedName[c]);
+
+    return fixedName;
+}
+
 
 //--------------------------------------------------------------------------------------
 string Map::getRiverPrettyNameFromString(const string & name)
@@ -345,7 +365,7 @@ string Map::getRiverPrettyNameFromString(const string & name)
     string input = name;
 
     // Remove prefixes.
-    constexpr const char * prefixes[] = { "RIVER_", "WADI_" };
+    constexpr const char * prefixes[] = { "RIVER_CIV7MAP_", "RIVER_", "WADI_" };
 
     for (const char * prefix : prefixes)
     {

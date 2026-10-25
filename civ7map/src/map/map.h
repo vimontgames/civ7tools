@@ -212,6 +212,8 @@ public:
     bool setRiverType(int _x, int _y, RiverType _value, int _index);
     bool setRiverDirection(int _x, int _y, DirectionType _value, int _index);
 
+    static string fixRiverName(const string & name);
+
     bool create(MapVersion _mapVersion, const string & _cwd, const string & _name, const string & _author, const string & _description, int _width, int _height, bool _customSize);
     bool createFolders();
 
@@ -414,7 +416,6 @@ public:
     // map data
     string                  m_author;
     string                  m_description;
-    bool                    m_useTSL = true;
 
     bool                    m_randomLakes           = true;
     bool                    m_randomContinents      = false;
@@ -428,6 +429,12 @@ public:
     bool                    m_randomFeatures        = true;
     bool                    m_randomSnow            = true;
     bool                    m_randomResources       = true;
+
+    bool                    m_useTSL                = true;
+    bool                    m_noResourceOnTSL       = true;
+
+    bool                    m_noResourceOnNavigableRivers = true;
+    bool                    m_exportPaintedRivers = true;
 
     u32                     m_width = 0;
     u32                     m_height = 0;

@@ -559,7 +559,7 @@ void Map::exportMapsCiv7Map()
         data += fmt::sprintf("	</Maps>\n");
     }
 
-    if (m_rivers.size() > 0)
+    if (m_exportPaintedRivers && m_rivers.size() > 0)
     {
         data += fmt::sprintf("  <NamedRivers>\n");
         for (uint i = 0; i < m_rivers.size(); ++i)
@@ -683,20 +683,28 @@ void Map::exportMapDataCiv7Map()
 
     data += fmt::sprintf("  genCtx.phases = %s;\n", genFlags);
 
-    data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = false;\n");
+    data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = true;\n");
     data += fmt::sprintf("  generateMapFeatures(hexMap, genCtx);\n");
     data += fmt::sprintf("  paintRivers();\n");
     data += fmt::sprintf("  nameRivers();\n");
     data += fmt::sprintf("  //nameVolcanoes();\n");
-    data += fmt::sprintf("  fakeWrapX();\n");
+    data += fmt::sprintf("  fixElevation();\n");
+
+    if (m_snowBorderX > 0)
+    {
+        data += fmt::sprintf("  fakeWrapX();\n");
+    }
 
     uint tslCount = 0;
-    for (uint i = 0; i < m_civilizations.size(); ++i)
+    if (m_useTSL)
     {
-        const Civilization & civ = m_civilizations[i];
-        if (civ.tsl.size() > 0)
+        for (uint i = 0; i < m_civilizations.size(); ++i)
         {
-            tslCount++;
+            const Civilization & civ = m_civilizations[i];
+            if (civ.tsl.size() > 0)
+            {
+                tslCount++;
+            }
         }
     }
 
@@ -732,211 +740,291 @@ void Map::exportMapDataCiv7Map()
     data += fmt::sprintf("    TerrainBuilder.generateCliffsFromElevation();\n");
     data += fmt::sprintf("}\n\n");
 
-    // Rivers plots
-    data += "function paintRivers()\n";
-    data += "{\n";
-    data += "  console.log(\"Begin paintRivers()\");\n";
+    data += "function fixElevation() {\n";
+    data += "    console.log(\"Begin fixElevation()\");\n";
+    data += "    const mapWidth = GameplayMap.getGridWidth();\n";
+    data += "    const mapHeight = GameplayMap.getGridHeight();\n";
+    data += "    let elevationArray = [];\n\n";
 
-    for (uint i = 0; i < m_rivers.size(); ++i)
+    data += "    for (let y = 0; y < mapHeight; y++) {\n";
+    data += "        for (let x = 0; x < mapWidth; x++) {\n";
+    data += "            let index = (y * mapWidth) + x;\n";
+    data += "            elevationArray[index] = GameplayMap.getElevation(x, y);\n";
+    data += "        }\n";
+    data += "    }\n\n";
+
+    // Zero elevation on navigable river tiles
+    for (uint y = 0; y < m_height; ++y)
     {
-        const RiverInfo & riverInfo = m_rivers[i];
-        if (!riverInfo.riverPaths.empty())
+        for (uint x = 0; x < m_width; ++x)
         {
-            data += fmt::sprintf("  // %s\n", riverInfo.name.c_str());
-
-            for (uint p = 0; p < riverInfo.riverPaths.size(); ++p)
+            Civ7Tile tile = m_civ7TerrainType.get(x, y);
+            for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
             {
-                const RiverPath & riverPath = riverInfo.riverPaths[p];
-
-                for (uint j = 0; j < riverPath.tiles.size(); ++j)
+                if (m_noResourceOnNavigableRivers)
                 {
-                    const int2 & tileXY = riverPath.tiles[j];
-                    const Civ7Tile & tile = m_civ7TerrainType.get(tileXY.x, tileXY.y);
-
-                    for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                    if (tile.rivers[r].nameIndex != RiverName::None && tile.rivers[r].type == RiverType::Navigable)
                     {
-                        const RiverTileInfo & riverTile = tile.rivers[r];
-                        if (riverTile.nameIndex == (RiverName)i)
-                        {
-                            data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
-                        }
+                        data += fmt::sprintf("    elevationArray[(%i * mapWidth) + %i] = 0;\n", y, x);
                     }
                 }
             }
         }
     }
 
-    data += "  console.log(\"End paintRivers()\");\n";
+    data += "    TerrainBuilder.setElevation(elevationArray);\n";
+    data += "    TerrainBuilder.generateCliffsFromElevation();\n";
+    data += "    console.log(\"end fixElevation()\");\n";
+    data += "}\n\n";
+
+    // Rivers plots
+    data += "function paintRivers()\n";
+    data += "{\n";
+
+    if (m_exportPaintedRivers)
+    {
+        data += "  console.log(\"Begin paintRivers()\");\n";
+        data += "  const emptyFeatureParam = \n";
+        data += "  {\n";
+        data += "    Feature: -1,\n";
+        data += "    Direction: -1,\n";
+        data += "    Elevation: 0\n";
+        data += "  }; \n";
+
+        for (uint i = 0; i < m_rivers.size(); ++i)
+        {
+            const RiverInfo & riverInfo = m_rivers[i];
+            if (!riverInfo.riverPaths.empty())
+            {
+                data += fmt::sprintf("  // %s\n", riverInfo.name.c_str());
+
+                for (uint p = 0; p < riverInfo.riverPaths.size(); ++p)
+                {
+                    const RiverPath & riverPath = riverInfo.riverPaths[p];
+
+                    for (uint j = 0; j < riverPath.tiles.size(); ++j)
+                    {
+                        const int2 & tileXY = riverPath.tiles[j];
+                        const Civ7Tile & tile = m_civ7TerrainType.get(tileXY.x, tileXY.y);
+
+                        for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
+                        {
+                            const RiverTileInfo & riverTile = tile.rivers[r];
+                            if (riverTile.nameIndex == (RiverName)i)
+                            {
+                                data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
+
+                                if (m_noResourceOnNavigableRivers && riverTile.type == RiverType::Navigable)
+                                {
+                                    data += fmt::sprintf("  TerrainBuilder.setFeatureType(%u, %u, emptyFeatureParam);\n", tileXY.x, tileXY.y);
+                                    data += fmt::sprintf("  ResourceBuilder.setResourceType(%u,%u, -1);", tileXY.x, tileXY.y);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        data += "  console.log(\"End paintRivers()\");\n";
+    }
+    else
+    {
+        data += "   console.log(\"Painted rivers are disabled\");\n";
+    }
+
+    
     data += "}\n\n";
 
     data += "function nameRivers()\n";
     data += "{\n";
-    data += "   console.log(\"Begin nameRivers()\");\n";
 
-    for (uint i = 0; i < m_rivers.size(); ++i)
+    if (m_exportPaintedRivers)
     {
-        const RiverInfo & riverInfo = m_rivers[i];
-        if (!riverInfo.riverPaths.empty() && !riverInfo.riverPaths[0].tiles.empty())
+        data += "   console.log(\"Begin nameRivers()\");\n";
+        for (uint i = 0; i < m_rivers.size(); ++i)
         {
-            const int2 & startXY = riverInfo.riverPaths[0].tiles[0];
-            data += fmt::sprintf("   TerrainBuilder.setCustomRiverName(%u, %u, \"%s\");\n", startXY.x, startXY.y, riverInfo.prettyName.c_str());
+            const RiverInfo & riverInfo = m_rivers[i];
+            if (!riverInfo.riverPaths.empty() && !riverInfo.riverPaths[0].tiles.empty())
+            {
+                const int2 & startXY = riverInfo.riverPaths[0].tiles[0];
+                data += fmt::sprintf("   TerrainBuilder.setCustomRiverName(%u, %u, \"%s\");\n", startXY.x, startXY.y, riverInfo.prettyName.c_str());
+            }
         }
+        data += "   console.log(\"End nameRivers()\");\n";
     }
-
-    data += "   console.log(\"End nameRivers()\");\n";
+    else
+    {
+        data += "   console.log(\"Painted rivers are disabled\");\n";
+    }
+    
     data += "}\n\n";
 
     // TSL
-    data += "function getDistanceToClosestOtherStart(iX, iY, startPositions, skipIndex) { \n";
-    data += "  let minDistance = 32768;\n";
-    data += "  for (let iStart = 0; iStart < startPositions.length; iStart++) {\n";
-    data += "    const startPlotIndex = startPositions[iStart];\n";
-    data += "    if (startPlotIndex && iStart != skipIndex) {\n";
-    data += "      const iStartX = startPlotIndex % GameplayMap.getGridWidth();\n";
-    data += "      const iStartY = startPlotIndex / GameplayMap.getGridWidth();\n";
-    data += "      const distance = GameplayMap.getPlotDistance(iX, iY, iStartX, iStartY);\n";
-    data += "      if (distance < minDistance) {\n";
-    data += "        minDistance = distance;\n";
-    data += "      }\n";
-    data += "    }\n";
-    data += "  }\n";
-    data += "  return minDistance;\n";
-    data += "}\n";
-
-    data +=  fmt::sprintf("function getRandomCivStartLocation() {\n");
-    data +=  fmt::sprintf("  const randomCiv = TerrainBuilder.getRandomNumber(%u, \"CIV TSL RANDOMIZATION\");\n", tslCount);
-    data +=  fmt::sprintf("  console.log(randomCiv + \" \");\n");
-    data +=  fmt::sprintf("  let plotIndex = -1;\n");
-    data +=  fmt::sprintf("  switch (randomCiv) {\n");
-
-    //data += "    case 0:\n";
-    //data += "      plotIndex = GameplayMap.getIndexFromXY(61, 28);\n";
-    //data += "      break;\n";
-
-    uint tslIndex = 0;
-    for (uint i = 0; i < m_civilizations.size(); ++i)
+    if (m_useTSL && tslCount > 0)
     {
-        const Civilization & civ = m_civilizations[i];
-        if (civ.tsl.size() > 0)
+        data += "function getDistanceToClosestOtherStart(iX, iY, startPositions, skipIndex) { \n";
+        data += "  let minDistance = 32768;\n";
+        data += "  for (let iStart = 0; iStart < startPositions.length; iStart++) {\n";
+        data += "    const startPlotIndex = startPositions[iStart];\n";
+        data += "    if (startPlotIndex && iStart != skipIndex) {\n";
+        data += "      const iStartX = startPlotIndex % GameplayMap.getGridWidth();\n";
+        data += "      const iStartY = startPlotIndex / GameplayMap.getGridWidth();\n";
+        data += "      const distance = GameplayMap.getPlotDistance(iX, iY, iStartX, iStartY);\n";
+        data += "      if (distance < minDistance) {\n";
+        data += "        minDistance = distance;\n";
+        data += "      }\n";
+        data += "    }\n";
+        data += "  }\n";
+        data += "  return minDistance;\n";
+        data += "}\n";
+
+        data += fmt::sprintf("function getRandomCivStartLocation() {\n");
+        data += fmt::sprintf("  const randomCiv = TerrainBuilder.getRandomNumber(%u, \"CIV TSL RANDOMIZATION\");\n", tslCount);
+        data += fmt::sprintf("  console.log(randomCiv + \" \");\n");
+        data += fmt::sprintf("  let plotIndex = -1;\n");
+        data += fmt::sprintf("  switch (randomCiv) {\n");
+
+        //data += "    case 0:\n";
+        //data += "      plotIndex = GameplayMap.getIndexFromXY(61, 28);\n";
+        //data += "      break;\n";
+
+        uint tslIndex = 0;
+        for (uint i = 0; i < m_civilizations.size(); ++i)
         {
-            const TSL & tsl = civ.tsl[0];
-
-            data += fmt::sprintf("    case %u:\n", tslIndex);
-            data += fmt::sprintf("      plotIndex = GameplayMap.getIndexFromXY(%u, %u);\n", tsl.pos.x, tsl.pos.y);
-            data += fmt::sprintf("      break;\n");
-
-            tslIndex++;
-        }
-    }
-
-    data += "  }\n";
-    data += "  return plotIndex;\n";
-    data += "}\n";
-
-    data += fmt::sprintf("function assignStartPositions() {\n");
-
-    data += fmt::sprintf("  const aliveMajorIds = Players.getAliveMajorIds();\n");
-    data += fmt::sprintf("  const startPositions = new Array(aliveMajorIds.length);\n");
-    data += fmt::sprintf("  let plotIndex = -1;\n");
-    data += fmt::sprintf("  for (const majorId of aliveMajorIds) {\n");
-    data += fmt::sprintf("    const player = Players.get(majorId);\n");
-    data += fmt::sprintf("    if (player != null) {\n");
-    data += fmt::sprintf("      switch (player.civilizationName) {\n");
-
-    //data += fmt::sprintf("        case \"LOC_CIVILIZATION_AKSUM_NAME\":\n");
-    //data += fmt::sprintf("          plotIndex = GameplayMap.getIndexFromXY(61, 28);\n");
-    //data += fmt::sprintf("          break;\n");
-
-    for (uint i = 0; i < m_civilizations.size(); ++i)
-    {
-        const Civilization & civ = m_civilizations[i];
-        if (civ.tsl.size() > 0)
-        {
-            const TSL & tsl = civ.tsl[0];
-
-            if (civ.civilizationName.length() > 0)
+            const Civilization & civ = m_civilizations[i];
+            if (civ.tsl.size() > 0)
             {
-                data += fmt::sprintf("        case \"LOC_%s_NAME\":\n", civ.civilizationName);
-                data += fmt::sprintf("          plotIndex = GameplayMap.getIndexFromXY(%u, %u);\n", tsl.pos.x, tsl.pos.y);
-                data += fmt::sprintf("          break;\n");
+                const TSL & tsl = civ.tsl[0];
+
+                data += fmt::sprintf("    case %u:\n", tslIndex);
+                data += fmt::sprintf("      plotIndex = GameplayMap.getIndexFromXY(%u, %u);\n", tsl.pos.x, tsl.pos.y);
+                data += fmt::sprintf("      break;\n");
+
+                tslIndex++;
             }
         }
+
+        data += "  }\n";
+        data += "  return plotIndex;\n";
+        data += "}\n";
+
+        data += fmt::sprintf("function assignStartPositions() {\n");
+
+        data += fmt::sprintf("  const aliveMajorIds = Players.getAliveMajorIds();\n");
+        data += fmt::sprintf("  const startPositions = new Array(aliveMajorIds.length);\n");
+        data += fmt::sprintf("  let plotIndex = -1;\n");
+        data += fmt::sprintf("  for (const majorId of aliveMajorIds) {\n");
+        data += fmt::sprintf("    const player = Players.get(majorId);\n");
+        data += fmt::sprintf("    if (player != null) {\n");
+        data += fmt::sprintf("      switch (player.civilizationName) {\n");
+
+        //data += fmt::sprintf("        case \"LOC_CIVILIZATION_AKSUM_NAME\":\n");
+        //data += fmt::sprintf("          plotIndex = GameplayMap.getIndexFromXY(61, 28);\n");
+        //data += fmt::sprintf("          break;\n");
+
+        for (uint i = 0; i < m_civilizations.size(); ++i)
+        {
+            const Civilization & civ = m_civilizations[i];
+            if (civ.tsl.size() > 0)
+            {
+                const TSL & tsl = civ.tsl[0];
+
+                if (civ.civilizationName.length() > 0)
+                {
+                    data += fmt::sprintf("        case \"LOC_%s_NAME\":\n", civ.civilizationName);
+                    data += fmt::sprintf("          plotIndex = GameplayMap.getIndexFromXY(%u, %u);\n", tsl.pos.x, tsl.pos.y);
+                    data += fmt::sprintf("          break;\n");
+                }
+            }
+        }
+
+        data += fmt::sprintf("      }\n");
+        data += fmt::sprintf("    }\n");
+        data += fmt::sprintf("    if (plotIndex >= 0) {\n");
+        data += fmt::sprintf("      startPositions[majorId] = plotIndex;\n");
+        data += fmt::sprintf("      const location2 = GameplayMap.getLocationFromIndex(plotIndex);\n");
+        data += fmt::sprintf("      console.log(\"CHOICE FOR PLAYER: \" + majorId + \" (\" + location2.x + \", \" + location2.y + \")\");\n");
+        data += fmt::sprintf("    } else {\n");
+        data += fmt::sprintf("      console.log(\"FAILED TO PICK LOCATION FOR: \" + majorId);\n");
+        data += fmt::sprintf("    }\n");
+        data += fmt::sprintf("    plotIndex = -1;\n");
+        data += fmt::sprintf("  }\n");
+        data += fmt::sprintf("  const validatedStartPositions = startPositions;\n");
+        data += fmt::sprintf("  console.log(startPositions.length + \"startlength\");\n");
+        data += fmt::sprintf("  validatedStartPositions[0] = startPositions[0];\n");
+        data += fmt::sprintf("  const location = GameplayMap.getLocationFromIndex(validatedStartPositions[0]);\n");
+        data += fmt::sprintf("  console.log(\"CHOICE FOR PLAYER: 0 (\" + location.x + \", \" + location.y + \")\");\n");
+        data += fmt::sprintf("  StartPositioner.setStartPosition(validatedStartPositions[0], 0);\n");
+
+        if (m_noResourceOnTSL)
+        {
+            data += fmt::sprintf("  ResourceBuilder.setResourceType(location.x,location.y, -1);");
+        }
+
+        data += fmt::sprintf("  for (let index = startPositions.length - 1; index > 0; index--) {\n");
+        data += fmt::sprintf("    let invalidPosition = false;\n");
+        data += fmt::sprintf("    let position = startPositions[index];\n");
+        data += fmt::sprintf("    for (let indexCheck = 0; indexCheck < index; indexCheck++) {\n");
+        data += fmt::sprintf("      console.log(\n");
+        data += fmt::sprintf("        getDistanceToClosestOtherStart(\n");
+        data += fmt::sprintf("          GameplayMap.getLocationFromIndex(position).x,\n");
+        data += fmt::sprintf("          GameplayMap.getLocationFromIndex(position).y,\n");
+        data += fmt::sprintf("          startPositions,\n");
+        data += fmt::sprintf("          index\n");
+        data += fmt::sprintf("        )\n");
+        data += fmt::sprintf("      );\n");
+        data += fmt::sprintf("      if (getDistanceToClosestOtherStart(\n");
+        data += fmt::sprintf("        GameplayMap.getLocationFromIndex(position).x,\n");
+        data += fmt::sprintf("        GameplayMap.getLocationFromIndex(position).y,\n");
+        data += fmt::sprintf("        startPositions,\n");
+        data += fmt::sprintf("        index\n");
+        data += fmt::sprintf("      ) < 3) {\n");
+        data += fmt::sprintf("        invalidPosition = true;\n");
+        data += fmt::sprintf("        console.log(\"check1\");\n");
+        data += fmt::sprintf("      } else {\n");
+        data += fmt::sprintf("        console.log(index + \" fine \" + indexCheck);\n");
+        data += fmt::sprintf("      }\n");
+        data += fmt::sprintf("    }\n");
+        data += fmt::sprintf("    while (invalidPosition) {\n");
+        data += fmt::sprintf("      position = getRandomCivStartLocation();\n");
+        data += fmt::sprintf("      invalidPosition = false;\n");
+        data += fmt::sprintf("      for (let indexCheck = 0; indexCheck < startPositions.length; indexCheck++) {\n");
+        data += fmt::sprintf("        if (index != indexCheck) {\n");
+        data += fmt::sprintf("          if (getDistanceToClosestOtherStart(\n");
+        data += fmt::sprintf("            GameplayMap.getLocationFromIndex(position).x,\n");
+        data += fmt::sprintf("            GameplayMap.getLocationFromIndex(position).y,\n");
+        data += fmt::sprintf("            startPositions,\n");
+        data += fmt::sprintf("            index\n");
+        data += fmt::sprintf("          ) < 4) {\n");
+        data += fmt::sprintf("            invalidPosition = true;\n");
+        data += fmt::sprintf("            console.log(\"check2\");\n");
+        data += fmt::sprintf("          }\n");
+        data += fmt::sprintf("        }\n");
+        data += fmt::sprintf("      }\n");
+        data += fmt::sprintf("    }\n");
+        data += fmt::sprintf("    if (position >= 0) {\n");
+        data += fmt::sprintf("      validatedStartPositions[index] = position;\n");
+        data += fmt::sprintf("      const location2 = GameplayMap.getLocationFromIndex(position);\n");
+        data += fmt::sprintf("      console.log(\"CHOICE FOR PLAYER: \" + index + \" (\" + location2.x + \", \" + location2.y + \")\");\n");
+        data += fmt::sprintf("      StartPositioner.setStartPosition(position, index);\n");
+
+        if (m_noResourceOnTSL)
+        {
+            data += fmt::sprintf("      ResourceBuilder.setResourceType(location2.x,location2.y, -1);");
+        }
+
+        data += fmt::sprintf("    } else {\n");
+        data += fmt::sprintf("      console.log(\"FAILED TO PICK LOCATION FOR: \" + index);\n");
+        data += fmt::sprintf("    }\n");
+        data += fmt::sprintf("  }\n");
+        data += fmt::sprintf("  return validatedStartPositions;\n");
+        data += fmt::sprintf("}\n");
     }
 
-    data += fmt::sprintf("      }\n");
-    data += fmt::sprintf("    }\n");
-    data += fmt::sprintf("    if (plotIndex >= 0) {\n");
-    data += fmt::sprintf("      startPositions[majorId] = plotIndex;\n");
-    data += fmt::sprintf("      const location2 = GameplayMap.getLocationFromIndex(plotIndex);\n");
-    data += fmt::sprintf("      console.log(\"CHOICE FOR PLAYER: \" + majorId + \" (\" + location2.x + \", \" + location2.y + \")\");\n");
-    data += fmt::sprintf("    } else {\n");
-    data += fmt::sprintf("      console.log(\"FAILED TO PICK LOCATION FOR: \" + majorId);\n");
-    data += fmt::sprintf("    }\n");
-    data += fmt::sprintf("    plotIndex = -1;\n");
-    data += fmt::sprintf("  }\n");
-    data += fmt::sprintf("  const validatedStartPositions = startPositions;\n");
-    data += fmt::sprintf("  console.log(startPositions.length + \"startlength\");\n");
-    data += fmt::sprintf("  validatedStartPositions[0] = startPositions[0];\n");
-    data += fmt::sprintf("  const location = GameplayMap.getLocationFromIndex(validatedStartPositions[0]);\n");
-    data += fmt::sprintf("  console.log(\"CHOICE FOR PLAYER: 0 (\" + location.x + \", \" + location.y + \")\");\n");
-    data += fmt::sprintf("  StartPositioner.setStartPosition(validatedStartPositions[0], 0);\n");
-    data += fmt::sprintf("  for (let index = startPositions.length - 1; index > 0; index--) {\n");
-    data += fmt::sprintf("    let invalidPosition = false;\n");
-    data += fmt::sprintf("    let position = startPositions[index];\n");
-    data += fmt::sprintf("    for (let indexCheck = 0; indexCheck < index; indexCheck++) {\n");
-    data += fmt::sprintf("      console.log(\n");
-    data += fmt::sprintf("        getDistanceToClosestOtherStart(\n");
-    data += fmt::sprintf("          GameplayMap.getLocationFromIndex(position).x,\n");
-    data += fmt::sprintf("          GameplayMap.getLocationFromIndex(position).y,\n");
-    data += fmt::sprintf("          startPositions,\n");
-    data += fmt::sprintf("          index\n");
-    data += fmt::sprintf("        )\n");
-    data += fmt::sprintf("      );\n");
-    data += fmt::sprintf("      if (getDistanceToClosestOtherStart(\n");
-    data += fmt::sprintf("        GameplayMap.getLocationFromIndex(position).x,\n");
-    data += fmt::sprintf("        GameplayMap.getLocationFromIndex(position).y,\n");
-    data += fmt::sprintf("        startPositions,\n");
-    data += fmt::sprintf("        index\n");
-    data += fmt::sprintf("      ) < 3) {\n");
-    data += fmt::sprintf("        invalidPosition = true;\n");
-    data += fmt::sprintf("        console.log(\"check1\");\n");
-    data += fmt::sprintf("      } else {\n");
-    data += fmt::sprintf("        console.log(index + \" fine \" + indexCheck);\n");
-    data += fmt::sprintf("      }\n");
-    data += fmt::sprintf("    }\n");
-    data += fmt::sprintf("    while (invalidPosition) {\n");
-    data += fmt::sprintf("      position = getRandomCivStartLocation();\n");
-    data += fmt::sprintf("      invalidPosition = false;\n");
-    data += fmt::sprintf("      for (let indexCheck = 0; indexCheck < startPositions.length; indexCheck++) {\n");
-    data += fmt::sprintf("        if (index != indexCheck) {\n");
-    data += fmt::sprintf("          if (getDistanceToClosestOtherStart(\n");
-    data += fmt::sprintf("            GameplayMap.getLocationFromIndex(position).x,\n");
-    data += fmt::sprintf("            GameplayMap.getLocationFromIndex(position).y,\n");
-    data += fmt::sprintf("            startPositions,\n");
-    data += fmt::sprintf("            index\n");
-    data += fmt::sprintf("          ) < 4) {\n");
-    data += fmt::sprintf("            invalidPosition = true;\n");
-    data += fmt::sprintf("            console.log(\"check2\");\n");
-    data += fmt::sprintf("          }\n");
-    data += fmt::sprintf("        }\n");
-    data += fmt::sprintf("      }\n");
-    data += fmt::sprintf("    }\n");
-    data += fmt::sprintf("    if (position >= 0) {\n");
-    data += fmt::sprintf("      validatedStartPositions[index] = position;\n");
-    data += fmt::sprintf("      const location2 = GameplayMap.getLocationFromIndex(position);\n");
-    data += fmt::sprintf("      console.log(\"CHOICE FOR PLAYER: \" + index + \" (\" + location2.x + \", \" + location2.y + \")\");\n");
-    data += fmt::sprintf("      StartPositioner.setStartPosition(position, index);\n");
-    data += fmt::sprintf("    } else {\n");
-    data += fmt::sprintf("      console.log(\"FAILED TO PICK LOCATION FOR: \" + index);\n");
-    data += fmt::sprintf("    }\n");
-    data += fmt::sprintf("  }\n");
-    data += fmt::sprintf("  return validatedStartPositions;\n");
-    data += fmt::sprintf("}\n");
-
-    data += fmt::sprintf("function fakeWrapX()\n");
-    data += fmt::sprintf("{ \n");
     if (m_snowBorderX > 0)
     {
+        data += fmt::sprintf("function fakeWrapX()\n");
+        data += fmt::sprintf("{ \n");    
         data += fmt::sprintf("    const effects = MapPlotEffects.getPlotEffectTypesContainingTags([\"SNOW\", \"HEAVY\", \"PERMANENT\"]); \n");
         data += fmt::sprintf("    const effect = effects[0]; const width = GameplayMap.getGridWidth(); \n");
         data += fmt::sprintf("    const height = GameplayMap.getGridHeight(); \n");
@@ -956,8 +1044,9 @@ void Map::exportMapDataCiv7Map()
         data += fmt::sprintf("            } \n");
         data += fmt::sprintf("        } \n");
         data += fmt::sprintf("    } \n");
+        data += fmt::sprintf("}\n\n");
     }
-    data += fmt::sprintf("}\n\n");
+   
 
     data += fmt::sprintf("function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization, paintRandomization)\n");
     data += fmt::sprintf("{\n");
@@ -1347,8 +1436,12 @@ void Map::exportSQLiteMap()
     ExportMetaData(db, "MaxSnowWeight", m_maxSnowWeight);
     ExportMetaData(db, "SnowRandomization", m_snowRandomization);
     ExportMetaData(db, "UsePaintedSnow", m_usePaintedSnow);
-    ExportMetaData(db, "PaintedSnowRandomization", m_paintedSnowRandomization);    
-
+    ExportMetaData(db, "PaintedSnowRandomization", m_paintedSnowRandomization);   
+    ExportMetaData(db, "UseTSL", m_useTSL);
+    ExportMetaData(db, "NoResourceOnTSL", m_noResourceOnTSL);
+    ExportMetaData(db, "NoResourceOnNavigableRivers", m_noResourceOnNavigableRivers);
+    ExportMetaData(db, "ExportPaintedRivers", m_exportPaintedRivers);
+    
     // Plot data
     sql = "INSERT OR REPLACE INTO Plots (ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);

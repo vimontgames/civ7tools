@@ -132,6 +132,10 @@ bool Map::importSQLiteMap(const string & _cwd)
     ImportMetaData(db, "SnowRandomization", &m_snowRandomization);
     ImportMetaData(db, "UsePaintedSnow", &m_usePaintedSnow);
     ImportMetaData(db, "PaintedSnowRandomization", &m_paintedSnowRandomization);
+    ImportMetaData(db, "UseTSL", &m_useTSL);
+    ImportMetaData(db, "NoResourceOnTSL", &m_noResourceOnTSL);
+    ImportMetaData(db, "NoResourceOnNavigableRivers", &m_noResourceOnNavigableRivers);
+    ImportMetaData(db, "ExportPaintedRivers", &m_exportPaintedRivers);
 
     // Get map size from the database
     const char * sql = "SELECT width, height FROM Map LIMIT 1;";
@@ -344,7 +348,12 @@ bool Map::importSQLiteMap(const string & _cwd)
                 int ID = sqlite3_column_int(stmt, 0);
                 const char * name = (const char *)sqlite3_column_text(stmt, 1);
                 const char * prettyName = (const char *)sqlite3_column_text(stmt, 2);
-                m_rivers.push_back(RiverInfo(name, false));
+
+                // Fix river name
+                string fixedName = name;
+                fixedName = fixRiverName(fixedName);
+
+                m_rivers.push_back(RiverInfo(fixedName.c_str(), false));
             }
 
             if (rc != SQLITE_DONE)

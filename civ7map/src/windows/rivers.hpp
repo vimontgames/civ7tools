@@ -1,7 +1,7 @@
 #include "BaseWindow.h"
 #include "misc\imguiutils.h"
 
-const string defaultName = "RIVER_FOO";
+const string defaultName = "Foo";
 
 //--------------------------------------------------------------------------------------
 class RiversWindow : public BaseWindow
@@ -42,7 +42,7 @@ bool RiversWindow::Draw(const RenderWindow & window)
         ImVec2 buttonSize = ImVec2(64 * EditorOptions::Get().m_editorGlobalScale, ImGui::GetTextLineHeightWithSpacing() + ImGui::GetStyle().CellPadding.y * 2.0f);
 
         int riverCount = g_map ? (int)g_map->getRivers().size() : 0;
-        float rowHeight = ImGui::GetTextLineHeightWithSpacing() + ImGui::GetStyle().CellPadding.y * 2.0f;
+        float rowHeight = ImGui::GetTextLineHeightWithSpacing() + ImGui::GetStyle().CellPadding.y * 4.0f;
         float tableHeight = ImGui::GetContentRegionAvail().y - 64.0f;
         float desiredHeight = rowHeight + (rowHeight + ImGui::GetStyle().CellPadding.y * 1.0f) * max(riverCount, 1) + +ImGui::GetStyle().CellPadding.y;
         ImVec2 tableSize(0.0f, std::min(tableHeight, desiredHeight));
@@ -155,6 +155,7 @@ bool RiversWindow::Draw(const RenderWindow & window)
             if (ImGui::Button("Add", buttonSize))
             {
                 auto & rivers = g_map->getRivers();
+                m_editRiverName = Map::fixRiverName(m_editRiverName);
                 rivers.push_back(RiverInfo(m_editRiverName, false));
                 m_editRiverName = defaultName;
             }

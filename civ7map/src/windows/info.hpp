@@ -49,70 +49,6 @@ bool InfoWindow::Draw(const RenderWindow & window)
         if (ImGui::InputText("Description", temp, sizeof(temp)))
             g_map->m_description = temp;
 
-        if (ImGui::CollapsingHeader("Randomize", ImGuiTreeNodeFlags_Framed))
-        {
-            const auto x = ImGui::GetCursorPosX();
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("Resources", &g_map->m_randomResources);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place resources randomly when generating map");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(x + checkbxoWidth);
-            ImGui::Checkbox("Features", &g_map->m_randomFeatures);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place features randomly when generating map");
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("Lakes", &g_map->m_randomLakes);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place lakes randomly when generating map");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(x + checkbxoWidth);
-            ImGui::Checkbox("Elevation", &g_map->m_randomElevation);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Change elevation when generating map");
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("Hills", &g_map->m_randomHills);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place hills randomly when generating map");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(x + checkbxoWidth);
-            ImGui::Checkbox("Rainfall", &g_map->m_randomRainfall);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place rainfalls randomly when generating map");
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("FloodPlains", &g_map->m_randomFloodPlains);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place flood plains randomly when generating map");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(x + checkbxoWidth);
-            ImGui::Checkbox("Rivers", &g_map->m_randomRivers);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place rivers randomly when generating map");
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("Continents", &g_map->m_randomContinents);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Select continents randomly when generating map");
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(x + checkbxoWidth);
-            ImGui::Checkbox("Biomes", &g_map->m_randomBiomes);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Select biomes randomly when generating map");
-
-            ImGui::SetNextItemWidth(checkbxoWidth);
-            ImGui::Checkbox("Natural Wonders", &g_map->m_randomNaturalWonders);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Place snow randomly when generating map");
-            //ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
-            //ImGui::Checkbox("Wonders", &g_map->m_randomNaturalWonders);
-            //if (ImGui::IsItemHovered())
-            //    ImGui::SetTooltip("Place natural wonders randomly when generating map"); 
-        }
-
         if (ImGui::CollapsingHeader("Size", ImGuiTreeNodeFlags_Framed))
         {
             bool isValidMapSize = g_map->getMapSize(g_map->m_editMapSize[0], g_map->m_editMapSize[1], false) != MapSize::Custom || !g_map->m_forceCustomMapSize;
@@ -162,7 +98,7 @@ bool InfoWindow::Draw(const RenderWindow & window)
 
                 if (!isValidMapSize)
                     ImGui::SetTooltip("Map is using a custom map size");
-            }   
+            }
 
             PushDisabled(true);
             {
@@ -202,7 +138,66 @@ bool InfoWindow::Draw(const RenderWindow & window)
                 ImGui::SetTooltip("Wrap map vertically");
 
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Force snow on each side of the map to mimic broken WrapX = false");           
+                ImGui::SetTooltip("Force snow on each side of the map to mimic broken WrapX = false");
+        }
+
+        if (ImGui::CollapsingHeader("Randomize", ImGuiTreeNodeFlags_Framed))
+        {
+            const auto x = ImGui::GetCursorPosX();
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("Resources", &g_map->m_randomResources);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place resources randomly when generating map");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + checkbxoWidth);
+            ImGui::Checkbox("Features", &g_map->m_randomFeatures);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place features randomly when generating map");
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("Lakes", &g_map->m_randomLakes);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place lakes randomly when generating map");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + checkbxoWidth);
+            ImGui::Checkbox("Elevation", &g_map->m_randomElevation);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Change elevation when generating map");
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("Hills", &g_map->m_randomHills);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place hills randomly when generating map");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + checkbxoWidth);
+            ImGui::Checkbox("Rainfall", &g_map->m_randomRainfall);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place rainfalls randomly when generating map");
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("FloodPlains", &g_map->m_randomFloodPlains);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place flood plains randomly when generating map");
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("Continents", &g_map->m_randomContinents);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Select continents randomly when generating map");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(x + checkbxoWidth);
+            ImGui::Checkbox("Biomes", &g_map->m_randomBiomes);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Select biomes randomly when generating map");
+
+            ImGui::SetNextItemWidth(checkbxoWidth);
+            ImGui::Checkbox("Natural Wonders", &g_map->m_randomNaturalWonders);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place snow randomly when generating map");
+            //ImGui::SameLine(ImGui::GetContentRegionAvailWidth() - itemWidth);
+            //ImGui::Checkbox("Wonders", &g_map->m_randomNaturalWonders);
+            //if (ImGui::IsItemHovered())
+            //    ImGui::SetTooltip("Place natural wonders randomly when generating map"); 
         }
 
         if (ImGui::CollapsingHeader("Snow###SnowOptions", ImGuiTreeNodeFlags_Framed))
@@ -354,9 +349,30 @@ bool InfoWindow::Draw(const RenderWindow & window)
             }
         }  
 
-        if (ImGui::CollapsingHeader("Misc", ImGuiTreeNodeFlags_Framed))
+        if (ImGui::CollapsingHeader("Rivers", ImGuiTreeNodeFlags_Framed))
+        {
+            ImGui::Checkbox("Generate Random Rivers", &g_map->m_randomRivers);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Place rivers randomly when generating map");
+
+            ImGui::Checkbox("Export Painted Rivers", &g_map->m_exportPaintedRivers);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Export custom rivers painted on the map");
+
+            ImGui::Checkbox("Clear Navigable River Tiles", &g_map->m_noResourceOnNavigableRivers);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Remove resource and features on Navigable river tiles");            
+        }
+
+        if (ImGui::CollapsingHeader("True Start Locations", ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Export TSL", &g_map->m_useTSL);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Export Starting positions for players");
+
+            ImGui::Checkbox("Clear TSL Tiles", &g_map->m_noResourceOnTSL);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Remove resource preventing city spawning on TSL");
         }
 
         ImGui::PopItemWidth();
