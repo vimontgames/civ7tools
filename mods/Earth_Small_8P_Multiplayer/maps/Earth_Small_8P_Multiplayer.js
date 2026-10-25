@@ -31,21 +31,22 @@ async function generateMap() {
   const hexMap = new HexMap();
   hexMap.initFromTerrainBuilder();
   paintElevation();
-  //paintEarthHugeRivers();
   paintNaturalWonders(iWidth, iHeight);
   //paintEarthHugeResourcesAntiquity();
   const topSnowRows = 4;
   const bottomSnowRows = 4;
   const maxSnowWeight = 100;
   const snowRandomization = 30;
-  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization);
+  const paintedSnowRandomization = 0;
+  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization, paintedSnowRandomization);
   const genCtx = new GenerationContext();
-  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.m_randomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
-  genCtx.bRunAestheticRiverValidation = false;
+  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.RandomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
+  genCtx.bRunAestheticRiverValidation = true;
   generateMapFeatures(hexMap, genCtx);
-  //nameRivers();
+  paintRivers();
+  nameRivers();
   //nameVolcanoes();
-  fakeWrapX();
+  fixElevation();
   const startPositions = assignStartPositions();
   generateDiscoveries(iWidth, iHeight, startPositions, g_PolarWaterRows);
   civ7MapScope.end();
@@ -56,6 +57,120 @@ function paintElevation() {
     TerrainBuilder.setElevation(elevationArray);
     TerrainBuilder.generateCliffsFromElevation();
 }
+
+function fixElevation() {
+    console.log("Begin fixElevation()");
+    const mapWidth = GameplayMap.getGridWidth();
+    const mapHeight = GameplayMap.getGridHeight();
+    let elevationArray = [];
+
+    for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+            let index = (y * mapWidth) + x;
+            elevationArray[index] = GameplayMap.getElevation(x, y);
+        }
+    }
+
+    elevationArray[(18 * mapWidth) + 14] = 0;
+    elevationArray[(19 * mapWidth) + 14] = 0;
+    elevationArray[(19 * mapWidth) + 15] = 0;
+    elevationArray[(25 * mapWidth) + 44] = 0;
+    elevationArray[(26 * mapWidth) + 44] = 0;
+    elevationArray[(27 * mapWidth) + 44] = 0;
+    TerrainBuilder.setElevation(elevationArray);
+    TerrainBuilder.generateCliffsFromElevation();
+    console.log("end fixElevation()");
+}
+
+function paintRivers()
+{
+  console.log("Begin paintRivers()");
+  const emptyFeatureParam = 
+  {
+    Feature: -1,
+    Direction: -1,
+    Elevation: 0
+  }; 
+  // RIVER_CIV7MAP_SUEZ
+  TerrainBuilder.setRiverInfo(44, 27, DirectionTypes.DIRECTION_SOUTHWEST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(44, 27, emptyFeatureParam);
+  ResourceBuilder.setResourceType(44,27, -1);  TerrainBuilder.setRiverInfo(44, 26, DirectionTypes.DIRECTION_SOUTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(44, 26, emptyFeatureParam);
+  ResourceBuilder.setResourceType(44,26, -1);  TerrainBuilder.setRiverInfo(44, 25, DirectionTypes.DIRECTION_SOUTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(44, 25, emptyFeatureParam);
+  ResourceBuilder.setResourceType(44,25, -1);  // RIVER_CIV7MAP_PANAMA
+  TerrainBuilder.setRiverInfo(14, 18, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(14, 18, emptyFeatureParam);
+  ResourceBuilder.setResourceType(14,18, -1);  TerrainBuilder.setRiverInfo(14, 19, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(14, 19, emptyFeatureParam);
+  ResourceBuilder.setResourceType(14,19, -1);  TerrainBuilder.setRiverInfo(15, 19, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_NAVIGABLE);
+  TerrainBuilder.setFeatureType(15, 19, emptyFeatureParam);
+  ResourceBuilder.setResourceType(15,19, -1);  // RIVER_CIV7MAP_SEINE
+  TerrainBuilder.setRiverInfo(31, 34, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(30, 35, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(29, 35, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(28, 35, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_LOIRE
+  TerrainBuilder.setRiverInfo(31, 32, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(30, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(29, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(28, 33, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_GARONNE
+  TerrainBuilder.setRiverInfo(29, 30, DirectionTypes.DIRECTION_NORTHEAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(29, 31, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(28, 31, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_RHONE
+  TerrainBuilder.setRiverInfo(34, 34, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(33, 34, DirectionTypes.DIRECTION_SOUTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(32, 33, DirectionTypes.DIRECTION_SOUTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(32, 32, DirectionTypes.DIRECTION_SOUTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(31, 31, DirectionTypes.DIRECTION_SOUTHEAST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_PO
+  TerrainBuilder.setRiverInfo(34, 33, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(35, 33, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(36, 33, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_EBRO
+  TerrainBuilder.setRiverInfo(26, 29, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(27, 29, DirectionTypes.DIRECTION_SOUTHEAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(28, 28, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(29, 28, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(30, 28, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_TAGUS
+  TerrainBuilder.setRiverInfo(27, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(26, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(25, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(24, 27, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_THAMES
+  TerrainBuilder.setRiverInfo(27, 38, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(28, 38, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(29, 38, DirectionTypes.DIRECTION_EAST, RiverTypes.RIVER_MINOR);
+  // RIVER_CIV7MAP_RHINE
+  TerrainBuilder.setRiverInfo(35, 36, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(34, 37, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(33, 37, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(33, 38, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(32, 38, DirectionTypes.DIRECTION_WEST, RiverTypes.RIVER_MINOR);
+  TerrainBuilder.setRiverInfo(31, 38, DirectionTypes.DIRECTION_NORTHWEST, RiverTypes.RIVER_MINOR);
+  console.log("End paintRivers()");
+}
+
+function nameRivers()
+{
+   console.log("Begin nameRivers()");
+   TerrainBuilder.setCustomRiverName(44, 27, "Suez");
+   TerrainBuilder.setCustomRiverName(14, 18, "Panama");
+   TerrainBuilder.setCustomRiverName(31, 34, "Seine");
+   TerrainBuilder.setCustomRiverName(31, 32, "Loire");
+   TerrainBuilder.setCustomRiverName(29, 30, "Garonne");
+   TerrainBuilder.setCustomRiverName(34, 34, "Rhone");
+   TerrainBuilder.setCustomRiverName(34, 33, "Po");
+   TerrainBuilder.setCustomRiverName(26, 29, "Ebro");
+   TerrainBuilder.setCustomRiverName(27, 27, "Tagus");
+   TerrainBuilder.setCustomRiverName(27, 38, "Thames");
+   TerrainBuilder.setCustomRiverName(35, 36, "Rhine");
+   console.log("End nameRivers()");
+}
+
 function getDistanceToClosestOtherStart(iX, iY, startPositions, skipIndex) { 
   let minDistance = 32768;
   for (let iStart = 0; iStart < startPositions.length; iStart++) {
@@ -476,7 +591,7 @@ function assignStartPositions() {
   const location = GameplayMap.getLocationFromIndex(validatedStartPositions[0]);
   console.log("CHOICE FOR PLAYER: 0 (" + location.x + ", " + location.y + ")");
   StartPositioner.setStartPosition(validatedStartPositions[0], 0);
-  for (let index = startPositions.length - 1; index > 0; index--) {
+  ResourceBuilder.setResourceType(location.x,location.y, -1);  for (let index = startPositions.length - 1; index > 0; index--) {
     let invalidPosition = false;
     let position = startPositions[index];
     for (let indexCheck = 0; indexCheck < index; indexCheck++) {
@@ -522,17 +637,16 @@ function assignStartPositions() {
       const location2 = GameplayMap.getLocationFromIndex(position);
       console.log("CHOICE FOR PLAYER: " + index + " (" + location2.x + ", " + location2.y + ")");
       StartPositioner.setStartPosition(position, index);
-    } else {
+      ResourceBuilder.setResourceType(location2.x,location2.y, -1);    } else {
       console.log("FAILED TO PICK LOCATION FOR: " + index);
     }
   }
   return validatedStartPositions;
 }
-function fakeWrapX()
-{ 
-}
+function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization, paintRandomization)
+{
+    console.log("Begin paintSnow");
 
-function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization) {
     console.log("Generating permanent snow");
     const aLightSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "LIGHT", "PERMANENT"]);
     const aMediumSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "MEDIUM", "PERMANENT"]);
@@ -543,11 +657,11 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
     aWeightEffect[2] = aHeavySnowEffects ? aHeavySnowEffects[0] : -1;
     const aWeightChance = [10, 30, 60];
     const weightAdjustment = maxWeight / 100;
-    const placeSnow = (x, y, percentChance) => {
+    const placeSnow = (x, y, percentChance, randomScale) => {
         percentChance *= weightAdjustment;
         if (!GameplayMap.isWater(x, y)) {
-            const snowRandomization = TerrainBuilder.getRandomNumber(randomization * 2, "Snow weight randomization");
-            const snowWeight = percentChance + snowRandomization - randomization;
+            const snowRandomization = TerrainBuilder.getRandomNumber(randomScale * 2, "Snow weight randomization");
+            const snowWeight = percentChance + snowRandomization - randomScale;
             if (snowWeight > 0) {
                 for (let weight = aWeightChance.length - 1; weight >= 0; --weight) {
                     if (snowWeight > aWeightChance[weight]) {
@@ -563,7 +677,7 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
         for (let row = height; row > endTopRow; --row) {
             const snowPercent = (1 - (height - row) / topRows) * 100;
             for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
+                placeSnow(col, row, snowPercent, randomization);
             }
         }
     }
@@ -571,10 +685,13 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
         for (let row = 0; row < bottomRows; ++row) {
             const snowPercent = (1 - row / bottomRows) * 100;
             for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
+                placeSnow(col, row, snowPercent, randomization);
             }
         }
-    }
+  }
+    console.log("Begin Snow tiles");
+  console.log("End Snow tiles");
+    console.log("End paintSnow");
 }
 
 async function paintNaturalWonders(width, height) {

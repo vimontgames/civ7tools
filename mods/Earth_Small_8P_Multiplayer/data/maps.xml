@@ -6,4 +6,17 @@
 	<Maps>
 		<Row MapSizeType="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x46" Name="Custom 74 x 46" Description="A map with a custom size of 74 x 46 tiles" DefaultPlayers="8" PlayersLandmass1="6" PlayersLandmass2="2" GridWidth="74" GridHeight="46" NumNaturalWonders="7" OceanWidth="8" LakeSizeCutoff="10" LakeGenerationFrequency="25" Continents="6" StartSectorRows="4" StartSectorCols="3"/>
 	</Maps>
+  <NamedRivers>
+      <Row NamedRiverType="RIVER_CIV7MAP_SUEZ" Name="Suez"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_PANAMA" Name="Panama"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_SEINE" Name="Seine"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_LOIRE" Name="Loire"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_GARONNE" Name="Garonne"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_RHONE" Name="Rhone"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_PO" Name="Po"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_EBRO" Name="Ebro"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_TAGUS" Name="Tagus"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_THAMES" Name="Thames"/>
+      <Row NamedRiverType="RIVER_CIV7MAP_RHINE" Name="Rhine"/>
+  </NamedRivers>
 </Database>
