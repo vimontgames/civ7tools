@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Database>
-  <NamedRivers>
-      <Row NamedRiverType="RIVER_FOO" Name="Foo"/>
-      <Row NamedRiverType="RIVER_SIX" Name="Six"/>
-      <Row NamedRiverType="RIVER_SEVEN" Name="Seven"/>
-  </NamedRivers>
-</Database>
