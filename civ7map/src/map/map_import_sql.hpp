@@ -135,7 +135,12 @@ bool Map::importSQLiteMap(const string & _cwd)
     ImportMetaData(db, "UseTSL", &m_useTSL);
     ImportMetaData(db, "NoResourceOnTSL", &m_noResourceOnTSL);
     ImportMetaData(db, "NoResourceOnNavigableRivers", &m_noResourceOnNavigableRivers);
+    ImportMetaData(db, "NoFeatureOnNavigableRivers", &m_noFeatureOnNavigableRivers);
+    ImportMetaData(db, "NoElevationOnNavigableRivers", &m_noElevationOnNavigableRivers);
     ImportMetaData(db, "ExportPaintedRivers", &m_exportPaintedRivers);
+    ImportMetaData(db, "MinPlayers", &m_minPlayers);
+    ImportMetaData(db, "MaxPlayers", &m_maxPlayers);
+    ImportMetaData(db, "DefaultPlayers", &m_defaultPlayers);
 
     // Get map size from the database
     const char * sql = "SELECT width, height FROM Map LIMIT 1;";

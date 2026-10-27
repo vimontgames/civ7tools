@@ -359,12 +359,20 @@ bool InfoWindow::Draw(const RenderWindow & window)
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Export custom rivers painted on the map");
 
-            ImGui::Checkbox("Clear Navigable River Tiles", &g_map->m_noResourceOnNavigableRivers);
+            ImGui::Checkbox("No Resource on Rivers", &g_map->m_noResourceOnNavigableRivers);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Remove resource and features on Navigable river tiles");            
+                ImGui::SetTooltip("Remove resource on navigable river tiles");     
+
+            ImGui::Checkbox("No Feature on Rivers", &g_map->m_noFeatureOnNavigableRivers);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Remove features on navigable river tiles");
+
+            ImGui::Checkbox("No Elevation on Rivers", &g_map->m_noElevationOnNavigableRivers);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Zero elevation on navigable river tiles");
         }
 
-        if (ImGui::CollapsingHeader("True Start Locations", ImGuiTreeNodeFlags_Framed))
+        if (ImGui::CollapsingHeader("True Start Location", ImGuiTreeNodeFlags_Framed))
         {
             ImGui::Checkbox("Export TSL", &g_map->m_useTSL);
             if (ImGui::IsItemHovered())
@@ -373,6 +381,56 @@ bool InfoWindow::Draw(const RenderWindow & window)
             ImGui::Checkbox("Clear TSL Tiles", &g_map->m_noResourceOnTSL);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Remove resource preventing city spawning on TSL");
+        }
+
+        if (ImGui::CollapsingHeader("Players", ImGuiTreeNodeFlags_Framed))
+        {
+            const bool canEditPlayerCount = g_map->m_forceCustomMapSize || g_map->m_mapSize == MapSize::Custom;
+            PushDisabled(!canEditPlayerCount);
+            {
+                if (ImGui::InputInt("Minimum", &g_map->m_minPlayers))
+                {
+                    g_map->m_minPlayers = clamp(g_map->m_minPlayers, 2, g_map->m_maxPlayers);
+                }
+            }
+            PopDisabled();
+
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Minimum amount of players required (requires custom map size)");
+
+            PushDisabled(!canEditPlayerCount);
+            {
+                if (ImGui::InputInt("Maximum", &g_map->m_maxPlayers))
+                {
+                    g_map->m_maxPlayers = clamp(g_map->m_maxPlayers, g_map->m_minPlayers, 64);
+                }
+            }
+            PopDisabled();
+
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Maximum amount of players allowed (requires custom map size)");
+
+            PushDisabled(!canEditPlayerCount);
+            {
+                if (ImGui::InputInt("Humans", &g_map->m_maxHumanPlayers))
+                {
+                    g_map->m_maxHumanPlayers = clamp(g_map->m_maxHumanPlayers, g_map->m_minPlayers, g_map->m_maxPlayers);
+                }
+            }
+            PopDisabled();
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Maximum amount of human players allowed (requires custom map size)");
+
+            PushDisabled(!canEditPlayerCount);
+            {
+                if (ImGui::InputInt("Default", &g_map->m_defaultPlayers))
+                {
+                    g_map->m_defaultPlayers = clamp(g_map->m_defaultPlayers, g_map->m_minPlayers, g_map->m_maxPlayers);
+                }
+            }
+            PopDisabled();
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Default amount of players (requires custom map size)");
         }
 
         ImGui::PopItemWidth();

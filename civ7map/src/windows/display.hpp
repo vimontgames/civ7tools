@@ -2,15 +2,17 @@
 #include "shader/colors.h"
 #include "shader/common.h"
 
-static_assert((MapFilter)PASS_TYPE_ALL       == MapFilter::All);
-static_assert((MapFilter)PASS_TYPE_TERRAIN   == MapFilter::Terrain);
-static_assert((MapFilter)PASS_TYPE_BIOME     == MapFilter::Biome);
-static_assert((MapFilter)PASS_TYPE_FEATURE   == MapFilter::Feature);
-static_assert((MapFilter)PASS_TYPE_RESOURCE  == MapFilter::Resource);
-static_assert((MapFilter)PASS_TYPE_CONTINENT == MapFilter::Continent);
-static_assert((MapFilter)PASS_TYPE_LANDMASS  == MapFilter::Landmass);
-static_assert((MapFilter)PASS_TYPE_ELEVATION == MapFilter::Elevation);
-static_assert((MapFilter)PASS_TYPE_SNOW      == MapFilter::Snow);
+static_assert((MapFilter)PASS_TYPE_ALL            == MapFilter::All);
+static_assert((MapFilter)PASS_TYPE_TERRAIN        == MapFilter::Terrain);
+static_assert((MapFilter)PASS_TYPE_BIOME          == MapFilter::Biome);
+static_assert((MapFilter)PASS_TYPE_FEATURE        == MapFilter::Feature);
+static_assert((MapFilter)PASS_TYPE_RESOURCE       == MapFilter::Resource);
+static_assert((MapFilter)PASS_TYPE_CONTINENT      == MapFilter::Continent);
+static_assert((MapFilter)PASS_TYPE_LANDMASS       == MapFilter::Landmass);
+static_assert((MapFilter)PASS_TYPE_ELEVATION      == MapFilter::Elevation);
+static_assert((MapFilter)PASS_TYPE_ELEVATION      == MapFilter::Elevation);
+static_assert((MapFilter)PASS_TYPE_NATURAL_WONDER == MapFilter::NaturalWonder);
+static_assert((MapFilter)PASS_TYPE_SNOW           == MapFilter::Snow);
 
 //--------------------------------------------------------------------------------------
 class DisplayWindow : public BaseWindow
@@ -166,7 +168,10 @@ void DrawColor(const Map * _map, NaturalWonderType _naturalWonder, bool _count =
     float4 color = getNaturalWonderColor(_naturalWonder);
     DrawSmallColoredSquare(color);
     ImGui::SameLine();
-    ImGui::Text(SeparateCapitalizedWords(asString(_naturalWonder)).c_str());
+    if (_count)
+        ImGui::Text(fmt::sprintf("%s (%u)", SeparateCapitalizedWords(asString(_naturalWonder)), _map->getNaturalWonderInfo(_naturalWonder).count ).c_str());
+    else
+        ImGui::Text(SeparateCapitalizedWords(asString(_naturalWonder)).c_str());
 }
 
 bool g_selectOverlayImage = false;
@@ -255,6 +260,16 @@ bool DisplayWindow::Draw(const RenderWindow & window)
                 default:
                     ASSERT(false, "Missing case \"%s\" (%i)", asString(g_map->m_mapFilter).c_str(), (int)g_map->m_mapFilter);
                     break;
+
+                case MapFilter::NaturalWonder:
+                {
+                    for (uint n = 1; n < enumCount<NaturalWonderType>(); ++n)
+                    {
+                        NaturalWonderType naturalWonder = (NaturalWonderType)n;
+                        DrawColor(g_map, naturalWonder, true);
+                    }
+                }
+                break;
 
                 case MapFilter::All:
                 {

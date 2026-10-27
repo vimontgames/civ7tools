@@ -502,8 +502,8 @@ void Map::exportConfigCiv7Map()
         string mapSizePrettyDescription = getExportMapSizePrettyDescription();
 
         data += fmt::sprintf("	<MapSizes>\n");
-        data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
-        data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"2\" MaxPlayers=\"24\" MaxHumans=\"24\" DefaultPlayers=\"24\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription);
+        data += fmt::sprintf("		<Row Domain=\"StandardMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"%u\" MaxPlayers=\"%u\" MaxHumans=\"%u\" DefaultPlayers=\"%u\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription, m_minPlayers, m_maxPlayers, m_maxHumanPlayers, m_defaultPlayers);
+        data += fmt::sprintf("		<Row Domain=\"DistantLandsMapSizes\" MapSizeType=\"%s\" Name=\"%s\" Description=\"%s\" MinPlayers=\"%u\" MaxPlayers=\"%u\" MaxHumans=\"%u\" DefaultPlayers=\"%u\" SortIndex=\"61\"/>\n", mapSize, mapSizePrettyName, mapSizePrettyDescription, m_minPlayers, m_maxPlayers, m_maxHumanPlayers, m_defaultPlayers);
         data += fmt::sprintf("	</MapSizes>\n");
     }
 
@@ -682,13 +682,21 @@ void Map::exportMapDataCiv7Map()
         genFlags += "| GenerationPhases.Resources";
 
     data += fmt::sprintf("  genCtx.phases = %s;\n", genFlags);
-
-    data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = true;\n");
+    data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = false;\n");
     data += fmt::sprintf("  generateMapFeatures(hexMap, genCtx);\n");
     data += fmt::sprintf("  paintRivers();\n");
     data += fmt::sprintf("  nameRivers();\n");
     data += fmt::sprintf("  //nameVolcanoes();\n");
-    data += fmt::sprintf("  fixElevation();\n");
+
+    if (m_noElevationOnNavigableRivers)
+    {
+        data += fmt::sprintf("  fixElevation();\n");
+    }
+
+    // Fix navigable rivers
+    data += fmt::sprintf("  genCtx.phases = 0; //GenerationPhases.WriteToTerrainBuilder;\n");
+    data += fmt::sprintf("  genCtx.bRunAestheticRiverValidation = false;\n");
+    data += fmt::sprintf("  generateMapFeatures(hexMap, genCtx);\n");
 
     if (m_snowBorderX > 0)
     {
@@ -761,7 +769,7 @@ void Map::exportMapDataCiv7Map()
             Civ7Tile tile = m_civ7TerrainType.get(x, y);
             for (uint r = 0; r < MAX_RIVER_PER_TILE; ++r)
             {
-                if (m_noResourceOnNavigableRivers)
+                if (m_noElevationOnNavigableRivers)
                 {
                     if (tile.rivers[r].nameIndex != RiverName::None && tile.rivers[r].type == RiverType::Navigable)
                     {
@@ -812,13 +820,19 @@ void Map::exportMapDataCiv7Map()
                             const RiverTileInfo & riverTile = tile.rivers[r];
                             if (riverTile.nameIndex == (RiverName)i)
                             {
-                                data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
-
-                                if (m_noResourceOnNavigableRivers && riverTile.type == RiverType::Navigable)
+                                if (riverTile.type == RiverType::Navigable)
                                 {
-                                    data += fmt::sprintf("  TerrainBuilder.setFeatureType(%u, %u, emptyFeatureParam);\n", tileXY.x, tileXY.y);
-                                    data += fmt::sprintf("  ResourceBuilder.setResourceType(%u,%u, -1);", tileXY.x, tileXY.y);
+                                    if (m_noFeatureOnNavigableRivers)
+                                    {
+                                        data += fmt::sprintf("  TerrainBuilder.setFeatureType(%u, %u, emptyFeatureParam);\n", tileXY.x, tileXY.y);
+                                    }
+
+                                    if (m_noResourceOnNavigableRivers)
+                                    {
+                                        data += fmt::sprintf("  ResourceBuilder.setResourceType(%u,%u, -1);", tileXY.x, tileXY.y);
+                                    }
                                 }
+                                data += fmt::sprintf("  TerrainBuilder.setRiverInfo(%u, %u, DirectionTypes.%s, RiverTypes.%s);\n", tileXY.x, tileXY.y, getDirectionTypeAsString(riverTile.direction), getRiverTypeAsString(riverTile.type).c_str());
                             }
                         }
                     }
@@ -1440,7 +1454,12 @@ void Map::exportSQLiteMap()
     ExportMetaData(db, "UseTSL", m_useTSL);
     ExportMetaData(db, "NoResourceOnTSL", m_noResourceOnTSL);
     ExportMetaData(db, "NoResourceOnNavigableRivers", m_noResourceOnNavigableRivers);
+    ExportMetaData(db, "NoFeatureOnNavigableRivers", m_noFeatureOnNavigableRivers);
+    ExportMetaData(db, "NoElevationOnNavigableRivers", m_noElevationOnNavigableRivers);
     ExportMetaData(db, "ExportPaintedRivers", m_exportPaintedRivers);
+    ExportMetaData(db, "MinPlayers", m_minPlayers);  
+    ExportMetaData(db, "MaxPlayers", m_maxPlayers);
+    ExportMetaData(db, "DefaultPlayers", m_defaultPlayers);    
     
     // Plot data
     sql = "INSERT OR REPLACE INTO Plots (ID, TerrainType, BiomeType, ContinentType, Elevation, IsImpassable, Tag, LandmassRegionId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";

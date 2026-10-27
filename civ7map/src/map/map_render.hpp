@@ -107,6 +107,7 @@ void Map::render(RenderWindow & _window)
                         case MapFilter::Landmass:
                         case MapFilter::Elevation:
                         case MapFilter::Snow:
+                        case MapFilter::NaturalWonder:
                             passFlags = (int)m_mapFilter;
                             break;
                     }

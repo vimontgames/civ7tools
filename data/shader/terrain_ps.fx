@@ -216,6 +216,16 @@ float4 getTileColor(Tile tile)
             color.rgb = lerp(color.rgb*0.25, 1, float(snowAmount)/float(maxSnowAmount));
         }
         break;
+        
+        case PASS_TYPE_NATURAL_WONDER:
+        {
+            uint biomeType = uint(tile.color0.g * 255.0f);
+            uint terrainType = uint(tile.color0.r * 255.0f);
+            
+            color = getBiomeTerrainColor(biomeType, terrainType);
+            color = lerp(color, ColorToLum(getBiomeTerrainColor(biomeType, terrainType)), 0.9);
+        }
+        break;
     }
    
     if (snow)

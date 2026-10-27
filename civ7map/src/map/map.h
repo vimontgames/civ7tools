@@ -254,6 +254,7 @@ public:
     void initFeatureInfos(bool _reload);
     void initContinentInfos(bool _reload);
     void initLandmassInfos(bool _reload);
+    void initNaturalWonderInfos(bool _reload);
 
     string getShortName() const;
 
@@ -329,6 +330,9 @@ public:
 
     BiomeTerrainInfo & getBiomeTerrainInfo(BiomeType _biome, TerrainType _terrain) { return m_biomeTerrainInfos[(int)_biome][(int)_terrain]; }
     const BiomeTerrainInfo & getBiomeTerrainInfo(BiomeType _biome, TerrainType _terrain) const { return m_biomeTerrainInfos[(int)_biome][(int)_terrain]; }
+
+    NaturalWonderInfo & getNaturalWonderInfo(NaturalWonderType _naturalWonder) { return m_naturalWonderInfos[(int)_naturalWonder]; }
+    const NaturalWonderInfo & getNaturalWonderInfo(NaturalWonderType _naturalWonder) const { return m_naturalWonderInfos[(int)_naturalWonder]; }
 
     ResourceInfo & getResourceInfo(ResourceType _resource) { return m_resourceInfos[(int)_resource + 1]; }
     const ResourceInfo & getResourceInfo(ResourceType _resource )const { return m_resourceInfos[(int)_resource + 1]; }
@@ -416,6 +420,10 @@ public:
     // map data
     string                  m_author;
     string                  m_description;
+    int                     m_minPlayers = 2;
+    int                     m_maxPlayers = 24;
+    int                     m_maxHumanPlayers = 24;
+    int                     m_defaultPlayers = 24;
 
     bool                    m_randomLakes           = true;
     bool                    m_randomContinents      = false;
@@ -434,6 +442,8 @@ public:
     bool                    m_noResourceOnTSL       = true;
 
     bool                    m_noResourceOnNavigableRivers = true;
+    bool                    m_noFeatureOnNavigableRivers = false;
+    bool                    m_noElevationOnNavigableRivers = false;
     bool                    m_exportPaintedRivers = true;
 
     u32                     m_width = 0;
@@ -502,6 +512,7 @@ private:
     BiomeTerrainInfo        m_biomeTerrainInfos[enumCount<BiomeType>()][enumCount<TerrainType>()];
     ResourceInfo            m_resourceInfos[enumCount<ResourceType>()];
     FeatureInfo             m_featureInfos[enumCount<FeatureType>()];
+    NaturalWonderInfo       m_naturalWonderInfos[enumCount<NaturalWonderType>()];
 
     vector<ContinentInfo>   m_continents;
     vector<LandmassInfo>    m_landmasses;

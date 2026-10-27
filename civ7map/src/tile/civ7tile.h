@@ -235,6 +235,11 @@ enum class NaturalWonderType : u8
     SeongsanIlchulbong,
 };
 
+struct NaturalWonderInfo
+{
+    u32 count = 0;
+}; 
+
 //--------------------------------------------------------------------------------------
 struct NaturalWonderPlacementInfo
 {

@@ -94,6 +94,15 @@ void Map::initLandmassInfos(bool _reload)
 }
 
 //--------------------------------------------------------------------------------------
+void Map::initNaturalWonderInfos(bool _reload)
+{
+    for (uint i = 0; i < enumCount<NaturalWonderType>(); ++i)
+    {
+        m_naturalWonderInfos[i].count = 0;
+    }
+}
+
+//--------------------------------------------------------------------------------------
 void Map::refresh(bool _reload)
 {
     if (!m_isLoaded)
@@ -106,6 +115,7 @@ void Map::refresh(bool _reload)
     initFeatureInfos(m_firstRefresh);
     initContinentInfos(m_firstRefresh);
     initLandmassInfos(m_firstRefresh);
+    initNaturalWonderInfos(m_firstRefresh);
 
     if (m_showRivers)
         UpdateRivers(false);
@@ -139,6 +149,19 @@ void Map::refresh(bool _reload)
         bitmap.sprites.clear();
 
     vector<int2> riverErrors;
+
+    float resourceAlpha = 1.0f;
+    float featureAlpha = 1.0f;
+    float riverAlpha = 1.0f;
+
+    switch (m_mapFilter)
+    {
+        case MapFilter::NaturalWonder:
+            resourceAlpha = 0.25f;
+            featureAlpha = 0.25f;
+            riverAlpha = 0.25f;
+            break;
+    }
 
     for (u32 h = 0; h < m_height; ++h)
     {
@@ -184,6 +207,7 @@ void Map::refresh(bool _reload)
                     {
                         SpriteInfo & spriteInfo = features.sprites.emplace_back();
                         spriteInfo.sprite.setTexture(icons.texture);
+                        spriteInfo.sprite.setColor(Color(255, 255, 255, (uint)(featureAlpha * 255.0f)));
                         spriteInfo.x = w;
                         spriteInfo.y = h;
                     }
@@ -222,7 +246,7 @@ void Map::refresh(bool _reload)
                             spriteInfo.y = h;
                             
                             float4 color = getRiverNameColor(riverTile.nameIndex);
-                            float alpha = isDisconnectedRiverTile ? 0.25f : 1.0f;
+                            float alpha = isDisconnectedRiverTile ? riverAlpha * 0.25f : riverAlpha;
                             spriteInfo.sprite.setColor(Color((uint)(color.r * 255.0f), (uint)(color.g * 255.0f), (uint)(color.b * 255.0f), (uint)(alpha * color.a * 255.0f)));
                         }
 
@@ -254,8 +278,6 @@ void Map::refresh(bool _reload)
 
                 if (tile.biome != BiomeType::Marine)
                 {
-                    snowAmount = (float)tile.snow / float(maxSnowAmount);
-
                     if (m_randomSnow)
                     {
                         if (m_useAdvancedSnow)
@@ -278,6 +300,9 @@ void Map::refresh(bool _reload)
                         if ((int)w < m_snowBorderX || (int)w >(m_width - 1 - m_snowBorderX))
                             snowAmount = 1.0f;
                     }
+
+                    if ((int)tile.snow > 0)
+                        snowAmount = (float)tile.snow / float(maxSnowAmount);
                 }
 
                 color1.a = (u8)((uint)(snowAmount* maxSnowAmount) * 255.0f / float(maxSnowAmount));
@@ -298,6 +323,7 @@ void Map::refresh(bool _reload)
                     {
                         SpriteInfo & spriteInfo = resources.sprites.emplace_back();
                         spriteInfo.sprite.setTexture(icons.texture);
+                        spriteInfo.sprite.setColor(Color(255, 255, 255, (uint)(resourceAlpha * 255.0f)));
                         spriteInfo.x = w;
                         spriteInfo.y = h;
                         //spriteInfo.scale = 0.75f;
@@ -305,9 +331,10 @@ void Map::refresh(bool _reload)
                 }
             }
 
-            if (m_showNaturalWonders)
+            if (NaturalWonderType::None != tile.naturalWonder)
             {
-                if (NaturalWonderType::None != tile.naturalWonder)
+                getNaturalWonderInfo(tile.naturalWonder).count++;
+                if (m_showNaturalWonders)
                 {
                     uint resIndex = (int)tile.naturalWonder;
                     auto & icons = s_naturalWonderIcons[resIndex];
