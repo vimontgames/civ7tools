@@ -442,7 +442,7 @@ public:
     bool                    m_noResourceOnTSL       = true;
 
     bool                    m_noResourceOnNavigableRivers = true;
-    bool                    m_noFeatureOnNavigableRivers = false;
+    bool                    m_noFeatureOnNavigableRivers = true;
     bool                    m_noElevationOnNavigableRivers = false;
     bool                    m_exportPaintedRivers = true;
 

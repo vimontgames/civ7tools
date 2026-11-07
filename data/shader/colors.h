@@ -500,11 +500,17 @@ inline float4 getSnowAmountColor(SnowAmount snow)
 //--------------------------------------------------------------------------------------
 // RiverName
 //--------------------------------------------------------------------------------------
+#define RIVER_COLOR_COUNT 6
+#define RIVER_COLOR_SHADES 6
+
 inline float4 getRiverNameColor(uint index)
 {
-    index &= 0xFF;
+    if (index == -1)
+        return float4(0, 0, 0, 1);
 
-    const float4 riverIndexColor[6] =
+    index %= RIVER_COLOR_COUNT * RIVER_COLOR_SHADES;
+
+    const float4 riverIndexColor[RIVER_COLOR_COUNT] =
     {
         float4(1,0,0,(1)),
         float4(0,1,0,(1)),
@@ -514,11 +520,11 @@ inline float4 getRiverNameColor(uint index)
         float4(0,0,1,(1)),
     };
 
-    float4 color = riverIndexColor[index % 6];
-    float greyscale = 1.0f - (float(index / 6)) / 8.0f; // max 8 * 6 = 48 named rivers max
-    color.r *= greyscale;
-    color.g *= greyscale;
-    color.b *= greyscale;
+    float4 color = riverIndexColor[index % RIVER_COLOR_COUNT];
+    float brightness = 1.0f - (float(index / RIVER_COLOR_COUNT)) / (RIVER_COLOR_SHADES+1); // 42 distinct color combinations before cycling.
+    color.r *= brightness;
+    color.g *= brightness;
+    color.b *= brightness;
     return color;
 }
 

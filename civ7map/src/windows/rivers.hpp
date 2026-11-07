@@ -32,7 +32,12 @@ bool RiversWindow::Draw(const RenderWindow & window)
     {
         PushDisabled(!g_map || g_map->getRivers().size() == 0);
         {
-            if (ImGui::Button("Check Rivers"))
+            string checkRiversLabel = "Check 0 River";
+            if (g_map)
+            {
+                checkRiversLabel = fmt::sprintf("Check %i River%s", g_map->getRivers().size(), g_map->getRivers().size() > 1 ? "s" : "");
+            }
+            if (ImGui::Button(checkRiversLabel.c_str()))
             {
                 g_map->UpdateRivers(true);
             }
@@ -120,26 +125,6 @@ bool RiversWindow::Draw(const RenderWindow & window)
             ImGui::EndTable();
 
             char temp[256];            
-
-            //sprintf(temp, g_map && m_selectedRiver < g_map->getRivers().size() ? g_map->getRivers()[m_selectedRiver].prettyName.c_str() : "");
-            //ImGui::InputText("###DeleteRiverName", temp, ImGuiInputTextFlags_ReadOnly);
-            //ImGui::SameLine();
-            //PushDisabled(g_map == nullptr || m_selectedRiver == -1 || g_map->getRivers()[m_selectedRiver].vanilla);
-            //if (ImGui::Button("Remove", buttonSize))
-            //{
-            //    vector<RiverInfo> & rivers = g_map->getRivers();
-            //    rivers.erase(rivers.begin() + m_selectedRiver);
-            //    m_selectedRiver--;
-            //}
-            //PopDisabled();
-            //if (ImGui::IsItemHovered())
-            //{
-            //    if (!g_map)
-            //        ImGui::SetTooltip("No map loaded");
-            //
-            //    if (g_map && m_selectedRiver < g_map->getRivers().size() && g_map->getRivers()[m_selectedRiver].vanilla)
-            //        ImGui::SetTooltip("Vanilla rivers cannot be removed");
-            //}
 
             PushDisabled(g_map == nullptr);
             sprintf(temp, m_editRiverName.c_str());
