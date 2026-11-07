@@ -8,12 +8,12 @@
 		<Row AgeType="AGE_MODERN" Domain="StandardMaps" Value="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map"/>
 	</UnsupportedValuesByAge>
 	<MapSizes>
-		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x46" Name="Custom 74 x 46" Description="A map with a custom size of 74 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
-		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x46" Name="Custom 74 x 46" Description="A map with a custom size of 74 x 46 tiles" MinPlayers="2" MaxPlayers="24" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
+		<Row Domain="StandardMapSizes" MapSizeType="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x52" Name="Custom 74 x 52" Description="A map with a custom size of 74 x 52 tiles" MinPlayers="2" MaxPlayers="32" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
+		<Row Domain="DistantLandsMapSizes" MapSizeType="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x52" Name="Custom 74 x 52" Description="A map with a custom size of 74 x 52 tiles" MinPlayers="2" MaxPlayers="32" MaxHumans="24" DefaultPlayers="24" SortIndex="61"/>
 	</MapSizes>
 	<SupportedValuesByMap>
-		<Row Map="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map" Domain="StandardMapSizes" Value="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x46"/>
-		<Row Map="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x46"/>
+		<Row Map="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map" Domain="StandardMapSizes" Value="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x52"/>
+		<Row Map="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map" Domain="DistantLandsMapSizes" Value="MAPSIZE_EARTH_SMALL_8P_MULTIPLAYER_74x52"/>
 	</SupportedValuesByMap>
 	<ParameterDependencies>
 		<Row ParameterID="MapSeaLevel" ConfigurationGroup="Map" ConfigurationKey="MapScript" Operator="NotEquals" ConfigurationValue="{Benualdo-Earth_Small_8P_Multiplayer}maps/Earth_Small_8P_Multiplayer.Civ7Map"/>

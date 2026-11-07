@@ -2,7 +2,8 @@ import { generateDiscoveries } from '/base-standard/maps/discovery-generator.js'
 import { g_PolarWaterRows } from '/base-standard/maps/map-globals.js';
 import { shuffle } from '/base-standard/maps/map-utilities.js';
 import { GenerationContext, GenerationPhases, generateMapFeatures } from '/base-standard/scripts/common-generation.js';
-import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';import { HexMap } from '/base-standard/scripts/hex-map.js';
+import { assignStartPositionsFromHexMap } from '/base-standard/maps/assign-starting-plots.js';
+import { HexMap } from '/base-standard/scripts/hex-map.js';
 import { profileScope } from '/base-standard/scripts/profiling.js';
 
 console.log("Generatingmap from Civ7Map script Europe_Small_8P_Multiplayer.js.");
@@ -30,20 +31,22 @@ async function generateMap() {
   const hexMap = new HexMap();
   hexMap.initFromTerrainBuilder();
   paintElevation();
-  //paintEarthHugeRivers();
-  //paintEarthHugeNaturalWonders();
+  paintNaturalWonders(iWidth, iHeight);
   //paintEarthHugeResourcesAntiquity();
   const topSnowRows = 13;
   const bottomSnowRows = 0;
   const maxSnowWeight = 100;
   const snowRandomization = 25;
-  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization);
+  const paintedSnowRandomization = 0;
+  paintSnow(iWidth, iHeight, topSnowRows, bottomSnowRows, maxSnowWeight, snowRandomization, paintedSnowRandomization);
   const genCtx = new GenerationContext();
-  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Hills| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.NaturalWonders| GenerationPhases.m_randomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
-  genCtx.bRunAestheticRiverValidation = false;
+  genCtx.phases = GenerationPhases.WriteToTerrainBuilder| GenerationPhases.Elevation| GenerationPhases.Hills| GenerationPhases.Rainfall| GenerationPhases.Rivers| GenerationPhases.NaturalWonders| GenerationPhases.RandomFloodPlains| GenerationPhases.Features| GenerationPhases.Resources;
+  genCtx.bRunAestheticRiverValidation = true;
   generateMapFeatures(hexMap, genCtx);
-  //nameRivers();
+  paintRivers();
+  nameRivers();
   //nameVolcanoes();
+  fixElevation();
   fakeWrapX();
   const startPositions = assignStartPositions();
   generateDiscoveries(iWidth, iHeight, startPositions, g_PolarWaterRows);
@@ -55,6 +58,43 @@ function paintElevation() {
     TerrainBuilder.setElevation(elevationArray);
     TerrainBuilder.generateCliffsFromElevation();
 }
+
+function fixElevation() {
+    console.log("Begin fixElevation()");
+    const mapWidth = GameplayMap.getGridWidth();
+    const mapHeight = GameplayMap.getGridHeight();
+    let elevationArray = [];
+
+    for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+            let index = (y * mapWidth) + x;
+            elevationArray[index] = GameplayMap.getElevation(x, y);
+        }
+    }
+
+    TerrainBuilder.setElevation(elevationArray);
+    TerrainBuilder.generateCliffsFromElevation();
+    console.log("end fixElevation()");
+}
+
+function paintRivers()
+{
+  console.log("Begin paintRivers()");
+  const emptyFeatureParam = 
+  {
+    Feature: -1,
+    Direction: -1,
+    Elevation: 0
+  }; 
+  console.log("End paintRivers()");
+}
+
+function nameRivers()
+{
+   console.log("Begin nameRivers()");
+   console.log("End nameRivers()");
+}
+
 function getDistanceToClosestOtherStart(iX, iY, startPositions, skipIndex) { 
   let minDistance = 32768;
   for (let iStart = 0; iStart < startPositions.length; iStart++) {
@@ -262,7 +302,7 @@ function assignStartPositions() {
   const location = GameplayMap.getLocationFromIndex(validatedStartPositions[0]);
   console.log("CHOICE FOR PLAYER: 0 (" + location.x + ", " + location.y + ")");
   StartPositioner.setStartPosition(validatedStartPositions[0], 0);
-  for (let index = startPositions.length - 1; index > 0; index--) {
+  ResourceBuilder.setResourceType(location.x,location.y, -1);  for (let index = startPositions.length - 1; index > 0; index--) {
     let invalidPosition = false;
     let position = startPositions[index];
     for (let indexCheck = 0; indexCheck < index; indexCheck++) {
@@ -279,7 +319,7 @@ function assignStartPositions() {
         GameplayMap.getLocationFromIndex(position).y,
         startPositions,
         index
-      ) < 4) {
+      ) < 3) {
         invalidPosition = true;
         console.log("check1");
       } else {
@@ -308,7 +348,7 @@ function assignStartPositions() {
       const location2 = GameplayMap.getLocationFromIndex(position);
       console.log("CHOICE FOR PLAYER: " + index + " (" + location2.x + ", " + location2.y + ")");
       StartPositioner.setStartPosition(position, index);
-    } else {
+      ResourceBuilder.setResourceType(location2.x,location2.y, -1);    } else {
       console.log("FAILED TO PICK LOCATION FOR: " + index);
     }
   }
@@ -336,7 +376,11 @@ function fakeWrapX()
         } 
     } 
 }
-function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization) {
+
+function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization, paintRandomization)
+{
+    console.log("Begin paintSnow");
+
     console.log("Generating permanent snow");
     const aLightSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "LIGHT", "PERMANENT"]);
     const aMediumSnowEffects = MapPlotEffects.getPlotEffectTypesContainingTags(["SNOW", "MEDIUM", "PERMANENT"]);
@@ -347,11 +391,11 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
     aWeightEffect[2] = aHeavySnowEffects ? aHeavySnowEffects[0] : -1;
     const aWeightChance = [10, 30, 60];
     const weightAdjustment = maxWeight / 100;
-    const placeSnow = (x, y, percentChance) => {
+    const placeSnow = (x, y, percentChance, randomScale) => {
         percentChance *= weightAdjustment;
         if (!GameplayMap.isWater(x, y)) {
-            const snowRandomization = TerrainBuilder.getRandomNumber(randomization * 2, "Snow weight randomization");
-            const snowWeight = percentChance + snowRandomization - randomization;
+            const snowRandomization = TerrainBuilder.getRandomNumber(randomScale * 2, "Snow weight randomization");
+            const snowWeight = percentChance + snowRandomization - randomScale;
             if (snowWeight > 0) {
                 for (let weight = aWeightChance.length - 1; weight >= 0; --weight) {
                     if (snowWeight > aWeightChance[weight]) {
@@ -367,7 +411,7 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
         for (let row = height; row > endTopRow; --row) {
             const snowPercent = (1 - (height - row) / topRows) * 100;
             for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
+                placeSnow(col, row, snowPercent, randomization);
             }
         }
     }
@@ -375,10 +419,76 @@ function paintSnow(width, height, topRows, bottomRows, maxWeight, randomization)
         for (let row = 0; row < bottomRows; ++row) {
             const snowPercent = (1 - row / bottomRows) * 100;
             for (let col = 0; col < width; ++col) {
-                placeSnow(col, row, snowPercent);
+                placeSnow(col, row, snowPercent, randomization);
             }
         }
-    }
+  }
+    console.log("Begin Snow tiles");
+  console.log("End Snow tiles");
+    console.log("End paintSnow");
+}
+
+async function paintNaturalWonders(width, height) {
+  console.log("Begin paintNaturalWonders");
+  let aPossibleWonders = [];
+  let iElevation
+  let featureParam;
+  let placementX ;
+  let placementY;
+  for (const nwDef of GameInfo.Feature_NaturalWonders) 
+  {
+      aPossibleWonders.push(nwDef.$hash);
+  }
+  for (let iI = 0; iI < aPossibleWonders.length; iI++)
+  {
+      let eFeature = aPossibleWonders[iI];
+      let nwDef = GameInfo.Feature_NaturalWonders.lookup(eFeature);
+      if (nwDef != null)
+      {
+          console.log("Placing natural wonder " + nwDef.FeatureType + " ...");
+          let possibleLocations = ""
+          let possibleLocationCount = 0;
+          for (let iY = height - 1; iY >= 0; iY--)
+          {
+              for (let iX = 0; iX < width; iX++)
+              {
+                  iElevation = GameplayMap.getElevation(iX, iY);
+                  featureParam = 
+                  {
+                      Feature: nwDef.$hash,
+                      Direction : nwDef.Direction,
+                      Elevation : iElevation
+                  };
+                  if (TerrainBuilder.canHaveFeatureParam(iX, iY, featureParam))
+                  {
+                      if (possibleLocations.length > 0)
+                      {
+                          possibleLocations += ", ";
+                      }
+                      possibleLocations += "(" + String(iX).padStart(2, '0') + ", " + String(iY).padStart(2, '0') + ")";
+                      possibleLocationCount++;
+                  }
+              }
+              if (possibleLocations.length > 0)
+              {
+                  console.log(possibleLocations);
+                  possibleLocations = "";
+              }
+          }
+          if (possibleLocations.length > 0)
+          {
+              console.log(possibleLocations);
+          }
+          console.log(possibleLocationCount + " possible location(s) found.");
+          switch (nwDef.FeatureType)
+          {
+                      default:
+                          console.log(nwDef.FeatureType + " had no custom location defined."); 
+                      break;
+          }
+      }
+  }
+  console.log("End paintNaturalWonders");
 }
 engine.on("RequestMapInitData", requestMapData);
 engine.on("GenerateMap", generateMap);
